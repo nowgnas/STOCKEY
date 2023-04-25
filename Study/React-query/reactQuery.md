@@ -111,3 +111,26 @@
     
     - isLoading: 캐시에 있는 데이터 가져오는 경우 포함 x
     - isFetching: 캐시에 있는 데이터 가져오는 경우 포함 o ( 더 큰 개념 )
+
+
+
+- Mutation
+    
+  ```jsx
+  // PostDetail.jsx
+  
+  ...
+  // const deleteMutation = useMutation((postId) => deletePost(postId)); 인수 전달 가능
+    const deleteMutation = useMutation(() => deletePost(post.id));
+  
+  return (
+    ...
+        <button onClick={() => deleteMutation.mutate()}>
+          Delete
+        </button> 
+        {deleteMutation.isLoading && <p style={{color: 'purple'}}>Deleting the post</p>}
+        {deleteMutation.isError && <p style={{color: 'red'}}>Error deleting the post</p>}
+        {deleteMutation.isSuccess && <p style={{color: 'green'}}>Post has (not) been deleted</p>}
+    ...
+  )
+  ```

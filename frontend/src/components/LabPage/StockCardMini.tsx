@@ -28,7 +28,7 @@ const CardWrapper = styled.div`
   gap: 1rem;
   
   font-size: 1.2rem;
-  // font-weight: bold;
+  font-weight: 400;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
 
   background: #ffffff;

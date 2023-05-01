@@ -23,18 +23,18 @@ const TradeShortcutCard = ({ text, navPage, imageSrc, color }: Props) => {
   }
 
   return (
-    <Wrapper color={color} onClick={handleBtnClick} md={4} sm={8} xs={11}>
+    <CardWrapper color={color} onClick={handleBtnClick} md={4} sm={8} xs={11}>
       <CardText>
         <span>{text}</span> <ArrowCircleRightOutlinedIcon fontSize="large" />
       </CardText>
       <LogoImage src={`/tradeLogos/${imageSrc}.png`} alt={imageSrc} />
-    </Wrapper>
+    </CardWrapper>
   )
 }
 
 export default TradeShortcutCard
 
-const Wrapper = styled(Grid)<WrapperProps>`
+const CardWrapper = styled(Grid)<WrapperProps>`
   background: ${(props) => `var(${props.color})`};
   height: 100%;
   width: 30%;

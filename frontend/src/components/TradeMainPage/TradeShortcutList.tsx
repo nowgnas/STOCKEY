@@ -22,5 +22,9 @@ export default TradeShortcutList
 const Container = styled(Grid)`
   height: 30rem;
   width: 100%;
-  gap: 44px;
+  gap: 128px;
+
+  @media (max-width: 900px) {
+    gap: 32px;
+  }
 `

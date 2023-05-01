@@ -6,6 +6,7 @@ import StockDetailPage from "./StockDetailPage"
 import StockMainPage from "./StockMainPage"
 import KeywordPage from "./KeywordPage"
 import KeywordDetailPage from "./KeywordDetailPage"
+import LabPage from "./LabPage"
 import Login from "./Login"
 import LoginRedirectHandler from "../components/common/Login/LoginRedirectHandler"
 import SignupPage from "./SignupPage"
@@ -77,7 +78,7 @@ const router = createBrowserRouter([
       // 실험실 페이지
       {
         path: "/lab",
-        element: <h1>lab</h1>,
+        element: <LabPage />,
       },
 
       // 로그인 페이지

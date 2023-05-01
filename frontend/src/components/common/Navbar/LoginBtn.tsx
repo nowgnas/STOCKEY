@@ -26,7 +26,8 @@ const LoginBtn = ({ isNarrow }: Props) => {
 export default LoginBtn
 
 const LoginBtnDiv = styled.div`
-  background: var(--custom-gradient-pink);
+  border: 3px solid var(--custom-purple-4);
+  box-shadow: var(--custom-purple-4) 0px 0px 12px 1px;
 
   // font
   font-size: 1.8rem;
@@ -40,7 +41,7 @@ const LoginBtnDiv = styled.div`
   padding: 12px;
 
   // border
-  border-radius: 4px;
+  border-radius: 12px;
 
   // prevent drag
   -webkit-user-select: none;

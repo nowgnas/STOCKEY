@@ -6,8 +6,9 @@ import reportWebVitals from "./reportWebVitals"
 import { RecoilRoot } from "recoil"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { ReactQueryDevtools } from "react-query/devtools"
-import { BrowserRouter } from "react-router-dom"
+import { BrowserRouter, RouterProvider } from "react-router-dom"
 import Spinner from "./components/common/Spinner/Spinner"
+import router from "./pages/index"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 const queryClient = new QueryClient()
@@ -15,11 +16,7 @@ const queryClient = new QueryClient()
 root.render(
   <RecoilRoot>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        {/* <Suspense> */}
-        <App />
-        {/* </Suspense> */}
-      </BrowserRouter>
+      <RouterProvider router={router} />
       <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
     </QueryClientProvider>
   </RecoilRoot>

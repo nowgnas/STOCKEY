@@ -1,25 +1,11 @@
 import "./App.css"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import { Routes, Route, useLocation, Navigate } from "react-router-dom"
-
-// 페이지 컴포넌트
-import MyPage from "./pages/MyPage"
-import IndustryDetailPage from "./pages/IndustryDetailPage"
-import IndustryMainPage from "./pages/IndustryMainPage"
-import StockDetailPage from "./pages/StockDetailPage"
-import StockMainPage from "./pages/StockMainPage"
-import KeywordPage from "./pages/KeywordPage"
-import KeywordDetailPage from "./pages/KeywordDetailPage"
-import Login from "./pages/Login"
-import SignupPage from "./pages/SignupPage"
-import LoginRedirectHandler from "./components/common/Login/LoginRedirectHandler"
-import StockeyErrorPage from "./pages/StockeyErrorPage"
+import { useLocation, Outlet } from "react-router-dom"
 
 // 스타일 적용
 import MainSection from "./components/common/Background/MainSection"
 import Navbar from "./components/common/Navbar/Navbar"
-import NotFoundPage from "./pages/NotFoundPage"
 
 function App() {
   const curPath = useLocation().pathname
@@ -70,26 +56,7 @@ function App() {
           }
         >
           <MainSection>
-            <Routes>
-              <Route path="/" element={<Navigate to="/stock" />} />
-              <Route path="/stock" element={<StockMainPage />} />
-              <Route path="/stock/:stockId" element={<StockDetailPage />} />
-              <Route path="/my" element={<MyPage />} />
-              <Route path="/industry" element={<IndustryMainPage />} />
-              <Route
-                path="/industry/:industryName"
-                element={<IndustryDetailPage />}
-              />
-              <Route path="/keyword" element={<KeywordPage />} />
-              <Route
-                path="/keyword/:keywordName"
-                element={<KeywordDetailPage />}
-              />
-              <Route path="/user/login" element={<Login />} />
-              <Route path="/oauth/kakao" element={<LoginRedirectHandler />} />
-              <Route path="/user/signup" element={<SignupPage />} />
-              <Route path="/*" element={<NotFoundPage />} />
-            </Routes>
+            <Outlet />
           </MainSection>
         </MainDiv>
       </MainWrapper>

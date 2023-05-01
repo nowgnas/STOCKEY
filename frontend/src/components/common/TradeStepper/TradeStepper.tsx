@@ -39,20 +39,28 @@ const Container = styled.section`
 const Header = styled.p`
   font-size: 36px;
   font-weight: bold;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
 `
 const BodyText = styled.p`
   font-size: 24px;
   font-weight: bold;
   color: #6d6666;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
 `
 
 const TimeWrapper = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0 64px 0 64px;
+  padding: 0 5% 0 5%;
   align-items: center;
-  width: auto%;
+  width: auto;
   height: 10rem;
 `
 
@@ -66,4 +74,8 @@ const Line = styled.div<LineProps>`
   width: 80%;
   height: 0.5%;
   z-index: 1;
+
+  @media (max-width: 500px) {
+    margin-top: 5%;
+  }
 `

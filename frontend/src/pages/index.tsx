@@ -13,6 +13,7 @@ import NotFoundPage from "./NotFoundPage"
 import App from "../App"
 
 import { createBrowserRouter } from "react-router-dom"
+import TradeMainPage from "./TradeMainPage"
 
 const router = createBrowserRouter([
   {
@@ -59,7 +60,7 @@ const router = createBrowserRouter([
       {
         path: "/trade",
         children: [
-          { index: true, element: <h1>trade</h1> },
+          { index: true, element: <TradeMainPage /> },
           {
             path: "order",
             element: <h1>trade order</h1>,

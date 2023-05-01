@@ -43,6 +43,7 @@ const Wrapper = styled(Grid)<Props>`
   font-weight: bold;
   box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.15),
     0px 1px 3px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
 `
 
 const CardText = styled.div`
@@ -56,8 +57,8 @@ const CardText = styled.div`
 
 const LogoImage = styled.img`
   position: relative;
-  top: 30%;
+  top: 25%;
   left: 30%;
-  width: 70%;
-  height: 70%;
+  width: 20rem;
+  height: 20rem;
 `

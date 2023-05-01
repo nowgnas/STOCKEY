@@ -9,16 +9,20 @@ import { ReactQueryDevtools } from "react-query/devtools"
 import { BrowserRouter, RouterProvider } from "react-router-dom"
 import Spinner from "./components/common/Spinner/Spinner"
 import router from "./pages/index"
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 const queryClient = new QueryClient()
 
 root.render(
   <RecoilRoot>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-    </QueryClientProvider>
+    <DndProvider backend={HTML5Backend}>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+      </QueryClientProvider>
+    </DndProvider>
   </RecoilRoot>
 )
 

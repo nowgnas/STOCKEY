@@ -26,6 +26,10 @@ const Navbar = ({ isNarrow }: Props) => {
       return true
     } else if (curPath === "/my" && name === "북마크") {
       return true
+    } else if (curPath.startsWith("/lab") && name === "실험실") {
+      return true
+    } else if (curPath.startsWith("/trade") && name === "모의투자") {
+      return true
     } else {
       return false
     }
@@ -66,6 +70,16 @@ const Navbar = ({ isNarrow }: Props) => {
           <PageLinkBtn
             name="북마크"
             selected={isSeleted("북마크")}
+            isNarrow={isNarrow}
+          />
+          <PageLinkBtn
+            name="실험실"
+            selected={isSeleted("실험실")}
+            isNarrow={isNarrow}
+          />
+          <PageLinkBtn
+            name="모의투자"
+            selected={isSeleted("모의투자")}
             isNarrow={isNarrow}
           />
           {isLogin ? <LogoutBtn isNarrow={isNarrow} /> : undefined}

@@ -1,12 +1,13 @@
-import React from "react"
 import styled, { keyframes } from "styled-components"
 // mui icon
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded"
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded"
 import AppsRoundedIcon from "@mui/icons-material/AppsRounded"
 import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
+import ScienceIcon from "@mui/icons-material/Science"
+import SportsEsportsIcon from "@mui/icons-material/SportsEsports"
 import { useNavigate } from "react-router-dom"
+import { shake } from "../../StockDetailPage/SubPanel/SubInfoPanel/ComparingAnalysisSection/PriceAnalysisCard"
 
 type PageLinkBtnProps = {
   name: string
@@ -25,6 +26,10 @@ const PageLinkBtn = ({ name, selected, isNarrow }: PageLinkBtnProps) => {
         ? "/industry"
         : name === "키워드"
         ? "/keyword"
+        : name === "실험실"
+        ? "/lab"
+        : name === "모의투자"
+        ? "/trade"
         : "/my"
     )
   }
@@ -41,8 +46,12 @@ const PageLinkBtn = ({ name, selected, isNarrow }: PageLinkBtnProps) => {
           <AppsRoundedIcon />
         ) : name === "키워드" ? (
           <ArticleRoundedIcon />
-        ) : (
+        ) : name === "북마크" ? (
           <BookmarkIcon />
+        ) : name === "실험실" ? (
+          <ScienceIcon />
+        ) : (
+          <SportsEsportsIcon />
         )}
         {isNarrow ? undefined : <PageLinkText>{name}</PageLinkText>}
       </PageLinkBtnDiv>
@@ -58,7 +67,8 @@ const BtnHoverAnime = keyframes`
     background: none;
   }
   to {
-    background: linear-gradient(92.18deg, #ff996c 1.48%, #fe7598 98.93%);
+    // background: var(--custom-gradient-violet);
+    // background: linear-gradient(92.18deg, #ff996c 1.48%, #fe7598 98.93%);
     // background-color: white;
   }
 `
@@ -70,8 +80,7 @@ const PageLinkBtnDiv = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 16px;
-  gap: 10px;
+  padding: 12px;
 
   // 크기
   width: 100%;
@@ -81,8 +90,8 @@ const PageLinkBtnDiv = styled.div`
 
   // 글자
   font-weight: bold;
-  font-size: 2rem;
-  color: white;
+  font-size: 1.7rem;
+  color: var(--custom-background);
 
   // 마진
   margin-top: 24px;
@@ -100,11 +109,18 @@ const PageLinkBtnDiv = styled.div`
   cursor: pointer;
 
   &.selected {
-    background: linear-gradient(92.18deg, #ff996c 1.48%, #fe7598 98.93%);
+    background: var(--custom-gradient-violet);
+    // background: linear-gradient(92.18deg, #ff996c 1.48%, #fe7598 98.93%);
   }
   &:hover {
     animation: ${BtnHoverAnime} 0s 0s ease 1 forwards;
     transform: scale(1.1, 1.1);
+    & > svg {
+      animation: ${shake} 1.5s ease-in-out infinite;
+  }
+
+  & > svg {
+    font-size: 2.4rem;
   }
 `
 

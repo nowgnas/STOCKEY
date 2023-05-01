@@ -6,6 +6,7 @@ import StockDetailPage from "./StockDetailPage"
 import StockMainPage from "./StockMainPage"
 import KeywordPage from "./KeywordPage"
 import KeywordDetailPage from "./KeywordDetailPage"
+import TradeMyPage from "./TradeMyPage"
 import Login from "./Login"
 import LoginRedirectHandler from "../components/common/Login/LoginRedirectHandler"
 import SignupPage from "./SignupPage"
@@ -71,7 +72,7 @@ const router = createBrowserRouter([
           },
           {
             path: "my",
-            element: <h1>trade my</h1>,
+            element: <TradeMyPage />,
           },
         ],
       },

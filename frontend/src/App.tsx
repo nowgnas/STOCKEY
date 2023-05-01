@@ -55,7 +55,11 @@ function App() {
               : undefined
           }
         >
-          <MainSection>
+          <MainSection
+            bgColor={
+              curPath === "/trade/my" ? "var(--custom-gray-4)" : undefined
+            }
+          >
             <Outlet />
           </MainSection>
         </MainDiv>

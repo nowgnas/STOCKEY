@@ -20,6 +20,10 @@ html {
   --custom-green-2: #7ed1b9;
   --custom-green-3: #9edfc9;
   --custom-green-4: #d3f4ce;
+  --custom-gray-1: #6d6666;
+  --custom-gray-2: #a29f9f;
+  --custom-gray-3: #d9d9d9;
+  --custom-gray-4: #f8f8f8;
   --custom-mint: #68e3be;
   --custom-blue: #a7b3f3;
   --custom-gradient-violet: linear-gradient(130deg, #99c2ff 0%, #ffa7d1 100%);

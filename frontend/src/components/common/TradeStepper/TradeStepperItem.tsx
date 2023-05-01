@@ -47,6 +47,11 @@ const TimeSection = styled.div`
   height: 100%;
   width: 8%;
   z-index: 2;
+
+  @media (max-width: 500px) {
+    height: 50%;
+    width: 12%;
+  }
 `
 
 const TimeText = styled.p`
@@ -55,6 +60,10 @@ const TimeText = styled.p`
   font-weight: bold;
   heigth: 20%;
   margin: 0;
+
+  @media (max-width: 500px) {
+    font-size: 8px;
+  }
 `
 
 const shimmer = keyframes`

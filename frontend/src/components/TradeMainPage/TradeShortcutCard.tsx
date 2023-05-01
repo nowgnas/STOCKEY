@@ -5,26 +5,25 @@ import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOu
 import { Grid } from "@mui/material"
 
 interface Props {
-  status: string
+  text: string
+  navPage: string
+  imageSrc: string
+  color: string
 }
 
-const TradeShortcutCard = ({ status }: Props) => {
+interface WrapperProps {
+  color: string
+}
+
+const TradeShortcutCard = ({ text, navPage, imageSrc, color }: Props) => {
   const navigate = useNavigate()
-  // status에 따라 텍스트 변경
-  const text = status === "TRADE" ? "거래 참여하기" : "내 거래 현황"
-
-  // navLink 변경
-  const navPage = status === "TRADE" ? "order" : "my"
-
-  // 이미지 변경
-  const imageSrc = status === "TRADE" ? "bill" : "moneyBag"
 
   const handleBtnClick = () => {
     navigate(navPage)
   }
 
   return (
-    <Wrapper status={status} onClick={handleBtnClick} md={4} sm={8} xs={11}>
+    <Wrapper color={color} onClick={handleBtnClick} md={4} sm={8} xs={11}>
       <CardText>
         <span>{text}</span> <ArrowCircleRightOutlinedIcon fontSize="large" />
       </CardText>
@@ -35,11 +34,8 @@ const TradeShortcutCard = ({ status }: Props) => {
 
 export default TradeShortcutCard
 
-const Wrapper = styled(Grid)<Props>`
-  background: ${(props) =>
-    props.status === "TRADE"
-      ? "var(--custom-purple-3)"
-      : "var(--custom-orange-4)"};
+const Wrapper = styled(Grid)<WrapperProps>`
+  background: ${(props) => `var(${props.color})`};
   height: 100%;
   width: 30%;
   padding: 3rem;

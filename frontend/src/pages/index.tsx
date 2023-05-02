@@ -7,6 +7,7 @@ import StockMainPage from "./StockMainPage"
 import KeywordPage from "./KeywordPage"
 import KeywordDetailPage from "./KeywordDetailPage"
 import LabPage from "./LabPage"
+import TradeMyPage from "./TradeMyPage"
 import Login from "./Login"
 import LoginRedirectHandler from "../components/common/Login/LoginRedirectHandler"
 import SignupPage from "./SignupPage"
@@ -14,6 +15,8 @@ import NotFoundPage from "./NotFoundPage"
 import App from "../App"
 
 import { createBrowserRouter } from "react-router-dom"
+import TradeMainPage from "./TradeMainPage"
+import TradeOrderPage from "./TradeOrderPage"
 
 const router = createBrowserRouter([
   {
@@ -60,10 +63,10 @@ const router = createBrowserRouter([
       {
         path: "/trade",
         children: [
-          { index: true, element: <h1>trade</h1> },
+          { index: true, element: <TradeMainPage /> },
           {
             path: "order",
-            element: <h1>trade order</h1>,
+            element: <TradeOrderPage />,
           },
           {
             path: "ranking",
@@ -71,7 +74,7 @@ const router = createBrowserRouter([
           },
           {
             path: "my",
-            element: <h1>trade my</h1>,
+            element: <TradeMyPage />,
           },
         ],
       },

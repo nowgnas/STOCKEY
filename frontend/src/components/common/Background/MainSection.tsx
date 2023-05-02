@@ -1,11 +1,11 @@
 import styled from "styled-components"
 
-const MainSection = styled.div`
+const MainSection = styled.div<{ bgColor?: string }>`
   // position
   position: relative;
 
   // 색상
-  background-color: #ffffff;
+  background-color: ${({ bgColor }) => (bgColor ? bgColor : "white")};
   color: #000000;
 
   // 모서리 radius

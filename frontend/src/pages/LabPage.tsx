@@ -10,11 +10,11 @@ import styled from "@emotion/styled"
 const LabPage = () => {
   return (
     <PageGrid container>
-      <AccordionGrid container item xs={8} sm={3} md={3}>
+      <AccordionGrid container item xs={8} sm={3.2}>
         <StockAccordion />
         <KeywordAccordion />
       </AccordionGrid>
-      <Grid item xs={8} sm={7} md={7}>
+      <Grid item xs={8} sm={7}>
         <TargetListSection />
       </Grid>
     </PageGrid>

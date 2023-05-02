@@ -6,7 +6,7 @@ interface Props {
 }
 
 // 추후 로고 이미지 경로 수정 예정
-const StockCardMini = ({item}: Props) => {
+const StockCardMini = ({ item }: Props) => {
   return (
     <CardWrapper>
       <LogoImg src={`logo_images/${item.name}.png`} />

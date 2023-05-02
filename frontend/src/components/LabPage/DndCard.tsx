@@ -1,7 +1,11 @@
 // drag and drop 용 card
 
 import { useSetRecoilState } from "recoil";
-import { StockCardType, KeywordCardType, draggedLabCardState } from "../../stores/LaboratoryAtoms";
+import {
+  StockCardType,
+  KeywordCardType,
+  draggedLabCardState,
+} from "../../stores/LaboratoryAtoms";
 import { useDrag } from "react-dnd";
 
 import StockCardMini from "./StockCardMini";
@@ -41,20 +45,25 @@ const DndCard = ({ type, item, size = "100px" }: ParamProps) => {
   );
 
   return (
-    <CardWrapper ref={dragRef} opacity={`${isDragging ? 0.4 : 1}`} size={size}>
+    <DragWrapper ref={dragRef} opacity={`${isDragging ? 0.4 : 1}`} size={size}>
       {type === "STOCK" ? (
         <StockCardMini item={item} />
       ) : (
         <KeywordCardMini item={item} />
       )}
-    </CardWrapper>
+    </DragWrapper>
   );
 };
 
 export default DndCard;
 
-const CardWrapper = styled.div<{ opacity: string; size: string }>`
+const DragWrapper = styled.div<{ opacity: string; size: string }>`
   width: ${(props) => props.size};
   height: ${(props) => props.size};
+  background-color: white;
+
+  border-radius: 24px;
   opacity: ${(props) => props.opacity};
+
+  cursor: pointer;
 `;

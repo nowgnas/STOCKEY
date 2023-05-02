@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   selectedLabStockState,
@@ -31,7 +31,7 @@ const TargetListSection = () => {
 
   // panel active 상태 (drag중 판단)
   // 0 (default) / 1 (possible) / -1 (impossible)
-  const activePanel = () => {
+  const activePanel = useMemo(() => {
     if (getItemType === "STOCK") {
       if (!stock) return 1;
       else return -1;
@@ -41,7 +41,11 @@ const TargetListSection = () => {
     } else {
       return 0;
     }
-  };
+  }, [getItem]
+  );
+  
+  console.log('section 재렌더링')
+  console.log(getItem, getItemType)
 
   // recoil의 draggedItem 변하면 stock 또는 keywordList update 가능여부 확인 후 update
   useEffect(() => {
@@ -57,15 +61,16 @@ const TargetListSection = () => {
     }
   }, [draggedItem]);
 
+
   return (
-    <TargetPanelLayout ref={dropRef} active={activePanel()}>
+    <TargetPanelLayout ref={dropRef} active={activePanel}>
       <HeaderWrapper>분석 요소</HeaderWrapper>
       <SubHeaderWrapper>분석 대상을 끌어서 선택하세요!</SubHeaderWrapper>
       <ContentWrapper>
-        <DndBox type={"STOCK"} />
-        <DndBox type={"KEYWORD1"} />
-        <DndBox type={"KEYWORD2"} />
-        <DndBox type={"KEYWORD3"} />
+        <DndBox type={"STOCK"} item={stock}/>
+        <DndBox type={"KEYWORD1"} item={keywordList[0]}/>
+        <DndBox type={"KEYWORD2"} item={keywordList[1]}/>
+        <DndBox type={"KEYWORD3"} item={keywordList[2]}/>
       </ContentWrapper>
     </TargetPanelLayout>
   );
@@ -84,10 +89,10 @@ const TargetPanelLayout = styled.div<{ active: number }>`
 
   border: ${(props) =>
     props.active === -1
-      ? "2px dashed #FB6F6F"
+      ? "3px dashed #FB6F6F"
       : props.active === 1
-      ? "2px dashed #4DC19F"
-      : "2px solid white"};
+      ? "3px dashed #4DC19F"
+      : "3px solid white"};
 `;
 
 const HeaderWrapper = styled.div`
@@ -97,7 +102,7 @@ const HeaderWrapper = styled.div`
 
 const SubHeaderWrapper = styled.div`
   font-size: 1.5rem;
-  margin: 12px 0;
+  margin: 8px 0 18px 0;
 `;
 
 const ContentWrapper = styled.div`

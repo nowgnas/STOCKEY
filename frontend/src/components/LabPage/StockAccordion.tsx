@@ -80,11 +80,11 @@ export const ContentWrapper = styled.div`
   height: 400px;
   overflow: auto;
 
-  padding: 10px 0;
+  padding: 12px 18px;
 
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 22px;
+  gap: 2.5rem;
 `;

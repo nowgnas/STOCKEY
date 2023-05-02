@@ -11,18 +11,22 @@ const TradeShortcutList = () => {
       justifyContent="center"
       alignItems="center"
     >
-      <TradeShortcutCard
-        text="거래 참여하기"
-        navPage="order"
-        imageSrc="bill"
-        color="--custom-purple-3"
-      />
-      <TradeShortcutCard
-        text="내 거래 현황"
-        navPage="my"
-        imageSrc="moneyBag"
-        color="--custom-orange-4"
-      />
+      <Grid item xs={3}>
+        <TradeShortcutCard
+          title="거래 참여하기"
+          navPage="order"
+          imageSrc="bill"
+          bgColor="--custom-purple-3"
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <TradeShortcutCard
+          title="내 거래 현황"
+          navPage="my"
+          imageSrc="moneyBag"
+          bgColor="--custom-orange-4"
+        />
+      </Grid>
     </Container>
   )
 }

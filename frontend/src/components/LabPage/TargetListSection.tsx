@@ -1,9 +1,11 @@
 import { useEffect, useMemo } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   selectedLabStockState,
   selectedLabKeywordListState,
   draggedLabCardState,
+  stockAccordionOpenState,
+  keywordAccordionOpenState
 } from "../../stores/LaboratoryAtoms";
 import { useDrop } from "react-dnd";
 import DndBox from "./DndBox";
@@ -16,6 +18,9 @@ const TargetListSection = () => {
     selectedLabKeywordListState
   );
   const draggedItem = useRecoilValue(draggedLabCardState);
+  const setStockAccordionOpen = useSetRecoilState(stockAccordionOpenState);
+  const setKeywordAccordionOpen = useSetRecoilState(keywordAccordionOpenState);
+
 
   // drag중일때 getItem, getItemType value 가짐 -> panel active 상태 활용
   // dropRef는 drop될 부분에 선언
@@ -52,8 +57,13 @@ const TargetListSection = () => {
   useEffect(() => {
     console.log("changed!", draggedItem);
     if (draggedItem.type === "STOCK" && !stock) {
+      // stock drop한 경우 
+      // recoil stock update & stock accordion close & keyword accordion open
       setStock(draggedItem.item);
+      setStockAccordionOpen(false);
+      setKeywordAccordionOpen(true);
     } else if (
+      // keyword drop한 경우
       draggedItem.type === "KEYWORD" &&
       keywordList.length < 3 &&
       !keywordList.includes(draggedItem.item!)

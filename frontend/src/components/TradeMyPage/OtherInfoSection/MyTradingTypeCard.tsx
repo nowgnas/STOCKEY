@@ -1,5 +1,5 @@
 const MyTradingTypeCard = () => {
-  return <div>MyTradingTypeCard</div>
+  return <span>MyTradingTypeCard</span>
 }
 
 export default MyTradingTypeCard

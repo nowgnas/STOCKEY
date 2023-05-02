@@ -8,6 +8,7 @@ import {
 import { useDrop } from "react-dnd";
 import DndBox from "./DndBox";
 import styled from "styled-components";
+import PeriodSelectBox from "./PeriodSelectBox";
 
 const TargetListSection = () => {
   const [stock, setStock] = useRecoilState(selectedLabStockState);
@@ -64,8 +65,13 @@ const TargetListSection = () => {
 
   return (
     <TargetPanelLayout ref={dropRef} active={activePanel}>
-      <HeaderWrapper>분석 요소</HeaderWrapper>
-      <SubHeaderWrapper>분석 대상을 끌어서 선택하세요!</SubHeaderWrapper>
+      <HeaderWrapper>
+        <TitleWrapper>
+          분석 요소
+          <SubTitleWrapper>분석 대상을 끌어서 선택하세요!</SubTitleWrapper>
+        </TitleWrapper>
+        <PeriodSelectBox />
+      </HeaderWrapper>
       <ContentWrapper>
         <DndBox type={"STOCK"} item={stock}/>
         <DndBox type={"KEYWORD1"} item={keywordList[0]}/>
@@ -80,7 +86,7 @@ export default TargetListSection;
 
 const TargetPanelLayout = styled.div<{ active: number }>`
   width: 100%;
-  background: #ffffff;
+  background: ${(props) => props.active === -1 ? "rgba(0, 0, 0, 0.2)" : "#ffffff"};
   border-radius: 24px;
   padding: 24px 36px;
 
@@ -98,10 +104,20 @@ const TargetPanelLayout = styled.div<{ active: number }>`
 const HeaderWrapper = styled.div`
   font-size: 2.2rem;
   font-weight: 700;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
 `;
 
-const SubHeaderWrapper = styled.div`
+const TitleWrapper = styled.div`
+  font-size: 2.2rem;
+  font-weight: 700;
+`;
+
+const SubTitleWrapper = styled.div`
   font-size: 1.5rem;
+  font-weight: 400;
   margin: 8px 0 18px 0;
 `;
 

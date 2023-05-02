@@ -24,3 +24,8 @@ export const draggedLabCardState = atom<{type: string, item: StockCardType | Key
   key: "draggedLabCardState",
   default: {type: "", item: undefined}
 })
+
+export const selectedLabPeriodState = atom<number>({
+  key: "selectedLabPeriodState",
+  default: 1,
+})

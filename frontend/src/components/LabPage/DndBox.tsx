@@ -30,6 +30,7 @@ const DndBox = ({ type, item }: Props) => {
   const deleteHandler = () => {
     console.log("deleteHandler!");
     animeRef.current = false;
+    setMouseOver(false);
     // zoom out animation 위해 settimeout
     setTimeout(() => {
       if (type === "STOCK") {
@@ -39,7 +40,7 @@ const DndBox = ({ type, item }: Props) => {
         setKeywordList((prev) => prev.filter((item, index) => index !== idx));
       }
       animeRef.current = true;
-    }, 200);
+    }, 150);
   };
 
   return (

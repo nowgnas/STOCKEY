@@ -1,17 +1,24 @@
-FROM adoptopenjdk:11-hotspot AS builder
+FROM adoptopenjdk/openjdk11:armv7l-ubuntu-jre-hotspot
+
 ENV PROFILE dev
+
 WORKDIR /app
+
 COPY server/discovery-service/gradlew .
 COPY server/discovery-service/gradle gradle
 COPY server/discovery-service/build.gradle .
 COPY server/discovery-service/settings.gradle .
 COPY server/discovery-service/src src
+
 RUN chmod +x ./gradlew
 RUN ./gradlew clean bootJar
 
-FROM adoptopenjdk:11-hotspot
+FROM adoptopenjdk/openjdk11:armv7l-ubuntu-jre-hotspot
+
 WORKDIR /app
-COPY --from=builder /app/build/libs/*.jar app.jar
+
+COPY --from=0 /app/build/libs/*.jar app.jar
+
 ENTRYPOINT ["java", "-jar", \
         "-Dspring.profiles.active=${PROFILE}", \
         "/app/app.jar"]

@@ -1,6 +1,10 @@
 server:
   port: 8000
 
+spring:
+  application:
+    name: apigateway-service
+
 
 management:
   endpoints:

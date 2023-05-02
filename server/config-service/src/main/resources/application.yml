@@ -1,0 +1,27 @@
+server:
+  port: 8888
+
+
+spring:
+  application:
+    name: config-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password : guest
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: '{cipher}18802404f95c64a497445612f249c6ee782ca04e7e10156321aa1a040f495b7a7a4b4da8ef78dc3d9ae1aa35a002aa5b6953c4ed4107cd9e8b779a12133481a9'
+          default-label: 'dev-be/docs'
+          searchPaths: 'server/config'
+          username: '{cipher}94a4b14736a8479bb718e6095f7c0c241e5bb6af76ea9c652c878ed8cd4ecb4a11bf453df2465807ed484a6dda6343a2'
+          password: '{cipher}2fd1052fd71d4ea7b0316f52d52d3a58393517cc0795a10f7266189eed0a9891b89013a992e3405976bfed0803175ad3'
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,busrefresh

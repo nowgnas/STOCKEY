@@ -25,6 +25,8 @@
     "highcharts-react-official": "^3.2.0",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.7",
     "react-query": "^3.39.3",

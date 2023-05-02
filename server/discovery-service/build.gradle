@@ -30,3 +30,8 @@ dependencyManagement {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+bootJar {
+    jvmTarget = '11'
+    classifier = 'boot'
+    targetPlatform 'linux', 'x86_64', 'aarch64'
+}

@@ -1,4 +1,4 @@
-FROM arm64v8/openjdk:11-jdk-slim AS builder
+FROM adoptopenjdk:11-jdk-hotspot-bionic AS builder
 ENV PROFILE dev
 WORKDIR /app
 COPY server/discovery-service/gradlew .
@@ -9,7 +9,7 @@ COPY server/discovery-service/src src
 RUN chmod +x ./gradlew
 RUN ./gradlew clean bootJar
 
-FROM arm64v8/openjdk:11-jdk-slim
+FROM adoptopenjdk:11-jdk-hotspot-bionic
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 ENTRYPOINT ["java", "-jar", \

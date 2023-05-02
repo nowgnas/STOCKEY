@@ -8,7 +8,6 @@ interface Props {
 }
 
 const TradeGuideItem = ({ title, mainText, imageSrc }: Props) => {
-  const text = mainText.split("\\n")
   return (
     <GuideItemWrapper
       direction="column"
@@ -20,9 +19,7 @@ const TradeGuideItem = ({ title, mainText, imageSrc }: Props) => {
       <GuideImg src={`/tradeLogos/${imageSrc}.png`} alt="#" />
       <Header>{title}</Header>
       <MainTextWrapper>
-        {text.map((t) => {
-          return <MainText>{t}</MainText>
-        })}
+        <MainText>{mainText}</MainText>
       </MainTextWrapper>
     </GuideItemWrapper>
   )
@@ -71,6 +68,7 @@ const MainText = styled.p`
   margin: 3%;
   font-size: 10px;
   color: #6d6666;
+  white-space: pre-wrap;
 
   @media (max-width: 1072px) {
     font-size: 8px;

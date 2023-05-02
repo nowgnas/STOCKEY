@@ -9,7 +9,7 @@ COPY server/discovery-service/src src
 RUN chmod +x ./gradlew
 RUN ./gradlew clean bootJar
 
-FROM arm64v8/openjdk:11-jre-alpine
+FROM arm64v8/openjdk:11-jdk
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 ENTRYPOINT ["java", "-jar", \

@@ -1,10 +1,12 @@
 import { memo, useState, useRef } from "react";
 import { useSetRecoilState } from "recoil";
 import {
-  selectedLabStockState,
-  selectedLabKeywordListState,
   KeywordCardType,
   StockCardType,
+  selectedLabStockState,
+  selectedLabKeywordListState,
+  stockAccordionOpenState,
+  keywordAccordionOpenState
 } from "../../stores/LaboratoryAtoms";
 
 import StockCardMini from "./StockCardMini";
@@ -24,18 +26,24 @@ const DndBox = ({ type, item }: Props) => {
   const text = type === "STOCK" ? "종목" : "키워드";
   const setStock = useSetRecoilState(selectedLabStockState);
   const setKeywordList = useSetRecoilState(selectedLabKeywordListState);
+  const setStockAccordionOpen = useSetRecoilState(stockAccordionOpenState);
+  const setKeywordAccordionOpen = useSetRecoilState(keywordAccordionOpenState);
   const [mouseOver, setMouseOver] = useState(false);
   const animeRef = useRef(true)
   
   const deleteHandler = () => {
-    console.log("deleteHandler!");
     animeRef.current = false;
     setMouseOver(false);
     // zoom out animation 위해 settimeout
     setTimeout(() => {
       if (type === "STOCK") {
+        // stock 삭제한 경우
+        // keyword accordion close & stock accordion open
         setStock(undefined);
+        setKeywordAccordionOpen(false);
+        setStockAccordionOpen(true);
       } else {
+        // keyword 삭제한 경우
         const idx = parseInt(type[7]) - 1;
         setKeywordList((prev) => prev.filter((item, index) => index !== idx));
       }

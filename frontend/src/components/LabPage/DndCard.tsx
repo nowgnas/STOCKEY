@@ -1,5 +1,6 @@
 // drag and drop 용 card
 
+import { memo } from 'react';
 import { useSetRecoilState } from "recoil";
 import {
   StockCardType,
@@ -55,7 +56,7 @@ const DndCard = ({ type, item, size = "100px" }: ParamProps) => {
   );
 };
 
-export default DndCard;
+export default memo(DndCard);
 
 const DragWrapper = styled.div<{ opacity: string; size: string }>`
   width: ${(props) => props.size};

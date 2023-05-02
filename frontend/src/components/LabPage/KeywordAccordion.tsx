@@ -1,7 +1,8 @@
-import { PanelLayout, HeaderWrapper, ContentWrapper } from "./StockAccordion";
-import DndCard from "./DndCard";
+import { useRecoilState } from "recoil";
+import { KeywordCardType, keywordAccordionOpenState } from "../../stores/LaboratoryAtoms";
+import AccordionLayout from "./AccordionLayout";
 
-const sampleItem = [
+const sampleItem: KeywordCardType[] = [
   {
     id: 1,
     name: "keyword1",
@@ -37,23 +38,10 @@ const sampleItem = [
 ];
 
 const KeywordAccordion = () => {
-
+  const [openState, setOpenState] = useRecoilState(keywordAccordionOpenState)
 
   return (
-    <PanelLayout>
-      <HeaderWrapper>키워드</HeaderWrapper>
-      <ContentWrapper>
-        {sampleItem.map((item) => {
-          return (
-            <DndCard
-              key={item.id}
-              item={item}
-              type="KEYWORD"
-            />
-          );
-        })}
-      </ContentWrapper>
-    </PanelLayout>
+    <AccordionLayout type="KEYWORD" items={sampleItem} openState={openState} setOpenState={setOpenState}/>
   );
 };
 

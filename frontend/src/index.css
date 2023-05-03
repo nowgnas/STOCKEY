@@ -32,6 +32,12 @@ html {
   --custom-background: #faf5f7;
 }
 
+@font-face {
+  font-family: "Inter";
+  src: url();
+  unicode-range: U+AC00-D7A3;
+}
+
 body {
   margin: 0;
   /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",

@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import { useRecoilState } from "recoil";
 import { selectedLabPeriodState } from "../../stores/LaboratoryAtoms";
 
@@ -14,6 +15,7 @@ const PeriodSelectBox = () => {
     { value: 3, text: "지난 3개월" },
     { value: 6, text: "지난 6개월" },
   ];
+
 
   const handleChange= (e: SelectChangeEvent<number>) => {
     e.preventDefault();
@@ -46,8 +48,8 @@ const PeriodSelectBox = () => {
   );
 };
 
-export default PeriodSelectBox;
+export default memo(PeriodSelectBox);
 
 const FormWrapper = styled(FormControl)({
-  width: "30%",
+  width: "120px",
 });

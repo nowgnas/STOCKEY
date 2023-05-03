@@ -43,6 +43,9 @@ const sampleItem: StockCardType[] = [
 const StockAccordion = () => {
   const [openState, setOpenState] = useRecoilState(stockAccordionOpenState);
 
+  console.log('accordion 재렌더링?')
+
+
   return (
     <AccordionLayout
       type="STOCK"

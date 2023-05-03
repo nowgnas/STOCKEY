@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import { useEffect, useMemo } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
@@ -93,14 +94,14 @@ const TargetListSection = () => {
   );
 };
 
-export default TargetListSection;
+export default memo(TargetListSection);
 
 const TargetPanelLayout = styled.div<{ active: number }>`
   width: 100%;
   background: ${(props) =>
     props.active === -1 ? "rgba(0, 0, 0, 0.2)" : "#ffffff"};
   border-radius: 24px;
-  padding: 24px 36px;
+  padding: 30px 36px;
 
   box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.15),
     0px 1px 3px rgba(0, 0, 0, 0.3);
@@ -131,7 +132,7 @@ const TitleWrapper = styled.div`
 const SubTitleWrapper = styled.div`
   font-size: 1.5rem;
   font-weight: 400;
-  margin: 8px 0 18px 0;
+  margin: 10px 0 30px 0;
 `;
 
 const RightItemWrapper = styled.div`

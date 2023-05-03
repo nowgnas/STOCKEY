@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { SetterOrUpdater } from "recoil";
 import { StockCardType, KeywordCardType } from "../../stores/LaboratoryAtoms";
 import AccordionSearchBar from "./AccordionSearchBar";
@@ -14,6 +15,8 @@ interface Props {
 
 const AccordionLayout = ({ type, items, openState, setOpenState }: Props) => {
   const headerText = type === "STOCK" ? "종목" : "키워드";
+
+  console.log(type, 'layout 재렌더링?')
 
   return (
     <PanelLayout>
@@ -40,7 +43,7 @@ const AccordionLayout = ({ type, items, openState, setOpenState }: Props) => {
   );
 };
 
-export default AccordionLayout;
+export default memo(AccordionLayout);
 
 const PanelLayout = styled.div`
   width: 100%;
@@ -66,8 +69,6 @@ const HeaderWrapper = styled.div`
 const ContentWrapper = styled.div`
   width: 100%;
   height: 400px;
-  overflow: auto;
-
   padding: 12px 18px;
 
   display: flex;
@@ -75,6 +76,22 @@ const ContentWrapper = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: 2.5rem;
+
+  overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    width: 1.8rem;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d9d9d9;
+    border-radius: 24px;
+    border: 5px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-track {
+    width: 1.8rem;
+  }
+
 `;
 
 const TailWrapper = styled.div`

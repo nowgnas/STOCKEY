@@ -6,7 +6,9 @@ import {
   draggedLabCardState,
   selectedLabPeriodState,
   stockAccordionOpenState,
-  keywordAccordionOpenState
+  keywordAccordionOpenState,
+  labStockSearchInput,
+  labKeywordSearchInput
 } from "../../stores/LaboratoryAtoms";
 
 import styled from "styled-components";
@@ -18,6 +20,8 @@ const ResetBtn = () => {
   const resetSelectedLabPeriodState = useResetRecoilState(selectedLabPeriodState);
   const resetStockAccordionOpenState = useResetRecoilState(stockAccordionOpenState);
   const resetKeywordAccordionOpenState = useResetRecoilState(keywordAccordionOpenState);
+  const resetLabStockSearchInput = useResetRecoilState(labStockSearchInput)
+  const resetLabKeywordSearchInput = useResetRecoilState(labKeywordSearchInput)
 
   const resetHandler = () => {
     console.log("reset all!");
@@ -27,6 +31,8 @@ const ResetBtn = () => {
     resetSelectedLabPeriodState();
     resetStockAccordionOpenState();
     resetKeywordAccordionOpenState();
+    resetLabStockSearchInput();
+    resetLabKeywordSearchInput();
   };
   
   return <ResetBtnWrapper onClick={resetHandler}>초기화</ResetBtnWrapper>;

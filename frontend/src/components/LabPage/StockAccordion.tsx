@@ -1,5 +1,8 @@
 import { useRecoilState } from "recoil";
-import { StockCardType, stockAccordionOpenState } from "../../stores/LaboratoryAtoms";
+import {
+  StockCardType,
+  stockAccordionOpenState,
+} from "../../stores/LaboratoryAtoms";
 import AccordionLayout from "./AccordionLayout";
 
 const sampleItem: StockCardType[] = [
@@ -38,9 +41,15 @@ const sampleItem: StockCardType[] = [
 ];
 
 const StockAccordion = () => {
-  const [openState, setOpenState] = useRecoilState(stockAccordionOpenState)
+  const [openState, setOpenState] = useRecoilState(stockAccordionOpenState);
+
   return (
-    <AccordionLayout type="STOCK" items={sampleItem} openState={openState} setOpenState={setOpenState}/>
+    <AccordionLayout
+      type="STOCK"
+      items={sampleItem}
+      openState={openState}
+      setOpenState={setOpenState}
+    />
   );
 };
 

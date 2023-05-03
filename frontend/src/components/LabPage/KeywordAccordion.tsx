@@ -1,5 +1,8 @@
 import { useRecoilState } from "recoil";
-import { KeywordCardType, keywordAccordionOpenState } from "../../stores/LaboratoryAtoms";
+import {
+  KeywordCardType,
+  keywordAccordionOpenState,
+} from "../../stores/LaboratoryAtoms";
 import AccordionLayout from "./AccordionLayout";
 
 const sampleItem: KeywordCardType[] = [
@@ -38,10 +41,15 @@ const sampleItem: KeywordCardType[] = [
 ];
 
 const KeywordAccordion = () => {
-  const [openState, setOpenState] = useRecoilState(keywordAccordionOpenState)
+  const [openState, setOpenState] = useRecoilState(keywordAccordionOpenState);
 
   return (
-    <AccordionLayout type="KEYWORD" items={sampleItem} openState={openState} setOpenState={setOpenState}/>
+    <AccordionLayout
+      type="KEYWORD"
+      items={sampleItem}
+      openState={openState}
+      setOpenState={setOpenState}
+    />
   );
 };
 

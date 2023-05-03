@@ -1,5 +1,6 @@
 import { SetterOrUpdater } from "recoil";
 import { StockCardType, KeywordCardType } from "../../stores/LaboratoryAtoms";
+import AccordionSearchBar from "./AccordionSearchBar";
 import DndCard from "./DndCard";
 import Collapse from "@mui/material/Collapse";
 import styled from "styled-components";
@@ -16,7 +17,10 @@ const AccordionLayout = ({ type, items, openState, setOpenState }: Props) => {
 
   return (
     <PanelLayout>
-      <HeaderWrapper>{headerText}</HeaderWrapper>
+      <HeaderWrapper>
+        {headerText}
+        <AccordionSearchBar type={type}/>
+      </HeaderWrapper>
       <Collapse in={openState} timeout={500}>
         <ContentWrapper>
           {items.map((item) => {
@@ -50,6 +54,10 @@ const PanelLayout = styled.div`
 `;
 
 const HeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   padding: 0 30px 18px 30px;
   font-size: 2.2rem;
   font-weight: 700;

@@ -45,3 +45,15 @@ export const keywordAccordionOpenState = atom<boolean>({
   key: "keywordAccordionOpenState",
   default: false,
 })
+
+// stock search input
+export const labStockSearchInput = atom<string>({
+  key: "labStockSearchInput",
+  default: ""
+})
+
+// keyword search input
+export const labKeywordSearchInput = atom<string>({
+  key: "labKeywordSearchInput",
+  default: ""
+})

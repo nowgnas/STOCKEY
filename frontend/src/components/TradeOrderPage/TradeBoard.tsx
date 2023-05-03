@@ -2,7 +2,6 @@ import styled from "styled-components"
 import TradeGuideList from "./TradeGuide/TradeGuideList"
 import dayjs from "dayjs"
 import TradeForm from "./TradeForm/TradeForm"
-
 interface SpeechBubbleProps {
   hour: number
 }
@@ -31,7 +30,7 @@ const Container = styled.section`
 
   background: #faf5f7;
   border-radius: 36px;
-  height: 100%;
+  min-height: max-content;
 `
 
 const SpeechBubble = styled.div<SpeechBubbleProps>`

@@ -18,11 +18,11 @@ const TradeStepper = () => {
     <Container>
       <Header>
         {nowHour > 7 && nowHour < 15
-          ? `지금 ${nowHour}시 거래 주문이 진행 중이에요!`
+          ? `지금 ${nowHour + 1}시 거래 주문이 진행 중이에요!`
           : "장이 마감되었습니다."}
       </Header>
       {nowHour > 7 && nowHour < 15 && (
-        <BodyText>{nowHour}시 전까지 주문서 제출을 완료해주세요.</BodyText>
+        <BodyText>{nowHour + 1}시 전까지 주문서 제출을 완료해주세요.</BodyText>
       )}
       <TimeWrapper>
         <Line nowHour={nowHour} />

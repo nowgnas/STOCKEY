@@ -1,36 +1,117 @@
 import styled from "styled-components"
+import dayjs from "dayjs"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
+
+import { BasketList } from "./TradeForm"
+import { Button, Grid, TextField } from "@mui/material"
+import { ChangeEvent, useState } from "react"
+
 interface Props {
+  id: number
   name: string
-  nums: number
+  quantity: number
+  status: string
+  myStockNums?: number
+  currentPrice: number
+  listHandler: (status: string) => void
 }
 
-const TradeBasketItem = ({ name, nums }: Props) => {
-  const stockNumHandler = (status: string) => {
-    switch (status) {
-      case "up":
-        //로컬 스토리지 개수 증가
-        break
-      case "down":
-        // 로컬 스토리지 개수 감소
-        break
-    }
+const TradeBasketItem = ({
+  id,
+  name,
+  quantity,
+  status,
+  myStockNums,
+  currentPrice,
+  listHandler,
+}: Props) => {
+  const [isEdit, setIsEdit] = useState(false)
+  const [editValue, setEditValue] = useState<number>(quantity)
+  const editHandler = () => {
+    setIsEdit(true)
   }
+  const editValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setEditValue(Number(e.target.value))
+  }
+
+  const stockNumHandler = (nums: number) => {
+    const list = status === "팔래요" ? "sellList" : "buyList"
+
+    let myList = JSON.parse(localStorage.getItem(list)!)
+
+    // 개수
+    let value
+    if (status === "살래요") {
+      value = quantity + nums < 0 ? 0 : quantity + nums
+    } else {
+      value =
+        quantity + nums > myStockNums!
+          ? myStockNums
+          : quantity + nums < 0
+          ? 0
+          : quantity + nums
+    }
+    const info = {
+      id,
+      name,
+      quantity: value,
+      myStockNums: myStockNums,
+      currentPrice: currentPrice,
+      time: dayjs().format("YYYY/MM/DD-HH:mm"),
+    }
+    value === 0
+      ? (myList = myList.filter((stock: BasketList) => {
+          return stock.id !== id
+        }))
+      : (myList = myList.map((stock: BasketList) => {
+          if (stock.id === id) return info
+          else return stock
+        }))
+    console.log(myList, list)
+    localStorage.setItem(list, JSON.stringify(myList))
+    listHandler(status)
+  }
+
   return (
     <>
       <StockLogoImage src={`/logo_images/${name}.png`} />
       <StockText>{name}</StockText>
-      <StockNumsWrapper>
-        <KeyboardArrowDownIcon
-          color="info"
-          onClick={() => stockNumHandler("down")}
-        />
-        <StockText>{nums}</StockText>
-        <KeyboardArrowUpIcon
-          color="warning"
-          onClick={() => stockNumHandler("up")}
-        />
+      <StockNumsWrapper item xs={3} justifyContent="space-between">
+        {isEdit ? (
+          <>
+            <TextFieldComp
+              value={editValue}
+              type="number"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              variant="standard"
+              onChange={editValueHandler}
+            />
+            <ButtonComp
+              variant="contained"
+              onClick={() => {
+                stockNumHandler(editValue - quantity)
+                setIsEdit(false)
+              }}
+            >
+              변경
+            </ButtonComp>
+          </>
+        ) : (
+          <>
+            <KeyboardArrowDownIcon
+              color="info"
+              onClick={() => {
+                stockNumHandler(-1)
+              }}
+            />
+            <StockText onClick={editHandler}>{quantity}</StockText>
+            <KeyboardArrowUpIcon
+              color="warning"
+              onClick={() => stockNumHandler(1)}
+            />
+          </>
+        )}
       </StockNumsWrapper>
     </>
   )
@@ -48,9 +129,22 @@ const StockText = styled.p`
   font-weight: bold;
 `
 
-const StockNumsWrapper = styled.div`
+const StockNumsWrapper = styled(Grid)`
   display: flex;
   flex-direction: row;
   gap: 2px;
   align-items: center;
+`
+
+const TextFieldComp = styled(TextField)`
+  & > div > input {
+    text-align: end;
+  }
+`
+const ButtonComp = styled(Button)`
+  min-width: 40% !important;
+  width: 40% !important;
+  padding: 1px 1px !important;
+  font-weight: bold !important;
+  color: black !important;
 `

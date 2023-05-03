@@ -2,42 +2,108 @@ import styled from "styled-components"
 import HelpIcon from "@mui/icons-material/Help"
 import TradeBasketItem from "./TradeBasketItem"
 import { useState } from "react"
+import { useDrop } from "react-dnd"
+
+import { BasketList } from "./TradeForm"
+import { SimpleDialogProps } from "./TradeQuantityInputModal"
+import { Grid } from "@mui/material"
+
 interface Props {
   status: string
   text: string
   color: string
-  data: { name: string; nums: number; currentPrice: number }[]
+  data: BasketList[]
+  myBalance: number
+  modalDataHandler: (info: SimpleDialogProps) => void
+  listHandler: (status: string) => void
 }
 
 interface ContainerProps {
   color: string
 }
 
-const TradeBasketList = ({ status, text, color, data }: Props) => {
+interface PriceTextProps {
+  myBalance: number
+  sumPrice: number
+  status: string
+}
+
+const TradeBasketList = ({
+  status,
+  text,
+  color,
+  data,
+  myBalance,
+  modalDataHandler,
+  listHandler,
+}: Props) => {
   // 숫자 포맷
   const internationalNumberFormat = new Intl.NumberFormat("en-US")
 
   // 합계
   const sumPrice = data.reduce((sum, currValue) => {
-    return sum + currValue.nums * currValue.currentPrice
+    return sum + currValue.quantity * currValue.currentPrice
   }, 0)
 
   // '?' hover
   const [isHover, setIsHover] = useState(false)
 
+  const [{ getItem, getItemType }, dropRef] = useDrop(
+    () => ({
+      accept: status === "팔래요" ? ["SELL"] : ["BUY", "SELL"],
+      collect: (monitor) => ({
+        getItem: monitor.getItem(),
+        getItemType: monitor.getItemType(),
+      }),
+      drop: (item, monitor) => {
+        if (monitor.canDrop()) {
+          const itemInfo = item as {
+            id: number
+            name: string
+            stockNums?: number
+            currentPrice: number
+          }
+          modalDataHandler({
+            id: itemInfo.id,
+            status,
+            stockInfo: {
+              name: itemInfo.name,
+              currentPrice: itemInfo.currentPrice,
+              myStockNums: itemInfo.stockNums,
+            },
+            open: true,
+          })
+        }
+      },
+    }),
+    []
+  )
+
   return (
-    <BasketContainer color={color}>
+    <BasketContainer color={color} ref={dropRef}>
       <BasketHeader>{status}</BasketHeader>
       <BasketWrapper>
-        {data.map((data) => {
+        {data?.map((data) => {
           return (
-            <BasketItemSection>
-              <TradeBasketItem name={data.name} nums={data.nums} />
+            <BasketItemSection
+              container
+              direction="row"
+              justifyContent="space-between"
+            >
+              <TradeBasketItem
+                id={data.id}
+                name={data.name}
+                quantity={data.quantity}
+                myStockNums={data.myStockNums}
+                currentPrice={data.currentPrice}
+                status={status}
+                listHandler={listHandler}
+              />
             </BasketItemSection>
           )
         })}
       </BasketWrapper>
-      <BasketItemSection>
+      <BasketItemSection container>
         <StatusText>
           예상 {text}
           <HelpIcon
@@ -52,7 +118,9 @@ const TradeBasketList = ({ status, text, color, data }: Props) => {
             </StatusText>
           </InfoSection>
         )}
-        <StatusText>{internationalNumberFormat.format(sumPrice)}원</StatusText>
+        <PriceText myBalance={myBalance} sumPrice={sumPrice} status={status}>
+          {sumPrice ? internationalNumberFormat.format(sumPrice) : 0}원
+        </PriceText>
       </BasketItemSection>
     </BasketContainer>
   )
@@ -101,10 +169,8 @@ const BasketWrapper = styled.section`
   }
 `
 
-const BasketItemSection = styled.section`
-  display: flex;
+const BasketItemSection = styled(Grid)`
   position: relative;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   padding: 0 10px 0 10px;
@@ -120,6 +186,13 @@ const StatusText = styled.p`
   white-space: pre-wrap;
 `
 
+const PriceText = styled(StatusText)<PriceTextProps>`
+  color: ${(props) =>
+    props.status === "살래요" && props.myBalance < props.sumPrice
+      ? "red"
+      : "black"};
+`
+
 const InfoSection = styled.section`
   display: flex;
   position: absolute;
@@ -128,5 +201,5 @@ const InfoSection = styled.section`
   border-radius: 24px;
   min-width: max-content;
   height: 6rem;
-  left: 20%;
+  left: 25%;
 `

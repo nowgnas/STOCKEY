@@ -1,12 +1,14 @@
 import styled from "styled-components"
-import { SectionWrapper } from "../../common/Background/SectionWrapper"
 
-const TradeFormBalance = () => {
+interface Props {
+  myBalance: number
+}
+
+const TradeFormBalance = ({ myBalance }: Props) => {
   const internationalNumberFormat = new Intl.NumberFormat("en-US")
 
   // 나중에 useQuery 사용해서 내 잔액 가져오기
   // 다음 정각때 query 삭제하고 다시 받아오기
-  const myBalance = 50000000
   return (
     <BalanceContainer>
       <BalanceWrapper>

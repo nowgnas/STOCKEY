@@ -7,105 +7,16 @@ import TradeStockTabPanel from "./TradeStockTabPanel"
 import TradeStockItem from "./TradeStockItem"
 import { Divider } from "@mui/material"
 
-// 나중에 useQuery 사용 전체종목도 해서 넣기
-const MY_STOCK_DUMMY_DATA = [
-  {
-    name: "naver",
-    industry: "IT",
-    currentPrice: 125000,
-    buyPrice: 127000,
-    buyPop: 3,
-    sellPop: 73,
-  },
-  {
-    name: "카카오",
-    industry: "IT",
-    currentPrice: 50000,
-    buyPrice: 23000,
-    buyPop: 72,
-    sellPop: 73,
-  },
-  {
-    name: "삼성전자",
-    industry: "반도체",
-    currentPrice: 53000,
-    buyPrice: 1000,
-    buyPop: 72,
-    sellPop: 73,
-  },
-  {
-    name: "naver",
-    industry: "IT",
-    currentPrice: 125000,
-    buyPrice: 127000,
-    buyPop: 72,
-    sellPop: 73,
-  },
-  {
-    name: "카카오",
-    industry: "IT",
-    currentPrice: 50000,
-    buyPrice: 23000,
-    buyPop: 72,
-    sellPop: 73,
-  },
-  {
-    name: "삼성전자",
-    industry: "반도체",
-    currentPrice: 53000,
-    buyPrice: 1000,
-    buyPop: 72,
-    sellPop: 73,
-  },
-  {
-    name: "naver",
-    industry: "IT",
-    currentPrice: 125000,
-    buyPrice: 127000,
-    buyPop: 72,
-    sellPop: 73,
-  },
-  {
-    name: "카카오",
-    industry: "IT",
-    currentPrice: 50000,
-    buyPrice: 23000,
-    buyPop: 72,
-    sellPop: 73,
-  },
-  {
-    name: "삼성전자",
-    industry: "반도체",
-    currentPrice: 53000,
-    buyPrice: 1000,
-    buyPop: 72,
-    sellPop: 73,
-  },
-  {
-    name: "naver",
-    industry: "IT",
-    currentPrice: 125000,
-    buyPrice: 127000,
-    buyPop: 72,
-    sellPop: 73,
-  },
-  {
-    name: "카카오",
-    industry: "IT",
-    currentPrice: 50000,
-    buyPrice: 23000,
-    buyPop: 72,
-    sellPop: 73,
-  },
-  {
-    name: "삼성전자",
-    industry: "반도체",
-    currentPrice: 53000,
-    buyPrice: 1000,
-    buyPop: 72,
-    sellPop: 73,
-  },
-]
+export interface TradeStockItemProps {
+  item: {
+    name: string
+    stockNums: number
+    currentPrice: number
+    buyPrice?: number
+    buyPop: number
+    sellPop: number
+  }
+}
 
 const TradeStockList = () => {
   const [value, setValue] = useState(0)
@@ -126,14 +37,7 @@ const TradeStockList = () => {
         {MY_STOCK_DUMMY_DATA.map((stock) => {
           return (
             <>
-              <TradeStockItem
-                name={stock.name}
-                industry={stock.industry}
-                currentPrice={stock.currentPrice}
-                buyPrice={stock.buyPrice}
-                buyPop={stock.buyPop}
-                sellPop={stock.sellPop}
-              />
+              <TradeStockItem item={stock} />
               <Divider />
             </>
           )
@@ -157,3 +61,151 @@ const StockContainer = styled.section`
 `
 
 const StockTabs = styled(Tabs)``
+
+// 나중에 useQuery 사용 전체종목도 해서 넣기
+const MY_STOCK_DUMMY_DATA = [
+  {
+    id: 1,
+    name: "LG에너지솔루션",
+    stockNums: 302,
+    currentPrice: 125000,
+    buyPrice: 127000,
+    buyPop: 3,
+    sellPop: 73,
+  },
+  {
+    id: 2,
+    name: "카카오",
+    stockNums: 32,
+    currentPrice: 50000,
+    buyPrice: 23000,
+    buyPop: 72,
+    sellPop: 73,
+  },
+  {
+    id: 3,
+    name: "삼성전자",
+    stockNums: 32,
+    currentPrice: 53000,
+    buyPrice: 1000,
+    buyPop: 72,
+    sellPop: 73,
+  },
+  {
+    id: 4,
+    name: "naver",
+    stockNums: 32,
+    currentPrice: 125000,
+    buyPrice: 127000,
+    buyPop: 72,
+    sellPop: 73,
+  },
+  {
+    id: 1,
+    name: "LG에너지솔루션",
+    stockNums: 302,
+    currentPrice: 125000,
+    buyPrice: 127000,
+    buyPop: 3,
+    sellPop: 73,
+  },
+  {
+    id: 2,
+    name: "카카오",
+    stockNums: 32,
+    currentPrice: 50000,
+    buyPrice: 23000,
+    buyPop: 72,
+    sellPop: 73,
+  },
+  {
+    id: 3,
+    name: "삼성전자",
+    stockNums: 32,
+    currentPrice: 53000,
+    buyPrice: 1000,
+    buyPop: 72,
+    sellPop: 73,
+  },
+  {
+    id: 4,
+    name: "naver",
+    stockNums: 32,
+    currentPrice: 125000,
+    buyPrice: 127000,
+    buyPop: 72,
+    sellPop: 73,
+  },
+  {
+    id: 1,
+    name: "LG에너지솔루션",
+    stockNums: 302,
+    currentPrice: 125000,
+    buyPrice: 127000,
+    buyPop: 3,
+    sellPop: 73,
+  },
+  {
+    id: 2,
+    name: "카카오",
+    stockNums: 32,
+    currentPrice: 50000,
+    buyPrice: 23000,
+    buyPop: 72,
+    sellPop: 73,
+  },
+  {
+    id: 3,
+    name: "삼성전자",
+    stockNums: 32,
+    currentPrice: 53000,
+    buyPrice: 1000,
+    buyPop: 72,
+    sellPop: 73,
+  },
+  {
+    id: 4,
+    name: "naver",
+    stockNums: 32,
+    currentPrice: 125000,
+    buyPrice: 127000,
+    buyPop: 72,
+    sellPop: 73,
+  },
+  {
+    id: 1,
+    name: "LG에너지솔루션",
+    stockNums: 302,
+    currentPrice: 125000,
+    buyPrice: 127000,
+    buyPop: 3,
+    sellPop: 73,
+  },
+  {
+    id: 2,
+    name: "카카오",
+    stockNums: 32,
+    currentPrice: 50000,
+    buyPrice: 23000,
+    buyPop: 72,
+    sellPop: 73,
+  },
+  {
+    id: 3,
+    name: "삼성전자",
+    stockNums: 32,
+    currentPrice: 53000,
+    buyPrice: 1000,
+    buyPop: 72,
+    sellPop: 73,
+  },
+  {
+    id: 4,
+    name: "naver",
+    stockNums: 32,
+    currentPrice: 125000,
+    buyPrice: 127000,
+    buyPop: 72,
+    sellPop: 73,
+  },
+]

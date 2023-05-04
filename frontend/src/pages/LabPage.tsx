@@ -28,7 +28,7 @@ const LabPage = () => {
       </ColumnWrapper>
 
       <AbsoluteWrapper resultSize={stockOpenState || keywordOpenState}>
-        <ResultBoard />
+        <ResultBoard resultSize={stockOpenState || keywordOpenState}/>
       </AbsoluteWrapper>
     </PageWrapper>
   );
@@ -55,7 +55,7 @@ const AbsoluteWrapper = styled.div<{ resultSize: boolean }>`
   position: absolute;
   padding: 0 0 5% 0;
   right: 10%;
-  top: ${(props) => (props.resultSize ? "410px" : "460px")};
+  top: ${(props) => (props.resultSize ? "415px" : "460px")};
   width: ${(props) => (props.resultSize ? "52%" : "80%")};
 
   -webkit-transition: width 1s, top 1s;

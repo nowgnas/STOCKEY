@@ -13,7 +13,7 @@ const AccordionSearchBar = ({type}: Props) => {
   const [stockInput, setStockInput] = useRecoilState(labStockSearchInput);
   const [keywordInput, setKeywordInput] = useRecoilState(labKeywordSearchInput);
 
-  console.log(type, stockInput, keywordInput)
+  // console.log(type, stockInput, keywordInput)
 
   // 변경될때마다 query 보내기
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

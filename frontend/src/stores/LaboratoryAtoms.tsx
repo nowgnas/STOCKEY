@@ -57,3 +57,9 @@ export const labKeywordSearchInput = atom<string>({
   key: "labKeywordSearchInput",
   default: ""
 })
+
+// resultBoard Open state
+export const resultBoardOpenState = atom<boolean>({
+  key: "resultBoardOpenState",
+  default: false
+})

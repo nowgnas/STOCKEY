@@ -7,6 +7,7 @@ import {
   draggedLabCardState,
   stockAccordionOpenState,
   keywordAccordionOpenState,
+  resultBoardOpenState
 } from "../../stores/LaboratoryAtoms";
 import { useDrop } from "react-dnd";
 import ResetBtn from "./ResetBtn";
@@ -22,6 +23,7 @@ const TargetListSection = () => {
   const draggedItem = useRecoilValue(draggedLabCardState);
   const setStockAccordionOpen = useSetRecoilState(stockAccordionOpenState);
   const setKeywordAccordionOpen = useSetRecoilState(keywordAccordionOpenState);
+  const setResultBoardOpen = useSetRecoilState(resultBoardOpenState);
 
   // drag중일때 getItem, getItemType value 가짐 -> panel active 상태 활용
   // dropRef는 drop될 부분에 선언
@@ -55,13 +57,13 @@ const TargetListSection = () => {
 
   // recoil의 draggedItem 변하면 stock 또는 keywordList update 가능여부 확인 후 update
   useEffect(() => {
-    console.log("changed!", draggedItem);
     if (draggedItem.type === "STOCK" && !stock) {
       // stock drop한 경우
-      // recoil stock update & stock accordion close & keyword accordion open
+      // recoil stock update & stock accordion close & keyword accordion open & resultboard lock
       setStock(draggedItem.item);
       setStockAccordionOpen(false);
       setKeywordAccordionOpen(true);
+      setResultBoardOpen(false);
     } else if (
       // keyword drop한 경우
       draggedItem.type === "KEYWORD" &&
@@ -69,6 +71,7 @@ const TargetListSection = () => {
       !keywordList.includes(draggedItem.item!)
     ) {
       setKeywordList((prev) => [...prev, draggedItem.item!]);
+      setResultBoardOpen(false);
     }
   }, [draggedItem]);
 
@@ -132,7 +135,7 @@ const TitleWrapper = styled.div`
 const SubTitleWrapper = styled.div`
   font-size: 1.5rem;
   font-weight: 400;
-  margin: 10px 0 30px 0;
+  margin: 10px 0 20px 0;
 `;
 
 const RightItemWrapper = styled.div`
@@ -143,10 +146,12 @@ const RightItemWrapper = styled.div`
 const ContentWrapper = styled.div`
   display: flex;
   justify-content: space-evenly;
+  align-items: center;
   flex-wrap: wrap;
   gap: 2rem;
-
-  height: 120px;
+  
+  padding: 4px 0 8px 0;
+  height: 140px;
   overflow-y: scroll;
 
   ::-webkit-scrollbar {

@@ -1,28 +1,15 @@
-import React from "react";
 import GraphComp from "./GraphComp";
+
+import { GraphItem } from './SampleItems'
 import styled from "styled-components";
-// import {useRecoilValue} from 'recoil';
-// import { selectedLabKeywordListState } from "../../stores/LaboratoryAtoms";
 
-const sampelItem = [
-  {
-
-  }, 
-  {
-
-  }, 
-  {
-
-  }
-];
 
 // query data 받아와서 map 돌리기
 const GraphSection = () => {
-  // const keywordList = useRecoilValue(selectedLabKeywordListState);
 
   return (
-    <GraphSectionWrapper cnt={sampelItem.length}>
-      {sampelItem.map((item) => (
+    <GraphSectionWrapper cnt={GraphItem.length}>
+      {GraphItem.map((item) => (
         <GraphComp item={item} />
       ))}
     </GraphSectionWrapper>

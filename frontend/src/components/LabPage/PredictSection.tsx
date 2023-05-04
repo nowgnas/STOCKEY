@@ -1,17 +1,24 @@
+import PredictSliderSection from "./PredictSliderSection";
+import PredictResultCard from "./PredictResultCard";
+
 import styled from "styled-components";
 
 const PredictSection = () => {
   return (
-    <PredictSectionWrapper>
-      
-    </PredictSectionWrapper>
+    <SectionWrapper>
+      <PredictSliderSection />
+      <PredictResultCard />
+    </SectionWrapper>
   );
 };
 
 export default PredictSection;
 
-const PredictSectionWrapper = styled.div`
+const SectionWrapper = styled.div`
   width: 100%;
-  height: 300px; // 임시
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
   border: 4px solid white; // 임시
 `;

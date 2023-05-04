@@ -8,7 +8,9 @@ import {
   stockAccordionOpenState,
   keywordAccordionOpenState,
   labStockSearchInput,
-  labKeywordSearchInput
+  labKeywordSearchInput,
+  resultBoardOpenState,
+  selectedSliderList
 } from "../../stores/LaboratoryAtoms";
 
 import styled from "styled-components";
@@ -22,6 +24,8 @@ const ResetBtn = () => {
   const resetKeywordAccordionOpenState = useResetRecoilState(keywordAccordionOpenState);
   const resetLabStockSearchInput = useResetRecoilState(labStockSearchInput)
   const resetLabKeywordSearchInput = useResetRecoilState(labKeywordSearchInput)
+  const resetResultBoardOpenState = useResetRecoilState(resultBoardOpenState);
+  const resetSelectedSliderList = useResetRecoilState(selectedSliderList);
 
   const resetHandler = () => {
     console.log("reset all!");
@@ -33,6 +37,8 @@ const ResetBtn = () => {
     resetKeywordAccordionOpenState();
     resetLabStockSearchInput();
     resetLabKeywordSearchInput();
+    resetResultBoardOpenState();
+    resetSelectedSliderList();
   };
   
   return <ResetBtnWrapper onClick={resetHandler}>초기화</ResetBtnWrapper>;

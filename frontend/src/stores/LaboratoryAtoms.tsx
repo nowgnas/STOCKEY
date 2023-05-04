@@ -63,3 +63,9 @@ export const resultBoardOpenState = atom<boolean>({
   key: "resultBoardOpenState",
   default: false
 })
+
+// predict slidebar state
+export const selectedSliderList = atom<any[]>({
+  key: "selectedSliderList",
+  default: [],
+})

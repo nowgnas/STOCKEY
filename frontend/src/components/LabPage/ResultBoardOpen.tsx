@@ -14,6 +14,7 @@ const ResultBoardOpen = () => {
 
   return (
     <BoardWrapper>
+      
       <HeaderWrapper>
         <StockNameSection>{stockName}</StockNameSection>
         {text} 키워드간 관계는 어떤가요?
@@ -21,14 +22,20 @@ const ResultBoardOpen = () => {
       <InfoWrapper>
         회귀분석 결과 어쩌구 저쩌구,, 마이너스는 음의 관계 플러스는 양의 관계!
       </InfoWrapper>
+      
+      {/* graph */}
       <GraphSection />
+      
       <HeaderWrapper>
         키워드를 조정하여 주가를 예측해보세요!
       </HeaderWrapper>
       <InfoWrapper>
         예측 어쩌구 저쩌구,,,,
       </InfoWrapper>
+      
+      {/* predict */}
       <PredictSection />
+    
     </BoardWrapper>
   );
 };

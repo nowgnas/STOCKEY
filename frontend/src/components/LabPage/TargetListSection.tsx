@@ -145,4 +145,20 @@ const ContentWrapper = styled.div`
   justify-content: space-evenly;
   flex-wrap: wrap;
   gap: 2rem;
+
+  height: 120px;
+  overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    width: 1.8rem;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d9d9d9;
+    border-radius: 24px;
+    border: 5px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-track {
+    width: 1.8rem;
+  }
 `;

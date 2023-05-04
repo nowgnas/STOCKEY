@@ -3,7 +3,7 @@ import styled from "styled-components";
 const PredictSection = () => {
   return (
     <PredictSectionWrapper>
-
+      
     </PredictSectionWrapper>
   );
 };

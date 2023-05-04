@@ -1,6 +1,6 @@
-package kr.stockey.memberservice.exception;
+package kr.stockey.memberservice.exception.member;
 
-import com.ssafy.backend.global.exception.BaseExceptionType;
+import kr.stockey.memberservice.exception.BaseExceptionType;
 import org.springframework.http.HttpStatus;
 
 public enum AuthExceptionType  implements BaseExceptionType {

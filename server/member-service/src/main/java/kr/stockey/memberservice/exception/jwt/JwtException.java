@@ -1,8 +1,8 @@
-package com.ssafy.backend.global.exception.jwt;
+package kr.stockey.memberservice.exception.jwt;
 
 
-import com.ssafy.backend.global.exception.BaseException;
-import com.ssafy.backend.global.exception.BaseExceptionType;
+import kr.stockey.memberservice.exception.BaseException;
+import kr.stockey.memberservice.exception.BaseExceptionType;
 
 public class JwtException extends BaseException {
     private final BaseExceptionType exceptionType;

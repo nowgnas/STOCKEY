@@ -1,6 +1,6 @@
-package com.ssafy.backend.global.exception.jwt;
+package kr.stockey.memberservice.exception.jwt;
 
-import com.ssafy.backend.global.exception.BaseExceptionType;
+import kr.stockey.memberservice.exception.BaseExceptionType;
 import org.springframework.http.HttpStatus;
 
 public enum JwtExceptionType implements BaseExceptionType {

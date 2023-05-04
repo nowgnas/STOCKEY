@@ -1,7 +1,7 @@
-package kr.stockey.memberservice.exception;
+package kr.stockey.memberservice.exception.member;
 
-import com.ssafy.backend.global.exception.BaseException;
-import com.ssafy.backend.global.exception.BaseExceptionType;
+import kr.stockey.memberservice.exception.BaseException;
+import kr.stockey.memberservice.exception.BaseExceptionType;
 
 public class MemberException extends BaseException {
     private final BaseExceptionType exceptionType;

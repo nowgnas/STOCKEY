@@ -5,8 +5,8 @@ import MyStockPieChart from "./MyStockPieChart"
 
 const MyPortfolioSection = () => {
   return (
-    <SectionWrapper pt={3} pb={3} pl={2} pr={2} bgColor="white">
-      <MyAccountCard />
+    <SectionWrapper pt={2} pb={2} pl={2} pr={2} bgColor="white">
+      <MyAccountCard total={54828000} stock={12014000} deposit={42814000} />
       <MyStockPieChart />
       <MyStockList />
     </SectionWrapper>

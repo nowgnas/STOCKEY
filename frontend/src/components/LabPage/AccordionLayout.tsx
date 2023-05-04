@@ -16,8 +16,6 @@ interface Props {
 const AccordionLayout = ({ type, items, openState, setOpenState }: Props) => {
   const headerText = type === "STOCK" ? "종목" : "키워드";
 
-  console.log(type, 'layout 재렌더링?')
-
   return (
     <PanelLayout>
       <HeaderWrapper>

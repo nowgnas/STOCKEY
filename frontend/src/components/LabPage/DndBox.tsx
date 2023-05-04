@@ -6,7 +6,8 @@ import {
   selectedLabStockState,
   selectedLabKeywordListState,
   stockAccordionOpenState,
-  keywordAccordionOpenState
+  keywordAccordionOpenState,
+  resultBoardOpenState
 } from "../../stores/LaboratoryAtoms";
 
 import StockCardMini from "./StockCardMini";
@@ -28,6 +29,7 @@ const DndBox = ({ type, item }: Props) => {
   const setKeywordList = useSetRecoilState(selectedLabKeywordListState);
   const setStockAccordionOpen = useSetRecoilState(stockAccordionOpenState);
   const setKeywordAccordionOpen = useSetRecoilState(keywordAccordionOpenState);
+  const setResultBoardOpen = useSetRecoilState(resultBoardOpenState);
   const [mouseOver, setMouseOver] = useState(false);
   const animeRef = useRef(true)
   
@@ -42,10 +44,12 @@ const DndBox = ({ type, item }: Props) => {
         setStock(undefined);
         setKeywordAccordionOpen(false);
         setStockAccordionOpen(true);
+        setResultBoardOpen(false);
       } else {
         // keyword 삭제한 경우
         const idx = parseInt(type[7]) - 1;
         setKeywordList((prev) => prev.filter((item, index) => index !== idx));
+        setResultBoardOpen(false);
       }
       animeRef.current = true;
     }, 150);

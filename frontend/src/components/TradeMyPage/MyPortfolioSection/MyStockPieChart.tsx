@@ -71,7 +71,7 @@ const MyStockPieChart = () => {
   return (
     <>
       <PanelTitle>보유 종목</PanelTitle>
-      <ChartWrapper chartOptions={chartOptions} height={35} />
+      <ChartWrapper chartOptions={chartOptions} height={40} />
     </>
   )
 }

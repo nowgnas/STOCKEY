@@ -26,6 +26,8 @@ html {
   --custom-gray-4: #f8f8f8;
   --custom-mint: #68e3be;
   --custom-blue: #a7b3f3;
+  --custom-increase-red: #fb6f6f;
+  --custom-decrease-blue: #72a6fa;
   --custom-gradient-violet: linear-gradient(130deg, #99c2ff 0%, #ffa7d1 100%);
   --custom-gradient-pink: linear-gradient(130deg, #ff996c 0%, #fe7598 100%);
   --custom-black: #1b1f24;

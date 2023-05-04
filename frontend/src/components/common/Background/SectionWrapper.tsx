@@ -44,5 +44,13 @@ export const SectionWrapper = styled.div<WrapperProps>`
   
   // 모서리 radius
   border-radius: 24px;
+
+  // 내부 스크롤(스크롤바 없애기)
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  ::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
   }
 `

@@ -6,7 +6,7 @@ plugins {
 
 group = 'kr.stockey'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 configurations {
     compileOnly {
@@ -33,6 +33,11 @@ dependencies {
     implementation 'com.h2database:h2'
     // for apache kafka
     implementation 'org.springframework.kafka:spring-kafka'
+    // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
+    implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '3.4.0'
+
+
+
 }
 
 tasks.named('test') {

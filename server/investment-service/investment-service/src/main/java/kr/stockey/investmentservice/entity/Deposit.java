@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@Table(name = "balance")
-public class Balance {
+@Table(name = "deposit")
+public class Deposit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "balance_id", nullable = false)
+    @Column(name = "deposit_id", nullable = false)
     private Long id;
 
     @NotNull

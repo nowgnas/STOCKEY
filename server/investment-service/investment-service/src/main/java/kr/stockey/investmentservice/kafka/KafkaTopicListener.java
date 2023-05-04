@@ -1,4 +1,4 @@
-package kr.stockey.investmentservice.etc;
+package kr.stockey.investmentservice.kafka;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.ListTopicsOptions;
 import org.apache.kafka.clients.admin.ListTopicsResult;

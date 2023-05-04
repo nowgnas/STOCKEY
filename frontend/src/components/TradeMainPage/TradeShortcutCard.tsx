@@ -25,10 +25,11 @@ const TradeShortcutCard = ({
   }
 
   return (
-    <CardBlock>
+    <CardBlock shouldNav={navPage ? true : false}>
       <CardWrapper bgColor={bgColor} onClick={handleBtnClick} elevation={0}>
         <CardTitle hasContent={content ? true : false}>
-          <span>{title}</span> <ArrowCircleRightOutlinedIcon fontSize="large" />
+          <span>{title}</span>{" "}
+          {navPage ? <ArrowCircleRightOutlinedIcon fontSize="large" /> : null}
         </CardTitle>
         <CardContent>{content}</CardContent>
         <LogoImage
@@ -43,7 +44,7 @@ const TradeShortcutCard = ({
 
 export default TradeShortcutCard
 
-const CardBlock = styled.div`
+const CardBlock = styled.div<{ shouldNav: boolean }>`
   // 항상 정사각형으로 유지하기 위한 속성
   position: relative;
   width: 100%;
@@ -52,6 +53,9 @@ const CardBlock = styled.div`
     padding-bottom: 100%;
     display: block;
   }
+
+  // navPage가 있을 때만 마우스 hover 시 pointer cursor로 변경
+  cursor: ${({ shouldNav }) => (shouldNav ? "pointer" : "default")};
 `
 const CardWrapper = styled(Paper)<{ bgColor: string }>`
   // 배경 색상은 지정한 변수를 사용하도록 함
@@ -74,7 +78,7 @@ const CardWrapper = styled(Paper)<{ bgColor: string }>`
 const CardTitle = styled.div<{ hasContent: boolean }>`
   // content 여부에 따라 title 색상과 크기 조정
   color: ${({ hasContent }) =>
-    hasContent ? "var(--custom-gray-2)" : "var(--custom-black)"};
+    hasContent ? "var(--custom-gray-1)" : "var(--custom-black)"};
   font-size: ${({ hasContent }) => (hasContent ? "1.5rem" : "2.2rem")};
 
   // 기본 레이아웃 속성

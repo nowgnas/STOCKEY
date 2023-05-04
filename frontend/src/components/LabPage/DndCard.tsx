@@ -22,6 +22,7 @@ interface ParamProps {
 const DndCard = ({ type, item, size = "100px" }: ParamProps) => {
   const setCard = useSetRecoilState(draggedLabCardState);
 
+
   //isDragging:  아이템이 드래깅 중일때 true, 아닐때 false. 드래깅 중인 아이템을 스타일링 할때 사용 (opactiy)
   //dragRef는 리액트의 useRef처럼 작동한다. 드래그될 부분에 선언
   //previewRef는 드래깅될때 보여질 프리뷰 이미지

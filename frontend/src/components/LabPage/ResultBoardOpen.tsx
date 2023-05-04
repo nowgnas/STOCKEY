@@ -10,7 +10,7 @@ const ResultBoardOpen = () => {
   const stockName = `${selectedStock ? selectedStock.name : "종목"}`;
   const uni = stockName[stockName.length - 1].charCodeAt(0);
   const text =
-    uni >= 44032 && uni <= 55203 && (uni - 44032) % 28 != 0 ? "과" : "와";
+    uni >= 44032 && uni <= 55203 && (uni - 44032) % 28 !== 0 ? "과" : "와";
 
   return (
     <BoardWrapper>

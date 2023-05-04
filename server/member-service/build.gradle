@@ -46,6 +46,7 @@ dependencies {
     implementation group: 'com.auth0', name: 'java-jwt', version: '4.2.2'
     //mapstruct
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
     // Swagger(OpenAPI)
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
 

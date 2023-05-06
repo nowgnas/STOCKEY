@@ -29,6 +29,21 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bus-amqp'
+    implementation "org.springframework.boot:spring-boot-starter-aop"
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
+    //mapstruct
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+    // Swagger(OpenAPI)
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+
 }
 
 dependencyManagement {

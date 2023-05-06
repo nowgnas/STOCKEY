@@ -4,3 +4,9 @@ eureka:
     fetch-registry: true
     service-url:
         defaultZone: http://host.docker.internal:8761/eureka
+spring:
+    rabbitmq:
+        host: host.docker.internal
+        port: 5672
+        username: guest
+        password: guest

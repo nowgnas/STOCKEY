@@ -13,4 +13,5 @@ WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 ENTRYPOINT ["java", "-jar", \
         "-Dspring.profiles.active=${PROFILE}", \
+        "-Dencrypt.key=${ENCRYPT}", \
         "/app/app.jar"]

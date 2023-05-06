@@ -1,5 +1,4 @@
 FROM arm64v8/openjdk:11-jdk AS builder
-ENV PROFILE dev
 WORKDIR /app
 COPY server/discovery-service/gradlew .
 COPY server/discovery-service/gradle gradle

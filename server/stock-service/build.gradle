@@ -43,6 +43,11 @@ dependencies {
     // Swagger(OpenAPI)
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
 
+    // 의존관계 추가
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-circuitbreaker-resilience4j'
+
 }
 
 dependencyManagement {

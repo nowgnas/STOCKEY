@@ -93,6 +93,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public MemberDto getMember(String userId) {
+        Member member = memberRepository.
+                findByUserId(userId)
+                .orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
+        return memberMapper.toDto(member);
+    }
+
+    @Override
     public Member getMemberEntity() {
         MemberDto memberDto = getMemberDtoByJwtToken();
         return memberRepository

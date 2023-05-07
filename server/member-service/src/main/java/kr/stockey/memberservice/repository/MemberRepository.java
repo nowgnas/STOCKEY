@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByOauthIdAndOauthType(Long oauthId, OauthType oauthType);
     Optional<Member> findByNickname(String nickName);
+
+    Optional<Member> findByUserId(String userId);
 }

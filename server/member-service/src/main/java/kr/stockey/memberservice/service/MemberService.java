@@ -16,6 +16,7 @@ public interface MemberService {
     // 메소드 오버로딩 : 회원가입, 로그인시 사용되는 getMember
     Optional<OauthMemberDto> getMember(long oAuthId, OauthType oAuthType);
     MemberDto getMember(long memberId);
+    MemberDto getMember(String userId);
     MemberDto getMember();
     Member getMemberEntity();
     void saveMember(long oAuthId, String nickname, OauthType oAuthType);

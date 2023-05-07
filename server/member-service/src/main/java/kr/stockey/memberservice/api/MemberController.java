@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import kr.stockey.memberservice.api.response.MemberResponse;
+import kr.stockey.memberservice.dto.MemberDto;
 import kr.stockey.memberservice.dto.ResponseDto;
 import kr.stockey.memberservice.mapper.MemberDtoMapper;
 import kr.stockey.memberservice.service.MemberService;
@@ -69,7 +70,7 @@ public class MemberController {
     }
 
 
-    @Operation(summary = "Delete member", description = "회원 탈퇴")
+    @Operation(summary = "Change member", description = "회원 닉네임 수정")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "요청 성공"),
@@ -82,5 +83,19 @@ public class MemberController {
                                                             @RequestBody String nickname) {
         memberService.changeNickname(nickname);
         return new ResponseEntity<>(new ResponseDto("닉네임 변경 완료!", null), HttpStatus.OK);
+    }
+
+    @Operation(summary = "get member", description = "회원 정보 수정")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "404", description = "회원 정보 없음"),
+            }
+    )
+    @GetMapping("/{userId}")
+    public ResponseEntity<ResponseDto> GetMember(@PathVariable String userId){
+        MemberDto memberDto = memberService.getMember(userId);
+        return new ResponseEntity<>(new ResponseDto("회원 정보 반환!", memberDto), HttpStatus.OK);
     }
 }

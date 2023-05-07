@@ -2,9 +2,9 @@ package kr.stockey.stockservice.service;
 
 import com.ssafy.backend.domain.keyword.dto.StockKeywordDto;
 import com.ssafy.backend.domain.member.entity.Member;
-import com.ssafy.backend.domain.stock.api.request.GetCorrelationRequest;
-import com.ssafy.backend.domain.stock.api.response.GetStockTodayResponse;
-import com.ssafy.backend.domain.stock.dto.*;
+import kr.stockey.stockservice.api.request.GetCorrelationRequest;
+import kr.stockey.stockservice.api.response.GetStockTodayResponse;
+import kr.stockey.stockservice.dto.*;
 
 import java.util.List;
 

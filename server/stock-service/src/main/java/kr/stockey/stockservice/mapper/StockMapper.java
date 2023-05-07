@@ -1,9 +1,9 @@
 package kr.stockey.stockservice.mapper;
 
 
-import com.ssafy.backend.domain.stock.dto.*;
-import com.ssafy.backend.domain.stock.entity.DailyStock;
-import com.ssafy.backend.domain.stock.entity.Stock;
+import kr.stockey.stockservice.dto.*;
+import kr.stockey.stockservice.entity.DailyStock;
+import kr.stockey.stockservice.entity.Stock;
 import org.mapstruct.Mapper;
 
 import java.util.List;

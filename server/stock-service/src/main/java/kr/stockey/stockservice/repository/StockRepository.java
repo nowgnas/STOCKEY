@@ -2,9 +2,9 @@ package kr.stockey.stockservice.repository;
 
 import com.ssafy.backend.domain.industry.entity.Industry;
 import com.ssafy.backend.domain.keyword.entity.Keyword;
-import com.ssafy.backend.domain.stock.dto.CorrelationDto;
-import com.ssafy.backend.domain.stock.dto.IndustrySumDto;
-import com.ssafy.backend.domain.stock.entity.Stock;
+import kr.stockey.stockservice.dto.CorrelationDto;
+import kr.stockey.stockservice.dto.IndustrySumDto;
+import kr.stockey.stockservice.entity.Stock;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

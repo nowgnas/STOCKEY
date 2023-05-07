@@ -1,6 +1,6 @@
 package kr.stockey.stockservice.entity;
 
-import com.ssafy.backend.domain.stock.entity.Stock;
+import kr.stockey.stockservice.entity.Stock;
 import lombok.Getter;
 
 import javax.persistence.*;

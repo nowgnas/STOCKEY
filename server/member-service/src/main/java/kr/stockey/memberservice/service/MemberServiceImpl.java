@@ -18,6 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -105,12 +106,14 @@ public class MemberServiceImpl implements MemberService {
     public void saveMember(long oAuthId, String nickname, OauthType oauthType) {
         // 닉네임 중복 화인
         checkDuplicatedNickname(nickname);
+        String uuid = UUID.randomUUID().toString();
 
         // 회원 등록
         Member member = Member.oAuthBuilder()
                 .nickname(nickname)
                 .oAuthId(oAuthId)
                 .oAuthType(oauthType)
+                .userId(uuid)
                 .build();
         memberRepository.save(member);
     }

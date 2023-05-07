@@ -46,6 +46,9 @@ public class Member {
     @Column(name = "oauth_id", nullable = false)
     private Long oauthId;
 
+    @Column(nullable = false,unique = true,length = 255)
+    private String userId;
+
     @ToString.Include
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -58,14 +61,16 @@ public class Member {
 
 
     @Builder(builderClassName = "oAuthBuilder", builderMethodName = "oAuthBuilder")
-    public Member(String nickname, Long oAuthId, OauthType oAuthType) {
+    public Member(String nickname, Long oAuthId, OauthType oAuthType,String userId) {
         Assert.notNull(nickname, "nickname must not be null");
         Assert.notNull(oAuthId, "oAuthId must not be null");
         Assert.notNull(oAuthType, "oAuthType must not be null");
+        Assert.notNull(userId, "userId must not be null");
 
         this.nickname = nickname;
         this.oauthId = oAuthId;
         this.oauthType = oAuthType;
+        this.userId = userId;
     }
 
 

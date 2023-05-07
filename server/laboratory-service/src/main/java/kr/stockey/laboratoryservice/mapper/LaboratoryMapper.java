@@ -9,7 +9,7 @@ import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface LaboratoryMapper {
     @Named("STOCKLST")
     @Mapping(source = "stock_id", target = "id")

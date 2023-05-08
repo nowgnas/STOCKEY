@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: config-service
+  rabbitmq:
+    host: host.docker.internal
+    port: 5672
+    username: guest
+    password : guest

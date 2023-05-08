@@ -69,4 +69,5 @@ public class KafkaConfiguration {
         factory.setConcurrency(3); // Set the desired level of concurrency
         return factory;
     }
+
 }

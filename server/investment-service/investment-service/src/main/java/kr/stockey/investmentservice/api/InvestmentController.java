@@ -22,7 +22,7 @@ public class InvestmentController {
     private final InvestmentDtoMapper investmentDtoMapper;
 
     @PostMapping("/order")
-    public void takeStockOrder(@RequestBody OrderRequest orderRequest) {
+    public void takeStockOrder(@RequestBody OrderRequest orderRequest) throws Exception {
         OrderProducerDto orderProducerDto = investmentDtoMapper.toOrderProducerDto(orderRequest);
         orderProducerDto.setOrderTime(LocalDateTime.now());
         investmentService.takeStockOrder(orderProducerDto);

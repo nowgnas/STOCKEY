@@ -3,9 +3,7 @@ eureka:
         register-with-eureka: true
         fetch-registry: true
         service-url:
-            defaultZone:
-                - http://discoverygreen:8083/eureka
-                - http://discoveryblue:8083/eureka
+            defaultZone: http://discoverygreen:8083/eureka/
 spring:
     rabbitmq:
         host: rabbitmq

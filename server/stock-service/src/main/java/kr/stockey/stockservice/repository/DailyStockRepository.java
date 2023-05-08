@@ -1,6 +1,6 @@
 package kr.stockey.stockservice.repository;
 
-import com.ssafy.backend.domain.stock.entity.DailyStock;
+import kr.stockey.stockservice.entity.DailyStock;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

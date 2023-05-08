@@ -1,8 +1,8 @@
 package kr.stockey.stockservice.api.response;
 
-import com.ssafy.backend.domain.industry.dto.IndustryDto;
-import com.ssafy.backend.domain.stock.dto.BusinessDto;
-import com.ssafy.backend.domain.stock.dto.DailyStockDto;
+import kr.stockey.stockservice.dto.BusinessDto;
+import kr.stockey.stockservice.dto.DailyStockDto;
+import kr.stockey.stockservice.dto.IndustryDto;
 import lombok.Builder;
 import lombok.Getter;
 

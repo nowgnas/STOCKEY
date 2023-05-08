@@ -1,36 +1,25 @@
 package kr.stockey.stockservice.service;
 
-import com.ssafy.backend.domain.favorites.entity.Favorite;
-import com.ssafy.backend.domain.favorites.repository.FavoriteRepository;
-import com.ssafy.backend.domain.favorites.service.FavoriteService;
-import com.ssafy.backend.domain.industry.dto.IndustryDto;
-import com.ssafy.backend.domain.industry.entity.Industry;
-import com.ssafy.backend.domain.industry.mapper.IndustryMapper;
-import com.ssafy.backend.domain.industry.repository.IndustryRepository;
-import com.ssafy.backend.domain.keyword.dto.StockKeywordDto;
-import com.ssafy.backend.domain.keyword.entity.Keyword;
-import com.ssafy.backend.domain.keyword.repository.KeywordRepository;
-import com.ssafy.backend.domain.keyword.repository.KeywordStatisticRepository;
-import com.ssafy.backend.domain.keyword.service.KeywordService;
-import com.ssafy.backend.domain.member.entity.Member;
-import com.ssafy.backend.domain.stock.api.request.GetCorrelationRequest;
-import com.ssafy.backend.domain.stock.api.response.GetStockTodayResponse;
-import com.ssafy.backend.domain.stock.dto.*;
-import com.ssafy.backend.domain.stock.entity.DailyStock;
-import com.ssafy.backend.domain.stock.entity.Stock;
-import com.ssafy.backend.domain.stock.mapper.BusinessMapper;
-import com.ssafy.backend.domain.stock.mapper.StockDtoMapper;
-import com.ssafy.backend.domain.stock.mapper.StockMapper;
-import com.ssafy.backend.domain.stock.repository.DailyStockRepository;
-import com.ssafy.backend.domain.stock.repository.StockRepository;
-import com.ssafy.backend.global.exception.dailyStock.DailyStockException;
-import com.ssafy.backend.global.exception.dailyStock.DailyStockExceptionType;
-import com.ssafy.backend.global.exception.favorite.FavoriteException;
-import com.ssafy.backend.global.exception.favorite.FavoriteExceptionType;
-import com.ssafy.backend.global.exception.keyword.KeywordException;
-import com.ssafy.backend.global.exception.keyword.KeywordExceptionType;
-import com.ssafy.backend.global.exception.stock.StockException;
-import com.ssafy.backend.global.exception.stock.StockExceptionType;
+import kr.stockey.stockservice.api.request.CreateFavoriteStockRequest;
+import kr.stockey.stockservice.api.request.GetCorrelationRequest;
+import kr.stockey.stockservice.api.response.GetStockTodayResponse;
+import kr.stockey.stockservice.client.FavoriteClient;
+import kr.stockey.stockservice.client.IndustryClient;
+import kr.stockey.stockservice.client.KeywordClient;
+import kr.stockey.stockservice.dto.*;
+import kr.stockey.stockservice.entity.DailyStock;
+import kr.stockey.stockservice.entity.Stock;
+import kr.stockey.stockservice.exception.favorite.FavoriteException;
+import kr.stockey.stockservice.exception.favorite.FavoriteExceptionType;
+import kr.stockey.stockservice.exception.stock.DailyStockException;
+import kr.stockey.stockservice.exception.stock.DailyStockExceptionType;
+import kr.stockey.stockservice.exception.stock.StockException;
+import kr.stockey.stockservice.exception.stock.StockExceptionType;
+import kr.stockey.stockservice.mapper.BusinessMapper;
+import kr.stockey.stockservice.mapper.StockDtoMapper;
+import kr.stockey.stockservice.mapper.StockMapper;
+import kr.stockey.stockservice.repository.DailyStockRepository;
+import kr.stockey.stockservice.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.springframework.stereotype.Service;
@@ -49,31 +38,27 @@ public class StockServiceImpl implements StockService{
     private final StockRepository stockRepository;
     private final StockMapper stockMapper;
     private final StockDtoMapper stockDtoMapper;
-    private final IndustryMapper industryMapper;
     private final BusinessMapper businessMapper;
-    private final KeywordRepository keywordRepository;
-    private final KeywordStatisticRepository keywordStatisticRepository;
-    private final FavoriteRepository favoriteRepository;
-    private final FavoriteService favoriteService;
-    private final KeywordService keywordService;
-
     private final DailyStockRepository dailyStockRepository;
-    private final IndustryRepository industryRepository;
+    private final IndustryClient industryClient;
+    private final KeywordClient keywordClient;
+    private final FavoriteClient favoriteClient;
 
     public StockDto getStock(Long stockId)  {
         Stock stock = stockRepository.findById(stockId).orElseThrow(()->new StockException(StockExceptionType.NOT_FOUND));
         StockDto stockDto = stockMapper.toStockDto(stock);
-        int industryTotalCount = stockRepository.findByIndustry(stock.getIndustry()).size();
+        int industryTotalCount = stockRepository.findByIndustry(stock.getIndustryId()).size();
         stockDto.setIndustryTotalCount(industryTotalCount);
-        IndustryDto industryDto = industryMapper.toDto(stock.getIndustry());
+        Long industryId = stock.getIndustryId();
+        IndustryDto industryDto = getIndustry(industryId);
         List<BusinessDto> businessDtos = businessMapper.toDto(stock.getBusinesses());
         stockDto.setIndustry(industryDto);
         stockDto.setBusinesses(businessDtos);
-        Integer marketCapRank = getStockIndustryMarketCapRank(stockId, industryDto.getId());
+        Integer marketCapRank = getStockIndustryMarketCapRank(stockId, industryId);
         stockDto.setIndustryCapRank(marketCapRank);
-        Integer favoriteRank = getStockIndustryFavoriteRank(stockId, industryDto.getId());
+        Integer favoriteRank = getStockIndustryFavoriteRank(stockId, industryId);
         stockDto.setIndustryFavRank(favoriteRank);
-        Float avgRate = getAverageIndustryChangeRate(industryDto.getId());
+        Float avgRate = getAverageIndustryChangeRate(industryId);
         stockDto.setIndustryAvgChangeRate(avgRate);
         DailyStockDto dailyStockDto =getTodayDailyStock(stockId);
         stockDto.setTodayDailyStock(dailyStockDto);
@@ -124,7 +109,8 @@ public class StockServiceImpl implements StockService{
 
 
     public List<StockKeywordDto> getStockKeyword(Long stockId){
-        List<StockKeywordDto> stockKeyword = keywordRepository.findStockKeywords(stockId);
+        ResponseDto responseDto = keywordClient.findStockKeywords(stockId);
+        List<StockKeywordDto> stockKeyword = (List<StockKeywordDto>) responseDto.getData();
         return stockKeyword;
     }
 
@@ -138,7 +124,7 @@ public class StockServiceImpl implements StockService{
         Stock stock = stockRepository.findById(stockId).orElseThrow(() -> new StockException(StockExceptionType.NOT_FOUND));
         DailyStock dailyStock = dailyStockRepository
                 .findTodayDailyStock(stock.getId())
-                .orElseThrow(()->new DailyStockException(com.ssafy.backend.global.exception.stock.DailyStockExceptionType.NOT_FOUND));
+                .orElseThrow(()->new DailyStockException(DailyStockExceptionType.NOT_FOUND));
         DailyStockDto dailyStockDto = stockMapper.toDailyStockDto(dailyStock);
         return dailyStockDto;
     }
@@ -151,15 +137,17 @@ public class StockServiceImpl implements StockService{
     }
 
     // 관심 종목 리스트 출력
-    public List<GetStockTodayResponse> getMyStocks(Member member) {
-        List<Favorite> favorites = favoriteService._findByStock(member);
+    public List<GetStockTodayResponse> getMyStocks(MemberDto memberdto) {
+        ResponseDto responseDto = favoriteClient.findByStockAndMember(memberdto.getUserId());
+        List<FavoriteDto> favorites = (List<FavoriteDto>) responseDto.getData();
+//                List<FavoriteDto> favorites = favoriteClient.findByStockAndMember(memberdto.getUserId());
         List<Stock> stockList = new ArrayList<>();
 
 
         List<StockTodayDto> result = new ArrayList<>();
-        for (Favorite favorite : favorites) {
-            Stock stock =  favorite.getStock();
-            DailyStock dailyStock = dailyStockRepository.findTodayDailyStock(stock.getId())
+        for (FavoriteDto favorite : favorites) {
+            Long stockId =  favorite.getStockId();
+            DailyStock dailyStock = dailyStockRepository.findTodayDailyStock(stockId)
                     .orElseThrow(() -> new DailyStockException(DailyStockExceptionType.NOT_FOUND));
 
             Long stock_id = dailyStock.getStock().getId();
@@ -180,55 +168,64 @@ public class StockServiceImpl implements StockService{
     }
 
     // 관심 여부 확인
-    public boolean checkFavorite(Member member, Long id) {
-        Stock industry = getStockEntity(id);
-        return favoriteService.existsByMemberAndStock(industry, member);
+    public boolean checkFavorite(String userId, Long stockId) {
+        ResponseDto responseDto = favoriteClient.existsByMemberAndStock(userId, stockId);
+        Boolean result = (Boolean) responseDto.getData();
+        return result;
     }
 
     // 관심 산업 등록
     @Transactional
-    public void addFavorite(Member member, Long id) {
+    public void addFavorite(MemberDto memberDto, Long id) {
         Stock stock = getStockEntity(id);
-        boolean isFavorite = checkFavorite(member, id);
+        boolean isFavorite = checkFavorite(memberDto.getUserId(), id);
         //이미 관심등록했다면
         if (isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.ALREADY_EXIST);
         }
-        Favorite favorite = Favorite.stockBuilder()
-                .member(member)
-                .stock(stock)
-                .build();
-        favoriteRepository.save(favorite);
 
+        CreateFavoriteStockRequest favoriteRequest = CreateFavoriteStockRequest.builder()
+                .stockId(id)
+                .userId(memberDto.getUserId())
+                .build();
+        favoriteClient.saveStock(favoriteRequest);
     }
 
     @Transactional
-    public void deleteFavorite(Member member, Long id) {
+    public void deleteFavorite(MemberDto memberdto, Long id) {
 
         Stock stock = getStockEntity(id);
-        boolean isFavorite = checkFavorite(member, id);
+        boolean isFavorite = checkFavorite(memberdto.getUserId(), id);
         // 관심 등록하지 않았다면
         if (!isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.NOT_FOUND);
         }
-        Favorite favorite = favoriteRepository.findByMemberAndStock(member, stock);
-        checkUser(member, favorite);
-        favoriteRepository.delete(favorite);
+        ResponseDto responseDto = favoriteClient.findByMemberAndStock(memberdto.getUserId(), stock.getId());
+        FavoriteDto favoriteDto = (FavoriteDto) responseDto.getData();
+//        Favorite favorite = favoriteRepository.findByMemberAndStock(memberdto.getUserId(), stock.getId());
+        checkUser(memberdto, favoriteDto);
+        favoriteClient.deleteFavorite(favoriteDto);
     }
 
+    /**
+     * // TODO 상관관계 추가
+     *
+     *
     public Double getCorrelation(Long id, GetCorrelationRequest getCorrelationRequest){
         Stock stock = getStockEntity(id);
-        List<Keyword> all = keywordRepository.findAll();
+        ResponseDto responseDto = keywordClient.findAll();
+        List<KeywordDto> all = (List<KeywordDto>) responseDto;
         System.out.println("all.size() = " + all.size());
 
         Long keywordId = getCorrelationRequest.getKeywordId();
-        System.out.println("getCorrelationRequest = " + getCorrelationRequest.getKeywordId());
-        System.out.println("keywordRepository = " + keywordRepository.findById(keywordId).get());
-        Keyword keyword = keywordRepository.findById(keywordId).orElseThrow(() ->
-                new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
+//        System.out.println("getCorrelationRequest = " + getCorrelationRequest.getKeywordId());
+//        System.out.println("keywordRepository = " + keywordRepository.findById(keywordId).get());
+        KeywordDto keywordDto = keywordClient.getKeyword(keywordId);
+//        Keyword keyword = keywordRepository.findById(keywordId).orElseThrow(() ->
+//                new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
         LocalDate startDate = getCorrelationRequest.getStartDate();
         LocalDate endDate = getCorrelationRequest.getEndDate();
-        System.out.println("stock. = " + stock.getName()+" "+keyword.getName());
+//        System.out.println("stock. = " + stock.getName()+" "+keyword.getName());
         List<CorrelationDto> test = stockRepository.getTest(stock, keyword,startDate, endDate);
         List<Double> priceList = new ArrayList<>();
         List<Double> countList = new ArrayList<>();
@@ -240,16 +237,19 @@ public class StockServiceImpl implements StockService{
         double correlationCoefficient = getCorrelationResult(countList, priceList);
         return correlationCoefficient;
     }
+
+     */
+
     public List<ResultCorrelationDto> getAllStockCorrelation(Long id ,GetCorrelationRequest getCorrelationRequest){
         Stock stock = getStockEntity(id);
-//        Industry industry = industryRepository.findById(id).orElseThrow(() -> new IndustryException(IndustryExceptionType.NOT_FOUND));
-        Industry industry = stock.getIndustry();
+        Long industryId = stock.getIndustryId();
         List<StockCorrelationDto> stockList = new ArrayList<>();
-        List<Stock> stocksExceptMe = stockRepository.getStocksExceptMe(stock,industry);
+        List<Stock> stocksExceptMe = stockRepository.getStocksExceptMe(stock,industryId);
         // 해당 종목을 제외한 주식들에 대하여 상관분석
         for(Stock s : stocksExceptMe){
-            Double correlation = getCorrelation(s.getId(), getCorrelationRequest);
-            stockList.add(new StockCorrelationDto(s,correlation));
+            //TODO 상관관계 추가
+//            Double correlation = getCorrelation(s.getId(), getCorrelationRequest);
+//            stockList.add(new StockCorrelationDto(s,correlation));
         }
         Collections.sort(stockList);
 
@@ -286,9 +286,16 @@ public class StockServiceImpl implements StockService{
     }
 
     // 유저가 같은지 체크
-    private static void checkUser(Member member, Favorite favorite) {
-        if (favorite.getMember() != member) {
+    private static void checkUser(MemberDto memberDto, FavoriteDto favoriteDto) {
+        if (!favoriteDto.getUserId().equals(memberDto.getUserId())) {
             throw new FavoriteException(FavoriteExceptionType.DIFFERENT_USER);
         }
+    }
+
+
+    private IndustryDto getIndustry(Long industryId){
+        ResponseDto responseDto = industryClient.geIndustry(industryId);
+        IndustryDto industryDto = (IndustryDto) responseDto.getData();
+        return industryDto;
     }
 }

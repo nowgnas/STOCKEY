@@ -1,6 +1,6 @@
 package kr.stockey.stockservice.dto;
 
-import com.ssafy.backend.domain.stock.entity.Stock;
+import kr.stockey.stockservice.entity.Stock;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

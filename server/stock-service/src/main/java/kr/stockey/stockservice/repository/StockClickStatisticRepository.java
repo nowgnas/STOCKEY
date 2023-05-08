@@ -1,7 +1,7 @@
 package kr.stockey.stockservice.repository;
 
-import com.ssafy.backend.domain.stock.entity.DailyStock;
-import com.ssafy.backend.domain.stock.entity.StockClickStatistic;
+import kr.stockey.stockservice.entity.DailyStock;
+import kr.stockey.stockservice.entity.StockClickStatistic;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

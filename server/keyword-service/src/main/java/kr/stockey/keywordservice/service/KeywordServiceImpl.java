@@ -2,11 +2,19 @@ package kr.stockey.keywordservice.service;
 
 import kr.stockey.keywordservice.api.request.GetKeyphraseRequest;
 import kr.stockey.keywordservice.api.request.GetTopNKeywordRequest;
+import kr.stockey.keywordservice.client.FavoriteClient;
+import kr.stockey.keywordservice.client.MemberClient;
+import kr.stockey.keywordservice.client.NewsClient;
 import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
 import kr.stockey.keywordservice.dto.KeywordDto;
 import kr.stockey.keywordservice.dto.KeywordStatisticDto;
 import kr.stockey.keywordservice.dto.TopKeywordDTO;
+import kr.stockey.keywordservice.dto.core.FavoriteDto;
+import kr.stockey.keywordservice.dto.core.MemberDto;
+import kr.stockey.keywordservice.dto.core.ResponseDto;
 import kr.stockey.keywordservice.entity.Keyword;
+import kr.stockey.keywordservice.exception.favorite.FavoriteException;
+import kr.stockey.keywordservice.exception.favorite.FavoriteExceptionType;
 import kr.stockey.keywordservice.exception.keyword.KeywordException;
 import kr.stockey.keywordservice.exception.keyword.KeywordExceptionType;
 import kr.stockey.keywordservice.mapper.KeywordMapper;
@@ -42,10 +50,10 @@ public class KeywordServiceImpl implements KeywordService{
     private final KeywordMapper keywordMapper;
     private final KeywordRepository keywordRepository;
     private final KeywordStatisticRepository keywordStatisticRepository;
-    private final FavoriteRepository favoriteRepository;
-    private final MemberService memberService;
-    private final NewsRelationRepository newsRelationRepository;
 
+    private final FavoriteClient favoriteClient;
+    private final MemberClient memberClient;
+    private final NewsClient newsClient;
 
 
 
@@ -62,21 +70,28 @@ public class KeywordServiceImpl implements KeywordService{
     }
 
     @Override
-    public List<KeywordDto> getMyKeywords() {
-        List<Keyword> keywords = favoriteRepository.findKeywordsByMember(memberService.getMemberEntity());
+    public List<KeywordDto> getMyKeywords(MemberDto memberDto) {
+        String userId = memberDto.getUserId();
+        ResponseDto responseDto = favoriteClient.findKeywordsByUserId(userId);
+        List<Keyword> keywords = (List<Keyword>)responseDto.getData();
         return keywordMapper.toDto(keywords);
     }
 
     @Override
-    public boolean checkFavorite(Long id) {
+    public boolean checkFavorite(MemberDto memberDto,Long id) {
+        String userId = memberDto.getUserId();
         Keyword keyword = keywordRepository.findById(id).orElseThrow(()
                 -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
-        return favoriteRepository.existsByMemberAndKeyword(memberService.getMemberEntity(), keyword);
+
+        ResponseDto responseDto = favoriteClient.existsByUserIdAndKeyword(userId, keyword.getId());
+        Boolean result = (Boolean) responseDto.getData();
+        return result;
     }
 
     @Override
     @Transactional
-    public void addFavorite(Long id) {
+    public void addFavorite(MemberDto memberDto,Long id) {
+        String userId = memberDto.getUserId();
         Keyword keyword = keywordRepository.findById(id).orElseThrow(()
                 -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
         // 이미 관심 등록 했다면
@@ -93,7 +108,8 @@ public class KeywordServiceImpl implements KeywordService{
     }
 
     @Override
-    public void deleteFavorite(Long id) {
+    public void deleteFavorite(MemberDto memberDto,Long id) {
+        String userId = memberDto.getUserId();
         Keyword keyword = keywordRepository.findById(id).orElseThrow(()
                 -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
         boolean isFavorite = checkFavorite(id);
@@ -192,8 +208,8 @@ public class KeywordServiceImpl implements KeywordService{
     }
 
     // 유저가 동일한지 체크
-    private static void checkUser(Member member, Favorite favorite) {
-        if (favorite.getMember() != member) {
+    private static void checkUser(MemberDto memberDto, FavoriteDto favoriteDto) {
+        if (! memberDto.getUserId().equals(favoriteDto.getUserId())) {
             throw new FavoriteException(FavoriteExceptionType.DIFFERENT_USER);
         }
     }

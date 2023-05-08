@@ -6,6 +6,7 @@ import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
 import kr.stockey.keywordservice.dto.KeywordDto;
 import kr.stockey.keywordservice.dto.KeywordStatisticDto;
 import kr.stockey.keywordservice.dto.TopKeywordDTO;
+import kr.stockey.keywordservice.dto.core.MemberDto;
 
 import java.util.List;
 
@@ -14,13 +15,13 @@ public interface KeywordService {
 
     List<KeywordStatisticDto> getKeywordFreq(Long keywordsId);
 
-    List<KeywordDto> getMyKeywords();
+    List<KeywordDto> getMyKeywords(MemberDto memberDto);
 
-    boolean checkFavorite(Long id);
+    boolean checkFavorite(MemberDto memberDto, Long id);
 
-    void addFavorite(Long id);
+    void addFavorite(MemberDto memberDto,Long id);
 
-    void deleteFavorite(Long id);
+    void deleteFavorite(MemberDto memberDto,Long id);
 
     Long getTargetNewsCount(GetTopNKeywordRequest getTopNKeywordRequest);
 

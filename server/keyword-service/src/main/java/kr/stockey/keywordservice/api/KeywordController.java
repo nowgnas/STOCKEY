@@ -5,7 +5,9 @@ import kr.stockey.keywordservice.api.request.GetTopNKeywordRequest;
 import kr.stockey.keywordservice.api.response.GetTopNKeywordResponse;
 import kr.stockey.keywordservice.api.response.KeywordDetailResponse;
 import kr.stockey.keywordservice.api.response.KeywordSearchResponse;
+import kr.stockey.keywordservice.client.MemberClient;
 import kr.stockey.keywordservice.dto.*;
+import kr.stockey.keywordservice.dto.core.MemberDto;
 import kr.stockey.keywordservice.dto.core.ResponseDto;
 import kr.stockey.keywordservice.mapper.KeywordDtoMapper;
 import kr.stockey.keywordservice.service.KeywordService;
@@ -29,6 +31,7 @@ public class KeywordController {
 
     private final KeywordService keywordService;
     private final KeywordDtoMapper keywordDtoMapper;
+    private final MemberClient memberClient;
 
     @Operation(summary = "keyword detail", description = "키워드 상세정보")
     @ApiResponses(
@@ -70,7 +73,8 @@ public class KeywordController {
     )
     @GetMapping("/keywordlist/my")
     public ResponseEntity<ResponseDto> getMyKeywords(@RequestHeader String userId) {
-        List<KeywordDto> myKeywords = keywordService.getMyKeywords();
+        MemberDto memberDto = getMember(userId);
+        List<KeywordDto> myKeywords = keywordService.getMyKeywords(memberDto);
         return new ResponseEntity<>(new ResponseDto("관심 키워드 출력!",
                 keywordDtoMapper.toKeywordResponse(myKeywords)), HttpStatus.OK);
 
@@ -87,7 +91,8 @@ public class KeywordController {
     )
     @GetMapping("/keywordlist/my/{id}")
     public ResponseEntity<ResponseDto> checkFavorite(@RequestHeader String userId,@PathVariable Long id) {
-        boolean result = keywordService.checkFavorite(id);
+        MemberDto memberDto = getMember(userId);
+        boolean result = keywordService.checkFavorite(memberDto,id);
         return new ResponseEntity<>(new ResponseDto("관심 키워드 여부 체크!", result), HttpStatus.OK);
     }
 
@@ -104,7 +109,8 @@ public class KeywordController {
     )
     @PostMapping("/keywordlist/my/{id}")
     public ResponseEntity<ResponseDto> addFavorite(@RequestHeader String userId,@PathVariable Long id) {
-        keywordService.addFavorite(id);
+        MemberDto memberDto = getMember(userId);
+        keywordService.addFavorite(memberDto,id);
         return new ResponseEntity<>(new ResponseDto("관심 키워드 등록 성공!", null), HttpStatus.CREATED);
     }
 
@@ -121,7 +127,8 @@ public class KeywordController {
     )
     @DeleteMapping("/keywordlist/my/{id}")
     public ResponseEntity<ResponseDto> deleteFavorite(@RequestHeader String userId,@PathVariable Long id) {
-        keywordService.deleteFavorite(id);
+        MemberDto memberDto = getMember(userId);
+        keywordService.deleteFavorite(memberDto,id);
         return new ResponseEntity<>(new ResponseDto("DELETED", null), HttpStatus.OK);
     }
 
@@ -168,6 +175,15 @@ public class KeywordController {
         List<KeywordSearchResponse> keywordSearchResponses = keywordDtoMapper.toKeywordSearchResponse(searchKeyword);
         return new ResponseEntity<>(new ResponseDto("OK",keywordSearchResponses),HttpStatus.OK);
     }
+
+
+    private MemberDto getMember(String userId) {
+        ResponseDto responseDto = memberClient.getMember(userId);
+        MemberDto memberDto = (MemberDto) responseDto.getData();
+        return memberDto;
+
+    }
+
 
 
 }

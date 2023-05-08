@@ -1,7 +1,5 @@
 package kr.stockey.stockservice.service;
 
-import com.ssafy.backend.domain.keyword.dto.StockKeywordDto;
-import com.ssafy.backend.domain.member.entity.Member;
 import kr.stockey.stockservice.api.request.GetCorrelationRequest;
 import kr.stockey.stockservice.api.response.GetStockTodayResponse;
 import kr.stockey.stockservice.dto.*;
@@ -20,13 +18,14 @@ public interface StockService {
      DailyStockDto getTodayDailyStock(Long stockId);
      List<StockSearchDto> getSearchStock(String keyword);
 
-     List<GetStockTodayResponse> getMyStocks(Member member);
+     List<GetStockTodayResponse> getMyStocks(MemberDto member);
 
-     void addFavorite(Member member,Long id);
-     void deleteFavorite(Member member,Long id);
-     boolean checkFavorite(Member member,Long id);
+     void addFavorite(MemberDto member,Long id);
+     void deleteFavorite(MemberDto member,Long id);
+     boolean checkFavorite(String userId,Long id);
 
-     Double getCorrelation(Long id, GetCorrelationRequest getCorrelationRequest);
+     // TODO 상관관계 추가
+//     Double getCorrelation(Long id, GetCorrelationRequest getCorrelationRequest);
      List<ResultCorrelationDto> getAllStockCorrelation(Long id , GetCorrelationRequest getCorrelationRequest);
 
 

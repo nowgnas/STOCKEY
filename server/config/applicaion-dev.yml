@@ -3,7 +3,9 @@ eureka:
         register-with-eureka: true
         fetch-registry: true
         service-url:
-            defaultZone: http://host.docker.internal:8761/eureka
+            defaultZone:
+                - http://15.164.240.191:8083/eureka
+                - http://15.164.240.191:8084/eureka
 spring:
     rabbitmq:
         host: rabbitmq

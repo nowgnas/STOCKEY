@@ -1,9 +1,12 @@
 import { ChangeEvent, useState, useEffect } from "react"
-import { Button, Dialog, TextField } from "@mui/material"
-import { DialogTitle } from "@mui/material"
 import dayjs from "dayjs"
 import styled from "styled-components"
+
 import { BasketList } from "./TradeForm"
+import { setWithExpiry } from "./setWithExpire"
+
+import { Button, Dialog, TextField } from "@mui/material"
+import { DialogTitle } from "@mui/material"
 
 export interface SimpleDialogProps {
   id?: number
@@ -49,7 +52,7 @@ const TradeQuantityInputModal = ({
     const list = status === "팔래요" ? "sellList" : "buyList"
 
     let myList = localStorage.getItem(list)
-      ? JSON.parse(localStorage.getItem(list)!)
+      ? JSON.parse(localStorage.getItem(list)!).value
       : []
 
     let orderInfo = []
@@ -71,21 +74,14 @@ const TradeQuantityInputModal = ({
         return stock.id !== id
       })
     }
-
-    localStorage.setItem(
-      list,
-      JSON.stringify([
-        {
-          id,
-          name: stockInfo?.name,
-          quantity: value,
-          myStockNums: stockInfo?.myStockNums,
-          currentPrice: stockInfo?.currentPrice,
-          time: dayjs().format("YYYY/MM/DD-HH:mm"),
-        },
-        ...myList,
-      ])
-    )
+    const item = {
+      id,
+      name: stockInfo?.name,
+      quantity: value,
+      myStockNums: stockInfo?.myStockNums,
+      currentPrice: stockInfo?.currentPrice,
+    }
+    setWithExpiry(list, item, myList)
     listHandler(status!)
     modalDataHandler({ open: false, status, stockInfo, id })
   }

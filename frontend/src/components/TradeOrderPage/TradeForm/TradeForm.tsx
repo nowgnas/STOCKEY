@@ -11,6 +11,7 @@ import dayjs from "dayjs"
 import TradeQuantityInputModal from "./TradeQuantityInputModal"
 import { SimpleDialogProps } from "./TradeQuantityInputModal"
 import { Button } from "@mui/material"
+import TradeConfirmModal from "./TradeConfirmModal"
 
 export type BasketList = {
   id: number
@@ -26,44 +27,58 @@ const TradeForm = () => {
   const myBalance = 1000000
 
   // 판매 목록
-  const [sellList, setSellList] = useState<BasketList[]>(
-    localStorage.getItem("sellList")
-      ? JSON.parse(localStorage.getItem("sellList")!)
-      : []
-  )
+  const [sellList, setSellList] = useState<BasketList[]>([])
   // 구매 목록
-  const [buyList, setBuyList] = useState<BasketList[]>(
-    localStorage.getItem("buyList")
+  const [buyList, setBuyList] = useState<BasketList[]>([])
+  const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false)
+
+  const confirmModalHandler = (status: boolean) => {
+    setConfirmModalOpen(status)
+  }
+
+  useEffect(() => {
+    // 팔기 리스트 초기화
+    const sell = localStorage.getItem("sellList")
+      ? JSON.parse(localStorage.getItem("sellList")!)
+      : ""
+    if (sell && dayjs().isAfter(sell.expiry)) {
+      localStorage.removeItem("sellList")
+    } else {
+      if (sell) setSellList(sell.value)
+    }
+    // 사기 리스트 초기화
+    const buy = localStorage.getItem("buyList")
       ? JSON.parse(localStorage.getItem("buyList")!)
-      : []
-  )
+      : ""
+    if (sell && dayjs().isAfter(sell.expiry)) {
+      localStorage.removeItem("buyList")
+    } else {
+      if (buy) setBuyList(buy.value)
+    }
+  }, [])
 
-  const [time, setTime] = useState<string | undefined>()
+  // modal에 줄 데이터들
   const [modalData, setModalData] = useState<SimpleDialogProps | undefined>()
-
   const modalDataHandler = (info: SimpleDialogProps) => {
     setModalData(info)
   }
-  const currentTime = useMemo(() => {
-    return dayjs().format("H")
-  }, [time])
 
+  // 주식 개수 선택 모달 확인 눌렀을 경우 list 변경
   const listHandler = (status: string) => {
     if (status === "팔래요") {
       setSellList(
         localStorage.getItem("sellList")
-          ? JSON.parse(localStorage.getItem("sellList")!)
+          ? JSON.parse(localStorage.getItem("sellList")!).value
           : []
       )
     } else {
       setBuyList(
         localStorage.getItem("buyList")
-          ? JSON.parse(localStorage.getItem("buyList")!)
+          ? JSON.parse(localStorage.getItem("buyList")!).value
           : []
       )
     }
   }
-
   return (
     <>
       <Header>주문서 작성하기</Header>
@@ -92,7 +107,10 @@ const TradeForm = () => {
             listHandler={listHandler}
           />
         </TradeFormWrapper>
-        <ButtonConfirmComp variant="contained">
+        <ButtonConfirmComp
+          variant="contained"
+          onClick={() => confirmModalHandler(true)}
+        >
           주문서 제출하기
           <ConfirmImage src={"/tradeLogos/paymentCheck.png"} />
         </ButtonConfirmComp>
@@ -104,6 +122,12 @@ const TradeForm = () => {
         open={modalData?.open}
         modalDataHandler={modalDataHandler}
         listHandler={listHandler}
+      />
+      <TradeConfirmModal
+        sellList={sellList}
+        buyList={buyList}
+        open={confirmModalOpen}
+        confirmModalHandler={confirmModalHandler}
       />
       <CustomDragLayer />
     </>

@@ -6,6 +6,7 @@ import { useDragLayer } from "react-dnd"
 import TradeStockItem from "../../TradeOrderPage/TradeForm/TradeStockItem"
 import StockCardMini from "../../LabPage/StockCardMini"
 import KeywordCardMini from "../../LabPage/KeywordCardMini"
+import TradeConfirmModalItem from "../../TradeOrderPage/TradeForm/TradeConfirmModalItem"
 
 interface RenderWrapper {
   initialOffset: XYCoord | null
@@ -28,6 +29,8 @@ export const CustomDragLayer = () => {
         return <TradeStockItem item={item} />
       case "SELL":
         return <TradeStockItem item={item} />
+      case "MYSELL":
+        return <TradeConfirmModalItem itemInfo={item} />
       case "STOCK":
         return <StockCardMini item={item} />
       case "KEYWORD":
@@ -55,7 +58,7 @@ export const CustomDragLayer = () => {
 const LayerStyles = styled.div`
   position: fixed;
   pointer-events: none;
-  z-index: 100;
+  z-index: 2000;
   left: 0;
   top: 0;
   width: 30%;

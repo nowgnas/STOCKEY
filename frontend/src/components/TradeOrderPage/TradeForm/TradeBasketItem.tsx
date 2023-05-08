@@ -1,11 +1,12 @@
+import { ChangeEvent, useState } from "react"
 import styled from "styled-components"
 import dayjs from "dayjs"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
 
+import { setWithExpiry } from "./setWithExpire"
 import { BasketList } from "./TradeForm"
 import { Button, Grid, TextField } from "@mui/material"
-import { ChangeEvent, useState } from "react"
 
 interface Props {
   id: number
@@ -38,7 +39,7 @@ const TradeBasketItem = ({
   const stockNumHandler = (nums: number) => {
     const list = status === "팔래요" ? "sellList" : "buyList"
 
-    let myList = JSON.parse(localStorage.getItem(list)!)
+    let myList = JSON.parse(localStorage.getItem(list)!).value
 
     // 개수
     let value
@@ -68,8 +69,8 @@ const TradeBasketItem = ({
           if (stock.id === id) return info
           else return stock
         }))
-    console.log(myList, list)
-    localStorage.setItem(list, JSON.stringify(myList))
+
+    setWithExpiry(list, null, myList)
     listHandler(status)
   }
 

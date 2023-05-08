@@ -1,6 +1,0 @@
-spring:
-  rabbitmq:
-    host: 10.0.2.126
-    port: 5672
-    username: guest
-    password: guest

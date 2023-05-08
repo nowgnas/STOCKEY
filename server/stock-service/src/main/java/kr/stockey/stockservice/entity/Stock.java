@@ -56,6 +56,7 @@ public class Stock {
     private String basicInfo;
 
     @NotNull
+    @Column(name = "industry_id")
     private Long  industryId;
 
     @BatchSize(size = 500)

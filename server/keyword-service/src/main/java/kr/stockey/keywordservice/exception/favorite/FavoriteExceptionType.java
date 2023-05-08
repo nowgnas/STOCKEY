@@ -1,6 +1,6 @@
 package kr.stockey.keywordservice.exception.favorite;
 
-import com.ssafy.backend.global.exception.BaseExceptionType;
+import kr.stockey.keywordservice.exception.BaseExceptionType;
 import org.springframework.http.HttpStatus;
 
 public enum FavoriteExceptionType implements BaseExceptionType {

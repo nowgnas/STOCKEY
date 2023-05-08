@@ -5,4 +5,4 @@ spring:
         - http://localhost:8085
         - http://localhost:8084
         - http://localhost:8888
-      name: stockey
+      name: apigateway-service

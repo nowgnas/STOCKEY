@@ -9,6 +9,7 @@ import kr.stockey.investmentservice.redis.Order;
 import kr.stockey.investmentservice.redis.OrderRedisRepository;
 import kr.stockey.investmentservice.service.InvestmentService;
 
+import kr.stockey.investmentservice.service.InvestmentServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,9 @@ class InvestmentServiceApplicationTests {
 
     @Autowired
     InvestmentService investmentService;
+
+    @Autowired
+    InvestmentServiceImpl investmentServiceImpl;
 
     @Autowired
     OrderRedisRepository orderRedisRepository;
@@ -67,7 +71,6 @@ class InvestmentServiceApplicationTests {
 
     @Test
     void 주문체결_테스트() {
-        investmentService.executeOrder();
+        investmentServiceImpl.orderExecute();
     }
-
 }

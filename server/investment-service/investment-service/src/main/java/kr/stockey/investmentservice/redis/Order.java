@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @AllArgsConstructor
-public class Order implements Serializable {
+public class Order implements Serializable, Comparable<Order> {
 
     @Id
     private Long memberId;
@@ -27,18 +27,8 @@ public class Order implements Serializable {
     private InvCategory invCategory; // ORDER, CONTRACT
     private LocalDateTime orderTime;
 
-//    public Order(Long memberId, Long stockId, Integer count, ContractType orderType, InvCategory invCategory, LocalDateTime orderTime) {
-//        this.id = memberId + "_" + orderTime.toString(); // Key 값을 설정
-//        this.memberId = memberId;
-//        this.stockId = stockId;
-//        this.count = count;
-//        this.orderType = orderType;
-//        this.invCategory = invCategory;
-//        this.orderTime = orderTime;
-//    }
-
-//    @PostConstruct
-//    public void init() {
-//        this.id = memberId + "_" + orderTime.toString(); // 객체 생성 후에 ID를 생성하는 초기화 로직
-//    }
+    @Override
+    public int compareTo(Order other) {
+        return this.orderTime.compareTo(other.getOrderTime());
+    }
 }

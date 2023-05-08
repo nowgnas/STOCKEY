@@ -1,5 +1,6 @@
 // drag and drop 용 card
 
+import { memo } from 'react';
 import { useSetRecoilState } from "recoil";
 import {
   StockCardType,
@@ -20,6 +21,7 @@ interface ParamProps {
 
 const DndCard = ({ type, item, size = "100px" }: ParamProps) => {
   const setCard = useSetRecoilState(draggedLabCardState);
+
 
   //isDragging:  아이템이 드래깅 중일때 true, 아닐때 false. 드래깅 중인 아이템을 스타일링 할때 사용 (opactiy)
   //dragRef는 리액트의 useRef처럼 작동한다. 드래그될 부분에 선언
@@ -55,7 +57,7 @@ const DndCard = ({ type, item, size = "100px" }: ParamProps) => {
   );
 };
 
-export default DndCard;
+export default memo(DndCard);
 
 const DragWrapper = styled.div<{ opacity: string; size: string }>`
   width: ${(props) => props.size};

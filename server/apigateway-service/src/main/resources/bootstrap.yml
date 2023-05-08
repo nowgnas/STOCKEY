@@ -2,7 +2,7 @@ spring:
   cloud:
     config:
       uri:
+        - http://localhost:8888
         - http://15.164.240.191:8085
         - http://15.164.240.191:8084
-        - http://localhost:8888
       name: apigateway-service

@@ -12,7 +12,7 @@ public class FavoriteDto {
     private Long id;
 
     @Schema(description = "관심 id", example = "10")
-    private Long userId;
+    private String userId;
 
     @Schema(description = "주식 id", example = "10")
     private Long stockId;

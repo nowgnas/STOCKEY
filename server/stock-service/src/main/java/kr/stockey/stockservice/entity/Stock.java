@@ -1,6 +1,5 @@
 package kr.stockey.stockservice.entity;
 
-import com.ssafy.backend.domain.industry.entity.Industry;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
@@ -57,9 +56,7 @@ public class Stock {
     private String basicInfo;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "industry_id", nullable = false)
-    private Industry industry;
+    private Long  industryId;
 
     @BatchSize(size = 500)
     @OneToMany(mappedBy = "stock",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -72,7 +69,7 @@ public class Stock {
         }
     }
     @Builder
-    public Stock(Long id, String name, String code, String description, Long marketCap, Long stockCount, String companySize, String companySales, String creditRank, String basicInfo, Industry industry) {
+    public Stock(Long id, String name, String code, String description, Long marketCap, Long stockCount, String companySize, String companySales, String creditRank, String basicInfo, Long industryId) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -83,6 +80,6 @@ public class Stock {
         this.companySales = companySales;
         this.creditRank = creditRank;
         this.basicInfo = basicInfo;
-        this.industry = industry;
+        this.industryId = industryId;
     }
 }

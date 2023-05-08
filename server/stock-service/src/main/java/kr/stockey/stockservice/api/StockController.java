@@ -1,16 +1,12 @@
 package kr.stockey.stockservice.api;
 
-import com.ssafy.backend.domain.keyword.dto.StockKeywordDto;
-import com.ssafy.backend.domain.member.entity.Member;
-import com.ssafy.backend.domain.member.service.MemberService;
-import com.ssafy.backend.domain.stock.api.request.GetCorrelationRequest;
-import com.ssafy.backend.domain.stock.api.response.GetStockResponse;
-import com.ssafy.backend.domain.stock.api.response.GetStockTodayResponse;
-import com.ssafy.backend.domain.stock.dto.*;
-import com.ssafy.backend.domain.stock.mapper.StockDtoMapper;
-import com.ssafy.backend.domain.stock.service.StockService;
-import com.ssafy.backend.global.annotation.Auth;
-import com.ssafy.backend.global.dto.ResponseDto;
+import kr.stockey.stockservice.api.request.GetCorrelationRequest;
+import kr.stockey.stockservice.api.response.GetStockResponse;
+import kr.stockey.stockservice.api.response.GetStockTodayResponse;
+import kr.stockey.stockservice.client.MemberClient;
+import kr.stockey.stockservice.dto.*;
+import kr.stockey.stockservice.mapper.StockDtoMapper;
+import kr.stockey.stockservice.service.StockService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -29,7 +25,7 @@ public class StockController {
 
     private final StockService stockService;
     private final StockDtoMapper stockDtoMapper;
-    private final MemberService memberService;
+    private final MemberClient memberClient;
     /*
             3. 산업중에 사이트 내에서 검색된 순위
         * */
@@ -114,7 +110,7 @@ public class StockController {
     }
 
     // 내 관심종목 리스트
-    @Auth
+    // TODO api gateway route 추가
     @Operation(summary = "관심 종목 리스트", description = "내 관심 종목 리스트를 출력합니다.")
     @ApiResponses(
             value = {
@@ -122,16 +118,16 @@ public class StockController {
             }
     )
     @GetMapping("/my")
-    public ResponseEntity<ResponseDto> getMyIndustries() {
-        Member member = getMember();
-        List<GetStockTodayResponse> myStocks = stockService.getMyStocks(member);
+    public ResponseEntity<ResponseDto> getMyIndustries(@RequestHeader String userId) {
+        MemberDto memberDto = getMember(userId);
+        List<GetStockTodayResponse> myStocks = stockService.getMyStocks(memberDto);
         return new ResponseEntity<>(new ResponseDto("OK", myStocks), HttpStatus.OK);
 
     }
 
 
     // 관심 여부 확인
-    @Auth
+    // TODO api gateway route 추가
     @Operation(summary = "종목 관심 여부 체크", description = "해당 종목이 관심등록 했는지 체크합니다.")
     @ApiResponses(
             value = {
@@ -141,14 +137,14 @@ public class StockController {
             }
     )
     @GetMapping("/my/{id}")
-    public ResponseEntity<ResponseDto> checkFavorite(@PathVariable Long id) {
-        Member member = getMember();
-        boolean result = stockService.checkFavorite(member, id);
+    public ResponseEntity<ResponseDto> checkFavorite(@RequestHeader String userId,@PathVariable Long id) {
+        MemberDto memberDto = getMember(userId);
+        boolean result = stockService.checkFavorite(memberDto.getUserId(), id);
         return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
     }
 
     // 관심 종목 등록
-    @Auth
+    // TODO api gateway route 추가
     @Operation(summary = "관심 종목 등록", description = "관심 종목을 등록합니다.")
     @ApiResponses(
             value = {
@@ -158,14 +154,14 @@ public class StockController {
             }
     )
     @PostMapping("/my/{id}")
-    public ResponseEntity<ResponseDto> addFavorite(@PathVariable Long id) {
-        Member member = getMember();
-        stockService.addFavorite(member, id);
+    public ResponseEntity<ResponseDto> addFavorite(@RequestHeader String userId, @PathVariable Long id) {
+        MemberDto memberDto = getMember(userId);
+        stockService.addFavorite(memberDto, id);
         return new ResponseEntity<>(new ResponseDto("CREATED", null), HttpStatus.CREATED);
     }
 
     // 관심 종목 삭제
-    @Auth
+    // TODO api gateway route 추가
     @Operation(summary = "관심 종목 삭제", description = "관심 종목을 삭제합니다.")
     @ApiResponses(
             value = {
@@ -175,26 +171,28 @@ public class StockController {
             }
     )
     @DeleteMapping("/my/{id}")
-    public ResponseEntity<ResponseDto> deleteFavorite(@PathVariable Long id) {
-        Member member = getMember();
-        stockService.deleteFavorite(member, id);
+    public ResponseEntity<ResponseDto> deleteFavorite(@RequestHeader String userId,@PathVariable Long id) {
+        MemberDto memberDto = getMember(userId);
+        stockService.deleteFavorite(memberDto, id);
         return new ResponseEntity<>(new ResponseDto("DELETED", null), HttpStatus.OK);
     }
 
-    @Operation(summary = "종목과 키워드 추이 상관분석", description = "종목과 키워드 추이 상관분석 결과를 진행합니다.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", description = "종목 없음, 키워드 없음"),
-            }
-    )
-    @GetMapping("/keyword/correlation/{id}")
-    public ResponseEntity<ResponseDto> getCorrelation(@PathVariable Long id,
-                                                      @Valid @ModelAttribute GetCorrelationRequest getCorrelationRequest){
-        Double correlation = stockService.getCorrelation(id, getCorrelationRequest);
-        System.out.println("correlation = " + correlation);
-        return new ResponseEntity<>(new ResponseDto("OK",correlation),HttpStatus.OK);
-    }
+//    @Operation(summary = "종목과 키워드 추이 상관분석", description = "종목과 키워드 추이 상관분석 결과를 진행합니다.")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+//                    @ApiResponse(responseCode = "404", description = "종목 없음, 키워드 없음"),
+//            }
+//    )
+//
+//    // TODO 상관관계 추가
+//    @GetMapping("/keyword/correlation/{id}")
+//    public ResponseEntity<ResponseDto> getCorrelation(@PathVariable Long id,
+//                                                      @Valid @ModelAttribute GetCorrelationRequest getCorrelationRequest){
+//        Double correlation = stockService.getCorrelation(id, getCorrelationRequest);
+//        System.out.println("correlation = " + correlation);
+//        return new ResponseEntity<>(new ResponseDto("OK",correlation),HttpStatus.OK);
+//    }
 
     @Operation(summary = "같은 산업내 종목과 키워드 추이 상관분석", description = "모든종목과 키워드 추이 상관분석 결과를 상위 3개를 보여줍니다.")
     @ApiResponses(
@@ -213,8 +211,10 @@ public class StockController {
 
 
 
-    private Member getMember() {
-        return memberService.getMemberEntity();
+    private MemberDto getMember(String userId) {
+        ResponseDto responseDto = memberClient.getMember(userId);
+        MemberDto memberDto = (MemberDto) responseDto.getData();
+        return memberDto;
 
     }
 

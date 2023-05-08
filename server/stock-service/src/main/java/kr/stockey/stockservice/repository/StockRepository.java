@@ -1,10 +1,8 @@
 package kr.stockey.stockservice.repository;
 
-import com.ssafy.backend.domain.industry.entity.Industry;
-import com.ssafy.backend.domain.keyword.entity.Keyword;
-import com.ssafy.backend.domain.stock.dto.CorrelationDto;
-import com.ssafy.backend.domain.stock.dto.IndustrySumDto;
-import com.ssafy.backend.domain.stock.entity.Stock;
+import kr.stockey.stockservice.dto.CorrelationDto;
+import kr.stockey.stockservice.dto.IndustrySumDto;
+import kr.stockey.stockservice.entity.Stock;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -32,12 +30,12 @@ public interface StockRepository extends JpaRepository<Stock,Long> {
 
     Optional<Stock> findById(Long id);
 
-    List<Stock> findByIndustry(Industry industry);
+    List<Stock> findByIndustry(Long industryId);
 
     @Query(value = "SELECT * FROM stock ORDER BY RAND() LIMIT :count", nativeQuery = true)
     List<Stock> findStockRandom(Integer count);
-    @Query("select s from Stock s where s.industry = :industry order by s.marketCap  desc")
-    List<Stock> findTop5Stocks(@Param("industry") Industry industry,Pageable pageable);
+    @Query("select s from Stock s where s.industryId = :industryId order by s.marketCap  desc")
+    List<Stock> findTop5Stocks(@Param("industryId") Long industryId,Pageable pageable);
     @Query("select s from Stock s order by s.marketCap desc")
     List<Stock> findTop5Stocks(Pageable pageable);
 
@@ -73,15 +71,16 @@ public interface StockRepository extends JpaRepository<Stock,Long> {
     List<Stock> findByName(String keyword);
 
 
-    @Query("SELECT ds.stockDate as stockDate,ds.closePrice as closePrice,ks.count as count" +
-            " FROM DailyStock  ds" +
-            " left JOIN KeywordStatistic ks" +
-            " ON ds.stockDate = ks.statisticDate " +
-            " WHERE ds.stock = :stock" +
-            " AND ds.stockDate BETWEEN :startDate and :endDate" +
-            " AND ks.keyword = :keyword")
-    List<CorrelationDto> getTest(Stock stock, Keyword keyword, LocalDate startDate, LocalDate endDate);
+    // TODO => JOIN문 구현
+//    @Query("SELECT ds.stockDate as stockDate,ds.closePrice as closePrice,ks.count as count" +
+//            " FROM DailyStock  ds" +
+//            " left JOIN KeywordStatistic ks" +
+//            " ON ds.stockDate = ks.statisticDate " +
+//            " WHERE ds.stock = :stock" +
+//            " AND ds.stockDate BETWEEN :startDate and :endDate" +
+//            " AND ks.keyword = :keyword")
+//    List<CorrelationDto> getTest(Stock stock, Keyword keyword, LocalDate startDate, LocalDate endDate);
 
-    @Query("select s from Stock s where s != :stock and s.industry = :industry ")
-    List<Stock> getStocksExceptMe(Stock stock,Industry industry);
+    @Query("select s from Stock s where s != :stock and s.industryId = :industryId ")
+    List<Stock> getStocksExceptMe(Stock stock,Long industryId);
 }

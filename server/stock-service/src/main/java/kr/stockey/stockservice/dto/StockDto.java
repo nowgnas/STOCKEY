@@ -1,6 +1,5 @@
 package kr.stockey.stockservice.dto;
 
-import com.ssafy.backend.domain.industry.dto.IndustryDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

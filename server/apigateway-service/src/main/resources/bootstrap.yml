@@ -1,5 +1,8 @@
 spring:
   cloud:
     config:
-      uri: http://localhost:8888
+      uri:
+        - http://localhost:8888
+        - http://localhost:8085
+        - http://localhost:8084
       name: stockey

@@ -1,10 +1,10 @@
 FROM arm64v8/openjdk:11-jdk AS builder
 WORKDIR /app
-COPY server/config-service/gradlew .
-COPY server/config-service/gradle gradle
-COPY server/config-service/build.gradle .
-COPY server/config-service/settings.gradle .
-COPY server/config-service/src src
+COPY S08P31A205/server/config-service/gradlew .
+COPY S08P31A205/server/config-service/gradle gradle
+COPY S08P31A205/server/config-service/build.gradle .
+COPY S08P31A205/server/config-service/settings.gradle .
+COPY S08P31A205/server/config-service/src src
 RUN chmod +x ./gradlew
 RUN ./gradlew clean bootJar
 

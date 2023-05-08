@@ -19,6 +19,4 @@ const SectionWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-
-  border: 4px solid white; // 임시
 `;

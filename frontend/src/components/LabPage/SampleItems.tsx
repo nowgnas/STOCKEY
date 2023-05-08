@@ -41,18 +41,20 @@ export const lastCnt = [
     }
 ]
 
-
-export const RegCo = [
-  {
-    keyword: "sampleKeyword1",
-    coefficient: 0.123
-  },
-  {
-    keyword: "sampleKeyword2",
-    coefficient: -0.222,
-  },
-  {
-    keyword: "sampleKeyword3",
-    coefficient: 0.312
-  },
-]
+export const Regression = {
+  "constant": 114434,
+  "coefficients": [
+    {
+      keyword: "sampleKeyword1",
+      coefficient: 0.123
+    },
+    {
+      keyword: "sampleKeyword2",
+      coefficient: -0.222,
+    },
+    {
+      keyword: "sampleKeyword3",
+      coefficient: 0.312
+    },
+  ]
+}

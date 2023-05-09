@@ -15,11 +15,3 @@ spring:
                   baseMessage: Spring Cloud Gateway Global Filter
                   preLogger: true
                   postLogger: true
-eureka:
-    client:
-        register-with-eureka: true
-        fetch-registry: true
-        service-url:
-            defaultZone:
-                - http://15.164.240.191:8083/eureka
-                - http://15.164.240.191:8082/eureka

@@ -1,3 +1,4 @@
+import {useRef} from 'react';
 import styled from "styled-components"
 import type { XYCoord } from "react-dnd"
 import { useDragLayer } from "react-dnd"
@@ -13,6 +14,7 @@ interface RenderWrapper {
   currentOffset: XYCoord | null
 }
 
+
 export const CustomDragLayer = () => {
   const { itemType, isDragging, item, initialOffset, currentOffset } =
     useDragLayer((monitor) => ({
@@ -23,17 +25,24 @@ export const CustomDragLayer = () => {
       isDragging: monitor.isDragging(),
     }))
 
+  const baseSize = useRef<string[]>(["", ""]);
+
   const renderItem = () => {
     switch (itemType) {
       case "BUY":
+        baseSize.current = ["30%"]
         return <TradeStockItem item={item} />
       case "SELL":
+        baseSize.current = ["30%"]
         return <TradeStockItem item={item} />
       case "MYSELL":
+        baseSize.current = ["30%"]
         return <TradeConfirmModalItem itemInfo={item} />
       case "STOCK":
+        baseSize.current = ["110px", "110px"]
         return <StockCardMini item={item} />
       case "KEYWORD":
+        baseSize.current = ["110px", "110px"]
         return <KeywordCardMini item={item} />
       default:
         return null
@@ -44,7 +53,7 @@ export const CustomDragLayer = () => {
     return null
   }
   return (
-    <LayerStyles>
+    <LayerStyles baseSize={baseSize.current}>
       <RenderWrapper
         initialOffset={initialOffset}
         currentOffset={currentOffset}
@@ -55,15 +64,17 @@ export const CustomDragLayer = () => {
   )
 }
 
-const LayerStyles = styled.div`
+const LayerStyles = styled.div<{baseSize: string[]}>`
   position: fixed;
   pointer-events: none;
   z-index: 2000;
   left: 0;
   top: 0;
-  width: 30%;
-  height: 100%;
+
+  width: ${props => props.baseSize[0]};
+  height: ${props => props.baseSize[1]};
 `
+
 const RenderWrapper = styled.div<RenderWrapper>`
   display: ${(props) => {
     if (!props.initialOffset || !props.currentOffset) {
@@ -87,4 +98,7 @@ const RenderWrapper = styled.div<RenderWrapper>`
   background: var(--custom-gray-4);
   border-radius: 24px;
   padding:3px;
+  
+  width: 100%;
+  height: 100%;
 `

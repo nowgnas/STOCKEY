@@ -8,6 +8,7 @@ import StockAccordion from "../components/LabPage/StockAccordion";
 import KeywordAccordion from "../components/LabPage/KeywordAccordion";
 import TargetListSection from "../components/LabPage/TargetListSection";
 import ResultBoard from "../components/LabPage/ResultBoard";
+import { CustomDragLayer } from "../components/common/DragDrop/CustomDragLayer";
 
 import styled from "styled-components";
 
@@ -30,6 +31,8 @@ const LabPage = () => {
       <AbsoluteWrapper resultSize={stockOpenState || keywordOpenState}>
         <ResultBoard resultSize={stockOpenState || keywordOpenState}/>
       </AbsoluteWrapper>
+      
+      <CustomDragLayer />
     </PageWrapper>
   );
 };

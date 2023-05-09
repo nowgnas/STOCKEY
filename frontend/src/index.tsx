@@ -1,16 +1,13 @@
-import React, { Suspense } from "react"
 import ReactDOM from "react-dom/client"
 import "./index.css"
-import App from "./App"
 import reportWebVitals from "./reportWebVitals"
 import { RecoilRoot } from "recoil"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { ReactQueryDevtools } from "react-query/devtools"
-import { BrowserRouter, RouterProvider } from "react-router-dom"
-import Spinner from "./components/common/Spinner/Spinner"
+import { RouterProvider } from "react-router-dom"
 import router from "./pages/index"
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 const queryClient = new QueryClient()

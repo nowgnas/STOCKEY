@@ -1,29 +1,19 @@
-FROM node:latest
-
+# Use a node image as the base image
+FROM node:18
+# Set the working directory
 WORKDIR /app
-
-COPY package*.json ./
-
+# Copy the package.json and package-lock.json files to the working directory
+COPY frontend/package*.json ./
+# Install the dependencies
 RUN npm install
-
-COPY . .
-
+# Copy the rest of the source code to the working directory
+COPY frontend/. .
+# Build the React app
 RUN npm run build
 
-# Use Nginx as the web server
-FROM nginx
-
-# nginx 의 default.conf 를 삭제
-RUN rm /etc/nginx/conf.d/default.conf
-
-# host pc 의 nginx.conf 를 아래 경로에 복사
-COPY ./default.conf /etc/nginx/conf.d/default.conf
-
-# Copy the build files to the Nginx web root directory
+FROM nginx:alpine
 COPY --from=0 /app/build /usr/share/nginx/html
-
-# Expose port 3000
-EXPOSE 80
-
+# Copy the Nginx configuration file to the appropriate location
+COPY frontend/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]

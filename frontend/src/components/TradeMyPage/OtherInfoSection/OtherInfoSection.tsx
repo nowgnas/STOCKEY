@@ -8,7 +8,7 @@ import MyTradingTypeCard from "./MyTradingTypeCard"
 const OtherInfoSection = () => {
   return (
     <SectionWrapper pr={2}>
-      <Grid container rowGap={3} columnSpacing={2}>
+      <Grid container rowGap={4} columnSpacing={2}>
         <Grid item xs={12}>
           <MyAccountFlowChart />
         </Grid>

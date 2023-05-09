@@ -4,20 +4,15 @@ import kr.stockey.investmentservice.enums.ContractType;
 import kr.stockey.investmentservice.enums.InvCategory;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderProducerDto {
+public class OrderProducerDto implements Serializable {
     private Long memberId;
-    private Long stockId;
-    private Integer count; // 주식 수량
-    private ContractType orderType; // BUY or SELL
-    private InvCategory invCategory; // ORDER, CONTRACT
+    private List<OrderListDto> orders;
     private LocalDateTime orderTime;
-
-    public void setOrderTime(LocalDateTime orderTime) {
-        this.orderTime = orderTime;
-    }
 }

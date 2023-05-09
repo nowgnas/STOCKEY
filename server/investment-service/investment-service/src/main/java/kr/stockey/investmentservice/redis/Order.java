@@ -1,5 +1,6 @@
 package kr.stockey.investmentservice.redis;
 
+import kr.stockey.investmentservice.dto.OrderListDto;
 import kr.stockey.investmentservice.enums.ContractType;
 import kr.stockey.investmentservice.enums.InvCategory;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.data.redis.core.RedisHash;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RedisHash(value = "order", timeToLive = 864000) // 개발용 10일, 실제 서비스: 60분 (60분 후에 DB 적재)
 @Getter
@@ -21,10 +23,7 @@ public class Order implements Serializable, Comparable<Order> {
 
     @Id
     private Long memberId;
-    private Long stockId;
-    private Integer count; // stock quantity
-    private ContractType orderType; // BUY or SELL
-    private InvCategory invCategory; // ORDER, CONTRACT
+    private List<OrderListDto> orders;
     private LocalDateTime orderTime;
 
     @Override

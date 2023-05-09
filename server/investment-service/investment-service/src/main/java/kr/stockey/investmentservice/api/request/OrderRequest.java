@@ -14,9 +14,6 @@ import java.time.LocalDateTime;
 public class OrderRequest {
     @Min(value = -1, message = "Number must be greater than -1")
     @NotNull
-    private final Long memberId;
-    @Min(value = -1, message = "Number must be greater than -1")
-    @NotNull
     private final Long stockId;
     @Min(value = -1, message = "Number must be greater than -1")
     @NotNull
@@ -24,6 +21,4 @@ public class OrderRequest {
     @Pattern(regexp = "BUY|SELL")
     @NotNull
     private final ContractType orderType; // BUY or SELL
-    @Pattern(regexp = "ORDER|CONTRACT")
-    private final InvCategory invCategory; // ORDER, CONTRACT
 }

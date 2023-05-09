@@ -36,12 +36,14 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
     implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '3.4.0'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // https://mvnrepository.com/artifact/org.mockito/mockito-core
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.3.1'
     // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.3.1'
+
 
 }
 

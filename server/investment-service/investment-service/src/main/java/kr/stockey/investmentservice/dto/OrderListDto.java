@@ -1,6 +1,7 @@
 package kr.stockey.investmentservice.dto;
 
-import lombok.Data;
+import kr.stockey.investmentservice.enums.ContractType;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -9,5 +10,5 @@ import java.time.LocalDateTime;
 public class OrderListDto implements Serializable {
     private Long stockId;
     private int count; // 주식 수량
-    private String orderType; // "BUY" or "SELL"
+    private ContractType orderType; // "BUY" or "SELL"
 }

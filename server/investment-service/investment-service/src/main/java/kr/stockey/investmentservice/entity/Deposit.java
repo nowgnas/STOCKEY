@@ -1,5 +1,5 @@
 package kr.stockey.investmentservice.entity;
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -7,7 +7,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "deposit")
+@ToString
 public class Deposit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +28,10 @@ public class Deposit {
     @Column(name = "money", nullable = false)
     private Long money;
 
+    @Builder
+    public Deposit(Long memberId, LocalDateTime createdAt, Long money) {
+        this.memberId = memberId;
+        this.createdAt = createdAt;
+        this.money = money;
+    }
 }

@@ -2,8 +2,7 @@ package kr.stockey.investmentservice.entity;
 
 import kr.stockey.investmentservice.enums.ContractType;
 import kr.stockey.investmentservice.enums.InvCategory;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,7 +13,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "contract")
+@ToString
 public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,4 +47,14 @@ public class Contract {
     @Column(name = "category", nullable = false, length = 20)
     private InvCategory category;
 
+    @Builder
+    public Contract(Long memberId, Long stockId, Long count, ContractType contractType,
+                    LocalDateTime createdAt, InvCategory category) {
+        this.memberId = memberId;
+        this.stockId = stockId;
+        this.count = count;
+        this.contractType = contractType;
+        this.createdAt = createdAt;
+        this.category = category;
+    }
 }

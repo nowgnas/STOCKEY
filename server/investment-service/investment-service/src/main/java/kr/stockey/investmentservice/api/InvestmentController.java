@@ -32,6 +32,6 @@ public class InvestmentController {
 
     private Long getMemberId() {
         // http 헤더에서 "X-UserId" 내용 가져와서 리턴하는 로직으로 채우기
-        return 1L;
+        return 5L;
     }
 }

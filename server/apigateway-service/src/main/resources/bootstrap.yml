@@ -19,3 +19,6 @@ eureka:
       defaultZone:
         - http://15.164.240.191:8083/eureka
         - http://15.164.240.191:8082/eureka
+        - http://15.164.240.191:8761/eureka
+        - http://discoverygreen:8761/eureka
+        - http://localhost:8083/eureka

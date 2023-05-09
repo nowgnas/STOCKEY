@@ -6,7 +6,7 @@ import styled from "styled-components"
 
 interface ChartProps {
   chartOptions: HighchartsReact.Props
-  height: number
+  height: string
 }
 
 const ChartWrapper = ({ chartOptions, height }: ChartProps) => {
@@ -38,9 +38,9 @@ const ChartWrapper = ({ chartOptions, height }: ChartProps) => {
 
 export default ChartWrapper
 
-export const ChartWrapperDiv = styled.div<{ h: number }>`
+export const ChartWrapperDiv = styled.div<{ h: string }>`
   width: 100%;
-  height: ${({ h }) => h}%;
+  height: ${({ h }) => h};
   & * {
     font-family: "Inter";
   }

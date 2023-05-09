@@ -36,7 +36,7 @@ const MyAccountFlowChart = () => {
         animation: true,
         enabled: true,
         formatter: function () {
-          return `${this.total.toLocaleString()}`
+          return `${this.total?.toLocaleString()}`
         },
         y: -10,
         style: {
@@ -229,9 +229,11 @@ const MyAccountFlowChart = () => {
 
   return (
     <>
-      <PanelTitle style={{ marginTop: "0" }}>계좌 변동 한 눈에 보기</PanelTitle>
+      <PanelTitle style={{ marginTop: "0", marginLeft: "5px" }}>
+        계좌 변동 한 눈에 보기
+      </PanelTitle>
       <br />
-      <ChartWrapper chartOptions={chartOptions} height={40} />
+      <ChartWrapper chartOptions={chartOptions} height="35vh" />
     </>
   )
 }

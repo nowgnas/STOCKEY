@@ -1,38 +1,37 @@
-.App {
-  text-align: center;
+/* custom classnames */
+
+/* 주가, 실현 손익 등에서 값이 양수인지, 음수인지, 0인지에 따라 적용되는 스타일 */
+.positive {
+  color: var(--custom-increase-red);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.negative {
+  color: var(--custom-decrease-blue);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.neutral {
+  color: var(--custom-gray-1);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
+/* 스크롤 */
 
-.App-link {
-  color: #61dafb;
+/* 가로 스크롤 + 스크롤바 숨김 */
+.scroll-x {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.scroll-x::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
+/* 세로 스크롤 + 스크롤바 숨김 */
+.scroll-y {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scroll-y::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
 }

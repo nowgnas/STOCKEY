@@ -11,3 +11,11 @@ management:
     web:
       exposure:
         include: refresh, health, beans,httptrace, busrefresh
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone:
+        - http://15.164.240.191:8083/eureka
+        - http://15.164.240.191:8082/eureka

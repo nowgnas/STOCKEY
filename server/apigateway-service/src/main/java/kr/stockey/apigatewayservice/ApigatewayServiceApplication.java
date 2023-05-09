@@ -9,7 +9,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@EnableDiscoveryClient
+@EnableEurekaClient
 public class ApigatewayServiceApplication {
 
     public static void main(String[] args) {

@@ -6,3 +6,8 @@ spring:
         - http://15.164.240.191:8085
         - http://15.164.240.191:8084
       name: apigateway-service
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans,httptrace, busrefresh

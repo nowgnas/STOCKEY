@@ -1,3 +1,20 @@
+spring:
+    rabbitmq:
+        host: rabbitmq
+        port: 5672
+        username: guest
+        password: guest
+    application:
+        name: apigateway-service
+
+    cloud:
+        gateway:
+        default-filters:
+            - name: GlobalFilter
+              args:
+                  baseMessage: Spring Cloud Gateway Global Filter
+                  preLogger: true
+                  postLogger: true
 eureka:
     client:
         register-with-eureka: true
@@ -6,9 +23,3 @@ eureka:
             defaultZone:
                 - http://15.164.240.191:8083/eureka
                 - http://15.164.240.191:8082/eureka
-spring:
-    rabbitmq:
-        host: rabbitmq
-        port: 5672
-        username: guest
-        password: guest

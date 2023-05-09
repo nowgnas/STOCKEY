@@ -14,6 +14,6 @@ public interface DepositRepository extends JpaRepository<Deposit, Long> {
             "AND d.createdAt = (SELECT MAX(d2.createdAt) FROM Deposit d2 WHERE d2.memberId = :memberId)")
     Optional<Deposit> findLatestDepositByMemberId(@Param("memberId") Long memberId);
 
-    List<Deposit> saveAll(List<Deposit> deposits);
+//    List<Deposit> saveAll(List<Deposit> deposits);
 
 }

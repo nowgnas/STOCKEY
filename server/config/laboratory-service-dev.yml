@@ -1,0 +1,14 @@
+spring:
+    datasource:
+        url: "{cipher}b6ad4ededc847cd1fc46ad3938e8ca0c5ee37112f981d3a2d45f7063eaaaa3ec4f08eb47423398ddb12b9d3a611a946f6fa626b8847dad197ec5a2beaaad6bdd6638e42abe7f485b7c52639ce24dc431e886a8812e28ba3e36463bb4acea91906c86584729c41692d8b40a119613d2f4578e9ea2030b10aa5ca059c584839bbf"
+        username: "{cipher}76c9b5f2064e0e895669abd41552ad978511295a1043a32a28f8b0ca738e1911"
+        password: "{cipher}9fe075646d24f48ad8ab793019960cf47340050169d522344f24cc1b6d3ad68c"
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+        hibernate:
+            ddl-auto: none
+        properties:
+            hibernate:
+                format_sql: true
+                default_batch_fetch_size: 100
+                show_sql: false

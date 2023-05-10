@@ -1,4 +1,5 @@
-import styled, { keyframes } from "styled-components"
+import styled from "styled-components"
+import { shimmer } from "../../../Keyframes"
 
 interface Props {
   time: number
@@ -66,15 +67,6 @@ const TimeText = styled.p`
   }
 `
 
-const shimmer = keyframes`
-  from {
-    box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(0, 0, 0, 0.3);
-  }
-  to {
-    box-shadow: 0px 0px 30px var(--custom-green-2), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);;
-  }
-`
-
 const TimeDiv = styled.div<TimeDivProps>`
   background: ${(props) =>
     props.isTimeOver ? "var(--custom-green-4)" : "#D9D9D9"};
@@ -87,5 +79,5 @@ const TimeDiv = styled.div<TimeDivProps>`
 
 const NextTimeDiv = styled(TimeDiv)`
   background: var(--custom-green-1);
-  animation: ${shimmer} 1s infinite;
+  animation: ${shimmer("var(--custom-green-2)")} 1s infinite;
 `

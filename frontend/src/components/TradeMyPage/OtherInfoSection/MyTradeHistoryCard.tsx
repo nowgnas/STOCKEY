@@ -1,11 +1,15 @@
 import styled from "styled-components"
+import dayjs from "dayjs"
 
 interface TradeHistoryProps {
   date: string
   realizedProfit: number
 }
 
-const MyTradeHistoryCard = ({ date, realizedProfit }: TradeHistoryProps) => {
+const MyTradeHistoryCard = ({
+  date = dayjs().format("오늘 H시"),
+  realizedProfit,
+}: TradeHistoryProps) => {
   // 실현 손익이 +, -, 0 인 경우에 따라 부호를 다르게 표시
   const profit =
     realizedProfit > 0
@@ -46,8 +50,8 @@ const CardWrapper = styled.div`
 
   // 스타일
   border-radius: 24px;
-  background-color: white;
   font-weight: bold;
+  background-color: white;
 
   // 드래그 방지
   & p {
@@ -70,8 +74,11 @@ const CardImg = styled.img`
   width: 7em;
   height: 7em;
 
-  // 그림자 및 커서
+  // 스타일
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+  // 상호작용
+
   cursor: pointer;
 
   // 호버 시 아이콘만 확대
@@ -87,5 +94,6 @@ const CardImg = styled.img`
   user-drag: none;
 `
 const CardFooter = styled.p`
+  // 스타일
   font-size: 1.6rem;
 `

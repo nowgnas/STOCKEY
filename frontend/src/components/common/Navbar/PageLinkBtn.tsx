@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components"
+import { shake } from "../../../Keyframes"
 // mui icon
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded"
 import AppsRoundedIcon from "@mui/icons-material/AppsRounded"
@@ -7,7 +8,6 @@ import BookmarkIcon from "@mui/icons-material/Bookmark"
 import ScienceIcon from "@mui/icons-material/Science"
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports"
 import { useNavigate } from "react-router-dom"
-import { shake } from "../../StockDetailPage/SubPanel/SubInfoPanel/ComparingAnalysisSection/PriceAnalysisCard"
 
 type PageLinkBtnProps = {
   name: string

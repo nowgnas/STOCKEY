@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import {
-  stockAccordionOpenState,
-  keywordAccordionOpenState,
-} from "../../stores/LaboratoryAtoms";
+import { resultBoardSizeState } from "../../stores/LaboratoryAtoms";
 
 import * as Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -24,10 +21,9 @@ interface Props {
 }
 
 const GraphComp = ({ item, index, coefficient }: Props) => {
-  const stockAccordionOpen = useRecoilValue(stockAccordionOpenState);
-  const keywordAccordionOpen = useRecoilValue(keywordAccordionOpenState);
+  const resultBoardSize = useRecoilValue(resultBoardSizeState);
 
-  const [chartWidth, setChartWidth] = useState(754);
+  const [chartWidth, setChartWidth] = useState(0);
 
   const handleResize = () => {
     const chartWrapperDiv = document.getElementById("lab-chart-wrapper");
@@ -52,7 +48,7 @@ const GraphComp = ({ item, index, coefficient }: Props) => {
         setChartWidth(chartWrapperDiv.clientWidth);
       }
     }, 1000);
-  }, [stockAccordionOpen, keywordAccordionOpen]);
+  }, [resultBoardSize]);
 
   // chart option
   const chartOptions: Highcharts.Options = {
@@ -64,12 +60,12 @@ const GraphComp = ({ item, index, coefficient }: Props) => {
     },
     colors: [colorPalette[index].color],
     xAxis: {
-      title: { text: "빈도" },
+      title: chartWidth > 240 ? { text: "빈도" } : undefined,
       gridLineWidth: 1,
       gridLineDashStyle: "LongDash",
     },
     yAxis: {
-      title: { text: "종목" },
+      title: chartWidth > 240 ? { text: "주가" } : undefined,
       gridLineWidth: 1,
       gridLineDashStyle: "LongDash",
     },
@@ -90,6 +86,8 @@ const GraphComp = ({ item, index, coefficient }: Props) => {
         color: colorPalette[index].tooltipColor,
         lineWidth: chartWidth / 80,
         zIndex: 1,
+        stickyTracking: false,
+        animation: false
       },
       {
         type: "scatter",
@@ -139,7 +137,7 @@ const GraphComp = ({ item, index, coefficient }: Props) => {
 export default GraphComp;
 
 const GraphContainer = styled.div`
-  width: 30%;
+  width: 32%;
 
   background-color: white;
   border-radius: 24px;
@@ -149,6 +147,7 @@ const GraphContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1%;
+  overflow: hidden;
 `;
 
 const GraphTitle = styled.div`

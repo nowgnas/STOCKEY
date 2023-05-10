@@ -88,6 +88,8 @@ const SliderSection = styled.div`
 `;
 
 const KeywordWrapper = styled.div`
+  width: 28%;
+  word-break: break-all;
   font-size: 1.5rem;
   font-weight: bold;
 `;

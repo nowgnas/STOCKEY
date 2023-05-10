@@ -1,4 +1,4 @@
-import {memo} from 'react';
+import { memo } from "react";
 import { useEffect, useMemo } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
@@ -7,13 +7,15 @@ import {
   draggedLabCardState,
   stockAccordionOpenState,
   keywordAccordionOpenState,
-  resultBoardOpenState
+  resultBoardOpenState,
 } from "../../stores/LaboratoryAtoms";
 import { useDrop } from "react-dnd";
 import ResetBtn from "./ResetBtn";
 import PeriodSelectBox from "./PeriodSelectBox";
 import DndBox from "./DndBox";
 import styled from "styled-components";
+
+type panelState = "possible" | "impossible" | "nonActive";
 
 const TargetListSection = () => {
   const [stock, setStock] = useRecoilState(selectedLabStockState);
@@ -39,21 +41,18 @@ const TargetListSection = () => {
   );
 
   // panel active 상태 (drag중 판단)
-  // 0 (default) / 1 (possible) / -1 (impossible)
-  const activePanel = useMemo(() => {
+  const activePanel: panelState = useMemo(() => {
     if (getItemType === "STOCK") {
-      if (!stock) return 1;
-      else return -1;
+      if (!stock) return "possible";
+      else return "impossible";
     } else if (getItemType === "KEYWORD") {
-      if (keywordList.length < 3 && !keywordList.includes(getItem)) return 1;
-      else return -1;
+      if (keywordList.length < 3 && !keywordList.includes(getItem))
+        return "possible";
+      else return "impossible";
     } else {
-      return 0;
+      return "nonActive";
     }
   }, [getItem]);
-
-  console.log("section 재렌더링");
-  console.log(getItem, getItemType);
 
   // recoil의 draggedItem 변하면 stock 또는 keywordList update 가능여부 확인 후 update
   useEffect(() => {
@@ -93,26 +92,27 @@ const TargetListSection = () => {
         <DndBox type={"KEYWORD2"} item={keywordList[1]} />
         <DndBox type={"KEYWORD3"} item={keywordList[2]} />
       </ContentWrapper>
+
+      {activePanel === "impossible" && <ImpossiblePanel />}
     </TargetPanelLayout>
   );
 };
 
 export default memo(TargetListSection);
 
-const TargetPanelLayout = styled.div<{ active: number }>`
+const TargetPanelLayout = styled.div<{ active: panelState }>`
   width: 100%;
-  background: ${(props) =>
-    props.active === -1 ? "rgba(0, 0, 0, 0.2)" : "#ffffff"};
   border-radius: 24px;
   padding: 30px 36px;
+  position: relative;
 
   box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.15),
     0px 1px 3px rgba(0, 0, 0, 0.3);
 
   border: ${(props) =>
-    props.active === -1
+    props.active === "impossible"
       ? "3px dashed #FB6F6F"
-      : props.active === 1
+      : props.active === "possible"
       ? "3px dashed #4DC19F"
       : "3px solid white"};
 `;
@@ -139,8 +139,8 @@ const SubTitleWrapper = styled.div`
 `;
 
 const RightItemWrapper = styled.div`
-    display: flex;
-    gap: 2rem;
+  display: flex;
+  gap: 2rem;
 `;
 
 const ContentWrapper = styled.div`
@@ -149,7 +149,7 @@ const ContentWrapper = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: 2rem;
-  
+
   padding: 4px 0 8px 0;
   height: 140px;
   overflow-y: scroll;
@@ -166,4 +166,15 @@ const ContentWrapper = styled.div`
   ::-webkit-scrollbar-track {
     width: 1.8rem;
   }
+`;
+
+const ImpossiblePanel = styled.div`
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  background-color: rgba(0, 0, 0, 0.2);
 `;

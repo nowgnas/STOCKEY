@@ -42,7 +42,6 @@ const LockWrapper = styled.div`
 
   display: flex;
   justify-content: center;
-  align-items: center;
 
   background: rgba(255, 254, 254, 0.9);
   border-radius: 24px;

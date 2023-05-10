@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useRecoilValue } from "recoil";
 import { selectedSliderList } from "../../stores/LaboratoryAtoms";
 
-import { lastCnt, Regression } from "./SampleItems";
+import { GraphItemSixMonth, Regression } from "./SampleItems";
 import styled from "styled-components";
 import PredictKeywordCard from "./PredictKeywordCard";
 
@@ -13,7 +13,7 @@ const PredictResultCard = () => {
   // 1.2 사용자 입력값 (query -> recoil)
 
   // 2. keyword card
-  // 2.1 keyword default (query)
+  // 2.1 graph 마지막 값 (query)
   // 2.2 사용자 입력값 (query -> recoil)
 
   // 사용자 입력값
@@ -34,12 +34,12 @@ const PredictResultCard = () => {
     return result;
   }, [Regression, sliderList]);
 
-  // 2.1 keyword default값
+  // 2. keyword 변화량 게산
   const baseCntCalc = (item: { keyword: string; cnt: number }) => {
     let base = 0;
-    lastCnt.forEach(({ keyword, cnt }) => {
+    GraphItemSixMonth.forEach(({ keyword, scatter }) => {
       if (keyword === item.keyword) {
-        base = cnt;
+        base = Math.round(scatter[scatter.length - 1][0]);
         return false;
       }
     });

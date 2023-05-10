@@ -13,7 +13,7 @@ type changeType = "increase" | "decrease" | "noChange";
 
 const PredictKeywordCard = ({ sliderItem, baseCnt }: Props) => {
   const changeAmount: number = useMemo(() => {
-    return (sliderItem.cnt - baseCnt) / sliderItem.cnt;
+    return (sliderItem.cnt - baseCnt) / baseCnt;
   }, [sliderItem.cnt]);
 
   const changeState: changeType = useMemo(() => {
@@ -29,20 +29,19 @@ const PredictKeywordCard = ({ sliderItem, baseCnt }: Props) => {
   return (
     <CardWrapper>
       <HeaderWrapper>
-        <KeywordSection>"{sliderItem.keyword}"</KeywordSection>
-        {" "}언급
+        <KeywordSection>"{sliderItem.keyword}"</KeywordSection> 언급
       </HeaderWrapper>
 
       <IconWrapper>
-        {changeState !== "noChange" && (
-          <IconImg
-            src={
-              changeState === "increase"
-                ? "labImages/increaseIcon.png"
-                : "labImages/decreaseIcon.png"
-            }
-          />
-        )}
+        <IconImg
+          src={
+            changeState === "noChange"
+              ? "labImages/noChangeIcon.png"
+              : changeState === "increase"
+              ? "labImages/increaseIcon.png"
+              : "labImages/decreaseIcon.png"
+          }
+        />
       </IconWrapper>
 
       <PercentWrapper changeState={changeState}>{`${Math.abs(
@@ -82,7 +81,6 @@ const KeywordSection = styled.span`
 const IconWrapper = styled.div`
   width: 32px;
   height: 32px;
-
   margin: 4px;
 `;
 
@@ -92,11 +90,11 @@ const IconImg = styled.img`
 `;
 
 const PercentWrapper = styled.div<{ changeState: changeType }>`
-  font-weight: bold;  
+  font-weight: bold;
   color: ${(props) =>
     props.changeState === "increase"
       ? "var(--custom-increase-red)"
       : props.changeState === "decrease"
       ? "var(--custom-decrease-blue)"
-      : "black"};
+      : "var(--custom-gray-1)"};
 `;

@@ -156,10 +156,12 @@ const GraphTitle = styled.div`
   font-weight: bold;
   margin: 0.4rem 0 1.6rem 0;
   display: flex;
-  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
 `;
 
 const CoefficientWrapper = styled.span<{ coefficient: number }>`
+  margin: 0 2rem;
   color: ${(props) =>
     props.coefficient > 0
       ? "var(--custom-increase-red)"

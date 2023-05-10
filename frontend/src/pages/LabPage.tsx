@@ -29,7 +29,7 @@ const LabPage = () => {
       </ColumnWrapper>
 
       <AbsoluteWrapper resultSize={stockOpenState || keywordOpenState}>
-        <ResultBoard resultSize={stockOpenState || keywordOpenState}/>
+        <ResultBoard />
       </AbsoluteWrapper>
       
       <CustomDragLayer />

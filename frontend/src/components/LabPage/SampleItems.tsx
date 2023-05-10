@@ -1,3 +1,5 @@
+
+// graph item sample
 export const GraphItemOneMonth = [
   { keyword: "sampleKeyword1",
     line: [[3.799, 593.337], [99.55, 699.226]],
@@ -31,37 +33,21 @@ export const GraphItemSixMonth = [
   }
 ]
 
-
-
-export const lastCnt = [
-  {
-    keyword: "sampleKeyword1",
-    cnt: 44
-  },
-  {
-    keyword: "sampleKeyword2",
-    cnt: 56
-  },
-  {
-    keyword: "sampleKeyword3",
-    cnt: 35
-  }
-]
-
+// regression sample
 export const Regression = {
   "constant": 114434,
   "coefficients": [
     {
       keyword: "sampleKeyword1",
-      coefficient: 0.123
+      coefficient: 0.312
     },
     {
       keyword: "sampleKeyword2",
-      coefficient: -0.222,
+      coefficient: 0.125,
     },
     {
       keyword: "sampleKeyword3",
-      coefficient: 0.312
+      coefficient: -0.245
     },
   ]
 }

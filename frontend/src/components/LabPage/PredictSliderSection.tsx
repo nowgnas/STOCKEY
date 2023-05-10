@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { selectedSliderList } from "../../stores/LaboratoryAtoms";
 
 import PredictSlider from "./PredictSlider";
-import { lastCnt } from "./SampleItems";
+import { GraphItemSixMonth } from "./SampleItems";
 import styled from "styled-components";
 
 const PredictSliderSection = () => {
@@ -14,10 +14,10 @@ const PredictSliderSection = () => {
   useEffect(() => {
     console.log("slider default 바꿀거임!");
 
-    const cntArr = lastCnt.map((item) => {
+    const cntArr = GraphItemSixMonth.map((item) => {
       return {
         keyword: item.keyword,
-        cnt: item.cnt,
+        cnt: Math.round(item.scatter[item.scatter.length - 1][0])
       };
     });
     setSliderList(cntArr);

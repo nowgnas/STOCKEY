@@ -4,11 +4,7 @@ import ResultBoardOpen from "./ResultBoardOpen";
 import OpenBtn from "./OpenBtn";
 import styled from "styled-components";
 
-interface Props {
-  resultSize: boolean;
-}
-
-const ResultBoard = ({ resultSize }: Props) => {
+const ResultBoard = () => {
   const openState = useRecoilValue(resultBoardOpenState);
 
   return (

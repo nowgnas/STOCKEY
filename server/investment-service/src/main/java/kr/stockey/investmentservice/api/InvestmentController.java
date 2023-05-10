@@ -23,6 +23,9 @@ public class InvestmentController {
     private final InvestmentService investmentService;
     private final InvestmentDtoMapper investmentDtoMapper;
 
+    /*
+        주문 제출
+     */
     @PostMapping("/order")
     public ResponseEntity<ResponseDto> takeStockOrder(@RequestBody List<OrderRequest> orderRequests) throws Exception {
         List<OrderListDto> orderListDto = investmentDtoMapper.toOrderListDto(orderRequests);
@@ -31,6 +34,13 @@ public class InvestmentController {
         return new ResponseEntity<>(new ResponseDto("주문 제출 완료!", null), HttpStatus.OK);
     }
 
+    /*
+        주문 제출 여부 확인
+     */
+    @GetMapping("/order/check")
+    public void checkOrderSubmit() throws Exception {
+        investmentService.checkOrderSubmit(getMemberId());
+    }
 
     private Long getMemberId() {
         // http 헤더에서 "X-UserId" 내용 가져와서 리턴하는 로직으로 채우기

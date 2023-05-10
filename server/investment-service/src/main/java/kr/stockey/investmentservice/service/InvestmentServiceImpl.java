@@ -80,6 +80,16 @@ public class InvestmentServiceImpl implements InvestmentService{
         }
     }
 
+    @Override
+    public Boolean checkOrderSubmit(Long memberId) {
+        Optional<Order> orderOptional = orderRedisRepository.findById(String.valueOf(memberId));
+        if (orderOptional.isEmpty()) {
+            return false; // 레디스에 없다면 주문 제출 안된것
+        }
+        return true; // 레디스에 있다면 주문 제출 된것 (체결은 안된것)
+    }
+
+
     @Transactional
     public void orderExecute() throws Exception {
         // 주식 현재가 테이블 가져오기 (매 2분마다 갱신된 최신 주가정보 가져오기)
@@ -199,6 +209,8 @@ public class InvestmentServiceImpl implements InvestmentService{
                     }
                 }
             }
+
+            orderRedisRepository.delete(memberOrder); // 주문에 사용된 데이터는 레디스에서 삭제
 
             // 정산 완료된 금액을 deposit history에 넣기
             Deposit resultDeposit = Deposit.builder()

@@ -8,4 +8,7 @@ public interface InvestmentService {
     void takeStockOrder(OrderProducerDto orderProducerDto) throws Exception;
 
     void orderExecuteScheduler() throws Exception;
+
+
+    Boolean checkOrderSubmit(Long memberId);
 }

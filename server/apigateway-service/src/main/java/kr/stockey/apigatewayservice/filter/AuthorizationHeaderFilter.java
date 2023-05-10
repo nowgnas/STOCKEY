@@ -65,7 +65,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         boolean returnValue = true;
         String subject = null;
         try {
-            String key = env.getProperty("token.secret");
+            String key = env.getProperty("jwt.secretKey");
             subject = Jwts.parser().setSigningKey(key)
                     .parseClaimsJws(jwt).getBody()
                     .getSubject();
@@ -84,7 +84,9 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
      * jwt토큰 => userId 리턴
      */
     private String getuserId(String jwt){
-        String key = env.getProperty("token.secret");
+        String key = env.getProperty("jwt.secretKey");
+
+
         String subject = Jwts.parser().setSigningKey(key)
                 .parseClaimsJws(jwt).getBody()
                 .getSubject();

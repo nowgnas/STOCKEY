@@ -24,6 +24,8 @@ dependencies {
     implementation 'javax.xml.bind:jaxb-api'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    //oauth
+    implementation group: 'com.auth0', name: 'java-jwt', version: '4.2.2'
 
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'

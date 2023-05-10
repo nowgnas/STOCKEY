@@ -16,4 +16,4 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://discovery-blue:8761/eureka, http://discovery-green:8761/eureka, http://localhost:8761/eureka
+      defaultZone: http://localhost:8761/eureka, http://discovery-blue:8761/eureka, http://discovery-green:8761/eureka

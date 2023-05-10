@@ -55,7 +55,7 @@ const PredictResultCard = () => {
         예상 주가
         <ResultWrapper size={resultBoardSize}>
           {calcResult.toLocaleString("ko-KR", {
-            maximumFractionDigits: 4,
+            maximumFractionDigits: 0,
           })}
           원
         </ResultWrapper>

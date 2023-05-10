@@ -51,3 +51,6 @@ export const Regression = {
     },
   ]
 }
+
+// 전체 기사 개수 sample
+export const totalNewsCnt = 1222;

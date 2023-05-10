@@ -35,7 +35,7 @@ export const CustomDragLayer = () => {
       case "SELL":
         baseSize.current = ["30%"]
         return <TradeStockItem item={item} />
-      case "MYSELL":
+      case "MYBUY":
         baseSize.current = ["30%"]
         return <TradeConfirmModalItem itemInfo={item} />
       case "STOCK":

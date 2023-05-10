@@ -1,16 +1,29 @@
 import GraphComp from "./GraphComp";
 
-import { GraphItem } from './SampleItems'
+import { GraphItemOneMonth, GraphItemSixMonth, Regression } from './SampleItems'
 import styled from "styled-components";
 
 
-// query data 받아와서 map 돌리기
+// graph query data 받아와서 map 돌리기
 const GraphSection = () => {
+  
+  // graphComp에 맞는 coefficient 보내기
+  // coefficient: query 데이터
+  const getCoefficient = (keyword: string) => {
+    let coefficient = 0;
+    Regression.coefficients.forEach((item) => {
+      if (keyword === item.keyword) {
+        coefficient = item.coefficient
+        return false;
+      }
+    })
+    return coefficient;
+  }
 
   return (
-    <GraphSectionWrapper cnt={GraphItem.length}>
-      {GraphItem.map((item) => (
-        <GraphComp item={item} />
+    <GraphSectionWrapper cnt={GraphItemSixMonth.length}>
+      {GraphItemSixMonth.map((item, index) => (
+        <GraphComp item={item} index={index} coefficient={getCoefficient(item.keyword)}/>
       ))}
     </GraphSectionWrapper>
   );

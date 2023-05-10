@@ -119,7 +119,7 @@ const BtnWrapper = styled.div`
   cursor: pointer;
 `;
 
-const colorPalette = [
+export const colorPalette = [
   {
     color: "var(--custom-pink-2)",
     backgroundColor: "var(--custom-pink-4)",

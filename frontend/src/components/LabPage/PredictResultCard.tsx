@@ -19,7 +19,7 @@ const PredictResultCard = () => {
   // 사용자 입력값
   const sliderList = useRecoilValue(selectedSliderList);
 
-  // 결과 계산
+  // 1. 결과 계산
   const calcResult = useMemo(() => {
     let result = Regression.constant;
 
@@ -34,6 +34,7 @@ const PredictResultCard = () => {
     return result;
   }, [Regression, sliderList]);
 
+  // 2.1 keyword default값
   const baseCntCalc = (item: { keyword: string; cnt: number }) => {
     let base = 0;
     lastCnt.forEach(({ keyword, cnt }) => {

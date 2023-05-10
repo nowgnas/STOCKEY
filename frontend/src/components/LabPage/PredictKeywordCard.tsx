@@ -67,7 +67,6 @@ const CardWrapper = styled.div`
   align-items: center;
 
   font-size: 1.2rem;
-  font-weight: bold;
 `;
 
 const HeaderWrapper = styled.div`
@@ -77,6 +76,7 @@ const HeaderWrapper = styled.div`
 
 const KeywordSection = styled.span`
   font-size: 1.4rem;
+  font-weight: bold;
 `;
 
 const IconWrapper = styled.div`
@@ -92,10 +92,11 @@ const IconImg = styled.img`
 `;
 
 const PercentWrapper = styled.div<{ changeState: changeType }>`
+  font-weight: bold;  
   color: ${(props) =>
     props.changeState === "increase"
-      ? "#FB6F6F"
+      ? "var(--custom-increase-red)"
       : props.changeState === "decrease"
-      ? "#72A6FA"
-      : "null"};
+      ? "var(--custom-decrease-blue)"
+      : "black"};
 `;

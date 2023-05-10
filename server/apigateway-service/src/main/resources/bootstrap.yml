@@ -3,8 +3,8 @@ spring:
     config:
       uri:
         - http://localhost:8888
-        - '{cipher}56f8cc7f1c4de51b984b27d2874ac04e34d4ca2eac31f2a56e90f4df823ed60349f66206f2763d6be42ec65f9242cce3'
-        - '{cipher}00b6a64e578600fcca1f24fad89a6de74faf1249422b8c660da9e1b595c543c1f93bc488ccf2cca480d7139de1919bc1'
+        - http://config-green:8888
+        - http://config-blue:8888
       name: apigateway-service
 management:
   endpoints:

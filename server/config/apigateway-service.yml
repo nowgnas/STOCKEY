@@ -4,14 +4,22 @@ spring:
         port: 5672
         username: guest
         password: guest
+
     application:
         name: apigateway-service
 
     cloud:
         gateway:
-        default-filters:
-            - name: GlobalFilter
-              args:
-                  baseMessage: Spring Cloud Gateway Global Filter
-                  preLogger: true
-                  postLogger: true
+            default-filters:
+                - name: GlobalFilter
+                  args:
+                      baseMessage: Spring Cloud Gateway Global Filter
+                      preLogger: true
+                      postLogger: true
+            routes:
+                - id: laboratory-service
+                  uri: lb://LABORATORY-SERVICE
+                  predicates:
+                      - Path=/lab/**
+                  filters:
+                      - RewritePath=/lab/(?<segment>.*), /$\{segment}

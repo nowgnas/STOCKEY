@@ -1,15 +1,2 @@
 server:
   port: 8000
-
-#spring:
-#  application:
-#    name: apigateway-service
-#
-#  cloud:
-#    gateway:
-#      default-filters:
-#        - name: GlobalFilter
-#          args:
-#            baseMessage: Spring Cloud Gateway Global Filter
-#            preLogger: true
-#            postLogger: true

@@ -1,5 +1,6 @@
 package kr.stockey.investmentservice.service;
 
+import kr.stockey.investmentservice.dto.ContractDto;
 import kr.stockey.investmentservice.dto.OrderListDto;
 import kr.stockey.investmentservice.dto.OrderProducerDto;
 import kr.stockey.investmentservice.entity.Contract;
@@ -8,6 +9,7 @@ import kr.stockey.investmentservice.entity.MyStock;
 import kr.stockey.investmentservice.enums.ContractType;
 import kr.stockey.investmentservice.enums.InvCategory;
 import kr.stockey.investmentservice.kafka.producer.StockOrderProducer;
+import kr.stockey.investmentservice.mapper.InvestmentMapper;
 import kr.stockey.investmentservice.redis.Order;
 import kr.stockey.investmentservice.redis.OrderRedisRepository;
 import kr.stockey.investmentservice.repository.ContractRepository;
@@ -38,6 +40,7 @@ public class InvestmentServiceImpl implements InvestmentService{
     private final DepositRepository depositRepository;
     private final MyStockRepository myStockRepository;
     private final ContractRepository contractRepository;
+    private final InvestmentMapper investmentMapper;
 
 
     /**
@@ -87,6 +90,14 @@ public class InvestmentServiceImpl implements InvestmentService{
             return false; // 레디스에 없다면 주문 제출 안된것
         }
         return true; // 레디스에 있다면 주문 제출 된것 (체결은 안된것)
+    }
+
+    @Override
+    public List<ContractDto> getOrderHistory(Long memberId) {
+        List<Contract> orderHistory = contractRepository.findByMemberId(memberId).stream()
+                .filter(contract -> contract.getCategory() == InvCategory.ORDER)
+                .toList();
+        return investmentMapper.toContractDtoList(orderHistory);
     }
 
 

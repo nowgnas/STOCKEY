@@ -1,5 +1,8 @@
 spring:
   cloud:
     config:
-      uri: http://localhost:8888
+      uri:
+        - http://localhost:8888
+        - '{cipher}d08e2ac8528917d23255bd0604b8b21f78918c9633b88632f20a650ced7dbe699939dc6cec5b56d5e1ec488489bbbcc2'
+        - '{cipher}2aca6a1671d29ca5a4e7a9a4030a2e86f0070915cedf940b90a0d7d00d198797c5cec82643e3085a2d8aaf16b45f32e1'
       name: laboratory-service

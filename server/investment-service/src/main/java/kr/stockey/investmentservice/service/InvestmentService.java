@@ -7,5 +7,5 @@ import java.util.concurrent.CompletableFuture;
 public interface InvestmentService {
     void takeStockOrder(OrderProducerDto orderProducerDto) throws Exception;
 
-    void orderExecuteScheduler();
+    void orderExecuteScheduler() throws Exception;
 }

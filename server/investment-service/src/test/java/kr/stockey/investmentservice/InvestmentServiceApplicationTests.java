@@ -62,7 +62,7 @@ class InvestmentServiceApplicationTests {
     }
 
     @Test
-    void 주문체결_테스트() {
+    void 주문체결_테스트() throws Exception {
         // 레디스에 데이터 적재
         // 1. 첫 모의투자 상황 (잔액 history x, 보유주식 x)
         Long memberId = -99L;

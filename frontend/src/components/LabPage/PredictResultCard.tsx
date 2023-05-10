@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useRecoilValue } from "recoil";
+import { resultBoardSizeState } from "../../stores/LaboratoryAtoms";
 import { selectedSliderList } from "../../stores/LaboratoryAtoms";
 
 import { GraphItemSixMonth, Regression } from "./SampleItems";
@@ -7,6 +8,8 @@ import styled from "styled-components";
 import PredictKeywordCard from "./PredictKeywordCard";
 
 const PredictResultCard = () => {
+  const resultBoardSize = useRecoilValue(resultBoardSizeState);
+
   // 데이터 목록
   // 1. 결과 돈
   // 1.1 회기계수 + 상수 (query)
@@ -47,38 +50,46 @@ const PredictResultCard = () => {
   };
 
   return (
-    <ResultCardSection>
+    <ResultCardSection size={resultBoardSize}>
       <HeaderWrapper>
         예상 주가
-        <ResultWrapper>
+        <ResultWrapper size={resultBoardSize}>
           {calcResult.toLocaleString("ko-KR", {
             maximumFractionDigits: 4,
           })}
           원
         </ResultWrapper>
       </HeaderWrapper>
+      
+      {resultBoardSize === "big" && (
+        <>
+          <InfoWrapper>오늘보다</InfoWrapper>
 
-      <InfoWrapper>오늘보다</InfoWrapper>
+          <CardWrapper>
+            {sliderList.map((item) => {
+              return (
+                <PredictKeywordCard sliderItem={item} baseCnt={baseCntCalc(item)} />
+              );
+            })}
+          </CardWrapper>
 
-      <CardWrapper>
-        {sliderList.map((item) => {
-          return (
-            <PredictKeywordCard sliderItem={item} baseCnt={baseCntCalc(item)} />
-          );
-        })}
-      </CardWrapper>
+          <IconWrapper>
+            <IconImg src={"labImages/robotIcon.png"} alt="" />
+          </IconWrapper>
+        </>
+      )}
 
-      <IconWrapper>
-        <IconImg src={"labImages/robotIcon.png"} alt="" />
-      </IconWrapper>
     </ResultCardSection>
+
+
   );
 };
 
 export default PredictResultCard;
 
-const ResultCardSection = styled.div`
-  width: 600px;
+const ResultCardSection = styled.div<{size: "big" | "small"}>`
+  width: ${props => props.size === "big" ? "600px" : "180px"};
+  height: ${props => props.size === "small" ? "180px" : undefined};
   border: 4px solid #ffffff;
   border-radius: 36px;
   position: relative;
@@ -86,7 +97,7 @@ const ResultCardSection = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 24px 36px;
+  padding: ${props => props.size === "big" ? "24px 36px" : "12px 18px"};
 `;
 
 const HeaderWrapper = styled.div`
@@ -96,11 +107,13 @@ const HeaderWrapper = styled.div`
   display: flex;
   align-items: flex-end;
   gap: 2rem;
+  flex-wrap: wrap;
 `;
 
-const ResultWrapper = styled.div`
-  font-size: 2.4rem;
+const ResultWrapper = styled.div<{size: "big" | "small"}>`
+  font-size: ${props => props.size === "big" ? "2.4rem" : "2rem"};
   color: var(--custom-mint);
+  word-break: break-all;
 `;
 
 const InfoWrapper = styled.div`

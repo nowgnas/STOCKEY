@@ -17,6 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class LaboratoryController {
     private final LaboratoryService laboratoryService;
 
+    @GetMapping("health")
+    public ResponseEntity<ResponseDto> healthCheck() {
+        return ResponseEntity.ok(
+                ResponseDto.builder()
+                .data("laboratory health check success")
+                .build());
+    }
+
     /**
      * 주식 이름으로 일치하는 주식 종목 찾기
      *

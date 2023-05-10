@@ -1,5 +1,7 @@
 package kr.stockey.apigatewayservice.filter;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -84,11 +86,8 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
      * jwt토큰 => userId 리턴
      */
     private String getuserId(String jwt){
-        String key = env.getProperty("token.secret");
-        String subject = Jwts.parser().setSigningKey(key)
-                .parseClaimsJws(jwt).getBody()
-                .getSubject();
-        return subject;
+        DecodedJWT payload = JWT.decode(jwt);
+        return payload.getAudience().get(0);
     }
 
     // Webflux = > mono(단일값)

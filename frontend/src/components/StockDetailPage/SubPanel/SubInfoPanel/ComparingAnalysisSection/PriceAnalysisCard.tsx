@@ -1,6 +1,6 @@
-import { Paper, Grid, Divider } from "@mui/material"
-// import Paper from "@mui/material/Paper"
-import styled, { keyframes } from "styled-components"
+import { Paper, Grid } from "@mui/material"
+import styled from "styled-components"
+import { shake } from "../../../../../Keyframes"
 
 interface Props {
   stockName: string
@@ -101,25 +101,6 @@ const PriceAnalysisCard = ({
 }
 
 export default PriceAnalysisCard
-
-export const shake = keyframes`
-0% {
-  transform: rotate(-10deg);
-}
-25% {
-  transform: rotate(10deg);
-}
-50% {
-  transform: rotate(-10deg);
-}
-75% {
-  transform: rotate(10deg);
-}
-
-100% {
-  transform: rotate(-10deg);
-}
-`
 
 export const CardPaper = styled(Paper)`
   padding: 5%;

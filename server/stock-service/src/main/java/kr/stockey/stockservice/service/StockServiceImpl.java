@@ -23,6 +23,8 @@ import kr.stockey.stockservice.repository.DailyStockRepository;
 import kr.stockey.stockservice.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -278,11 +280,26 @@ public class StockServiceImpl implements StockService{
         );
         return correlationCoefficient;
     }
+    // 산업에 해당하는 종목들
     public List<StockDto> getByIndustryId(Long industryId){
         List<Stock> stockList = stockRepository.findByIndustry(industryId);
         return stockMapper.toStockDto(stockList);
     }
 
+    //시가총액순 N개 출력
+    public List<StockDto> getNStock(int page,int size){
+        Pageable pageable = PageRequest.of(page, size);
+        List<Stock> top5Stocks = stockRepository.findTop5Stocks(pageable);
+        return stockMapper.toStockDto(top5Stocks);
+    }
+
+    // 산업별 날짜별 시가총액 합
+
+
+    public List<IndustrySumDto> getMarketList(Long industryId) {
+        List<IndustrySumDto> marketList = stockRepository.getMarketList(industryId);
+        return marketList;
+    }
 
     // Stock Entity 반환
     private Stock getStockEntity(Long id) {

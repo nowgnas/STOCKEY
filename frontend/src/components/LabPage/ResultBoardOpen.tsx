@@ -1,4 +1,3 @@
-import React from "react";
 import { useRecoilValue } from "recoil";
 import { selectedLabStockState } from "../../stores/LaboratoryAtoms";
 import GraphSection from "./GraphSection";
@@ -15,7 +14,6 @@ const ResultBoardOpen = () => {
 
   return (
     <BoardWrapper>
-      
       <HeaderWrapper>
         <StockNameSection>{stockName}</StockNameSection>
         {text} 키워드간 관계는 어떤가요?
@@ -24,25 +22,20 @@ const ResultBoardOpen = () => {
         <InfoSpan>
           각 숫자는 키워드의 출연 빈도가 주가에 미치는 영향력을 나타내요.
         </InfoSpan>
-        <InfoSpan>
-           + 는 비례, - 는 반비례할 가능성이 높아요!
-        </InfoSpan>
+        <InfoSpan>+ 는 비례, - 는 반비례할 가능성이 높아요!</InfoSpan>
       </InfoWrapper>
-      
+
       {/* graph */}
       <GraphSection />
-      
-      <HeaderWrapper>
-        키워드를 조정하여 주가를 예측해보세요!
-      </HeaderWrapper>
-      
+
+      <HeaderWrapper>키워드를 조정하여 주가를 예측해보세요!</HeaderWrapper>
+
       {/* predict */}
       <PredictSection />
 
       {/* zoom btn */}
-      <ZoomWrapper>
-        <ZoomBtn />
-      </ZoomWrapper>
+
+      <ZoomBtn />
 
     </BoardWrapper>
   );
@@ -64,7 +57,7 @@ const HeaderWrapper = styled.div`
 `;
 
 const StockNameSection = styled.span`
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   margin: 4px;
   color: var(--custom-mint);
 `;
@@ -77,8 +70,4 @@ const InfoWrapper = styled.div`
   gap: 1rem;
 `;
 
-const InfoSpan = styled.span`
-`
-
-const ZoomWrapper = styled.div`
-`
+const InfoSpan = styled.span``;

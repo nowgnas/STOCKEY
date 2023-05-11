@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { GraphItemSixMonth } from "./SampleItems";
 import styled from "styled-components";
 
 interface Props {
@@ -6,20 +7,35 @@ interface Props {
     keyword: string;
     cnt: number;
   };
-  baseCnt: number;
 }
 
-type changeType = "increase" | "decrease" | "noChange";
+export type changeType = "increase" | "decrease" | "noChange";
 
-const PredictKeywordCard = ({ sliderItem, baseCnt }: Props) => {
-  const changeAmount: number = useMemo(() => {
+const PredictKeywordCard = ({ sliderItem }: Props) => {
+  
+  // query에서 graph 마지막 keyword 빈도 가져오기
+  const baseCnt: number = useMemo(() => {
+    console.log('이거 계산 다시?')
+    let baseCnt = 0;
+    GraphItemSixMonth.forEach(({ keyword, scatter }) => {
+      if (keyword === sliderItem.keyword) {
+        baseCnt = Math.round(scatter[scatter.length - 1][0]);
+        return false;
+      }
+    });
+    return baseCnt;
+  }, []);
+
+  // console.log('여기 다시?', sliderItem.keyword)
+
+  const changePercent: number = useMemo(() => {
     return (sliderItem.cnt - baseCnt) / baseCnt;
   }, [sliderItem.cnt]);
 
   const changeState: changeType = useMemo(() => {
-    if (changeAmount === 0) {
+    if (changePercent === 0) {
       return "noChange";
-    } else if (changeAmount > 0) {
+    } else if (changePercent > 0) {
       return "increase";
     } else {
       return "decrease";
@@ -45,7 +61,7 @@ const PredictKeywordCard = ({ sliderItem, baseCnt }: Props) => {
       </IconWrapper>
 
       <PercentWrapper changeState={changeState}>{`${Math.abs(
-        changeAmount
+        changePercent
       ).toFixed(2)}%`}</PercentWrapper>
     </CardWrapper>
   );

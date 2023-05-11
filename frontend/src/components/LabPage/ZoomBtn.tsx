@@ -34,7 +34,7 @@ const BtnWrapper = styled.div`
 `
 
 const IconWrapper = emotionStyled(ZoomOutMapIcon)(() => ({
-  fontSize: "4rem",
-  color: "var(--custom-gray-1)",
+  fontSize: "3.5rem",
+  color: "var(--custom-gray-2)",
   cursor: "pointer"
 }))

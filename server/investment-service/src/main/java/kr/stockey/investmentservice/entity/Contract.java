@@ -30,8 +30,13 @@ public class Contract {
     @Column(name = "stock_id", nullable = false)
     private Long stockId;
 
+    @NotNull
     @Column(name = "count", columnDefinition = "INT UNSIGNED not null")
     private Long count;
+
+    @NotNull
+    @Column(name = "contract_price", nullable = false)
+    private Long contractPrice;
 
     @Size(max = 10)
     @NotNull

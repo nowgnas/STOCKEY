@@ -1,12 +1,7 @@
 package kr.stockey.investmentservice.api;
 
 import kr.stockey.investmentservice.api.request.OrderRequest;
-import kr.stockey.investmentservice.dto.ContractDto;
-import kr.stockey.investmentservice.dto.OrderListDto;
-import kr.stockey.investmentservice.dto.OrderProducerDto;
-import kr.stockey.investmentservice.dto.ResponseDto;
-import kr.stockey.investmentservice.entity.Contract;
-import kr.stockey.investmentservice.kafka.producer.StockOrderProducer;
+import kr.stockey.investmentservice.dto.*;
 import kr.stockey.investmentservice.mapper.InvestmentDtoMapper;
 import kr.stockey.investmentservice.service.InvestmentService;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +52,19 @@ public class InvestmentController {
         return new ResponseEntity<>(new ResponseDto("주문 내역 제공 완료!", ordersHistory), HttpStatus.OK);
     }
 
+    /*
+        내 계좌 정보 가져오기 (총자산, 주식, 예수금)
+     */
+    @GetMapping
+    public ResponseEntity<ResponseDto> getMyAccount() throws Exception {
+        AccountDto accountDto = investmentService.getMyAccount(getMemberId());
+        return new ResponseEntity<>(new ResponseDto("내 계좌 정보 제공 완료!", accountDto), HttpStatus.OK);
+    }
+
+
+    /*
+        http 헤더에서 member id 가져오는 메소드
+     */
     private Long getMemberId() throws Exception {
         // http 헤더에서 "X-UserId" 내용 가져와서 리턴하는 로직으로 채우기
         HttpServletRequest request

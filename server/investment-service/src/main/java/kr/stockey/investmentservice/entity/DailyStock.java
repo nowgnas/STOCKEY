@@ -1,25 +1,24 @@
-package kr.stockey.investmentservice.tmp;
+package kr.stockey.investmentservice.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Getter
-@Setter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "daily_stock")
+@ToString
 public class DailyStock {
     @Id
     @Column(name = "daily_stock_id", nullable = false)
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "stock_id", nullable = false)
-    private Stock stock;
+    @Column(name = "stock_id", nullable = false)
+    private Long stockId;
 
     @NotNull
     @Column(name = "stock_date", nullable = false)

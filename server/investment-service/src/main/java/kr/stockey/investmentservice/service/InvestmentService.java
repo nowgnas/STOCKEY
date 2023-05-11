@@ -1,5 +1,6 @@
 package kr.stockey.investmentservice.service;
 
+import kr.stockey.investmentservice.dto.AccountDto;
 import kr.stockey.investmentservice.dto.ContractDto;
 import kr.stockey.investmentservice.dto.OrderProducerDto;
 
@@ -15,4 +16,6 @@ public interface InvestmentService {
     Boolean checkOrderSubmit(Long memberId);
 
     List<ContractDto> getOrderHistory(Long memberId);
+
+    AccountDto getMyAccount(Long memberId);
 }

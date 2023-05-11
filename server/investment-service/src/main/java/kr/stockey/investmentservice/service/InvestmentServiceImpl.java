@@ -1,9 +1,11 @@
 package kr.stockey.investmentservice.service;
 
+import kr.stockey.investmentservice.dto.AccountDto;
 import kr.stockey.investmentservice.dto.ContractDto;
 import kr.stockey.investmentservice.dto.OrderListDto;
 import kr.stockey.investmentservice.dto.OrderProducerDto;
 import kr.stockey.investmentservice.entity.Contract;
+import kr.stockey.investmentservice.entity.DailyStock;
 import kr.stockey.investmentservice.entity.Deposit;
 import kr.stockey.investmentservice.entity.MyStock;
 import kr.stockey.investmentservice.enums.ContractType;
@@ -13,19 +15,19 @@ import kr.stockey.investmentservice.mapper.InvestmentMapper;
 import kr.stockey.investmentservice.redis.Order;
 import kr.stockey.investmentservice.redis.OrderRedisRepository;
 import kr.stockey.investmentservice.repository.ContractRepository;
+import kr.stockey.investmentservice.repository.DailyStockRepository;
 import kr.stockey.investmentservice.repository.DepositRepository;
 import kr.stockey.investmentservice.repository.MyStockRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -35,11 +37,14 @@ import java.util.stream.Collectors;
 public class InvestmentServiceImpl implements InvestmentService{
 
     private final long DEFAULT_CREDIT = 10000000;
+    private Map<Long, Long> stockPriceMap; // 데이터 캐싱
+
     private final StockOrderProducer stockOrderProducer;
     private final OrderRedisRepository orderRedisRepository;
     private final DepositRepository depositRepository;
     private final MyStockRepository myStockRepository;
     private final ContractRepository contractRepository;
+    private final DailyStockRepository dailyStockRepository;
     private final InvestmentMapper investmentMapper;
 
 
@@ -100,11 +105,42 @@ public class InvestmentServiceImpl implements InvestmentService{
         return investmentMapper.toContractDtoList(orderHistory);
     }
 
+    @Override
+    public AccountDto getMyAccount(Long memberId) {
+        // 총 자산 = 주식 평가금액 + 예수금
+        Long curDeposit = 0L; // 예수금
+        Long curStockValuation = 0L; // 주식 평가금액
+        Long totalAsset = 0L; // 총 자산
+
+        // 예수금 -> history에서 최신 가져오기
+        Optional<Deposit> depositOptional = depositRepository.findLatestDepositByMemberId(memberId);
+        if (depositOptional.isEmpty()) {
+            // 첫거래면 보유 주식이 없음. 돈은 기본 크레딧
+            curDeposit = DEFAULT_CREDIT;
+            return new AccountDto(curDeposit, curStockValuation, curDeposit);
+        } else {
+            Deposit deposit = depositOptional.get();
+            curDeposit = deposit.getMoney();
+        }
+
+        // 주식 평가금액 -> myStock 데이터 가져와서 특정 stockId에 해당하는 주식 현재가 가져와서 count랑 곱하기
+        List<MyStock> myStocks = myStockRepository.findByMemberId(memberId);
+        for (MyStock myStock : myStocks) {
+            Long curStockId = myStock.getStockId();
+            Long curStockPrice = stockPriceMap.get(curStockId);
+            curStockValuation += curStockPrice * myStock.getCount();
+        }
+
+        // 총 자산 = 주식 평가금액 + 예수금
+        totalAsset = curDeposit + curStockValuation;
+        return new AccountDto(totalAsset, curStockValuation, curDeposit);
+    }
+
 
     @Transactional
     public void orderExecute() throws Exception {
         // 주식 현재가 테이블 가져오기 (매 2분마다 갱신된 최신 주가정보 가져오기)
-        Map<Long, Long> stockPriceMap = getStockPrice();
+//        Map<Long, Long> stockPriceMap = getStockPrice();
 
         // 레디스에 쌓인 모든 order 데이터 가져와 list로 만들기
         Iterable<Order> orderIterable = orderRedisRepository.findAll();
@@ -262,10 +298,16 @@ public class InvestmentServiceImpl implements InvestmentService{
         return result;
     }
 
-    private Map<Long, Long> getStockPrice() {
-        // 주식 서버와 통신하여 현재 가격 가져오기
-        return null;
+    @Scheduled(cron = "0 */5 * * * *", zone = "Asia/Seoul")
+    private void updateStockPriceMap() {
+        LocalDate today = LocalDate.now();
+        List<DailyStock> dailyStockList = dailyStockRepository.findByStockDate(today);
+        for (DailyStock dailyStock : dailyStockList) {
+            stockPriceMap.put(dailyStock.getStockId(), Long.valueOf(dailyStock.getClosePrice()));
+        }
     }
+
+
 
     private double calculateNewAvgUnitPrice(double currentAvgUnitPrice, long numStocksOwned,
                                             double newPurchasePrice, long numNewStocks) {

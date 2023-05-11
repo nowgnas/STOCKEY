@@ -1,4 +1,5 @@
 server:
+  address: ${UPSTREAM}
   port: 8761
 
 spring:

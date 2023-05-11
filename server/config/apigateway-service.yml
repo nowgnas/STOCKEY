@@ -45,7 +45,7 @@ spring:
         - id: member-service
           uri: lb://member-service
           predicates:
-            - Path=/member/
+            - Path=/member
             - Path=/member/nickname
           filters:
             - AuthorizationHeaderFilter

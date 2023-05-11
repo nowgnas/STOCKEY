@@ -1,9 +1,10 @@
 package kr.stockey.apigatewayservice.filter;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.core.env.Environment;
@@ -24,6 +25,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     Environment env;
 
 
+    @Autowired
     public AuthorizationHeaderFilter(Environment env) {
         super(Config.class);
         this.env = env;
@@ -40,7 +42,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             }
             //성공
             String authorizationHeader = request.getHeaders().getFirst("Authorization");
-            String jwt = authorizationHeader.replace("Bearer", "");
+            String jwt = authorizationHeader.replace("Bearer ", "");
 
             if (!isJwtValid(jwt)) {
                 return onError(exchange, "JWT is not valid ", HttpStatus.UNAUTHORIZED);
@@ -67,10 +69,13 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         boolean returnValue = true;
         String subject = null;
         try {
-            String key = env.getProperty("token.secret");
-            subject = Jwts.parser().setSigningKey(key)
-                    .parseClaimsJws(jwt).getBody()
-                    .getSubject();
+            String key = env.getProperty("jwt.secretKey");
+            subject = JWT.require(Algorithm.HMAC256(key))
+                    .withSubject("AccessToken")
+                    .build()
+                    .verify(jwt)
+                    .getToken();
+
         } catch (Exception ex) {
             log.error("ex = {}", ex);
             returnValue = false;
@@ -88,6 +93,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     private String getuserId(String jwt){
         DecodedJWT payload = JWT.decode(jwt);
         return payload.getAudience().get(0);
+
     }
 
     // Webflux = > mono(단일값)

@@ -1,7 +1,6 @@
-import { useState } from "react";
 import { SetterOrUpdater } from "recoil";
-
 import Slider from "@mui/material/Slider";
+import { totalNewsCnt } from "./SampleItems";
 import styled from "styled-components";
 import { styled as emotionStyled } from "@mui/material/styles";
 
@@ -14,25 +13,27 @@ interface Props {
   setSliderList: SetterOrUpdater<any[]>;
 }
 
-const PredictSlider = ({ item, index, setSliderList }: Props) => {
-  const [tooltipVisible, setTooltipVisible] = useState<"auto" | "on">("auto");
 
+const PredictSlider = ({ item, index, setSliderList }: Props) => {
+  // slier 변경하면 recoil data 변경
   const changeHandler = (e: any) => {
+    console.log(e.target.value);
     setSliderList((prev) => {
       return prev.map((prevItem) => {
         return prevItem.keyword === item.keyword
-          ? { keyword: prevItem.keyword, cnt: e.target.value }
+          ? { keyword: prevItem.keyword, cnt: e.target.value * totalNewsCnt / 100 }
           : prevItem;
       });
     });
   };
 
+  // btn 클릭하면 recoil data 변경
   const btnHandler = (type: string) => {
     if (type === "plus") {
       setSliderList((prev) => {
         return prev.map((prevItem) => {
           return prevItem.keyword === item.keyword
-            ? { keyword: prevItem.keyword, cnt: prevItem.cnt + 1 }
+            ? { keyword: prevItem.keyword, cnt: prevItem.cnt +  totalNewsCnt / 100}
             : prevItem;
         });
       });
@@ -40,12 +41,15 @@ const PredictSlider = ({ item, index, setSliderList }: Props) => {
       setSliderList((prev) => {
         return prev.map((prevItem) => {
           return prevItem.keyword === item.keyword
-            ? { keyword: prevItem.keyword, cnt: prevItem.cnt - 1 }
+            ? { keyword: prevItem.keyword, cnt: prevItem.cnt - totalNewsCnt / 100 }
             : prevItem;
         });
       });
     }
   };
+
+  // slider에서 취급하는 0-100 값은 (키워드 출연 뉴스 개수 / 전체 기사 개수) %
+  const sliderPercentage = parseFloat((item.cnt / totalNewsCnt * 100).toPrecision(2));
 
   return (
     <SliderSection>
@@ -53,23 +57,21 @@ const PredictSlider = ({ item, index, setSliderList }: Props) => {
       <SlideBarSection>
         <BtnWrapper
           onClick={() => btnHandler("minus")}
-          onMouseEnter={() => setTooltipVisible("on")}
-          onMouseLeave={() => setTooltipVisible("auto")}
         >
           -
         </BtnWrapper>
 
         <PrettoSlider
           colorPalette={colorPalette[index]}
-          valueLabelDisplay={tooltipVisible}
-          value={item.cnt}
+          valueLabelDisplay={"on"}
+          value={sliderPercentage}
           onChange={changeHandler}
+          step={5}
+          marks
         />
 
         <BtnWrapper
           onClick={() => btnHandler("plus")}
-          onMouseEnter={() => setTooltipVisible("on")}
-          onMouseLeave={() => setTooltipVisible("auto")}
         >
           +
         </BtnWrapper>
@@ -88,6 +90,8 @@ const SliderSection = styled.div`
 `;
 
 const KeywordWrapper = styled.div`
+  width: 28%;
+  word-break: break-all;
   font-size: 1.5rem;
   font-weight: bold;
 `;
@@ -119,7 +123,7 @@ const BtnWrapper = styled.div`
   cursor: pointer;
 `;
 
-const colorPalette = [
+export const colorPalette = [
   {
     color: "var(--custom-pink-2)",
     backgroundColor: "var(--custom-pink-4)",
@@ -177,6 +181,7 @@ const PrettoSlider = emotionStyled(Slider)<sliderProps>(({ colorPalette }) => ({
     backgroundColor: colorPalette.tooltipColor,
     transformOrigin: "bottom left",
     transform: "translate(50%, -100%) rotate(-45deg) scale(0)",
+    top: -4,
     "&:before": { display: "none" },
     "&.MuiSlider-valueLabelOpen": {
       transform: "translate(50%, -100%) rotate(-45deg) scale(1)",

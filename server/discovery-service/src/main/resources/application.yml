@@ -1,5 +1,7 @@
 server:
-  address: ${UPSTREAM}
+  addresses:
+    - ${UPSTREAM}
+    - localhost
   port: 8761
 
 spring:

@@ -7,4 +7,4 @@ eureka:
         register-with-eureka: true
         fetch-registry: true
         service-url:
-            defaultZone: "{cipher}6f28ade178d0674c063906f758f128e2be9047af36b8608f045c0813b072e57db4eff2ca504cdcfe227588befb9a888bffb40aa3fdd493df9ef82802b2ca2e3b244af8cbaed1d7e8ee282a6ca5c44820098cbbc3268e92388e639f3c45b6a4a3b687f047498607cfa7a4a02dc2f9bdf9b19bb0bc19c5a38319ad4deca2206525"
+            defaultZone: "http://localhost:8761/eureka"

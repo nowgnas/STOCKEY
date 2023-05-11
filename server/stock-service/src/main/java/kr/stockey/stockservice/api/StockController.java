@@ -114,7 +114,6 @@ public class StockController {
     }
 
     // 내 관심종목 리스트
-    // TODO api gateway route 추가
     @Operation(summary = "관심 종목 리스트", description = "내 관심 종목 리스트를 출력합니다.")
     @ApiResponses(
             value = {
@@ -131,7 +130,6 @@ public class StockController {
 
 
     // 관심 여부 확인
-    // TODO api gateway route 추가
     @Operation(summary = "종목 관심 여부 체크", description = "해당 종목이 관심등록 했는지 체크합니다.")
     @ApiResponses(
             value = {
@@ -148,7 +146,6 @@ public class StockController {
     }
 
     // 관심 종목 등록
-    // TODO api gateway route 추가
     @Operation(summary = "관심 종목 등록", description = "관심 종목을 등록합니다.")
     @ApiResponses(
             value = {
@@ -165,7 +162,6 @@ public class StockController {
     }
 
     // 관심 종목 삭제
-    // TODO api gateway route 추가
     @Operation(summary = "관심 종목 삭제", description = "관심 종목을 삭제합니다.")
     @ApiResponses(
             value = {

@@ -278,6 +278,10 @@ public class StockServiceImpl implements StockService{
         );
         return correlationCoefficient;
     }
+    public List<StockDto> getByIndustryId(Long industryId){
+        List<Stock> stockList = stockRepository.findByIndustry(industryId);
+        return stockMapper.toStockDto(stockList);
+    }
 
 
     // Stock Entity 반환

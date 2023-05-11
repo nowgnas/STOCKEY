@@ -8,6 +8,7 @@ import kr.stockey.stockservice.dto.*;
 import kr.stockey.stockservice.dto.core.DailyStockDto;
 import kr.stockey.stockservice.dto.core.MemberDto;
 import kr.stockey.stockservice.dto.core.ResponseDto;
+import kr.stockey.stockservice.dto.core.StockDto;
 import kr.stockey.stockservice.mapper.StockDtoMapper;
 import kr.stockey.stockservice.service.StockService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -211,6 +212,19 @@ public class StockController {
         return new ResponseEntity<>(new ResponseDto("OK",top3StockCorrelation),HttpStatus.OK);
     }
 
+
+    @Operation(summary = "산업별 종목", description = "산업별 종목을 출력합니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "성공"),
+                    @ApiResponse(responseCode = "404", description = "산업 없음"),
+            }
+    )
+    @GetMapping("/industry/{industryId}")
+    public ResponseEntity<ResponseDto> getByIndustryId(@PathVariable Long industryId){
+        List<StockDto> stockList = stockService.getByIndustryId(industryId);
+        return new ResponseEntity<>(new ResponseDto("OK", stockList), HttpStatus.OK);
+    }
 
 
 

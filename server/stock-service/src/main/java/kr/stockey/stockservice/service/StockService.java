@@ -5,6 +5,7 @@ import kr.stockey.stockservice.api.response.GetStockTodayResponse;
 import kr.stockey.stockservice.dto.*;
 import kr.stockey.stockservice.dto.core.DailyStockDto;
 import kr.stockey.stockservice.dto.core.MemberDto;
+import kr.stockey.stockservice.dto.core.StockDto;
 
 import java.util.List;
 
@@ -29,6 +30,9 @@ public interface StockService {
      // TODO 상관관계 추가
 //     Double getCorrelation(Long id, GetCorrelationRequest getCorrelationRequest);
      List<ResultCorrelationDto> getAllStockCorrelation(Long id , GetCorrelationRequest getCorrelationRequest);
+
+     // 산업별 종목
+     List<StockDto> getByIndustryId(Long industryId);
 
 
 }

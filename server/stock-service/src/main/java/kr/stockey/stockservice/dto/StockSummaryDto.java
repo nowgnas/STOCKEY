@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class StockDto {
+public class StockSummaryDto {
 
     private Long id;
     private String name;

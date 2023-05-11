@@ -39,7 +39,7 @@ public class StockController {
     )
     @GetMapping("/{stockId}")
     public ResponseEntity<GetStockResponse> getStock(@PathVariable("stockId") Long stockId)  {
-        StockDto stockDto = stockService.getStock(stockId);
+        StockSummaryDto stockDto = stockService.getStock(stockId);
         return ResponseEntity.ok(stockDtoMapper.toGetStockResponse(stockDto));
     }
 

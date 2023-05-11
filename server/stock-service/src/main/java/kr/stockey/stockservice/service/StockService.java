@@ -7,7 +7,7 @@ import kr.stockey.stockservice.dto.*;
 import java.util.List;
 
 public interface StockService {
-     StockDto getStock(Long stockId) ;
+     StockSummaryDto getStock(Long stockId) ;
      Integer getStockIndustryMarketCapRank(Long stockId, Long industryId);
      Integer getStockIndustryFavoriteRank(Long stockId, Long industryId);
      Float getAverageIndustryChangeRate(Long industryId) ;

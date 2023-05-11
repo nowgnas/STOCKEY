@@ -25,7 +25,6 @@ import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,9 +43,9 @@ public class StockServiceImpl implements StockService{
     private final KeywordClient keywordClient;
     private final FavoriteClient favoriteClient;
 
-    public StockDto getStock(Long stockId)  {
+    public StockSummaryDto getStock(Long stockId)  {
         Stock stock = stockRepository.findById(stockId).orElseThrow(()->new StockException(StockExceptionType.NOT_FOUND));
-        StockDto stockDto = stockMapper.toStockDto(stock);
+        StockSummaryDto stockDto = stockMapper.toStockDto(stock);
         int industryTotalCount = stockRepository.findByIndustry(stock.getIndustryId()).size();
         stockDto.setIndustryTotalCount(industryTotalCount);
         Long industryId = stock.getIndustryId();

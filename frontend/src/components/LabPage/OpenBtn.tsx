@@ -41,7 +41,7 @@ export default OpenBtn;
 const LockBtnWrapper = styled.button<{ active: boolean }>`
   width: 30%;
   height: 80px;
-  margin-bottom: 20%;
+  margin-top: 300px;
 
   display: flex;
   flex-direction: row;

@@ -1,8 +1,8 @@
-import React from "react";
 import { useRecoilValue } from "recoil";
 import { selectedLabStockState } from "../../stores/LaboratoryAtoms";
 import GraphSection from "./GraphSection";
 import PredictSection from "./PredictSection";
+import ZoomBtn from "./ZoomBtn";
 import styled from "styled-components";
 
 const ResultBoardOpen = () => {
@@ -14,28 +14,29 @@ const ResultBoardOpen = () => {
 
   return (
     <BoardWrapper>
-      
       <HeaderWrapper>
         <StockNameSection>{stockName}</StockNameSection>
         {text} 키워드간 관계는 어떤가요?
       </HeaderWrapper>
       <InfoWrapper>
-        회귀분석 결과 어쩌구 저쩌구,, 마이너스는 음의 관계 플러스는 양의 관계!
+        <InfoSpan>
+          각 숫자는 키워드의 출연 빈도가 주가에 미치는 영향력을 나타내요.
+        </InfoSpan>
+        <InfoSpan>+ 는 비례, - 는 반비례할 가능성이 높아요!</InfoSpan>
       </InfoWrapper>
-      
+
       {/* graph */}
       <GraphSection />
-      
-      <HeaderWrapper>
-        키워드를 조정하여 주가를 예측해보세요!
-      </HeaderWrapper>
-      <InfoWrapper>
-        예측 어쩌구 저쩌구,,,,
-      </InfoWrapper>
-      
+
+      <HeaderWrapper>키워드를 조정하여 주가를 예측해보세요!</HeaderWrapper>
+
       {/* predict */}
       <PredictSection />
-    
+
+      {/* zoom btn */}
+
+      <ZoomBtn />
+
     </BoardWrapper>
   );
 };
@@ -52,15 +53,21 @@ const BoardWrapper = styled.div`
 const HeaderWrapper = styled.div`
   font-size: 2rem;
   font-weight: bold;
+  margin-top: 1rem;
 `;
 
 const StockNameSection = styled.span`
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   margin: 4px;
   color: var(--custom-mint);
 `;
 
 const InfoWrapper = styled.div`
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   color: var(--custom-gray-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 `;
+
+const InfoSpan = styled.span``;

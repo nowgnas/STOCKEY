@@ -4,11 +4,7 @@ import ResultBoardOpen from "./ResultBoardOpen";
 import OpenBtn from "./OpenBtn";
 import styled from "styled-components";
 
-interface Props {
-  resultSize: boolean;
-}
-
-const ResultBoard = ({ resultSize }: Props) => {
+const ResultBoard = () => {
   const openState = useRecoilValue(resultBoardOpenState);
 
   return (
@@ -46,7 +42,6 @@ const LockWrapper = styled.div`
 
   display: flex;
   justify-content: center;
-  align-items: center;
 
   background: rgba(255, 254, 254, 0.9);
   border-radius: 24px;

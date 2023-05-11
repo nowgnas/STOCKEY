@@ -1,83 +1,61 @@
-import { useMemo } from "react";
+import { useState, useEffect } from 'react';
 import { useRecoilValue } from "recoil";
+import { resultBoardSizeState } from "../../stores/LaboratoryAtoms";
 import { selectedSliderList } from "../../stores/LaboratoryAtoms";
 
-import { lastCnt, Regression } from "./SampleItems";
-import styled from "styled-components";
+import ResultStock from "./ResultStock";
 import PredictKeywordCard from "./PredictKeywordCard";
+import styled from "styled-components";
 
 const PredictResultCard = () => {
-  // 데이터 목록
-  // 1. 결과 돈
-  // 1.1 회기계수 + 상수 (query)
-  // 1.2 사용자 입력값 (query -> recoil)
+  const resultBoardSize = useRecoilValue(resultBoardSizeState);
+  const [resultCardState, setResultCardState] = useState(resultBoardSize);
 
-  // 2. keyword card
-  // 2.1 keyword default (query)
-  // 2.2 사용자 입력값 (query -> recoil)
+  useEffect(() => {
+    // small -> big size 조정
+    if (resultCardState === "small" && resultBoardSize === "big") {
+      setTimeout(() => {
+        setResultCardState(resultBoardSize);
+      }, 700)
+    } else {
+      setResultCardState(resultBoardSize);
+    }
+  }, [resultBoardSize])
 
   // 사용자 입력값
   const sliderList = useRecoilValue(selectedSliderList);
 
-  // 결과 계산
-  const calcResult = useMemo(() => {
-    let result = Regression.constant;
-
-    Regression.coefficients.map(({ keyword, coefficient }) => {
-      sliderList.forEach((item) => {
-        if (item.keyword === keyword) {
-          result += coefficient * item.cnt;
-          return false;
-        }
-      });
-    });
-    return result;
-  }, [Regression, sliderList]);
-
-  const baseCntCalc = (item: { keyword: string; cnt: number }) => {
-    let base = 0;
-    lastCnt.forEach(({ keyword, cnt }) => {
-      if (keyword === item.keyword) {
-        base = cnt;
-        return false;
-      }
-    });
-    return base;
-  };
-
   return (
-    <ResultCardSection>
+    <ResultCardSection size={resultCardState}>
       <HeaderWrapper>
         예상 주가
-        <ResultWrapper>
-          {calcResult.toLocaleString("ko-KR", {
-            maximumFractionDigits: 4,
-          })}
-          원
-        </ResultWrapper>
+        <ResultStock sliderList={sliderList} resultCardState={resultCardState}/>
       </HeaderWrapper>
 
-      <InfoWrapper>오늘보다</InfoWrapper>
+      {resultCardState === "big" && (
+        <>
+          <InfoWrapper>오늘보다</InfoWrapper>
 
-      <CardWrapper>
-        {sliderList.map((item) => {
-          return (
-            <PredictKeywordCard sliderItem={item} baseCnt={baseCntCalc(item)} />
-          );
-        })}
-      </CardWrapper>
+          <CardWrapper>
+            {sliderList.map((item) => {
+              return <PredictKeywordCard sliderItem={item} />;
+            })}
+          </CardWrapper>
 
-      <IconWrapper>
-        <IconImg src={"labImages/robotIcon.png"} alt="" />
-      </IconWrapper>
+          <IconWrapper>
+            <IconImg src={"labImages/robotIcon.png"} alt="" />
+          </IconWrapper>
+        </>
+      )}
     </ResultCardSection>
   );
 };
 
 export default PredictResultCard;
 
-const ResultCardSection = styled.div`
-  width: 600px;
+const ResultCardSection = styled.div<{ size: "big" | "small" }>`
+  width: ${(props) => (props.size === "big" ? "600px" : "180px")};
+  height: ${(props) => (props.size === "small" ? "180px" : undefined)};
   border: 4px solid #ffffff;
   border-radius: 36px;
   position: relative;
@@ -85,7 +63,7 @@ const ResultCardSection = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 24px 36px;
+  padding: ${(props) => (props.size === "big" ? "24px 36px" : "12px 18px")};
 `;
 
 const HeaderWrapper = styled.div`
@@ -95,11 +73,7 @@ const HeaderWrapper = styled.div`
   display: flex;
   align-items: flex-end;
   gap: 2rem;
-`;
-
-const ResultWrapper = styled.div`
-  font-size: 2.4rem;
-  color: var(--custom-mint);
+  flex-wrap: wrap;
 `;
 
 const InfoWrapper = styled.div`

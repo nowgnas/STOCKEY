@@ -293,13 +293,20 @@ public class StockServiceImpl implements StockService{
         return stockMapper.toStockDto(top5Stocks);
     }
 
+    //산업별 주식 시가총액순 N개 출력
+    public List<StockDto> getNStock(Long industryId,int page,int size){
+        Pageable pageable = PageRequest.of(page, size);
+        List<Stock> top5Stocks = stockRepository.findTop5Stocks(industryId,pageable);
+        return stockMapper.toStockDto(top5Stocks);
+    }
+
     // 산업별 날짜별 시가총액 합
-
-
     public List<IndustrySumDto> getMarketList(Long industryId) {
         List<IndustrySumDto> marketList = stockRepository.getMarketList(industryId);
         return marketList;
     }
+
+
 
     // Stock Entity 반환
     private Stock getStockEntity(Long id) {

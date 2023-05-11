@@ -238,6 +238,18 @@ public class StockController {
         return new ResponseEntity<>(new ResponseDto("OK", stockTop5), HttpStatus.OK);
     }
 
+    @Operation(summary = "산업별 종목들 시가총액 기준 N개 종목", description = "시가총액 기준으로 N개 종목을 출력")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "성공"),
+            }
+    )
+    @GetMapping("/marketcap-by-industry/{industryId}")
+    public ResponseEntity<ResponseDto> industry(@PathVariable Long industryId,@RequestParam int page,@RequestParam int size){
+        List<StockDto> stockTopN = stockService.getNStock(industryId, page, size);
+        return new ResponseEntity<>(new ResponseDto("OK", stockTopN), HttpStatus.OK);
+    }
+
 
 
     @Operation(summary = "산업별 날짜별 시가총액합", description = "산업의 시가총액을 날짜별로 출력합니다.")

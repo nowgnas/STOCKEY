@@ -36,6 +36,8 @@ public interface StockService {
 
      // 시가총액순 N개 출력
      List<StockDto> getNStock(int page, int size);
+     // 산업별 시가총액순 N개 출력
+     List<StockDto> getNStock(Long industryId,int page, int size);
 
      // 산업별 날짜별 시가총액 합
      List<IndustrySumDto> getMarketList(Long industryId);

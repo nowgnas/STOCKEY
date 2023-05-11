@@ -1,6 +1,6 @@
 package kr.stockey.stockservice.mapper;
 
-import kr.stockey.stockservice.dto.BusinessDto;
+import kr.stockey.stockservice.dto.core.BusinessDto;
 import kr.stockey.stockservice.entity.Business;
 import org.mapstruct.Mapper;
 

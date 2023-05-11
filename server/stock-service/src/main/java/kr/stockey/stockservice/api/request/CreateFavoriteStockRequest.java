@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 @Getter
 public class CreateFavoriteStockRequest {
-    private String userId;
+    private Long memberId;
     private Long stockId;
 }

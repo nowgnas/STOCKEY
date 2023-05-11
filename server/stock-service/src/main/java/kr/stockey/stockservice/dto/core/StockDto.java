@@ -1,16 +1,13 @@
-package kr.stockey.stockservice.dto;
+package kr.stockey.stockservice.dto.core;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
 @Getter
-@Setter
 @Builder
 public class StockDto {
-
     private Long id;
     private String name;
     private String code;
@@ -21,14 +18,6 @@ public class StockDto {
     private String companySales;
     private String creditRank;
     private String basicInfo;
-    private IndustryDto industry;
+    private Long  industryId;
     private List<BusinessDto> businesses;
-    private DailyStockDto todayDailyStock;
-    private Integer industryTotalCount;
-
-    private Integer industryCapRank;
-    private Integer industryFavRank;
-
-    private Float industryAvgChangeRate;
-
 }

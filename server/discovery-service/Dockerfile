@@ -13,5 +13,5 @@ WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 ENTRYPOINT ["java", "-jar", \
         "-Dspring.profiles.active=${PROFILE}", \
-        "-Dserver.address=${UPSTREAM}", \
+        "-Dserver.addresses=${UPSTREAM}", \
         "/app/app.jar"]

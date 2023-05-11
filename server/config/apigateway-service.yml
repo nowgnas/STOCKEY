@@ -26,16 +26,15 @@ spring:
           uri: lb://member-service
           predicates:
             - Path=/auth/logout
-            - Path=/auth/nickname
           filters:
             - AuthorizationHeaderFilter
 
-        # - id: member-service
-        #   uri: lb://member-service
-        #   predicates:
-
-        #   filters:
-        #     - AuthorizationHeaderFilter
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/auth/nickname
+          filters:
+            - AuthorizationHeaderFilter
 
 
 
@@ -54,8 +53,15 @@ spring:
         - id: member-service
           uri: lb://member-service
           predicates:
-            - Path=/member
             - Path=/member/nickname
+          filters:
+            - AuthorizationHeaderFilter
+
+  
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/member
           filters:
             - AuthorizationHeaderFilter
 

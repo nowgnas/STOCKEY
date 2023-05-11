@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: apigateway-service
+
+  cloud:
+    gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway Global Filter
+            preLogger: true
+            postLogger: true
+
+      routes:
+        # auth
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/auth/logout
+          filters:
+            - AuthorizationHeaderFilter
+
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/auth/nickname
+          filters:
+            - AuthorizationHeaderFilter
+
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/auth/**
+
+        # member
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/member/nickname
+            - Method=GET
+
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/member
+            - Path=/member/nickname
+          filters:
+            - AuthorizationHeaderFilter
+
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/member/**
+
+        # lab
+        - id: laboratory-service
+          uri: lb://LABORATORY-SERVICE
+          predicates:
+            - Path=/lab/**
+          filters:
+            - RewritePath=/lab/(?<segment>.*), /$\{segment}

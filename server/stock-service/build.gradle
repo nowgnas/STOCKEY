@@ -50,6 +50,9 @@ dependencies {
     // Pearson 상관계수
     implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.0'
 
+    // servlet 추가
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+
 }
 
 dependencyManagement {

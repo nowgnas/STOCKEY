@@ -2,8 +2,8 @@ package kr.stockey.stockservice.client;
 
 
 import kr.stockey.stockservice.api.request.CreateFavoriteStockRequest;
-import kr.stockey.stockservice.dto.FavoriteDto;
-import kr.stockey.stockservice.dto.ResponseDto;
+import kr.stockey.stockservice.dto.core.FavoriteDto;
+import kr.stockey.stockservice.dto.core.ResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +14,11 @@ public interface FavoriteClient {
     
     // TODO : url 작성
     @GetMapping("")
-    ResponseDto findByStockAndMember(String userId);
+    ResponseDto findByStockAndMember(Long memberId);
     
     // TODO url 작성
     @GetMapping("")
-    ResponseDto existsByMemberAndStock(String memberId,Long stockId);
+    ResponseDto existsByMemberAndStock(Long memberId,Long stockId);
 
 
     //TODO url 작성
@@ -31,6 +31,6 @@ public interface FavoriteClient {
 
     //TODO url 작성
     @GetMapping("")
-    ResponseDto findByMemberAndStock(String userID, Long stockId);
+    ResponseDto findByMemberAndStock(Long memberId, Long stockId);
 
 }

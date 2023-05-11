@@ -3,11 +3,14 @@ package kr.stockey.stockservice.service;
 import kr.stockey.stockservice.api.request.GetCorrelationRequest;
 import kr.stockey.stockservice.api.response.GetStockTodayResponse;
 import kr.stockey.stockservice.dto.*;
+import kr.stockey.stockservice.dto.core.DailyStockDto;
+import kr.stockey.stockservice.dto.core.MemberDto;
+import kr.stockey.stockservice.dto.core.StockDto;
 
 import java.util.List;
 
 public interface StockService {
-     StockDto getStock(Long stockId) ;
+     StockSummaryDto getStock(Long stockId) ;
      Integer getStockIndustryMarketCapRank(Long stockId, Long industryId);
      Integer getStockIndustryFavoriteRank(Long stockId, Long industryId);
      Float getAverageIndustryChangeRate(Long industryId) ;
@@ -22,11 +25,22 @@ public interface StockService {
 
      void addFavorite(MemberDto member,Long id);
      void deleteFavorite(MemberDto member,Long id);
-     boolean checkFavorite(String userId,Long id);
+     boolean checkFavorite(Long memberId,Long id);
 
      // TODO 상관관계 추가
 //     Double getCorrelation(Long id, GetCorrelationRequest getCorrelationRequest);
      List<ResultCorrelationDto> getAllStockCorrelation(Long id , GetCorrelationRequest getCorrelationRequest);
+
+     // 산업별 종목
+     List<StockDto> getByIndustryId(Long industryId);
+
+     // 시가총액순 N개 출력
+     List<StockDto> getNStock(int page, int size);
+     // 산업별 시가총액순 N개 출력
+     List<StockDto> getNStock(Long industryId,int page, int size);
+
+     // 산업별 날짜별 시가총액 합
+     List<IndustrySumDto> getMarketList(Long industryId);
 
 
 }

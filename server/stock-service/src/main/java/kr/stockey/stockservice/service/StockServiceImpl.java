@@ -7,6 +7,7 @@ import kr.stockey.stockservice.client.FavoriteClient;
 import kr.stockey.stockservice.client.IndustryClient;
 import kr.stockey.stockservice.client.KeywordClient;
 import kr.stockey.stockservice.dto.*;
+import kr.stockey.stockservice.dto.core.*;
 import kr.stockey.stockservice.entity.DailyStock;
 import kr.stockey.stockservice.entity.Stock;
 import kr.stockey.stockservice.exception.favorite.FavoriteException;
@@ -22,10 +23,11 @@ import kr.stockey.stockservice.repository.DailyStockRepository;
 import kr.stockey.stockservice.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,9 +46,9 @@ public class StockServiceImpl implements StockService{
     private final KeywordClient keywordClient;
     private final FavoriteClient favoriteClient;
 
-    public StockDto getStock(Long stockId)  {
+    public StockSummaryDto getStock(Long stockId)  {
         Stock stock = stockRepository.findById(stockId).orElseThrow(()->new StockException(StockExceptionType.NOT_FOUND));
-        StockDto stockDto = stockMapper.toStockDto(stock);
+        StockSummaryDto stockDto = stockMapper.toStockDto(stock);
         int industryTotalCount = stockRepository.findByIndustry(stock.getIndustryId()).size();
         stockDto.setIndustryTotalCount(industryTotalCount);
         Long industryId = stock.getIndustryId();
@@ -138,7 +140,7 @@ public class StockServiceImpl implements StockService{
 
     // 관심 종목 리스트 출력
     public List<GetStockTodayResponse> getMyStocks(MemberDto memberdto) {
-        ResponseDto responseDto = favoriteClient.findByStockAndMember(memberdto.getUserId());
+        ResponseDto responseDto = favoriteClient.findByStockAndMember(memberdto.getId());
         List<FavoriteDto> favorites = (List<FavoriteDto>) responseDto.getData();
 //                List<FavoriteDto> favorites = favoriteClient.findByStockAndMember(memberdto.getUserId());
         List<Stock> stockList = new ArrayList<>();
@@ -168,7 +170,7 @@ public class StockServiceImpl implements StockService{
     }
 
     // 관심 여부 확인
-    public boolean checkFavorite(String userId, Long stockId) {
+    public boolean checkFavorite(Long userId, Long stockId) {
         ResponseDto responseDto = favoriteClient.existsByMemberAndStock(userId, stockId);
         Boolean result = (Boolean) responseDto.getData();
         return result;
@@ -178,7 +180,7 @@ public class StockServiceImpl implements StockService{
     @Transactional
     public void addFavorite(MemberDto memberDto, Long id) {
         Stock stock = getStockEntity(id);
-        boolean isFavorite = checkFavorite(memberDto.getUserId(), id);
+        boolean isFavorite = checkFavorite(memberDto.getId(), id);
         //이미 관심등록했다면
         if (isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.ALREADY_EXIST);
@@ -186,7 +188,7 @@ public class StockServiceImpl implements StockService{
 
         CreateFavoriteStockRequest favoriteRequest = CreateFavoriteStockRequest.builder()
                 .stockId(id)
-                .userId(memberDto.getUserId())
+                .memberId(memberDto.getId())
                 .build();
         favoriteClient.saveStock(favoriteRequest);
     }
@@ -195,12 +197,12 @@ public class StockServiceImpl implements StockService{
     public void deleteFavorite(MemberDto memberdto, Long id) {
 
         Stock stock = getStockEntity(id);
-        boolean isFavorite = checkFavorite(memberdto.getUserId(), id);
+        boolean isFavorite = checkFavorite(memberdto.getId(), id);
         // 관심 등록하지 않았다면
         if (!isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.NOT_FOUND);
         }
-        ResponseDto responseDto = favoriteClient.findByMemberAndStock(memberdto.getUserId(), stock.getId());
+        ResponseDto responseDto = favoriteClient.findByMemberAndStock(memberdto.getId(), stock.getId());
         FavoriteDto favoriteDto = (FavoriteDto) responseDto.getData();
 //        Favorite favorite = favoriteRepository.findByMemberAndStock(memberdto.getUserId(), stock.getId());
         checkUser(memberdto, favoriteDto);
@@ -278,6 +280,32 @@ public class StockServiceImpl implements StockService{
         );
         return correlationCoefficient;
     }
+    // 산업에 해당하는 종목들
+    public List<StockDto> getByIndustryId(Long industryId){
+        List<Stock> stockList = stockRepository.findByIndustry(industryId);
+        return stockMapper.toStockDto(stockList);
+    }
+
+    //시가총액순 N개 출력
+    public List<StockDto> getNStock(int page,int size){
+        Pageable pageable = PageRequest.of(page, size);
+        List<Stock> top5Stocks = stockRepository.findTop5Stocks(pageable);
+        return stockMapper.toStockDto(top5Stocks);
+    }
+
+    //산업별 주식 시가총액순 N개 출력
+    public List<StockDto> getNStock(Long industryId,int page,int size){
+        Pageable pageable = PageRequest.of(page, size);
+        List<Stock> top5Stocks = stockRepository.findTop5Stocks(industryId,pageable);
+        return stockMapper.toStockDto(top5Stocks);
+    }
+
+    // 산업별 날짜별 시가총액 합
+    public List<IndustrySumDto> getMarketList(Long industryId) {
+        List<IndustrySumDto> marketList = stockRepository.getMarketList(industryId);
+        return marketList;
+    }
+
 
 
     // Stock Entity 반환
@@ -287,7 +315,7 @@ public class StockServiceImpl implements StockService{
 
     // 유저가 같은지 체크
     private static void checkUser(MemberDto memberDto, FavoriteDto favoriteDto) {
-        if (!favoriteDto.getUserId().equals(memberDto.getUserId())) {
+        if (!favoriteDto.getUserId().equals(memberDto.getId())) {
             throw new FavoriteException(FavoriteExceptionType.DIFFERENT_USER);
         }
     }

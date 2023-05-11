@@ -12,7 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
@@ -50,6 +53,9 @@ public class MemberController {
     )
     @GetMapping
     public ResponseEntity<ResponseDto> getMember() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String StringId = request.getHeader("X-UserId");
+        System.out.println(StringId);
         MemberResponse memberResponse = memberDtoMapper.toGetMemberResponse(memberService.getMember());
         return new ResponseEntity<>(new ResponseDto("회원 정보 반환!", memberResponse), HttpStatus.OK);
     }
@@ -93,9 +99,9 @@ public class MemberController {
                     @ApiResponse(responseCode = "404", description = "회원 정보 없음"),
             }
     )
-    @GetMapping("/{userId}")
-    public ResponseEntity<ResponseDto> GetMember(@PathVariable String userId){
-        MemberDto memberDto = memberService.getMember(userId);
+    @GetMapping("/{memberId}")
+    public ResponseEntity<ResponseDto> GetMember(@PathVariable String memberId){
+        MemberDto memberDto = memberService.getMember(memberId);
         return new ResponseEntity<>(new ResponseDto("회원 정보 반환!", memberDto), HttpStatus.OK);
     }
 }

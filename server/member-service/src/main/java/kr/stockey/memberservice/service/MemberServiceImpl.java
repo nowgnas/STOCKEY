@@ -93,11 +93,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto getMember(String userId) {
-        Member member = memberRepository.
-                findByUserId(userId)
-                .orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
-        return memberMapper.toDto(member);
+    public MemberDto getMember(String memberId) {
+        Long id = Long.parseLong(memberId);
+        return getMember(id);
     }
 
     @Override
@@ -114,14 +112,12 @@ public class MemberServiceImpl implements MemberService {
     public void saveMember(long oAuthId, String nickname, OauthType oauthType) {
         // 닉네임 중복 화인
         checkDuplicatedNickname(nickname);
-        String uuid = UUID.randomUUID().toString();
 
         // 회원 등록
         Member member = Member.oAuthBuilder()
                 .nickname(nickname)
                 .oAuthId(oAuthId)
                 .oAuthType(oauthType)
-                .userId(uuid)
                 .build();
         memberRepository.save(member);
     }
@@ -129,13 +125,10 @@ public class MemberServiceImpl implements MemberService {
 
     private MemberDto getMemberDtoByJwtToken() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String accessToken = request.getHeader("Authorization");
-        accessToken = accessToken.substring(7);
-        DecodedJWT payload = jwtUtil.getDecodedJWT(accessToken);
-        long memberId = Long.parseLong(payload.getAudience().get(0));
-        String nickname = String.valueOf(payload.getClaim("nickname"));
-        String trimmedNickname = nickname.replaceAll("\"", "");
-        return MemberDto.builder().id(memberId).nickname(trimmedNickname).build();
+        String StringId = request.getHeader("X-UserId");
+        System.out.println(StringId);
+        long memberId = Long.parseLong(StringId);
+        return MemberDto.builder().id(memberId).build();
     }
 
 

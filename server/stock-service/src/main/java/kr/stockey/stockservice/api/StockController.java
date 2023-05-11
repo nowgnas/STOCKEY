@@ -18,7 +18,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -263,7 +266,9 @@ public class StockController {
 
 
     private MemberDto getMember(String userId) {
-        ResponseDto responseDto = memberClient.getMember(userId);
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String memberId = request.getHeader("X-UserId");
+        ResponseDto responseDto = memberClient.getMember(memberId);
         MemberDto memberDto = (MemberDto) responseDto.getData();
         return memberDto;
 

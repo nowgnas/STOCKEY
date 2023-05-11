@@ -70,6 +70,18 @@ spring:
           predicates:
             - Path=/member/**
 
+        # stock
+        - id: stock-service
+          uri: lb://stock-service
+          predicates:
+            - Path=/stock/my/**
+          filters:
+            - AuthorizationHeaderFilter
+
+        - id: stock-service
+          uri: lb://stock-service
+          predicates:
+            - Path=/stock/**
 
         # lab
         - id: laboratory-service

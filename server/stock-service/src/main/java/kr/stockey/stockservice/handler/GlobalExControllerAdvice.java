@@ -1,7 +1,7 @@
 package kr.stockey.stockservice.handler;
 
-import kr.stockey.stockservice.dto.ErrorResultDto;
-import kr.stockey.stockservice.dto.ResponseDto;
+import kr.stockey.stockservice.dto.core.ErrorResultDto;
+import kr.stockey.stockservice.dto.core.ResponseDto;
 import kr.stockey.stockservice.exception.BaseException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

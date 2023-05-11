@@ -1,5 +1,8 @@
 package kr.stockey.stockservice.dto;
 
+import kr.stockey.stockservice.dto.core.BusinessDto;
+import kr.stockey.stockservice.dto.core.DailyStockDto;
+import kr.stockey.stockservice.dto.core.IndustryDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

@@ -7,6 +7,7 @@ import kr.stockey.stockservice.client.FavoriteClient;
 import kr.stockey.stockservice.client.IndustryClient;
 import kr.stockey.stockservice.client.KeywordClient;
 import kr.stockey.stockservice.dto.*;
+import kr.stockey.stockservice.dto.core.*;
 import kr.stockey.stockservice.entity.DailyStock;
 import kr.stockey.stockservice.entity.Stock;
 import kr.stockey.stockservice.exception.favorite.FavoriteException;

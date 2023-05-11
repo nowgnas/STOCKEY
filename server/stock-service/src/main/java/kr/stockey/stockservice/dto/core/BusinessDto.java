@@ -1,4 +1,4 @@
-package kr.stockey.stockservice.dto;
+package kr.stockey.stockservice.dto.core;
 
 import kr.stockey.stockservice.entity.Stock;
 import lombok.Builder;

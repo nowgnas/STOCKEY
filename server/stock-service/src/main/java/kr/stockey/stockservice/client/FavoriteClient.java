@@ -2,8 +2,8 @@ package kr.stockey.stockservice.client;
 
 
 import kr.stockey.stockservice.api.request.CreateFavoriteStockRequest;
-import kr.stockey.stockservice.dto.FavoriteDto;
-import kr.stockey.stockservice.dto.ResponseDto;
+import kr.stockey.stockservice.dto.core.FavoriteDto;
+import kr.stockey.stockservice.dto.core.ResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -3,6 +3,8 @@ package kr.stockey.stockservice.service;
 import kr.stockey.stockservice.api.request.GetCorrelationRequest;
 import kr.stockey.stockservice.api.response.GetStockTodayResponse;
 import kr.stockey.stockservice.dto.*;
+import kr.stockey.stockservice.dto.core.DailyStockDto;
+import kr.stockey.stockservice.dto.core.MemberDto;
 
 import java.util.List;
 

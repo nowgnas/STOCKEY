@@ -2,6 +2,7 @@ package kr.stockey.stockservice.mapper;
 
 
 import kr.stockey.stockservice.dto.*;
+import kr.stockey.stockservice.dto.core.DailyStockDto;
 import kr.stockey.stockservice.dto.core.StockDto;
 import kr.stockey.stockservice.entity.DailyStock;
 import kr.stockey.stockservice.entity.Stock;

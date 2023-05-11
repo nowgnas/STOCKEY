@@ -24,7 +24,7 @@ public interface StockService {
 
      void addFavorite(MemberDto member,Long id);
      void deleteFavorite(MemberDto member,Long id);
-     boolean checkFavorite(String userId,Long id);
+     boolean checkFavorite(Long memberId,Long id);
 
      // TODO 상관관계 추가
 //     Double getCorrelation(Long id, GetCorrelationRequest getCorrelationRequest);

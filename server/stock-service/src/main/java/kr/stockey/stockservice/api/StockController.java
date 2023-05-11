@@ -142,7 +142,7 @@ public class StockController {
     @GetMapping("/my/{id}")
     public ResponseEntity<ResponseDto> checkFavorite(@RequestHeader String userId,@PathVariable Long id) {
         MemberDto memberDto = getMember(userId);
-        boolean result = stockService.checkFavorite(memberDto.getUserId(), id);
+        boolean result = stockService.checkFavorite(memberDto.getId(), id);
         return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
     }
 

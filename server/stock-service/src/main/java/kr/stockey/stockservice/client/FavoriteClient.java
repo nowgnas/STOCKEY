@@ -14,11 +14,11 @@ public interface FavoriteClient {
     
     // TODO : url 작성
     @GetMapping("")
-    ResponseDto findByStockAndMember(String userId);
+    ResponseDto findByStockAndMember(Long memberId);
     
     // TODO url 작성
     @GetMapping("")
-    ResponseDto existsByMemberAndStock(String memberId,Long stockId);
+    ResponseDto existsByMemberAndStock(Long memberId,Long stockId);
 
 
     //TODO url 작성
@@ -31,6 +31,6 @@ public interface FavoriteClient {
 
     //TODO url 작성
     @GetMapping("")
-    ResponseDto findByMemberAndStock(String userID, Long stockId);
+    ResponseDto findByMemberAndStock(Long memberId, Long stockId);
 
 }

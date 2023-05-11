@@ -64,10 +64,9 @@ public class InvestmentServiceImpl implements InvestmentService{
         LocalDateTime now = LocalDateTime.now(); // 한국 시간 기준으로 현재 시간을 가져옴
 
         int hour = now.getHour();
-        int minute = now.getMinute();
 
-        // 주문 가능시간: 9시 ~ 15시 && 매 05분 ~ 다음 시간 00분까지
-        if (!(hour >= 9 && hour < 15) && minute >= 1 && minute <= 4) {
+        // 주문 가능시간: 9시 ~ 15시
+        if (!(hour >= 9 && hour < 15)) {
             throw new Exception("주문 가능한 시간이 아닙니다.");
         }
         return true;
@@ -144,12 +143,15 @@ public class InvestmentServiceImpl implements InvestmentService{
 
         // 레디스에 쌓인 모든 order 데이터 가져와 list로 만들기
         Iterable<Order> orderIterable = orderRedisRepository.findAll();
-        List<Order> wholeOrderList = new ArrayList<>();
+        List<Order> rawOrderList = new ArrayList<>();
         for (Order order : orderIterable) {
-            wholeOrderList.add(order);
+            rawOrderList.add(order);
         }
         // 시간순 정렬
-        Collections.sort(wholeOrderList);
+        Collections.sort(rawOrderList);
+
+        // 이전 라운드에 대한 주문만 남기기
+        List<Order> wholeOrderList = filterOrders(rawOrderList);
 
         // wholeOrderList 내용 DB에 적재
         loadOrderIntoDB(wholeOrderList);
@@ -221,6 +223,7 @@ public class InvestmentServiceImpl implements InvestmentService{
                                 .memberId(curMemberId)
                                 .stockId(curStockId)
                                 .count(actualBuyNum)
+                                .contractPrice(curStockPrice)
                                 .contractType(ContractType.BUY)
                                 .createdAt(LocalDateTime.now())
                                 .category(InvCategory.CONTRACT)
@@ -248,6 +251,7 @@ public class InvestmentServiceImpl implements InvestmentService{
                                 .memberId(curMemberId)
                                 .stockId(curStockId)
                                 .count(actualSellQuantity)
+                                .contractPrice(curStockPrice)
                                 .contractType(ContractType.SELL)
                                 .createdAt(LocalDateTime.now())
                                 .category(InvCategory.CONTRACT)
@@ -298,8 +302,8 @@ public class InvestmentServiceImpl implements InvestmentService{
         return result;
     }
 
-    @Scheduled(cron = "0 */5 * * * *", zone = "Asia/Seoul")
-    private void updateStockPriceMap() {
+    @Scheduled(cron = "0 0/5 * * * *", zone = "Asia/Seoul")  // 0분부터 55분까지 5분 간격으로 실행
+    protected void updateStockPriceMap() {
         LocalDate today = LocalDate.now();
         List<DailyStock> dailyStockList = dailyStockRepository.findByStockDate(today);
         for (DailyStock dailyStock : dailyStockList) {
@@ -307,6 +311,22 @@ public class InvestmentServiceImpl implements InvestmentService{
         }
     }
 
+    private List<Order> filterOrders(List<Order> rawOrderList) {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime oneHourAgo = currentDateTime.minusHours(1);
+        LocalDateTime desiredStartTime = LocalDateTime.of(oneHourAgo.getYear(), oneHourAgo.getMonth(), oneHourAgo.getDayOfMonth(), oneHourAgo.getHour(), 0, 0);
+        LocalDateTime desiredEndTime = LocalDateTime.of(oneHourAgo.getYear(), oneHourAgo.getMonth(), oneHourAgo.getDayOfMonth(), currentDateTime.getHour(), 0, 0);
+
+        List<Order> filteredOrderList = new ArrayList<>();
+        for (Order order : rawOrderList) {
+            LocalDateTime orderTime = order.getOrderTime();
+            if (orderTime.isAfter(desiredStartTime) && orderTime.isBefore(desiredEndTime)) {
+                filteredOrderList.add(order);
+            }
+        }
+
+        return filteredOrderList;
+    }
 
 
     private double calculateNewAvgUnitPrice(double currentAvgUnitPrice, long numStocksOwned,

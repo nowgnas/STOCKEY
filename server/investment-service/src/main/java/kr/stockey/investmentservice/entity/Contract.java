@@ -7,8 +7,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -53,11 +51,12 @@ public class Contract {
     private InvCategory category;
 
     @Builder
-    public Contract(Long memberId, Long stockId, Long count, ContractType contractType,
-                    LocalDateTime createdAt, InvCategory category) {
+    public Contract(Long memberId, Long stockId, Long count, Long contractPrice,
+                    ContractType contractType, LocalDateTime createdAt, InvCategory category) {
         this.memberId = memberId;
         this.stockId = stockId;
         this.count = count;
+        this.contractPrice = contractPrice;
         this.contractType = contractType;
         this.createdAt = createdAt;
         this.category = category;

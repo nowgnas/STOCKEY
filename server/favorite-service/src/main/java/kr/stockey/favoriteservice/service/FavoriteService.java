@@ -1,18 +1,18 @@
 package kr.stockey.favoriteservice.service;
 
-import com.ssafy.backend.domain.favorites.entity.Favorite;
-import com.ssafy.backend.domain.industry.entity.Industry;
-import com.ssafy.backend.domain.member.entity.Member;
-import com.ssafy.backend.domain.stock.entity.Stock;
+
+import kr.stockey.favoriteservice.dto.core.FavoriteDto;
 
 import java.util.List;
 
 public interface FavoriteService {
-    List<Favorite> _findByIndustry(Member member);
-    List<Favorite>  _findByStock(Member member);
+    List<FavoriteDto> findByIndustry(Long memberId);
+    List<FavoriteDto> findByStock(Long memberId);
+    List<FavoriteDto> findByKeyword(Long memberId);
 
-    boolean existsByMemberAndIndustry(Industry industry, Member member);
-    boolean existsByMemberAndStock(Stock stock, Member member);
+    boolean existsByMemberAndIndustry(Long industryId,Long memberId);
+    boolean existsByMemberAndStock(Long stockId,Long memberId);
+    boolean existsByMemberAndKeyword(Long keywordId,Long memberId);
 
 
 

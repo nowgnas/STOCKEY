@@ -17,7 +17,7 @@ const LabPage = () => {
   // accordion 둘다 접혀져있는 경우, result panel 큰 버전 랜더링
   return (
     <PageWrapper>
-      <ColumnWrapper width={"25%"}>
+      <ColumnWrapper width={"30%"}>
         <StockAccordion />
         <KeywordAccordion />
       </ColumnWrapper>
@@ -26,7 +26,7 @@ const LabPage = () => {
         <TargetListSection />
       </ColumnWrapper>
 
-      <AbsoluteWrapper resultSize={resultBoardSize}>
+      <AbsoluteWrapper resultBoardSize={resultBoardSize}>
         <ResultBoard />
       </AbsoluteWrapper>
       
@@ -38,10 +38,11 @@ const LabPage = () => {
 export default LabPage;
 
 const PageWrapper = styled.div`
-  margin: 5% 10%;
+  padding: 4% 8%;
+  positon: relative;
+
   display: flex;
   justify-content: space-between;
-  positon: relative;
 `;
 
 const ColumnWrapper = styled.div<{width: string}>`
@@ -52,12 +53,12 @@ const ColumnWrapper = styled.div<{width: string}>`
   gap: 45px;
 `;
 
-const AbsoluteWrapper = styled.div<{ resultSize: "big" | "small" }>`
+const AbsoluteWrapper = styled.div<{ resultBoardSize: "big" | "small" }>`
   position: absolute;
   padding: 0 0 5% 0;
-  right: 10%;
-  top: ${(props) => (props.resultSize === "small" ? "415px" : "460px")};
-  width: ${(props) => (props.resultSize === "small" ? "52%" : "80%")};
+  right: 8%;
+  top: ${(props) => (props.resultBoardSize === "small" ? "390px" : "440px")};
+  width: ${(props) => (props.resultBoardSize === "small" ? "54.6%" : "84%")};
 
   -webkit-transition: width 1s, top 1s;
   transition: width 1s, top 1s;

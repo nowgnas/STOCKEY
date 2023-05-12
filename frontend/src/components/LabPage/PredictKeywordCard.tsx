@@ -15,7 +15,7 @@ const PredictKeywordCard = ({ sliderItem }: Props) => {
   
   // query에서 graph 마지막 keyword 빈도 가져오기
   const baseCnt: number = useMemo(() => {
-    console.log('이거 계산 다시?')
+    // console.log('이거 계산 다시?')
     let baseCnt = 0;
     GraphItemSixMonth.forEach(({ keyword, scatter }) => {
       if (keyword === sliderItem.keyword) {
@@ -82,6 +82,7 @@ const CardWrapper = styled.div`
   align-items: center;
 
   font-size: 1.2rem;
+  z-index: 1;
 `;
 
 const HeaderWrapper = styled.div`

@@ -25,10 +25,9 @@ const ResultStock = ({ sliderList, resultCardState }: Props) => {
   // query에서 graph 마지막 주가 가져오기
   const baseStock: number = useMemo(() => {
     const scatterList = GraphItemSixMonth[0].scatter;
-    console.log(scatterList);
     return scatterList[scatterList.length - 1][1];
   }, []);
-  console.log('base: ', baseStock);
+  // console.log('base: ', baseStock);
 
 
   const changeAmount = result - baseStock;

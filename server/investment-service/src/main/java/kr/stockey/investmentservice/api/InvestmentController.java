@@ -71,6 +71,15 @@ public class InvestmentController {
     }
 
     /*
+        내 보유 주식 정보 (목록, 평가액 비중, 수익률)
+     */
+    @GetMapping("/rank")
+    public ResponseEntity<ResponseDto> getTraderRank(@RequestParam Long num) throws Exception {
+        List<TraderRankDto> traderRankDtoList = investmentService.getTraderRank(num);
+        return new ResponseEntity<>(new ResponseDto("유저 랭킹 정보 제공 완료!", traderRankDtoList), HttpStatus.OK);
+    }
+
+    /*
         http 헤더에서 member id 가져오는 메소드
      */
     private Long getMemberId() throws Exception {

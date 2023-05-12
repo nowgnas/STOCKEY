@@ -2,6 +2,7 @@ package kr.stockey.investmentservice;
 
 import kr.stockey.investmentservice.dto.OrderListDto;
 import kr.stockey.investmentservice.dto.OrderProducerDto;
+import kr.stockey.investmentservice.dto.TraderRankDto;
 import kr.stockey.investmentservice.entity.Contract;
 import kr.stockey.investmentservice.entity.Stock;
 import kr.stockey.investmentservice.enums.ContractType;
@@ -25,6 +26,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @SpringBootTest
@@ -140,7 +142,7 @@ class InvestmentServiceApplicationTests {
         List<Order> filteredOrderList = filterOrders(orderList, LocalDateTime.parse("2022-05-11T10:02:00"));
 
         // check that the filtered list contains only orders within the desired time range
-        Assertions.assertEquals(2, filteredOrderList.size());
+        assertEquals(2, filteredOrderList.size());
         Assertions.assertTrue(filteredOrderList.contains(order1));
         Assertions.assertTrue(filteredOrderList.contains(order2));
     }
@@ -173,10 +175,10 @@ class InvestmentServiceApplicationTests {
                 .collect(Collectors.toMap(Stock::getId, Stock::getName));
 
         // Perform assertions
-        Assertions.assertEquals(3, stockIdToNameMap.size());
-        Assertions.assertEquals("Stock A", stockIdToNameMap.get(1L));
-        Assertions.assertEquals("Stock B", stockIdToNameMap.get(2L));
-        Assertions.assertEquals("Stock C", stockIdToNameMap.get(3L));
+        assertEquals(3, stockIdToNameMap.size());
+        assertEquals("Stock A", stockIdToNameMap.get(1L));
+        assertEquals("Stock B", stockIdToNameMap.get(2L));
+        assertEquals("Stock C", stockIdToNameMap.get(3L));
     }
 
     static class Stock {
@@ -219,9 +221,9 @@ class InvestmentServiceApplicationTests {
         }
 
         // Assert the modified stockName field in the OrderHistoryDto objects
-        Assertions.assertEquals("Stock 1", orderHistoryDtoList.get(0).getStockName());
-        Assertions.assertEquals("Stock 2", orderHistoryDtoList.get(1).getStockName());
-        Assertions.assertEquals("Stock 3", orderHistoryDtoList.get(2).getStockName());
+        assertEquals("Stock 1", orderHistoryDtoList.get(0).getStockName());
+        assertEquals("Stock 2", orderHistoryDtoList.get(1).getStockName());
+        assertEquals("Stock 3", orderHistoryDtoList.get(2).getStockName());
     }
 
     // Sample class for OrderHistoryDto
@@ -267,7 +269,7 @@ class InvestmentServiceApplicationTests {
                 .sum();
 
         // Assert the expected sum of valuations
-        Assertions.assertEquals(230.0, sum);
+        assertEquals(230.0, sum);
     }
 
     private double calcMyStockValuation(MyStock myStock) {
@@ -294,4 +296,66 @@ class InvestmentServiceApplicationTests {
         }
     }
 
+    @Test
+    public void getTraderRankTest() {
+        investmentService.getTraderRank(10L);
+    }
+
+    @Test
+    public void testAssignRanks() {
+        TraderRankDto trader1 = new TraderRankDto("Trader1", 400L, null);
+        TraderRankDto trader2 = new TraderRankDto("Trader2", 200L, null);
+        TraderRankDto trader3 = new TraderRankDto("Trader3", 200L, null);
+        TraderRankDto trader4 = new TraderRankDto("Trader4", 300L, null);
+        TraderRankDto trader5 = new TraderRankDto("Trader5", 200L, null);
+        TraderRankDto trader6 = new TraderRankDto("Trader6", 100L, null);
+
+        List<TraderRankDto> traders = Arrays.asList(trader1, trader2, trader3, trader4, trader5, trader6);
+
+        assignRanks(traders);
+
+        assertEquals(1L, trader1.getRanking());
+        assertEquals(2L, trader4.getRanking());
+        assertEquals(3L, trader2.getRanking());
+        assertEquals(3L, trader3.getRanking());
+        assertEquals(3L, trader5.getRanking());
+        assertEquals(6L, trader6.getRanking());
+    }
+
+    public void assignRanks(List<TraderRankDto> traders) {
+        List<TraderRankDto> sortedTraders = traders.stream()
+                .sorted((o1, o2) -> o2.getTotalAsset().compareTo(o1.getTotalAsset()))
+                .toList();
+
+        long rank = 1;
+        long count = 1;
+        Long previousAsset = null;
+
+        for (TraderRankDto trader : sortedTraders) {
+            if (previousAsset != null && !trader.getTotalAsset().equals(previousAsset)) {
+                rank = count;
+            }
+
+            trader.setRanking(rank);
+            previousAsset = trader.getTotalAsset();
+            count++;
+        }
+    }
+
+    @Test
+    public void testGetFirstNElements() {
+        List<String> inputList = Arrays.asList("Element 1", "Element 2", "Element 3", "Element 4", "Element 5");
+
+        int N = 3;
+        List<String> result = getFirstNElements(inputList, N);
+
+        List<String> expected = Arrays.asList("Element 1", "Element 2", "Element 3");
+        Assertions.assertEquals(expected, result);
+    }
+
+    public <T> List<T> getFirstNElements(List<T> inputList, int N) {
+        return inputList.stream()
+                .limit(N)
+                .toList();
+    }
 }

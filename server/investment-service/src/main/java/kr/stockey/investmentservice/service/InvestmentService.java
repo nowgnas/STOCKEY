@@ -18,4 +18,6 @@ public interface InvestmentService {
     AccountDto getMyAccount(Long memberId);
 
     List<MyStockInfoDto> getMyStockInfo(Long memberId) throws Exception;
+
+    List<TraderRankDto> getTraderRank(Long num);
 }

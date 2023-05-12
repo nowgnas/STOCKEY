@@ -31,6 +31,7 @@ public class InvestmentServiceImpl implements InvestmentService{
     private final long DEFAULT_CREDIT = 10000000;
     private Map<Long, Long> stockPriceMap; // 데이터 캐싱
     public Map<Long, String> stockIdToNameMap; // 변하지 않는 주식 정보 캐싱
+    public List<TraderRankDto> traderRankDtoList; // 유저 랭킹 정보 캐싱 -> 주문 체결시마다 update
 
     private final StockOrderProducer stockOrderProducer;
     private final OrderRedisRepository orderRedisRepository;
@@ -44,6 +45,7 @@ public class InvestmentServiceImpl implements InvestmentService{
     @PostConstruct
     public void init() {
         stockIdToNameMap = makeStockIdToNameMap();
+        traderRankDtoList = updateUserRank();
     }
 
 
@@ -79,12 +81,75 @@ public class InvestmentServiceImpl implements InvestmentService{
     public void orderExecuteScheduler() throws Exception {
         // 실행할 메소드 내용 작성
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        // 오전 9시 ~ 오후 3시 사이, 2분일 때 실행
         if (now.getHour() >= 9 && now.getHour() <= 15 && now.getMinute() == 2) {
-            // 오전 9시 ~ 오후 3시 사이, 2분일 때 실행
-            // 실행할 코드 작성
+            // 주문 체결 실행
             orderExecute();
+            // 랭킹 업데이트
+            traderRankDtoList = updateUserRank();
         }
     }
+
+    private List<TraderRankDto> updateUserRank() {
+        List<TraderRankDto> traderRankDtos = new ArrayList<>();
+        // 전체 회원 가져오기
+        Map<Long, String> memberIdAndNicknameMap = getWholeMemberInfo();
+        // member id만 모으기
+        Set<Long> memberIds = memberIdAndNicknameMap.keySet();
+        for (Long memberId : memberIds) {
+            String nickname = memberIdAndNicknameMap.get(memberId);
+            // 회원의 자산 정보 가져오기
+            Long totalAssets = getMyAccount(memberId).getTotalAssets();
+            traderRankDtos.add(new TraderRankDto(nickname, totalAssets, null));
+        }
+        assignRanks(traderRankDtos);
+        return traderRankDtos;
+    }
+
+    private void assignRanks(List<TraderRankDto> traders) {
+        List<TraderRankDto> sortedTraders = traders.stream()
+                .sorted((o1, o2) -> o2.getTotalAsset().compareTo(o1.getTotalAsset()))
+                .toList();
+
+        long rank = 1;
+        long count = 1;
+        Long previousAsset = null;
+
+        for (TraderRankDto trader : sortedTraders) {
+            if (previousAsset != null && !trader.getTotalAsset().equals(previousAsset)) {
+                rank = count;
+            }
+
+            trader.setRanking(rank);
+            previousAsset = trader.getTotalAsset();
+            count++;
+        }
+    }
+
+    @Override
+    public List<TraderRankDto> getTraderRank(Long num) {
+        return getFirstNElements(traderRankDtoList, num);
+    }
+
+    private  <T> List<T> getFirstNElements(List<T> inputList, Long N) {
+        return inputList.stream()
+                .limit(N)
+                .toList();
+    }
+
+    private Map<Long, String> getWholeMemberInfo() {
+        // http 통신으로 가져오기
+        // 임시 구현
+        Map<Long, String> memberInfo = new HashMap<>();
+        memberInfo.put(1L, "jun");
+        memberInfo.put(2L, "kong");
+        memberInfo.put(3L, "gang2");
+        memberInfo.put(4L, "won2");
+        memberInfo.put(5L, "chol2");
+        memberInfo.put(6L, "gitfairy");
+        return memberInfo;
+    }
+
 
     @Override
     public Boolean checkOrderSubmit(Long memberId) {

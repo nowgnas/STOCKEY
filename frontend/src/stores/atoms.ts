@@ -1,4 +1,4 @@
-import { atom, selector, useRecoilState } from "recoil"
+import { atom, selector } from "recoil"
 
 // 닉네임 유효성 검사 State
 export const nicknameValidState = atom<boolean>({

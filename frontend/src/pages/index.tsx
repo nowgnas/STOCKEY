@@ -17,6 +17,7 @@ import App from "../App"
 import { createBrowserRouter } from "react-router-dom"
 import TradeMainPage from "./TradeMainPage"
 import TradeOrderPage from "./TradeOrderPage"
+import TradeRankingPage from "./TradeRankingPage"
 
 const router = createBrowserRouter([
   {
@@ -70,7 +71,7 @@ const router = createBrowserRouter([
           },
           {
             path: "ranking",
-            element: <h1>trade ranking</h1>,
+            element: <TradeRankingPage />,
           },
           {
             path: "my",

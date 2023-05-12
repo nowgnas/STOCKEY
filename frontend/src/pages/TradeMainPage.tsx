@@ -1,13 +1,17 @@
 import styled from "styled-components"
 import TradeShortcutList from "../components/TradeMainPage/TradeShortcutList"
 import TradeStepper from "../components/common/TradeStepper/TradeStepper"
+import TradeBanner from "../components/TradeMainPage/TradeBanner"
 
 const TradeMainPage = () => {
   return (
-    <Container>
-      <TradeStepper />
-      <TradeShortcutList />
-    </Container>
+    <>
+      <TradeBanner />
+      <Container>
+        <TradeStepper />
+        <TradeShortcutList />
+      </Container>
+    </>
   )
 }
 

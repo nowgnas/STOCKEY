@@ -112,6 +112,7 @@ const StockItemWrapper = styled(Grid)<{ opacity: string }>`
 const StockImage = styled.img`
   width: 80%;
   height: 100%;
+  border-radius: 16px;
 `
 
 const StockInfo = styled(Grid)``

@@ -1,8 +1,8 @@
 package kr.stockey.favoriteservice.exception.stock;
 
 
-import kr.stockey.newsservice.exception.BaseException;
-import kr.stockey.newsservice.exception.BaseExceptionType;
+import kr.stockey.favoriteservice.exception.BaseException;
+import kr.stockey.favoriteservice.exception.BaseExceptionType;
 
 public class StockException extends BaseException {
     private final BaseExceptionType exceptionType;

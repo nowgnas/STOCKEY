@@ -46,7 +46,7 @@ public class InvestmentController {
     /*
         내가 주문한 history 제공
      */
-    @GetMapping("/orders")
+    @GetMapping("/my/orders")
     public ResponseEntity<ResponseDto> getOrderHistory() throws Exception {
         List<OrderHistoryDto> ordersHistory = investmentService.getOrderHistory(getMemberId());
         return new ResponseEntity<>(new ResponseDto("주문 내역 제공 완료!", ordersHistory), HttpStatus.OK);
@@ -55,11 +55,13 @@ public class InvestmentController {
     /*
         내 계좌 정보 가져오기 (총자산, 주식, 예수금)
      */
-    @GetMapping("/asset")
+    @GetMapping("/my/asset")
     public ResponseEntity<ResponseDto> getMyAccount() throws Exception {
         AccountDto accountDto = investmentService.getMyAccount(getMemberId());
         return new ResponseEntity<>(new ResponseDto("내 계좌 정보 제공 완료!", accountDto), HttpStatus.OK);
     }
+
+
 
 
     /*

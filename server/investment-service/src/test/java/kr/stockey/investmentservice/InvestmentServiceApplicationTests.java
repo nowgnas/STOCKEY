@@ -253,4 +253,45 @@ class InvestmentServiceApplicationTests {
         }
     }
 
+    @Test
+    public void testCalculateSumOfValuations() {
+        // Create a sample list of MyStock objects
+        List<MyStock> myStocks = new ArrayList<>();
+        myStocks.add(new MyStock(1L, 10));
+        myStocks.add(new MyStock(2L, 5));
+        myStocks.add(new MyStock(3L, 8));
+
+        // Calculate the sum of valuations using lambda expression
+        double sum = myStocks.stream()
+                .mapToDouble(this::calcMyStockValuation)
+                .sum();
+
+        // Assert the expected sum of valuations
+        Assertions.assertEquals(230.0, sum);
+    }
+
+    private double calcMyStockValuation(MyStock myStock) {
+        double stockPrice = 10.0; // Replace with your desired stock price
+        double valuation = stockPrice * myStock.getCount();
+        return valuation;
+    }
+
+    private static class MyStock {
+        private Long stockId;
+        private int count;
+
+        public MyStock(Long stockId, int count) {
+            this.stockId = stockId;
+            this.count = count;
+        }
+
+        public Long getStockId() {
+            return stockId;
+        }
+
+        public int getCount() {
+            return count;
+        }
+    }
+
 }

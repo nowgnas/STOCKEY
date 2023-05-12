@@ -61,8 +61,14 @@ public class InvestmentController {
         return new ResponseEntity<>(new ResponseDto("내 계좌 정보 제공 완료!", accountDto), HttpStatus.OK);
     }
 
-
-
+    /*
+        내 보유 주식 정보 (목록, 평가액 비중, 수익률)
+     */
+    @GetMapping("/my/stock")
+    public ResponseEntity<ResponseDto> getMyStockInfo() throws Exception {
+        List<MyStockInfoDto> myStockInfoDtoList = investmentService.getMyStockInfo(getMemberId());
+        return new ResponseEntity<>(new ResponseDto("내 보유 주식 정보 제공 완료!", myStockInfoDtoList), HttpStatus.OK);
+    }
 
     /*
         http 헤더에서 member id 가져오는 메소드

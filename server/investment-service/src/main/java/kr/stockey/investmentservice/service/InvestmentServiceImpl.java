@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -149,6 +148,46 @@ public class InvestmentServiceImpl implements InvestmentService{
         // 총 자산 = 주식 평가금액 + 예수금
         totalAsset = curDeposit + curStockValuation;
         return new AccountDto(totalAsset, curStockValuation, curDeposit);
+    }
+
+    @Override
+    public List<MyStockInfoDto> getMyStockInfo(Long memberId) throws Exception {
+        List<MyStockInfoDto> resLst = new ArrayList<>();
+
+        // 1. 주식 목록
+        List<MyStock> myStocks = myStockRepository.findByMemberId(memberId);
+        if (myStocks.isEmpty()) {
+            throw new Exception("구매한 주식 목록 없음! (204)");
+        }
+
+        // 전체 주식 평가 금액
+        double totalSv = myStocks.stream()
+                .mapToDouble(this::calcMyStockValuation)
+                .sum();
+
+        for (MyStock myStock : myStocks) {
+            Long curStockId = myStock.getStockId();
+            // 2. 평가액 비중 = 해당 종목의 평가금액 / 전체 주식 평가금액
+            Long curSv = stockPriceMap.get(curStockId) * myStock.getCount(); // 해당 종목의 평가금액
+            Double curSvp = curSv / totalSv;
+
+            // 3. 수익률 = (현재가 - 매입 평균단가) / 매입 평균단가
+            Double avgPrice = myStock.getAvgPrice(); // 매입 평균단가
+            Long curStockPrice = stockPriceMap.get(curStockId); // 현재가
+            Double curRrp = (curStockPrice - avgPrice) * 100 / avgPrice; // 수익률
+
+            // 현재 주식명
+            String curStockName = stockIdToNameMap.get(myStock.getStockId());
+            resLst.add(new MyStockInfoDto(curStockId, curStockName, curSvp, curRrp));
+        }
+        return resLst;
+    }
+
+    private double calcMyStockValuation(MyStock myStock) {
+        Long stockId = myStock.getStockId();
+        Long stockPrice = stockPriceMap.get(stockId);
+        double sv = stockPrice * myStock.getCount();
+        return sv;
     }
 
 

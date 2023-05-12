@@ -1,9 +1,6 @@
 package kr.stockey.investmentservice.service;
 
-import kr.stockey.investmentservice.dto.AccountDto;
-import kr.stockey.investmentservice.dto.ContractDto;
-import kr.stockey.investmentservice.dto.OrderHistoryDto;
-import kr.stockey.investmentservice.dto.OrderProducerDto;
+import kr.stockey.investmentservice.dto.*;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -20,5 +17,5 @@ public interface InvestmentService {
 
     AccountDto getMyAccount(Long memberId);
 
-
+    List<MyStockInfoDto> getMyStockInfo(Long memberId) throws Exception;
 }

@@ -5,7 +5,7 @@ WORKDIR /app
 # Copy the package.json and package-lock.json files to the working directory
 COPY frontend/package*.json ./
 # Install the dependencies
-RUN npm install
+RUN npm install --force
 # Copy the rest of the source code to the working directory
 COPY frontend/. .
 # Build the React app

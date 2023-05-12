@@ -8,6 +8,8 @@ import java.time.LocalDate;
 
 public interface NewsRelationRepository extends JpaRepository<NewsRelation, Long> {
 
+    
+    // TODO JOIN 구현
 //    @Query("SELECT nr.keyword.id as keywordId, COUNT(nr.keyword.id) as keywordCount, nr.keyword.name as keywordName " +
 //            "FROM NewsRelation nr " +
 //            "JOIN nr.news n " +

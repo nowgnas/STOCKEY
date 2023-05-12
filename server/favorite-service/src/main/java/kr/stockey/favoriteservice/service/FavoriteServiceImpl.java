@@ -63,6 +63,36 @@ public class FavoriteServiceImpl implements FavoriteService {
         favoriteRepository.delete(favorite);
     }
 
+    @Override
+    @Transactional
+    public void createFavoriteIndustry(Long industryId, Long memberId) {
+        Favorite favorite = Favorite.builder()
+                .memberId(memberId)
+                .industryId(industryId)
+                .build();
+        favoriteRepository.save(favorite);
+    }
+
+    @Override
+    @Transactional
+    public void createFavoriteStock(Long stockId, Long memberId) {
+        Favorite favorite = Favorite.builder()
+                .memberId(memberId)
+                .stockId(stockId)
+                .build();
+        favoriteRepository.save(favorite);
+    }
+
+    @Override
+    @Transactional
+    public void createFavoriteKeyword(Long keywordId, Long memberId) {
+        Favorite favorite = Favorite.builder()
+                .memberId(memberId)
+                .keywordId(keywordId)
+                .build();
+        favoriteRepository.save(favorite);
+    }
+
     // List Favorite => FavoriteDto
     private List<FavoriteDto> getFavoriteDto(List<Favorite> favoriteStock) {
         List<FavoriteDto> returnDto = new ArrayList<>();

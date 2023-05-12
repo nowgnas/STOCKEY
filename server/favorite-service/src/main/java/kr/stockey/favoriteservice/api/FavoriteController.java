@@ -20,46 +20,67 @@ public class FavoriteController {
     private final FavoriteService favoriteService;
 
 
-    @GetMapping("/my/industry")
+    @GetMapping("/industry/my")
     public ResponseEntity<ResponseDto> getMyFavoriteIndustry() {
         Long memberId = getMemberId();
         List<FavoriteDto> favoriteDtoList = favoriteService.findByIndustry(memberId);
         return new ResponseEntity<>(new ResponseDto("OK", favoriteDtoList), HttpStatus.OK);
     }
 
-    @GetMapping("/my/stock")
+    @GetMapping("/stock/my")
     public ResponseEntity<ResponseDto> getMyFavoriteStock() {
         Long memberId = getMemberId();
         List<FavoriteDto> favoriteDtoList = favoriteService.findByStock(memberId);
         return new ResponseEntity<>(new ResponseDto("OK", favoriteDtoList), HttpStatus.OK);
     }
 
-    @GetMapping("/my/keyword")
+    @GetMapping("/keyword/my")
     public ResponseEntity<ResponseDto> getMyFavoriteKeyword() {
         Long memberId = getMemberId();
         List<FavoriteDto> favoriteDtoList = favoriteService.findByKeyword(memberId);
         return new ResponseEntity<>(new ResponseDto("OK", favoriteDtoList), HttpStatus.OK);
     }
 
-    @GetMapping("check/industry/{industryId}")
+    @GetMapping("industry/check/{industryId}")
     public ResponseEntity<ResponseDto> checkFavoriteIndustry(@PathVariable Long industryId) {
         Long memberId = getMemberId();
         boolean result = favoriteService.existsByMemberAndIndustry(industryId, memberId);
         return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
     }
 
-    @GetMapping("check/stock/{stockId}")
+    @GetMapping("stock/check/{stockId}")
     public ResponseEntity<ResponseDto> checkFavoriteStock(@PathVariable Long stockId) {
         Long memberId = getMemberId();
         boolean result = favoriteService.existsByMemberAndStock(stockId, memberId);
         return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
     }
 
-    @GetMapping("check/keyword/{keywordId}")
+    @GetMapping("keyword/check/{keywordId}")
     public ResponseEntity<ResponseDto> checkFavoriteKeyword(@PathVariable Long keywordId) {
         Long memberId = getMemberId();
         boolean result = favoriteService.existsByMemberAndKeyword(keywordId, memberId);
         return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
+    }
+
+    @PostMapping("industry/{keywordId}")
+    public ResponseEntity<ResponseDto> createFavoriteIndustry(@PathVariable Long keywordId) {
+        Long memberId = getMemberId();
+        favoriteService.createFavoriteIndustry(keywordId, memberId);
+        return new ResponseEntity<>(new ResponseDto("CREATED", null), HttpStatus.CREATED);
+    }
+
+    @PostMapping("stock/{stockId}")
+    public ResponseEntity<ResponseDto> createFavoriteStock(@PathVariable Long stockId) {
+        Long memberId = getMemberId();
+        favoriteService.createFavoriteStock(stockId, memberId);
+        return new ResponseEntity<>(new ResponseDto("CREATED", null), HttpStatus.CREATED);
+    }
+
+    @PostMapping("keyword/{keywordId}")
+    public ResponseEntity<ResponseDto> createFavoriteKeyword(@PathVariable Long keywordId) {
+        Long memberId = getMemberId();
+        favoriteService.createFavoriteKeyword(keywordId, memberId);
+        return new ResponseEntity<>(new ResponseDto("CREATED", null), HttpStatus.CREATED);
     }
 
 

@@ -14,6 +14,13 @@ public interface FavoriteService {
     boolean existsByMemberAndStock(Long stockId,Long memberId);
     boolean existsByMemberAndKeyword(Long keywordId,Long memberId);
 
+    void createFavoriteIndustry(Long industryId,Long memberId);
+    void createFavoriteStock(Long stockId,Long memberId);
+    void createFavoriteKeyword(Long keywordId,Long memberId);
+
+
+
+
     void delete(Long favoriteId, Long memberId);
 
 

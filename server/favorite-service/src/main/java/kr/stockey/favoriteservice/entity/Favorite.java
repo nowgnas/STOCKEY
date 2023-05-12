@@ -1,8 +1,10 @@
 package kr.stockey.favoriteservice.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -31,5 +33,15 @@ public class Favorite {
 
     @Column(name = "keyword_id", nullable = true)
     private Long keywordId;
+
+    @Builder
+    public Favorite(Long memberId,Long industryId,Long stockId,Long keywordId){
+        Assert.notNull(memberId, "memberId must not be null");
+
+        this.memberId = memberId;
+        this.stockId = stockId;
+        this.keywordId = keywordId;
+        this.industryId = industryId;
+    }
 
 }

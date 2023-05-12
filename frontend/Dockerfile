@@ -22,15 +22,19 @@ RUN apk update && \
 # Copy the Nginx configuration file to the appropriate location
 COPY frontend/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
+# Copy the existing Nginx configuration files to the appropriate location
+COPY /etc/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY /etc/nginx/conf.d/custom.conf /etc/nginx/conf.d/custom.conf
+
 # Copy the built React app to the Nginx HTML directory
 COPY --from=build /app/build /usr/share/nginx/html
+
+# Copy existing Let's Encrypt SSL certificates to the appropriate location
+COPY --from=0 /etc/letsencrypt /etc/letsencrypt
 
 # Expose ports 80 (HTTP) and 443 (HTTPS)
 EXPOSE 80
 EXPOSE 443
-
-# Run Certbot to install the certificate during the container build
-RUN certbot install --cert-name stockey.kr
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]

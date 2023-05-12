@@ -55,4 +55,4 @@ spring:
           predicates:
             - Path=/lab/**
           filters:
-            - RewritePath=/lab/(?<segment>.*), /$\{segment}
+            - RewritePath=/lab/?(?<segment>.*), /$\{segment}

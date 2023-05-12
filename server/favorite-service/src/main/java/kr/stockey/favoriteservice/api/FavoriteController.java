@@ -62,10 +62,10 @@ public class FavoriteController {
         return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
     }
 
-    @PostMapping("industry/{keywordId}")
-    public ResponseEntity<ResponseDto> createFavoriteIndustry(@PathVariable Long keywordId) {
+    @PostMapping("industry/{industryId}")
+    public ResponseEntity<ResponseDto> createFavoriteIndustry(@PathVariable Long industryId) {
         Long memberId = getMemberId();
-        favoriteService.createFavoriteIndustry(keywordId, memberId);
+        favoriteService.createFavoriteIndustry(industryId, memberId);
         return new ResponseEntity<>(new ResponseDto("CREATED", null), HttpStatus.CREATED);
     }
 

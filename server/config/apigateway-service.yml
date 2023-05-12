@@ -1,4 +1,3 @@
-
 spring:
   rabbitmq:
     host: localhost
@@ -18,8 +17,6 @@ spring:
             preLogger: true
             postLogger: true
 
-
-
       routes:
         # auth
         - id: member-service
@@ -35,8 +32,6 @@ spring:
             - Path=/auth/nickname
           filters:
             - AuthorizationHeaderFilter
-
-
 
         - id: member-service
           uri: lb://member-service
@@ -57,7 +52,6 @@ spring:
           filters:
             - AuthorizationHeaderFilter
 
-  
         - id: member-service
           uri: lb://member-service
           predicates:
@@ -89,14 +83,11 @@ spring:
           predicates:
             - Path=/lab/**
           filters:
-            - RewritePath=/lab/(?<segment>.*), /$\{segment}
-
-
-
+            - RewritePath=/order/?(?<segment>.*), /$\{segment}
 
 jwt:
   # base64? ???? ?? ?, HS512? ??? ??? ???, 512??(64???) ??? ??? ???. ?? ????
-  secretKey: '{cipher}10d6a9ef3db134316645ec176d42327e9055a5b380dcbe81a2662924b154fcb38774a7be9ac48ff17d91d512a297b79dbf5f39f0e7dd318c2a23b442fefb6202f798c269c52c21e85ab9a3a1d9854014'
+  secretKey: "{cipher}10d6a9ef3db134316645ec176d42327e9055a5b380dcbe81a2662924b154fcb38774a7be9ac48ff17d91d512a297b79dbf5f39f0e7dd318c2a23b442fefb6202f798c269c52c21e85ab9a3a1d9854014"
   access:
     expiration: 100
   refresh:

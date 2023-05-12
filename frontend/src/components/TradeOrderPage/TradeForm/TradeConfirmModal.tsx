@@ -24,17 +24,18 @@ const TradeConfirmModal = ({
         <BodyText>
           주문을 제출하고 나면 거래가 완료될 때까지 더 이상 수정할 수 없어요!
         </BodyText>
-        <ComponentWrapper>
-          <MainText color="var(--custom-pink-1)">살래요</MainText>
-          <SubText color="var(--custom-pink-1)">({buyList.length}종목)</SubText>
-        </ComponentWrapper>
-        <TradeConfirmModalList status="MYBUY" list={buyList} />
 
         <ComponentWrapper>
           <MainText color="var(--custom-blue)">팔래요</MainText>
           <SubText color="var(--custom-blue)">({sellList.length}종목)</SubText>
         </ComponentWrapper>
         <TradeConfirmModalList status="MYSELL" list={sellList} />
+
+        <ComponentWrapper>
+          <MainText color="var(--custom-pink-1)">살래요</MainText>
+          <SubText color="var(--custom-pink-1)">({buyList.length}종목)</SubText>
+        </ComponentWrapper>
+        <TradeConfirmModalList status="MYBUY" list={buyList} />
 
         <ButtonWrapper>
           {/* API 통신시 제출 */}

@@ -35,26 +35,18 @@ const TradeForm = () => {
   const confirmModalHandler = (status: boolean) => {
     setConfirmModalOpen(status)
   }
+  // localStorage 데이터 불러오기
+  const getList = (status: string) => {
+    const list = localStorage.getItem(status)
+      ? JSON.parse(localStorage.getItem(status)!)
+      : []
+    if (list && dayjs().isAfter(list.expiry)) localStorage.removeItem(status)
+    return list
+  }
 
   useEffect(() => {
-    // 팔기 리스트 초기화
-    const sell = localStorage.getItem("sellList")
-      ? JSON.parse(localStorage.getItem("sellList")!)
-      : ""
-    if (sell && dayjs().isAfter(sell.expiry)) {
-      localStorage.removeItem("sellList")
-    } else {
-      if (sell) setSellList(sell.value)
-    }
-    // 사기 리스트 초기화
-    const buy = localStorage.getItem("buyList")
-      ? JSON.parse(localStorage.getItem("buyList")!)
-      : ""
-    if (sell && dayjs().isAfter(sell.expiry)) {
-      localStorage.removeItem("buyList")
-    } else {
-      if (buy) setBuyList(buy.value)
-    }
+    setSellList(getList("sellList"))
+    setSellList(getList("buyList"))
   }, [])
 
   // modal에 줄 데이터들

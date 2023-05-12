@@ -48,13 +48,9 @@ const TradeBasketList = ({
   // '?' hover
   const [isHover, setIsHover] = useState(false)
 
-  const [{ getItem, getItemType }, dropRef] = useDrop(
+  const [, dropRef] = useDrop(
     () => ({
       accept: status === "팔래요" ? ["SELL"] : ["BUY", "SELL"],
-      collect: (monitor) => ({
-        getItem: monitor.getItem(),
-        getItemType: monitor.getItemType(),
-      }),
       drop: (item, monitor) => {
         if (monitor.canDrop()) {
           const itemInfo = item as {

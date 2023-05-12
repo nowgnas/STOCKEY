@@ -3,18 +3,16 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   selectedLabStockState,
   selectedLabKeywordListState,
-  stockAccordionOpenState,
-  keywordAccordionOpenState,
+  resultBoardSizeState,
   resultBoardOpenState
 } from "../../stores/LaboratoryAtoms";
-
+import { triggerScroll } from "../common/Functions/triggerScroll";
 import styled from "styled-components";
 
 const OpenBtn = () => {
   const selectedStock = useRecoilValue(selectedLabStockState);
   const selectedKeywodrState = useRecoilValue(selectedLabKeywordListState);
-  const setStockAccordionOpen = useSetRecoilState(stockAccordionOpenState);
-  const setKeywordAccordionOpen = useSetRecoilState(keywordAccordionOpenState);
+  const setResultBoardSize = useSetRecoilState(resultBoardSizeState);
   const setResultBoardOpen = useSetRecoilState(resultBoardOpenState);
   const active = !!(selectedStock && selectedKeywodrState.length > 0);
 
@@ -22,8 +20,8 @@ const OpenBtn = () => {
     // result data 받아오는 query 보내기
     // loading 중에는 spinner loading 끝나면 openstate 변경
     // 임시로 settimeout
-    setStockAccordionOpen(false);
-    setKeywordAccordionOpen(false);
+    setResultBoardSize("big");
+    triggerScroll("resultBoardRef");
     setTimeout(() => {
       setResultBoardOpen(true);
     }, 500)

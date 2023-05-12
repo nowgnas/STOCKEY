@@ -1,4 +1,4 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { resultBoardOpenState, resultBoardSizeState } from '../../stores/LaboratoryAtoms';
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 import styled from "styled-components";
@@ -6,13 +6,16 @@ import { styled as emotionStyled } from "@mui/material/styles";
 
 const ZoomBtn = () => {
   const openState = useRecoilValue(resultBoardOpenState);
-  const size = useRecoilValue(resultBoardSizeState);
-  const setSizeBig = useSetRecoilState(resultBoardSizeState);
+  const [resultBoardSize, setResultBoardSize] = useRecoilState(resultBoardSizeState);
+
+  const clickHandler = () => {
+    setResultBoardSize("big");
+  }
 
   return (
     <BtnWrapper>
-      {openState && size === "small" && (
-        <IconWrapper onClick={() => setSizeBig("big")}/>
+      {openState && resultBoardSize === "small" && (
+        <IconWrapper onClick={clickHandler}/>
       )}
     </BtnWrapper>
   )

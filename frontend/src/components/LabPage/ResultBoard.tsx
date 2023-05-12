@@ -8,7 +8,7 @@ const ResultBoard = () => {
   const openState = useRecoilValue(resultBoardOpenState);
 
   return (
-    <BoardWrapper>
+    <BoardWrapper id="resultBoardRef">
       <ResultBoardOpen />
       {!openState && (
         <LockWrapper>

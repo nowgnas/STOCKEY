@@ -29,5 +29,8 @@ COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
 EXPOSE 443
 
-# Obtain SSL certificates using Certbot and start Nginx
-CMD certbot --nginx -n --agree-tos --email swlee0376@gmail.com --domains stockey.kr && nginx -g 'daemon off;'
+# Run Certbot to install the certificate during the container build
+RUN certbot install --cert-name stockey.kr
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]

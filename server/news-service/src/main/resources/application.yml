@@ -1,1 +1,11 @@
+server:
+  port: 0
 
+
+
+# springdoc swagger
+springdoc:
+  api-docs:
+    path: /docs # ?? path ??
+  swagger-ui:
+    path: /swagger-ui # ?? path ??

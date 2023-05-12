@@ -2,18 +2,22 @@ import styled from "styled-components"
 import TradeGuideList from "./TradeGuide/TradeGuideList"
 import dayjs from "dayjs"
 import TradeForm from "./TradeForm/TradeForm"
+import { useRecoilValue } from "recoil"
+import { currentTimeState } from "../../stores/TradeAtoms"
+import PopTradeList from "./PopTradeList"
 interface SpeechBubbleProps {
   hour: number
 }
 
 const TradeBoard = () => {
-  const hour = Number(dayjs().format("H"))
+  const hour = Number(useRecoilValue(currentTimeState).format("H"))
   // const hour = 10
   return (
     <>
       <Container>
         {hour > 7 && hour < 15 && <SpeechBubble hour={hour} />}
         <TradeGuideList />
+        <PopTradeList />
         <TradeForm />
       </Container>
     </>

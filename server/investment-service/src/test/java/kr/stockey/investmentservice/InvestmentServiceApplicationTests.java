@@ -2,7 +2,10 @@ package kr.stockey.investmentservice;
 
 import kr.stockey.investmentservice.dto.OrderListDto;
 import kr.stockey.investmentservice.dto.OrderProducerDto;
+import kr.stockey.investmentservice.entity.Contract;
+import kr.stockey.investmentservice.entity.Stock;
 import kr.stockey.investmentservice.enums.ContractType;
+import kr.stockey.investmentservice.enums.InvCategory;
 import kr.stockey.investmentservice.mapper.InvestmentDtoMapper;
 import kr.stockey.investmentservice.redis.Order;
 import kr.stockey.investmentservice.redis.OrderRedisRepository;
@@ -18,8 +21,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.*;
 
 
 @SpringBootTest
@@ -154,6 +159,98 @@ class InvestmentServiceApplicationTests {
         }
 
         return filteredOrderList;
+    }
+
+    @Test
+    void testStocksToMap() {
+        Stock stock1 = new Stock(1L, "Stock A");
+        Stock stock2 = new Stock(2L, "Stock B");
+        Stock stock3 = new Stock(3L, "Stock C");
+
+        List<Stock> stocks = Arrays.asList(stock1, stock2, stock3);
+
+        Map<Long, String> stockIdToNameMap = stocks.stream()
+                .collect(Collectors.toMap(Stock::getId, Stock::getName));
+
+        // Perform assertions
+        Assertions.assertEquals(3, stockIdToNameMap.size());
+        Assertions.assertEquals("Stock A", stockIdToNameMap.get(1L));
+        Assertions.assertEquals("Stock B", stockIdToNameMap.get(2L));
+        Assertions.assertEquals("Stock C", stockIdToNameMap.get(3L));
+    }
+
+    static class Stock {
+        private Long id;
+        private String name;
+
+        public Stock(Long id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+
+    @Test
+    public void testOrderHistoryDtoListModification() {
+        // Create a sample orderHistoryDtoList
+        List<OrderHistoryDto> orderHistoryDtoList = new ArrayList<>();
+        orderHistoryDtoList.add(new OrderHistoryDto(1L, "Order 1", null));
+        orderHistoryDtoList.add(new OrderHistoryDto(2L, "Order 2", null));
+        orderHistoryDtoList.add(new OrderHistoryDto(3L, "Order 3", null));
+
+        // Create a sample stockIdToNameMap
+        Map<Long, String> stockIdToNameMap = new HashMap<>();
+        stockIdToNameMap.put(1L, "Stock 1");
+        stockIdToNameMap.put(2L, "Stock 2");
+        stockIdToNameMap.put(3L, "Stock 3");
+
+        // Update the stockName field in the OrderHistoryDto objects
+        for (OrderHistoryDto orderHistoryDto : orderHistoryDtoList) {
+            String stockName = stockIdToNameMap.get(orderHistoryDto.getStockId());
+            orderHistoryDto.setStockName(stockName);
+        }
+
+        // Assert the modified stockName field in the OrderHistoryDto objects
+        Assertions.assertEquals("Stock 1", orderHistoryDtoList.get(0).getStockName());
+        Assertions.assertEquals("Stock 2", orderHistoryDtoList.get(1).getStockName());
+        Assertions.assertEquals("Stock 3", orderHistoryDtoList.get(2).getStockName());
+    }
+
+    // Sample class for OrderHistoryDto
+    private static class OrderHistoryDto {
+        private Long stockId;
+        private String orderName;
+        private String stockName;
+
+        public OrderHistoryDto(Long stockId, String orderName, String stockName) {
+            this.stockId = stockId;
+            this.orderName = orderName;
+            this.stockName = stockName;
+        }
+
+        public Long getStockId() {
+            return stockId;
+        }
+
+        public String getOrderName() {
+            return orderName;
+        }
+
+        public String getStockName() {
+            return stockName;
+        }
+
+        public void setStockName(String stockName) {
+            this.stockName = stockName;
+        }
     }
 
 }

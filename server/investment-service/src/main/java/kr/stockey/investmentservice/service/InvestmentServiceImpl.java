@@ -1,33 +1,26 @@
 package kr.stockey.investmentservice.service;
 
-import kr.stockey.investmentservice.dto.AccountDto;
-import kr.stockey.investmentservice.dto.ContractDto;
-import kr.stockey.investmentservice.dto.OrderListDto;
-import kr.stockey.investmentservice.dto.OrderProducerDto;
-import kr.stockey.investmentservice.entity.Contract;
-import kr.stockey.investmentservice.entity.DailyStock;
-import kr.stockey.investmentservice.entity.Deposit;
-import kr.stockey.investmentservice.entity.MyStock;
+import kr.stockey.investmentservice.dto.*;
+import kr.stockey.investmentservice.entity.*;
 import kr.stockey.investmentservice.enums.ContractType;
 import kr.stockey.investmentservice.enums.InvCategory;
 import kr.stockey.investmentservice.kafka.producer.StockOrderProducer;
 import kr.stockey.investmentservice.mapper.InvestmentMapper;
 import kr.stockey.investmentservice.redis.Order;
 import kr.stockey.investmentservice.redis.OrderRedisRepository;
-import kr.stockey.investmentservice.repository.ContractRepository;
-import kr.stockey.investmentservice.repository.DailyStockRepository;
-import kr.stockey.investmentservice.repository.DepositRepository;
-import kr.stockey.investmentservice.repository.MyStockRepository;
+import kr.stockey.investmentservice.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -38,6 +31,7 @@ public class InvestmentServiceImpl implements InvestmentService{
 
     private final long DEFAULT_CREDIT = 10000000;
     private Map<Long, Long> stockPriceMap; // 데이터 캐싱
+    public Map<Long, String> stockIdToNameMap; // 변하지 않는 주식 정보 캐싱
 
     private final StockOrderProducer stockOrderProducer;
     private final OrderRedisRepository orderRedisRepository;
@@ -45,7 +39,13 @@ public class InvestmentServiceImpl implements InvestmentService{
     private final MyStockRepository myStockRepository;
     private final ContractRepository contractRepository;
     private final DailyStockRepository dailyStockRepository;
+    private final StockRepository stockRepository;
     private final InvestmentMapper investmentMapper;
+
+    @PostConstruct
+    public void init() {
+        stockIdToNameMap = makeStockIdToNameMap();
+    }
 
 
     /**
@@ -97,11 +97,27 @@ public class InvestmentServiceImpl implements InvestmentService{
     }
 
     @Override
-    public List<ContractDto> getOrderHistory(Long memberId) {
+    public List<OrderHistoryDto> getOrderHistory(Long memberId) {
         List<Contract> orderHistory = contractRepository.findByMemberId(memberId).stream()
                 .filter(contract -> contract.getCategory() == InvCategory.ORDER)
                 .toList();
-        return investmentMapper.toContractDtoList(orderHistory);
+
+        List<OrderHistoryDto> orderHistoryDtoList = investmentMapper.toOrderHistoryDtoList(orderHistory);
+
+        for (OrderHistoryDto orderHistoryDto : orderHistoryDtoList) {
+            String stockName = stockIdToNameMap.get(orderHistoryDto.getStockId());
+            orderHistoryDto.setStockName(stockName);
+        }
+        return orderHistoryDtoList;
+    }
+
+    private Map<Long, String> makeStockIdToNameMap() {
+        List<Stock> stocks = stockRepository.findAll();
+        Map<Long, String> idNameMap = new HashMap<>();
+        for (Stock stock : stocks) {
+            idNameMap.put(stock.getId(), stock.getName());
+        }
+        return idNameMap;
     }
 
     @Override

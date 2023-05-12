@@ -2,6 +2,7 @@ package kr.stockey.investmentservice.service;
 
 import kr.stockey.investmentservice.dto.AccountDto;
 import kr.stockey.investmentservice.dto.ContractDto;
+import kr.stockey.investmentservice.dto.OrderHistoryDto;
 import kr.stockey.investmentservice.dto.OrderProducerDto;
 
 import java.util.List;
@@ -15,7 +16,9 @@ public interface InvestmentService {
 
     Boolean checkOrderSubmit(Long memberId);
 
-    List<ContractDto> getOrderHistory(Long memberId);
+    List<OrderHistoryDto> getOrderHistory(Long memberId);
 
     AccountDto getMyAccount(Long memberId);
+
+
 }

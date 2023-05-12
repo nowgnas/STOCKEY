@@ -48,14 +48,14 @@ public class InvestmentController {
      */
     @GetMapping("/orders")
     public ResponseEntity<ResponseDto> getOrderHistory() throws Exception {
-        List<ContractDto> ordersHistory = investmentService.getOrderHistory(getMemberId());
+        List<OrderHistoryDto> ordersHistory = investmentService.getOrderHistory(getMemberId());
         return new ResponseEntity<>(new ResponseDto("주문 내역 제공 완료!", ordersHistory), HttpStatus.OK);
     }
 
     /*
         내 계좌 정보 가져오기 (총자산, 주식, 예수금)
      */
-    @GetMapping
+    @GetMapping("/asset")
     public ResponseEntity<ResponseDto> getMyAccount() throws Exception {
         AccountDto accountDto = investmentService.getMyAccount(getMemberId());
         return new ResponseEntity<>(new ResponseDto("내 계좌 정보 제공 완료!", accountDto), HttpStatus.OK);
@@ -75,4 +75,6 @@ public class InvestmentController {
         }
         return Long.valueOf(userId);
     }
+
+
 }

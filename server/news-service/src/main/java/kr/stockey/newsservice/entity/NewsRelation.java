@@ -1,9 +1,5 @@
 package kr.stockey.newsservice.entity;
 
-import com.ssafy.backend.domain.industry.entity.Industry;
-import com.ssafy.backend.domain.keyword.entity.Keyword;
-import com.ssafy.backend.domain.news.entity.News;
-import com.ssafy.backend.domain.stock.entity.Stock;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -23,17 +19,15 @@ public class NewsRelation {
     @JoinColumn(name = "news_id", nullable = false)
     private News news;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "keyword_id")
-    private Keyword keyword;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stock_id")
-    private Stock stock;
+    @Column(name = "keyword_id")
+    private Long keywordId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "industry_id")
-    private Industry industry;
+    @Column(name = "stock_id")
+    private Long stockId;
+
+    @Column(name = "industry_id")
+    private Long industryId;
 
     @Size(max = 45)
     @Column(name = "news_type", length = 45)

@@ -4,7 +4,6 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.time.Instant;
 import java.time.LocalDate;
 
 @Getter

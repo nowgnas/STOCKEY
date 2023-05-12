@@ -40,6 +40,8 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
     // Swagger(OpenAPI)
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+    // HttpServlet추가
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
 }
 
 dependencyManagement {

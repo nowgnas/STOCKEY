@@ -90,14 +90,14 @@ const SliderSection = styled.div`
 `;
 
 const KeywordWrapper = styled.div`
-  width: 28%;
+  width: 30%;
   word-break: break-all;
   font-size: 1.5rem;
   font-weight: bold;
 `;
 
 const SlideBarSection = styled.div`
-  width: 70%;
+  width: 65%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -152,7 +152,7 @@ type sliderProps = {
 const PrettoSlider = emotionStyled(Slider)<sliderProps>(({ colorPalette }) => ({
   color: colorPalette.color,
   height: 8,
-  width: "80%",
+  width: "70%",
   cursor: "default",
   "& .MuiSlider-track": {
     border: "none",

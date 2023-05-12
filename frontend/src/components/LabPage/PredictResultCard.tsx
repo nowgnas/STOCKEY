@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react';
 import { useRecoilValue } from "recoil";
-import { resultBoardSizeState } from "../../stores/LaboratoryAtoms";
-import { selectedSliderList } from "../../stores/LaboratoryAtoms";
+import { selectedSliderList,  resultBoardSizeState } from "../../stores/LaboratoryAtoms";
 
 import ResultStock from "./ResultStock";
 import PredictKeywordCard from "./PredictKeywordCard";
@@ -9,30 +7,18 @@ import styled from "styled-components";
 
 const PredictResultCard = () => {
   const resultBoardSize = useRecoilValue(resultBoardSizeState);
-  const [resultCardState, setResultCardState] = useState(resultBoardSize);
-
-  useEffect(() => {
-    // small -> big size 조정
-    if (resultCardState === "small" && resultBoardSize === "big") {
-      setTimeout(() => {
-        setResultCardState(resultBoardSize);
-      }, 700)
-    } else {
-      setResultCardState(resultBoardSize);
-    }
-  }, [resultBoardSize])
 
   // 사용자 입력값
   const sliderList = useRecoilValue(selectedSliderList);
 
   return (
-    <ResultCardSection size={resultCardState}>
+    <ResultCardSection size={resultBoardSize}>
       <HeaderWrapper>
         예상 주가
-        <ResultStock sliderList={sliderList} resultCardState={resultCardState}/>
+        <ResultStock sliderList={sliderList} resultCardState={resultBoardSize}/>
       </HeaderWrapper>
 
-      {resultCardState === "big" && (
+      {resultBoardSize === "big" && (
         <>
           <InfoWrapper>오늘보다</InfoWrapper>
 
@@ -54,8 +40,8 @@ const PredictResultCard = () => {
 export default PredictResultCard;
 
 const ResultCardSection = styled.div<{ size: "big" | "small" }>`
-  width: ${(props) => (props.size === "big" ? "600px" : "180px")};
-  height: ${(props) => (props.size === "small" ? "180px" : undefined)};
+  width: ${(props) => (props.size === "big" ? "50%" : "170px")};
+  height: ${(props) => (props.size === "small" ? "170px" : undefined)};
   border: 4px solid #ffffff;
   border-radius: 36px;
   position: relative;
@@ -89,12 +75,12 @@ const CardWrapper = styled.div`
 `;
 
 const IconWrapper = styled.div`
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
 
   position: absolute;
   bottom: 0;
-  right: 36px;
+  right: 24px;
 `;
 
 const IconImg = styled.img`

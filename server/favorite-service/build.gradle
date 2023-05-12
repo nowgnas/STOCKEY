@@ -34,11 +34,14 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
 
     runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
     //mapstruct
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
     // Swagger(OpenAPI)
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+    // HttpServlet추가
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
 }
 
 dependencyManagement {

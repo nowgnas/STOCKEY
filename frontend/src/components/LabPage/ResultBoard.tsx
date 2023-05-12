@@ -8,7 +8,7 @@ const ResultBoard = () => {
   const openState = useRecoilValue(resultBoardOpenState);
 
   return (
-    <BoardWrapper>
+    <BoardWrapper id="resultBoardRef">
       <ResultBoardOpen />
       {!openState && (
         <LockWrapper>
@@ -39,6 +39,7 @@ const LockWrapper = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 2;
 
   display: flex;
   justify-content: center;

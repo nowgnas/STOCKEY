@@ -3,7 +3,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: "{cipher}bfb54aca43be71a632a9f17aa26fe082f13de57cb267928bc19a45731cb40bfaa66c04627fe916f22d8fc308f820148937287c0780f8a7d830cd05cc02d5725043801f5a2a1974ceb40540980fe7ca1b"
+      defaultZone: "{cipher}71103a8b218e5a1ba76bbc2a548a7d9d90a05a708b66dc6ed58a4242cdebd5ad5cdd9042514c6ab53b8411fb87466855"
 spring:
   rabbitmq:
     host: rabbitmq

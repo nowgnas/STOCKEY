@@ -6,9 +6,7 @@ import kr.stockey.favoriteservice.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -42,6 +40,37 @@ public class FavoriteController {
         List<FavoriteDto> favoriteDtoList = favoriteService.findByKeyword(memberId);
         return new ResponseEntity<>(new ResponseDto("OK", favoriteDtoList), HttpStatus.OK);
     }
+
+    @GetMapping("check/industry/{industryId}")
+    public ResponseEntity<ResponseDto> checkFavoriteIndustry(@PathVariable Long industryId) {
+        Long memberId = getMemberId();
+        boolean result = favoriteService.existsByMemberAndIndustry(industryId, memberId);
+        return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
+    }
+
+    @GetMapping("check/stock/{stockId}")
+    public ResponseEntity<ResponseDto> checkFavoriteStock(@PathVariable Long stockId) {
+        Long memberId = getMemberId();
+        boolean result = favoriteService.existsByMemberAndStock(stockId, memberId);
+        return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
+    }
+
+    @GetMapping("check/keyword/{keywordId}")
+    public ResponseEntity<ResponseDto> checkFavoriteKeyword(@PathVariable Long keywordId) {
+        Long memberId = getMemberId();
+        boolean result = favoriteService.existsByMemberAndKeyword(keywordId, memberId);
+        return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/{favoriteId}")
+    public ResponseEntity<Void> deleteFavorite(@PathVariable Long favoriteId) {
+        Long memberId = getMemberId();
+        favoriteService.delete(favoriteId, memberId);
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
 
 
     private Long getMemberId() {

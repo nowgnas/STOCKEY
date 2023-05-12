@@ -1,10 +1,4 @@
 spring:
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-
   application:
     name: apigateway-service
 
@@ -83,7 +77,7 @@ spring:
           predicates:
             - Path=/lab/**
           filters:
-            - RewritePath=/order/?(?<segment>.*), /$\{segment}
+            - RewritePath=/lab/?(?<segment>.*), /$\{segment}
 
 jwt:
   # base64? ???? ?? ?, HS512? ??? ??? ???, 512??(64???) ??? ??? ???. ?? ????

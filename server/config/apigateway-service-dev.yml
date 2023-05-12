@@ -1,7 +1,4 @@
 spring:
-  application:
-    name: apigateway-service
-
   cloud:
     gateway:
       default-filters:

@@ -15,3 +15,11 @@ spring:
     username: "{cipher}76c9b5f2064e0e895669abd41552ad978511295a1043a32a28f8b0ca738e1911"
     password: "{cipher}9fe075646d24f48ad8ab793019960cf47340050169d522344f24cc1b6d3ad68c"
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+        show_sql: false

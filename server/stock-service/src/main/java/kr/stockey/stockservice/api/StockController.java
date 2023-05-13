@@ -234,9 +234,9 @@ public class StockController {
             }
     )
     @GetMapping("/client/industry/{industryId}")
-    public ResponseEntity<ResponseDto> getByIndustryId(@PathVariable Long industryId){
+    public ResponseEntity<List<StockDto>> getByIndustryId(@PathVariable Long industryId){
         List<StockDto> stockList = stockService.getByIndustryId(industryId);
-        return new ResponseEntity<>(new ResponseDto("OK", stockList), HttpStatus.OK);
+        return new ResponseEntity<>(stockList, HttpStatus.OK);
     }
 
     @Operation(summary = "시가총액 기준 N개 종목", description = "시가총액 기준으로 N개 종목을 출력")
@@ -246,9 +246,9 @@ public class StockController {
             }
     )
     @GetMapping("/client")
-    public ResponseEntity<ResponseDto> getNStock(@RequestParam int page,@RequestParam int size){
+    public ResponseEntity<List<StockDto>> getNStock(@RequestParam int page,@RequestParam int size){
         List<StockDto> stockTop5 = stockService.getNStock(page, size);
-        return new ResponseEntity<>(new ResponseDto("OK", stockTop5), HttpStatus.OK);
+        return new ResponseEntity<>(stockTop5, HttpStatus.OK);
     }
 
     @Operation(summary = "산업별 종목들 시가총액 기준 N개 종목", description = "시가총액 기준으로 N개 종목을 출력")
@@ -258,9 +258,9 @@ public class StockController {
             }
     )
     @GetMapping("/client/marketcap-by-industry/{industryId}")
-    public ResponseEntity<ResponseDto> industry(@PathVariable Long industryId,@RequestParam int page,@RequestParam int size){
+    public ResponseEntity<List<StockDto>> industry(@PathVariable Long industryId,@RequestParam int page,@RequestParam int size){
         List<StockDto> stockTopN = stockService.getNStock(industryId, page, size);
-        return new ResponseEntity<>(new ResponseDto("OK", stockTopN), HttpStatus.OK);
+        return new ResponseEntity<>(stockTopN, HttpStatus.OK);
     }
 
 
@@ -272,9 +272,9 @@ public class StockController {
             }
     )
     @GetMapping("/client/marketcap-by-date/industry/{industryId}")
-    public ResponseEntity<ResponseDto> getMarketList(@PathVariable Long industryId){
+    public ResponseEntity<List<IndustrySumDto>> getMarketList(@PathVariable Long industryId){
         List<IndustrySumDto> marketList = stockService.getMarketList(industryId);
-        return new ResponseEntity<>(new ResponseDto("OK", marketList), HttpStatus.OK);
+        return new ResponseEntity<>(marketList, HttpStatus.OK);
     }
 
 

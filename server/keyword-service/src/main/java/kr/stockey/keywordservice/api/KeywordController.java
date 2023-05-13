@@ -124,19 +124,21 @@ public class KeywordController {
         return new ResponseEntity<>(new ResponseDto("DELETED", null), HttpStatus.OK);
     }
 
-    @Operation(summary = "TopN 키워드 리턴", description = "economy, industry, stock 가각에 대해 특정 기간의 TopN 키워드 리턴")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공")
-            }
-    )
-    @GetMapping("/topN")
-    public ResponseEntity<ResponseDto> getTopNKeyword(@Valid @ModelAttribute GetTopNKeywordRequest getTopNKeywordRequest) {
-        Long totalNewsCount = keywordService.getTargetNewsCount(getTopNKeywordRequest);
-        List<TopKeywordDTO> topKeywordDTO = keywordService.getTopNKeyword(getTopNKeywordRequest);
-        GetTopNKeywordResponse getTopNKeywordResponse = new GetTopNKeywordResponse(totalNewsCount, topKeywordDTO);
-        return new ResponseEntity<>(new ResponseDto("OK", getTopNKeywordResponse), HttpStatus.OK);
-    }
+
+    // TODO topNKeyword
+//    @Operation(summary = "TopN 키워드 리턴", description = "economy, industry, stock 가각에 대해 특정 기간의 TopN 키워드 리턴")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "200", description = "요청 성공")
+//            }
+//    )
+//    @GetMapping("/topN")
+//    public ResponseEntity<ResponseDto> getTopNKeyword(@Valid @ModelAttribute GetTopNKeywordRequest getTopNKeywordRequest) {
+//        Long totalNewsCount = keywordService.getTargetNewsCount(getTopNKeywordRequest);
+//        List<TopKeywordDTO> topKeywordDTO = keywordService.getTopNKeyword(getTopNKeywordRequest);
+//        GetTopNKeywordResponse getTopNKeywordResponse = new GetTopNKeywordResponse(totalNewsCount, topKeywordDTO);
+//        return new ResponseEntity<>(new ResponseDto("OK", getTopNKeywordResponse), HttpStatus.OK);
+//    }
 
 
     @Operation(summary = "keyphrase 제공", description = "특정 기간의 클러스터링 keyphrase을 제공합니다.")

@@ -2,12 +2,14 @@ package kr.stockey.keywordservice.service;
 
 import kr.stockey.keywordservice.api.request.GetKeyphraseRequest;
 import kr.stockey.keywordservice.api.request.GetTopNKeywordRequest;
+import kr.stockey.keywordservice.api.request.NewsCountRequest;
 import kr.stockey.keywordservice.client.FavoriteClient;
+import kr.stockey.keywordservice.client.NewsClient;
 import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
 import kr.stockey.keywordservice.dto.KeywordStatisticDto;
-import kr.stockey.keywordservice.dto.TopKeywordDTO;
 import kr.stockey.keywordservice.dto.core.FavoriteDto;
 import kr.stockey.keywordservice.dto.core.KeywordDto;
+import kr.stockey.keywordservice.dto.core.ResponseDto;
 import kr.stockey.keywordservice.entity.Keyword;
 import kr.stockey.keywordservice.exception.favorite.FavoriteException;
 import kr.stockey.keywordservice.exception.favorite.FavoriteExceptionType;
@@ -17,10 +19,9 @@ import kr.stockey.keywordservice.mapper.KeywordMapper;
 import kr.stockey.keywordservice.repository.KeywordRepository;
 import kr.stockey.keywordservice.repository.KeywordStatisticRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -50,8 +51,7 @@ public class KeywordServiceImpl implements KeywordService{
     private final KeywordRepository keywordRepository;
     private final KeywordStatisticRepository keywordStatisticRepository;
     private final FavoriteClient favoriteClient;
-    private final MemberService memberService;
-    private final NewsRelationRepository newsRelationRepository;
+    private final NewsClient newsClient;
 
 
 
@@ -117,54 +117,37 @@ public class KeywordServiceImpl implements KeywordService{
 
     @Override
     public Long getTargetNewsCount(GetTopNKeywordRequest getTopNKeywordRequest) {
-        String newsType = getTopNKeywordRequest.getNewsType();
-        Long domainId = getTopNKeywordRequest.getId();
-        LocalDate startDate = getTopNKeywordRequest.getStartDate();
-        LocalDate endDate = getTopNKeywordRequest.getEndDate();
-
-        Long totalNewsCount = 0L;
-
-        switch (newsType) {
-            case "ECONOMY":
-                totalNewsCount = newsRelationRepository.getTotalNewsCountForEconomy(startDate, endDate);
-                break;
-            case "INDUSTRY":
-                totalNewsCount = newsRelationRepository.getTotalNewsCountForIndustry(startDate, endDate, domainId);
-                break;
-            case "STOCK":
-                totalNewsCount = newsRelationRepository.getTotalNewsCountForStock(startDate, endDate, domainId);
-                break;
-            default:
-                break;
-        }
-        return totalNewsCount;
+        NewsCountRequest request = new ModelMapper().map(getTopNKeywordRequest, NewsCountRequest.class);
+        ResponseDto responseDto= newsClient.getNewsCountByDomain(request);
+        return (Long) responseDto.getData();
     }
 
-    @Override
-    public List<TopKeywordDTO> getTopNKeyword(GetTopNKeywordRequest getTopNKeywordRequest) {
-        Pageable topN = PageRequest.of(0, getTopNKeywordRequest.getTopN());
-        String newsType = getTopNKeywordRequest.getNewsType();
-        Long domainId = getTopNKeywordRequest.getId();
-        LocalDate startDate = getTopNKeywordRequest.getStartDate();
-        LocalDate endDate = getTopNKeywordRequest.getEndDate();
-
-        List<TopKeywordDTO> topKeywords = new ArrayList<>();
-
-        switch (newsType) {
-            case "ECONOMY":
-                topKeywords = newsRelationRepository.getTopNKeywordsForEconomy(startDate, endDate, topN);
-                break;
-            case "INDUSTRY":
-                topKeywords = newsRelationRepository.getTopNKeywordsForIndustry(startDate, endDate, topN, domainId);
-                break;
-            case "STOCK":
-                topKeywords = newsRelationRepository.getTopNKeywordsForStock(startDate, endDate, topN, domainId);
-                break;
-            default:
-                break;
-        }
-        return topKeywords;
-    }
+    // TODO TopNKeyword
+//    @Override
+//    public List<TopKeywordDTO> getTopNKeyword(GetTopNKeywordRequest getTopNKeywordRequest) {
+//        Pageable topN = PageRequest.of(0, getTopNKeywordRequest.getTopN());
+//        String newsType = getTopNKeywordRequest.getNewsType();
+//        Long domainId = getTopNKeywordRequest.getId();
+//        LocalDate startDate = getTopNKeywordRequest.getStartDate();
+//        LocalDate endDate = getTopNKeywordRequest.getEndDate();
+//
+//        List<TopKeywordDTO> topKeywords = new ArrayList<>();
+//
+//        switch (newsType) {
+//            case "ECONOMY":
+//                topKeywords = newsRelationRepository.getTopNKeywordsForEconomy(startDate, endDate, topN);
+//                break;
+//            case "INDUSTRY":
+//                topKeywords = newsRelationRepository.getTopNKeywordsForIndustry(startDate, endDate, topN, domainId);
+//                break;
+//            case "STOCK":
+//                topKeywords = newsRelationRepository.getTopNKeywordsForStock(startDate, endDate, topN, domainId);
+//                break;
+//            default:
+//                break;
+//        }
+//        return topKeywords;
+//    }
 
     @Override
     public List<GetKeyPhraseResponse.Message> getKeyphrase(Long keywordId, GetKeyphraseRequest getKeyphraseRequest) {

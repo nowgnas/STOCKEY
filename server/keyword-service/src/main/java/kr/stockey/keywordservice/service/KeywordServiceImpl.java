@@ -27,11 +27,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -40,7 +37,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class KeywordServiceImpl implements KeywordService{
+public class KeywordServiceImpl implements KeywordService {
     @Value("${django.url}")
     private String djangoUrl;
     @Value("${django.port}")
@@ -52,8 +49,6 @@ public class KeywordServiceImpl implements KeywordService{
     private final KeywordStatisticRepository keywordStatisticRepository;
     private final FavoriteClient favoriteClient;
     private final NewsClient newsClient;
-
-
 
 
     @Override
@@ -71,11 +66,11 @@ public class KeywordServiceImpl implements KeywordService{
     @Override
     public List<KeywordDto> getMyKeywords() {
         // 내 관심 키워드들
-        List<FavoriteDto> myFavoriteKeyword = (List<FavoriteDto>)favoriteClient.getMyFavoriteKeyword().getData();
+        List<FavoriteDto> myFavoriteKeyword = (List<FavoriteDto>) favoriteClient.getMyFavoriteKeyword().getData();
         List<KeywordDto> keywordDtoList = new ArrayList<>();
 
         // 관심 키워드 ID -> 키워드 entity => dto
-        myFavoriteKeyword.forEach(v ->{
+        myFavoriteKeyword.forEach(v -> {
             Long keywordId = v.getKeywordId();
             Keyword keyword = keywordRepository.findById(keywordId).orElseThrow(
                     () -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
@@ -105,7 +100,7 @@ public class KeywordServiceImpl implements KeywordService{
 
     @Override
     public void deleteFavorite(Long id) {
-        Keyword keyword = keywordRepository.findById(id).orElseThrow(()
+        keywordRepository.findById(id).orElseThrow(()
                 -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
         boolean isFavorite = checkFavorite(id);
         // 관심 등록하지 않았다면
@@ -118,7 +113,7 @@ public class KeywordServiceImpl implements KeywordService{
     @Override
     public Long getTargetNewsCount(GetTopNKeywordRequest getTopNKeywordRequest) {
         NewsCountRequest request = new ModelMapper().map(getTopNKeywordRequest, NewsCountRequest.class);
-        ResponseDto responseDto= newsClient.getNewsCountByDomain(request);
+        ResponseDto responseDto = newsClient.getNewsCountByDomain(request);
         return (Long) responseDto.getData();
     }
 
@@ -154,24 +149,25 @@ public class KeywordServiceImpl implements KeywordService{
 
         LocalDate startDate = getKeyphraseRequest.getStartDate();
         LocalDate endDate = getKeyphraseRequest.getEndDate();
-        Long id =  getKeyphraseRequest.getId();
+        Long id = getKeyphraseRequest.getId();
         String newsType = getKeyphraseRequest.getNewsType();
         // LocalDate => String 형식으로 변환
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd"); 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
         String startDateString = startDate.format(formatter);
         String endDateString = endDate.format(formatter);
 
         // SpringBoot -> DjangoServer 데이터 요청
         RestTemplate restTemplate = new RestTemplate();
-        String url = djangoUrl+":"+djangoPort+"/keywords/{keywordId}/keyphrase?";
+        String url = djangoUrl + ":" + djangoPort + "/keywords/{keywordId}/keyphrase?";
         String queryUrl = UriComponentsBuilder.fromUriString(url)
                 .queryParam("type", newsType)
                 .queryParam("id", id)
                 .queryParam("start_date", startDateString)
-                .queryParam("end_date",endDateString)
+                .queryParam("end_date", endDateString)
                 .buildAndExpand(keywordId)
                 .toUriString();
-        ResponseEntity<GetKeyPhraseResponse> response = restTemplate.exchange(queryUrl, HttpMethod.GET, null, new ParameterizedTypeReference<GetKeyPhraseResponse>() {});
+        ResponseEntity<GetKeyPhraseResponse> response = restTemplate.exchange(queryUrl, HttpMethod.GET, null, new ParameterizedTypeReference<GetKeyPhraseResponse>() {
+        });
         GetKeyPhraseResponse Returns = response.getBody();
         return Returns.getMessages();
     }
@@ -182,19 +178,7 @@ public class KeywordServiceImpl implements KeywordService{
         return keywordMapper.toDto(keywordList);
     }
 
-    // 유저가 동일한지 체크
-    private static void checkUser(Long memberId, Long favoriteId) {
-        if (memberId != favoriteId) {
-            throw new FavoriteException(FavoriteExceptionType.DIFFERENT_USER);
-        }
-    }
 
-    // 유저 memberId 가져오기
-    private Long getMemberId() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String stringId = request.getHeader("X-UserId");
-        return Long.parseLong(stringId);
-    }
 
 
 }

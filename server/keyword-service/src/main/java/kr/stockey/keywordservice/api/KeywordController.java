@@ -1,26 +1,25 @@
 package kr.stockey.keywordservice.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import kr.stockey.keywordservice.api.request.GetKeyphraseRequest;
 import kr.stockey.keywordservice.api.request.GetTopNKeywordRequest;
 import kr.stockey.keywordservice.api.response.GetTopNKeywordResponse;
 import kr.stockey.keywordservice.api.response.KeywordDetailResponse;
 import kr.stockey.keywordservice.api.response.KeywordSearchResponse;
-import kr.stockey.keywordservice.dto.*;
+import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
+import kr.stockey.keywordservice.dto.KeywordStatisticDto;
+import kr.stockey.keywordservice.dto.TopKeywordDTO;
 import kr.stockey.keywordservice.dto.core.KeywordDto;
 import kr.stockey.keywordservice.dto.core.ResponseDto;
 import kr.stockey.keywordservice.mapper.KeywordDtoMapper;
 import kr.stockey.keywordservice.service.KeywordService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -64,7 +63,6 @@ public class KeywordController {
 
 
     // 내 관심키워드 리스트
-    // TODO
     @Operation(summary = "관심 키워드 리스트", description = "내 관심 키워드 리스트를 출력합니다.")
     @ApiResponses(
             value = {
@@ -81,7 +79,6 @@ public class KeywordController {
     }
 
     // 관심 키워드 체크
-    // TODO 유저 인증
     @Operation(summary = "관심 키워드 체크", description = "관심 키워드 체크")
     @ApiResponses(
             value = {
@@ -96,7 +93,6 @@ public class KeywordController {
     }
 
     // 관심 키워드 등록
-    // TODO 유저 인증
     @Operation(summary = "관심 키워드 등록", description = "관심 키워드를 등록합니다.")
     @ApiResponses(
             value = {
@@ -113,7 +109,6 @@ public class KeywordController {
     }
 
     // 관심 산업 삭제
-    // TODO 유저 인증
     @Operation(summary = "관심 키워드 삭제", description = "관심 키워드를 삭제합니다.")
     @ApiResponses(
             value = {
@@ -173,11 +168,7 @@ public class KeywordController {
         return new ResponseEntity<>(new ResponseDto("OK",keywordSearchResponses),HttpStatus.OK);
     }
 
-    private Long getMemberId() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String stringId = request.getHeader("X-UserId");
-        return Long.parseLong(stringId);
-    }
+
 
 
 }

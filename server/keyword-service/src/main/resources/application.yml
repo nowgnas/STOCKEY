@@ -11,3 +11,9 @@ springdoc:
     path: /docs # ?? path ??
   swagger-ui:
     path: /swagger-ui # ?? path ??
+
+
+django:
+  url: localhost
+  port: 8000
+

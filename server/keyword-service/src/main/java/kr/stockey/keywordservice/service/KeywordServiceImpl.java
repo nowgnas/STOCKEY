@@ -2,10 +2,12 @@ package kr.stockey.keywordservice.service;
 
 import kr.stockey.keywordservice.api.request.GetKeyphraseRequest;
 import kr.stockey.keywordservice.api.request.GetTopNKeywordRequest;
+import kr.stockey.keywordservice.client.FavoriteClient;
 import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
-import kr.stockey.keywordservice.dto.core.KeywordDto;
 import kr.stockey.keywordservice.dto.KeywordStatisticDto;
 import kr.stockey.keywordservice.dto.TopKeywordDTO;
+import kr.stockey.keywordservice.dto.core.FavoriteDto;
+import kr.stockey.keywordservice.dto.core.KeywordDto;
 import kr.stockey.keywordservice.entity.Keyword;
 import kr.stockey.keywordservice.exception.favorite.FavoriteException;
 import kr.stockey.keywordservice.exception.favorite.FavoriteExceptionType;
@@ -47,7 +49,7 @@ public class KeywordServiceImpl implements KeywordService{
     private final KeywordMapper keywordMapper;
     private final KeywordRepository keywordRepository;
     private final KeywordStatisticRepository keywordStatisticRepository;
-    private final FavoriteRepository favoriteRepository;
+    private final FavoriteClient favoriteClient;
     private final MemberService memberService;
     private final NewsRelationRepository newsRelationRepository;
 
@@ -68,8 +70,19 @@ public class KeywordServiceImpl implements KeywordService{
 
     @Override
     public List<KeywordDto> getMyKeywords() {
-        List<Keyword> keywords = favoriteRepository.findKeywordsByMember(memberService.getMemberEntity());
-        return keywordMapper.toDto(keywords);
+        // 내 관심 키워드들
+        List<FavoriteDto> myFavoriteKeyword = (List<FavoriteDto>)favoriteClient.getMyFavoriteKeyword().getData();
+        List<KeywordDto> keywordDtoList = new ArrayList<>();
+
+        // 관심 키워드 ID -> 키워드 entity => dto
+        myFavoriteKeyword.forEach(v ->{
+            Long keywordId = v.getKeywordId();
+            Keyword keyword = keywordRepository.findById(keywordId).orElseThrow(
+                    () -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
+            KeywordDto keywordDto = keywordMapper.toDto(keyword);
+            keywordDtoList.add(keywordDto);
+        });
+        return keywordDtoList;
     }
 
     @Override

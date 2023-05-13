@@ -1,8 +1,8 @@
 package kr.stockey.industryservice.service;
 
-import com.ssafy.backend.domain.industry.api.response.GetIndustryMarketCapResponse;
-import com.ssafy.backend.domain.industry.api.response.IndustryCapitalDto;
-import com.ssafy.backend.domain.industry.dto.IndustryDto;
+import kr.stockey.industryservice.api.response.GetIndustryMarketCapResponse;
+import kr.stockey.industryservice.api.response.IndustryCapitalDto;
+import kr.stockey.industryservice.dto.core.IndustryDto;
 import com.ssafy.backend.domain.member.entity.Member;
 import com.ssafy.backend.domain.stock.api.response.GetStockTodayResponse;
 import com.ssafy.backend.domain.stock.dto.StockBriefDto;

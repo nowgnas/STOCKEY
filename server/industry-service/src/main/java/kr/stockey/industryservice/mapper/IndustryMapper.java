@@ -1,7 +1,7 @@
 package kr.stockey.industryservice.mapper;
 
-import com.ssafy.backend.domain.industry.dto.IndustryDto;
-import com.ssafy.backend.domain.industry.entity.Industry;
+import kr.stockey.industryservice.dto.core.IndustryDto;
+import kr.stockey.industryservice.entity.Industry;
 import org.mapstruct.Mapper;
 
 import java.util.List;

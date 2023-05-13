@@ -1,17 +1,12 @@
 package kr.stockey.industryservice.api;
 
-import com.ssafy.backend.domain.industry.api.response.GetIndustryMarketCapResponse;
-import com.ssafy.backend.domain.industry.api.response.GetIndustryResponse;
-import com.ssafy.backend.domain.industry.api.response.IndustryCapitalDto;
-import com.ssafy.backend.domain.industry.dto.IndustryDto;
-import com.ssafy.backend.domain.industry.mapper.IndustryDtoMapper;
-import com.ssafy.backend.domain.industry.service.IndustryService;
-import com.ssafy.backend.domain.member.entity.Member;
-import com.ssafy.backend.domain.member.service.MemberService;
-import com.ssafy.backend.domain.stock.api.response.GetStockTodayResponse;
-import com.ssafy.backend.domain.stock.dto.StockBriefDto;
-import com.ssafy.backend.global.annotation.Auth;
-import com.ssafy.backend.global.dto.ResponseDto;
+import kr.stockey.industryservice.api.response.GetIndustryMarketCapResponse;
+import kr.stockey.industryservice.api.response.GetIndustryResponse;
+import kr.stockey.industryservice.api.response.IndustryCapitalDto;
+import kr.stockey.industryservice.dto.core.IndustryDto;
+import kr.stockey.industryservice.dto.core.ResponseDto;
+import kr.stockey.industryservice.mapper.IndustryDtoMapper;
+import kr.stockey.industryservice.service.IndustryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -116,7 +111,6 @@ public class IndustryController {
 
 
     // 내 관심산업 리스트
-    @Auth
     @Operation(summary = "관심 산업 리스트", description = "내 관심 산업 리스트를 출력합니다.")
     @ApiResponses(
             value = {
@@ -133,7 +127,6 @@ public class IndustryController {
     }
 
     // 관심 여부 확인
-    @Auth
     @Operation(summary = "산업 관심 여부 체크", description = "해당 산업이 관심등록 했는지 체크합니다.")
     @ApiResponses(
             value = {
@@ -150,7 +143,6 @@ public class IndustryController {
     }
 
     // 관심 산업 등록
-    @Auth
     @Operation(summary = "관심 산업 등록", description = "관심 산업을 등록합니다.")
     @ApiResponses(
             value = {
@@ -167,7 +159,6 @@ public class IndustryController {
     }
 
     // 관심 산업 삭제
-    @Auth
     @Operation(summary = "관심 산업 삭제", description = "관심 산업을 삭제합니다.")
     @ApiResponses(
             value = {

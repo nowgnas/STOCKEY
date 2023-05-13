@@ -1,11 +1,11 @@
 package kr.stockey.industryservice.mapper;
 
-import com.ssafy.backend.domain.industry.api.response.GetIndustryMarketCapResponse;
-import com.ssafy.backend.domain.industry.api.response.GetIndustryResponse;
-import com.ssafy.backend.domain.industry.api.response.IndustryCapitalDto;
-import com.ssafy.backend.domain.industry.dto.IndustryDto;
-import com.ssafy.backend.domain.industry.dto.IndustryEpochSumDto;
-import com.ssafy.backend.domain.industry.entity.Industry;
+import kr.stockey.industryservice.api.response.GetIndustryMarketCapResponse;
+import kr.stockey.industryservice.api.response.GetIndustryResponse;
+import kr.stockey.industryservice.api.response.IndustryCapitalDto;
+import kr.stockey.industryservice.dto.core.IndustryDto;
+import kr.stockey.industryservice.dto.IndustryEpochSumDto;
+import kr.stockey.industryservice.entity.Industry;
 import org.mapstruct.Mapper;
 
 import java.util.List;

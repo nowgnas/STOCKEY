@@ -1,4 +1,4 @@
-package kr.stockey.industryservice.dto;
+package kr.stockey.industryservice.dto.core;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

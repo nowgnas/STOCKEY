@@ -3,10 +3,12 @@ package kr.stockey.keywordservice.service;
 import kr.stockey.keywordservice.api.request.GetKeyphraseRequest;
 import kr.stockey.keywordservice.api.request.GetTopNKeywordRequest;
 import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
-import kr.stockey.keywordservice.dto.KeywordDto;
+import kr.stockey.keywordservice.dto.core.KeywordDto;
 import kr.stockey.keywordservice.dto.KeywordStatisticDto;
 import kr.stockey.keywordservice.dto.TopKeywordDTO;
 import kr.stockey.keywordservice.entity.Keyword;
+import kr.stockey.keywordservice.exception.favorite.FavoriteException;
+import kr.stockey.keywordservice.exception.favorite.FavoriteExceptionType;
 import kr.stockey.keywordservice.exception.keyword.KeywordException;
 import kr.stockey.keywordservice.exception.keyword.KeywordExceptionType;
 import kr.stockey.keywordservice.mapper.KeywordMapper;
@@ -22,8 +24,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -192,10 +197,17 @@ public class KeywordServiceImpl implements KeywordService{
     }
 
     // 유저가 동일한지 체크
-    private static void checkUser(Member member, Favorite favorite) {
-        if (favorite.getMember() != member) {
+    private static void checkUser(Long memberId, Long favoriteId) {
+        if (memberId != favoriteId) {
             throw new FavoriteException(FavoriteExceptionType.DIFFERENT_USER);
         }
+    }
+
+    // 유저 memberId 가져오기
+    private Long getMemberId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String stringId = request.getHeader("X-UserId");
+        return Long.parseLong(stringId);
     }
 
 

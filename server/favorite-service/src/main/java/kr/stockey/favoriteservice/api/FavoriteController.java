@@ -83,13 +83,24 @@ public class FavoriteController {
         return new ResponseEntity<>(new ResponseDto("CREATED", null), HttpStatus.CREATED);
     }
 
-
-    @DeleteMapping("/{favoriteId}")
-    public ResponseEntity<Void> deleteFavorite(@PathVariable Long favoriteId) {
+    @DeleteMapping("/keyword/{industryId}")
+    public ResponseEntity<Void> deleteFavoriteIndustry(@PathVariable Long industryId) {
         Long memberId = getMemberId();
-        favoriteService.delete(favoriteId, memberId);
+        favoriteService.deleteFavoriteIndustry(industryId, memberId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @DeleteMapping("/keyword/{stockId}")
+    public ResponseEntity<Void> deleteFavoriteStock(@PathVariable Long stockId) {
+        Long memberId = getMemberId();
+        favoriteService.deleteFavoriteStock(stockId, memberId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
+    @DeleteMapping("/keyword/{keywordId}")
+    public ResponseEntity<Void> deleteFavoriteKeyword(@PathVariable Long keywordId) {
+        Long memberId = getMemberId();
+        favoriteService.deleteFavoriteKeyword(keywordId, memberId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

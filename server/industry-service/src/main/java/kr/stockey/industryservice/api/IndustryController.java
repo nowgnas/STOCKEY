@@ -27,8 +27,6 @@ import java.util.List;
 @Tag(name = "산업 ", description = "산업 관련 API 입니다.")
 public class IndustryController {
     private final IndustryService industryService;
-
-    private final MemberService memberService;
     private final IndustryDtoMapper dtoMapper;
 
 
@@ -119,8 +117,7 @@ public class IndustryController {
     )
     @GetMapping("stocklist/my")
     public ResponseEntity<ResponseDto> getMyIndustries() {
-        Member member = memberService.getMemberEntity();
-        List<IndustryDto> myIndustries = industryService.getMyIndustries(member);
+        List<IndustryDto> myIndustries = industryService.getMyIndustries();
         List<GetIndustryResponse> getIndustryResponses = dtoMapper.toGetResponse(myIndustries);
         return new ResponseEntity<>(new ResponseDto("OK", getIndustryResponses), HttpStatus.OK);
 
@@ -137,8 +134,7 @@ public class IndustryController {
     )
     @GetMapping("stocklist/my/{id}")
     public ResponseEntity<ResponseDto> checkFavorite(@PathVariable Long id) {
-        Member member = memberService.getMemberEntity();
-        boolean result = industryService.checkFavorite(member, id);
+        boolean result = industryService.checkFavorite(id);
         return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
     }
 
@@ -153,8 +149,7 @@ public class IndustryController {
     )
     @PostMapping("stocklist/my/{id}")
     public ResponseEntity<ResponseDto> addFavorite(@PathVariable Long id) {
-        Member member = memberService.getMemberEntity();
-        industryService.addFavorite(member, id);
+        industryService.addFavorite(id);
         return new ResponseEntity<>(new ResponseDto("CREATED", null), HttpStatus.CREATED);
     }
 
@@ -169,8 +164,7 @@ public class IndustryController {
     )
     @DeleteMapping("stocklist/my/{id}")
     public ResponseEntity<ResponseDto> deleteFavorite(@PathVariable Long id) {
-        Member member = memberService.getMemberEntity();
-        industryService.deleteFavorite(member, id);
+        industryService.deleteFavorite(id);
         return new ResponseEntity<>(new ResponseDto("DELETED", null), HttpStatus.OK);
     }
 

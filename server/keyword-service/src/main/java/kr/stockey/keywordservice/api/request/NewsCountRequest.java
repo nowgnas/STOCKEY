@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -14,11 +13,7 @@ import java.time.LocalDate;
 @Schema(description = "특정 주제 뉴스의 Top N 빈도수에 해당하는 키워드를 뽑는 요청 파라미터")
 @Builder
 @Getter
-public class GetTopNKeywordRequest {
-    @Schema(description = "Top N개의 N",example = "6")
-    @NotNull(message = "topN은 null 일 수 없습니다.")
-    @Min(value = 1, message = "topN은 1 이상이어야 합니다.")
-    private final Integer topN;
+public class NewsCountRequest {
 
     @Schema(description = "뉴스 타입",example = "INDUSTRY, ECONOMY, STOCK")
     @NotNull(message = "뉴스 타입은 null 일 수 없습니다.")
@@ -38,4 +33,5 @@ public class GetTopNKeywordRequest {
     @NotNull(message = "종료 날짜는 null 일 수 없습니다.")
     @DateTimeFormat(pattern = "yyMMdd")
     private final LocalDate endDate;
+
 }

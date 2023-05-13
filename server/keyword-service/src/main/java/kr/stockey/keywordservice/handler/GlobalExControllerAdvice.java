@@ -28,6 +28,15 @@ public class GlobalExControllerAdvice {
         return collect;
     }
 
+    @ExceptionHandler
+    public ResponseEntity<ResponseDto> classCastEx(ClassCastException ex){
+        log.error("[ClassCastException] handler");
+        ResponseDto responseDTO = ResponseDto.builder()
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 
     @ExceptionHandler
     public ResponseEntity<ResponseDto> handleBaseEx(BaseException exception){

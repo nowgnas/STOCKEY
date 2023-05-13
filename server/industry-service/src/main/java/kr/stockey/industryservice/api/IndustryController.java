@@ -3,6 +3,8 @@ package kr.stockey.industryservice.api;
 import kr.stockey.industryservice.api.response.GetIndustryMarketCapResponse;
 import kr.stockey.industryservice.api.response.GetIndustryResponse;
 import kr.stockey.industryservice.api.response.IndustryCapitalDto;
+import kr.stockey.industryservice.dto.GetStockTodayResponse;
+import kr.stockey.industryservice.dto.StockBriefDto;
 import kr.stockey.industryservice.dto.core.IndustryDto;
 import kr.stockey.industryservice.dto.core.ResponseDto;
 import kr.stockey.industryservice.mapper.IndustryDtoMapper;

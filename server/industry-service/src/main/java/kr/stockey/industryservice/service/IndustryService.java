@@ -2,10 +2,9 @@ package kr.stockey.industryservice.service;
 
 import kr.stockey.industryservice.api.response.GetIndustryMarketCapResponse;
 import kr.stockey.industryservice.api.response.IndustryCapitalDto;
+import kr.stockey.industryservice.dto.GetStockTodayResponse;
+import kr.stockey.industryservice.dto.StockBriefDto;
 import kr.stockey.industryservice.dto.core.IndustryDto;
-import com.ssafy.backend.domain.member.entity.Member;
-import com.ssafy.backend.domain.stock.api.response.GetStockTodayResponse;
-import com.ssafy.backend.domain.stock.dto.StockBriefDto;
 
 import java.util.List;
 

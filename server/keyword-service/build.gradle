@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'kr.stockey'
-version = '0.0.1-SNAPSHOT'
+version = '1.0'
 sourceCompatibility = '11'
 
 configurations {
@@ -47,6 +47,8 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-circuitbreaker-resilience4j'
+    // HttpServlet추가
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
 
 }
 

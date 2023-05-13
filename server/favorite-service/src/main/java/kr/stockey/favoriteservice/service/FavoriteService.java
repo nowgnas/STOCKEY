@@ -19,9 +19,10 @@ public interface FavoriteService {
     void createFavoriteKeyword(Long keywordId,Long memberId);
 
 
+    void deleteFavoriteIndustry(Long industryId,Long memberId);
+    void deleteFavoriteStock(Long stockId,Long memberId);
+    void deleteFavoriteKeyword(Long keywordId,Long memberId);
 
-
-    void delete(Long favoriteId, Long memberId);
 
 
 

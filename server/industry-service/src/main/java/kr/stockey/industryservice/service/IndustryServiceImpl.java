@@ -1,32 +1,18 @@
 package kr.stockey.industryservice.service;
 
 
-import com.ssafy.backend.domain.favorites.entity.Favorite;
-import com.ssafy.backend.domain.favorites.repository.FavoriteRepository;
-import com.ssafy.backend.domain.favorites.service.FavoriteService;
 import kr.stockey.industryservice.api.response.GetIndustryMarketCapResponse;
 import kr.stockey.industryservice.api.response.IndustryCapitalDto;
-import kr.stockey.industryservice.dto.core.IndustryDto;
+import kr.stockey.industryservice.dto.GetStockTodayResponse;
 import kr.stockey.industryservice.dto.IndustryEpochSumDto;
+import kr.stockey.industryservice.dto.StockBriefDto;
+import kr.stockey.industryservice.dto.core.IndustryDto;
 import kr.stockey.industryservice.entity.Industry;
+import kr.stockey.industryservice.exception.industry.IndustryException;
+import kr.stockey.industryservice.exception.industry.IndustryExceptionType;
 import kr.stockey.industryservice.mapper.IndustryDtoMapper;
 import kr.stockey.industryservice.mapper.IndustryMapper;
 import kr.stockey.industryservice.repository.IndustryRepository;
-import com.ssafy.backend.domain.member.entity.Member;
-import com.ssafy.backend.domain.stock.api.response.GetStockTodayResponse;
-import com.ssafy.backend.domain.stock.dto.IndustrySumDto;
-import com.ssafy.backend.domain.stock.dto.StockBriefDto;
-import com.ssafy.backend.domain.stock.dto.StockTodayDto;
-import com.ssafy.backend.domain.stock.entity.DailyStock;
-import com.ssafy.backend.domain.stock.entity.Stock;
-import com.ssafy.backend.domain.stock.mapper.StockDtoMapper;
-import com.ssafy.backend.domain.stock.mapper.StockMapper;
-import com.ssafy.backend.domain.stock.repository.DailyStockRepository;
-import com.ssafy.backend.domain.stock.repository.StockRepository;
-import com.ssafy.backend.global.exception.favorite.FavoriteException;
-import com.ssafy.backend.global.exception.favorite.FavoriteExceptionType;
-import com.ssafy.backend.global.exception.industry.IndustryException;
-import com.ssafy.backend.global.exception.industry.IndustryExceptionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

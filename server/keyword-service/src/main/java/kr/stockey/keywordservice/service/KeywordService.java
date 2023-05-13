@@ -24,7 +24,7 @@ public interface KeywordService {
 
     Long getTargetNewsCount(GetTopNKeywordRequest getTopNKeywordRequest);
 
-    List<TopKeywordDTO> getTopNKeyword(GetTopNKeywordRequest getTopNKeywordRequest);
+//    List<TopKeywordDTO> getTopNKeyword(GetTopNKeywordRequest getTopNKeywordRequest);
 
     List<GetKeyPhraseResponse.Message> getKeyphrase(Long keywordId, GetKeyphraseRequest getKeyphraseRequest);
 

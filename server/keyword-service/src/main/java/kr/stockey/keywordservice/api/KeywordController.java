@@ -4,13 +4,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import kr.stockey.keywordservice.api.request.GetKeyphraseRequest;
-import kr.stockey.keywordservice.api.request.GetTopNKeywordRequest;
-import kr.stockey.keywordservice.api.response.GetTopNKeywordResponse;
 import kr.stockey.keywordservice.api.response.KeywordDetailResponse;
 import kr.stockey.keywordservice.api.response.KeywordSearchResponse;
 import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
 import kr.stockey.keywordservice.dto.KeywordStatisticDto;
-import kr.stockey.keywordservice.dto.TopKeywordDTO;
 import kr.stockey.keywordservice.dto.core.KeywordDto;
 import kr.stockey.keywordservice.dto.core.ResponseDto;
 import kr.stockey.keywordservice.mapper.KeywordDtoMapper;
@@ -71,7 +68,7 @@ public class KeywordController {
             }
     )
     @GetMapping("/keywordlist/my")
-    public ResponseEntity<ResponseDto> getMyKeywords(@RequestHeader String userId) {
+    public ResponseEntity<ResponseDto> getMyKeywords() {
         List<KeywordDto> myKeywords = keywordService.getMyKeywords();
         return new ResponseEntity<>(new ResponseDto("관심 키워드 출력!",
                 keywordDtoMapper.toKeywordResponse(myKeywords)), HttpStatus.OK);
@@ -87,7 +84,7 @@ public class KeywordController {
             }
     )
     @GetMapping("/keywordlist/my/{id}")
-    public ResponseEntity<ResponseDto> checkFavorite(@RequestHeader String userId,@PathVariable Long id) {
+    public ResponseEntity<ResponseDto> checkFavorite(@PathVariable Long id) {
         boolean result = keywordService.checkFavorite(id);
         return new ResponseEntity<>(new ResponseDto("관심 키워드 여부 체크!", result), HttpStatus.OK);
     }
@@ -103,7 +100,7 @@ public class KeywordController {
             }
     )
     @PostMapping("/keywordlist/my/{id}")
-    public ResponseEntity<ResponseDto> addFavorite(@RequestHeader String userId,@PathVariable Long id) {
+    public ResponseEntity<ResponseDto> addFavorite(@PathVariable Long id) {
         keywordService.addFavorite(id);
         return new ResponseEntity<>(new ResponseDto("관심 키워드 등록 성공!", null), HttpStatus.CREATED);
     }
@@ -119,7 +116,7 @@ public class KeywordController {
             }
     )
     @DeleteMapping("/keywordlist/my/{id}")
-    public ResponseEntity<ResponseDto> deleteFavorite(@RequestHeader String userId,@PathVariable Long id) {
+    public ResponseEntity<ResponseDto> deleteFavorite(@PathVariable Long id) {
         keywordService.deleteFavorite(id);
         return new ResponseEntity<>(new ResponseDto("DELETED", null), HttpStatus.OK);
     }
@@ -169,6 +166,16 @@ public class KeywordController {
         List<KeywordSearchResponse> keywordSearchResponses = keywordDtoMapper.toKeywordSearchResponse(searchKeyword);
         return new ResponseEntity<>(new ResponseDto("OK",keywordSearchResponses),HttpStatus.OK);
     }
+
+    /* --------------  다른 서비스에서 호출하는 메소드 [start] ----------------  */
+
+    @GetMapping("/client/{keywordId}")
+    public ResponseEntity<KeywordDto> getKeyword(@PathVariable Long keywordId) {
+        KeywordDto keywordDto = keywordService.getKeywordDetail(keywordId);
+        return new ResponseEntity<>(keywordDto, HttpStatus.OK);
+    }
+
+    /* --------------  다른 서비스에서 호출하는 메소드 [end]  ----------------  */
 
 
 

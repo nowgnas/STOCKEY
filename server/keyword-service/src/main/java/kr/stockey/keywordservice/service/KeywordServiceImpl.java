@@ -100,13 +100,7 @@ public class KeywordServiceImpl implements KeywordService{
         if (checkFavorite(keyword.getId())) {
             throw new FavoriteException(FavoriteExceptionType.ALREADY_EXIST);
         }
-
-        Member member = memberService.getMemberEntity();
-        Favorite favorite = Favorite.keywordBuilder()
-                .member(member)
-                .keyword(keyword)
-                .build();
-        favoriteRepository.save(favorite);
+        favoriteClient.createFavoriteKeyword(id);
     }
 
     @Override

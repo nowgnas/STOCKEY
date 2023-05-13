@@ -1,8 +1,8 @@
 package kr.stockey.industryservice.handler;
 
-import com.ssafy.backend.global.dto.ErrorResultDto;
-import com.ssafy.backend.global.dto.ResponseDto;
-import com.ssafy.backend.global.exception.BaseException;
+import kr.stockey.industryservice.dto.core.ErrorResultDto;
+import kr.stockey.industryservice.dto.core.ResponseDto;
+import kr.stockey.industryservice.exception.BaseException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

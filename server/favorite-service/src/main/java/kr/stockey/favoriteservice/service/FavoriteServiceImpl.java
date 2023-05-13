@@ -2,8 +2,6 @@ package kr.stockey.favoriteservice.service;
 
 import kr.stockey.favoriteservice.dto.core.FavoriteDto;
 import kr.stockey.favoriteservice.entity.Favorite;
-import kr.stockey.favoriteservice.exception.favorite.FavoriteException;
-import kr.stockey.favoriteservice.exception.favorite.FavoriteExceptionType;
 import kr.stockey.favoriteservice.repository.FavoriteRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -54,12 +52,25 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     @Transactional
-    public void delete(Long favoriteId, Long memberId) {
-        Favorite favorite = favoriteRepository.findById(favoriteId)
-                .orElseThrow(() -> new FavoriteException(FavoriteExceptionType.NOT_FOUND));
-        if(favorite.getMemberId() !=memberId){
-            throw new FavoriteException(FavoriteExceptionType.DIFFERENT_USER);
-        }
+    public void deleteFavoriteIndustry(Long industryId, Long memberId) {
+        Favorite favorite = favoriteRepository
+                .findByMemberIdAndIndustryId(memberId, industryId);
+        favoriteRepository.delete(favorite);
+    }
+
+    @Override
+    @Transactional
+    public void deleteFavoriteStock(Long stockId, Long memberId) {
+        Favorite favorite = favoriteRepository
+                .findByMemberIdAndStockId(memberId, stockId);
+        favoriteRepository.delete(favorite);
+    }
+
+    @Override
+    @Transactional
+    public void deleteFavoriteKeyword(Long keywordId, Long memberId) {
+        Favorite favorite = favoriteRepository
+                .findByMemberIdAndKeywordId(memberId, keywordId);
         favoriteRepository.delete(favorite);
     }
 

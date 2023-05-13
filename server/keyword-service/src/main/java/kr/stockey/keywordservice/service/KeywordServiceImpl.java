@@ -112,10 +112,7 @@ public class KeywordServiceImpl implements KeywordService{
         if (!isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.NOT_FOUND);
         }
-        Member member = memberService.getMemberEntity();
-        Favorite favorite = favoriteRepository.findByMemberAndKeyword(member, keyword);
-        checkUser(member, favorite);
-        favoriteRepository.delete(favorite);
+        favoriteClient.deleteFavorite(id);
     }
 
     @Override

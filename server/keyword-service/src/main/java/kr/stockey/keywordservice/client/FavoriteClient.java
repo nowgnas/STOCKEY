@@ -19,7 +19,7 @@ public interface FavoriteClient {
     @PostMapping("keyword/{keywordId}")
     ResponseDto createFavoriteKeyword(@PathVariable Long keywordId);
 
-    @DeleteMapping("/{favoriteId}")
-    Void deleteFavorite(@PathVariable Long favoriteId);
+    @DeleteMapping("/keyword/{keywordId}")
+    Void deleteFavorite(@PathVariable Long keywordId);
 
 }

@@ -124,7 +124,7 @@ public class StockController {
             }
     )
     @GetMapping("/my")
-    public ResponseEntity<ResponseDto> getMyIndustries(@RequestHeader String userId) {
+    public ResponseEntity<ResponseDto> getMyStock(@RequestHeader String userId) {
         MemberDto memberDto = getMember(userId);
         List<GetStockTodayResponse> myStocks = stockService.getMyStocks(memberDto);
         return new ResponseEntity<>(new ResponseDto("OK", myStocks), HttpStatus.OK);
@@ -212,6 +212,20 @@ public class StockController {
     }
 
 
+
+
+
+    private MemberDto getMember(String userId) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String memberId = request.getHeader("X-UserId");
+        ResponseDto responseDto = memberClient.getMember(memberId);
+        MemberDto memberDto = (MemberDto) responseDto.getData();
+        return memberDto;
+
+    }
+
+    /* --------------  다른 서비스에서 호출하는 메소드 [start] ----------------  */
+
     @Operation(summary = "산업별 종목", description = "산업별 종목을 출력합니다.")
     @ApiResponses(
             value = {
@@ -219,7 +233,7 @@ public class StockController {
                     @ApiResponse(responseCode = "404", description = "산업 없음"),
             }
     )
-    @GetMapping("/industry/{industryId}")
+    @GetMapping("/client/industry/{industryId}")
     public ResponseEntity<ResponseDto> getByIndustryId(@PathVariable Long industryId){
         List<StockDto> stockList = stockService.getByIndustryId(industryId);
         return new ResponseEntity<>(new ResponseDto("OK", stockList), HttpStatus.OK);
@@ -231,7 +245,7 @@ public class StockController {
                     @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
-    @GetMapping("/")
+    @GetMapping("/client")
     public ResponseEntity<ResponseDto> getNStock(@RequestParam int page,@RequestParam int size){
         List<StockDto> stockTop5 = stockService.getNStock(page, size);
         return new ResponseEntity<>(new ResponseDto("OK", stockTop5), HttpStatus.OK);
@@ -243,7 +257,7 @@ public class StockController {
                     @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
-    @GetMapping("/marketcap-by-industry/{industryId}")
+    @GetMapping("/client/marketcap-by-industry/{industryId}")
     public ResponseEntity<ResponseDto> industry(@PathVariable Long industryId,@RequestParam int page,@RequestParam int size){
         List<StockDto> stockTopN = stockService.getNStock(industryId, page, size);
         return new ResponseEntity<>(new ResponseDto("OK", stockTopN), HttpStatus.OK);
@@ -257,7 +271,7 @@ public class StockController {
                     @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
-    @GetMapping("/marketcap-by-date/industry/{industryId}")
+    @GetMapping("/client/marketcap-by-date/industry/{industryId}")
     public ResponseEntity<ResponseDto> getMarketList(@PathVariable Long industryId){
         List<IndustrySumDto> marketList = stockService.getMarketList(industryId);
         return new ResponseEntity<>(new ResponseDto("OK", marketList), HttpStatus.OK);
@@ -265,14 +279,16 @@ public class StockController {
 
 
 
-    private MemberDto getMember(String userId) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String memberId = request.getHeader("X-UserId");
-        ResponseDto responseDto = memberClient.getMember(memberId);
-        MemberDto memberDto = (MemberDto) responseDto.getData();
-        return memberDto;
-
+    @GetMapping("/client/industry/{industryId}")
+    public ResponseEntity<List<StockDto>> getByIndustryId_client(@PathVariable Long industryId){
+        List<StockDto> stockList = stockService.getByIndustryId(industryId);
+        return new ResponseEntity<>(stockList, HttpStatus.OK);
     }
+
+    /* --------------  다른 서비스에서 호출하는 메소드 [end]  ----------------  */
+
+
+
 
 
 }

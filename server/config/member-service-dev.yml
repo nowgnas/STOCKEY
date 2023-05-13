@@ -8,3 +8,5 @@ spring:
     port: 6379
     host: "redis-container"
     password: "{cipher}7df8e06c3f6c837dd827ad35a8e961e5295a22fed3a2ac061a95f450ff71b991"
+server:
+  port: 8081

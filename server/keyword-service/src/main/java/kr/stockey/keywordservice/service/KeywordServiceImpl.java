@@ -87,9 +87,8 @@ public class KeywordServiceImpl implements KeywordService{
 
     @Override
     public boolean checkFavorite(Long id) {
-        Keyword keyword = keywordRepository.findById(id).orElseThrow(()
-                -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
-        return favoriteRepository.existsByMemberAndKeyword(memberService.getMemberEntity(), keyword);
+        boolean result = (boolean) favoriteClient.checkFavoriteKeyword(id).getData();
+        return result;
     }
 
     @Override

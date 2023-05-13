@@ -1,4 +1,4 @@
-package kr.stockey.keywordservice.dto;
+package kr.stockey.keywordservice.dto.core;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package kr.stockey.keywordservice.mapper;
 
-import kr.stockey.keywordservice.dto.KeywordDto;
+import kr.stockey.keywordservice.dto.core.KeywordDto;
 import kr.stockey.keywordservice.entity.Keyword;
 import org.mapstruct.Mapper;
 

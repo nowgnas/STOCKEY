@@ -6,6 +6,7 @@ import kr.stockey.keywordservice.api.response.GetTopNKeywordResponse;
 import kr.stockey.keywordservice.api.response.KeywordDetailResponse;
 import kr.stockey.keywordservice.api.response.KeywordSearchResponse;
 import kr.stockey.keywordservice.dto.*;
+import kr.stockey.keywordservice.dto.core.KeywordDto;
 import kr.stockey.keywordservice.dto.core.ResponseDto;
 import kr.stockey.keywordservice.mapper.KeywordDtoMapper;
 import kr.stockey.keywordservice.service.KeywordService;
@@ -16,7 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -167,6 +171,12 @@ public class KeywordController {
         List<KeywordDto> searchKeyword = keywordService.getSearchKeyword(keyword);
         List<KeywordSearchResponse> keywordSearchResponses = keywordDtoMapper.toKeywordSearchResponse(searchKeyword);
         return new ResponseEntity<>(new ResponseDto("OK",keywordSearchResponses),HttpStatus.OK);
+    }
+
+    private Long getMemberId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String stringId = request.getHeader("X-UserId");
+        return Long.parseLong(stringId);
     }
 
 

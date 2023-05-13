@@ -19,36 +19,37 @@ import java.util.List;
 public class FavoriteController {
     private final FavoriteService favoriteService;
 
+    /* --------------  다른 서비스에서 호출하는 메소드 [start] ----------------  */
 
-    @GetMapping("/industry/my")
+    @GetMapping("/client/industry/my")
     public ResponseEntity<ResponseDto> getMyFavoriteIndustry() {
         Long memberId = getMemberId();
         List<FavoriteDto> favoriteDtoList = favoriteService.findByIndustry(memberId);
         return new ResponseEntity<>(new ResponseDto("OK", favoriteDtoList), HttpStatus.OK);
     }
 
-    @GetMapping("/stock/my")
+    @GetMapping("/client/stock/my")
     public ResponseEntity<ResponseDto> getMyFavoriteStock() {
         Long memberId = getMemberId();
         List<FavoriteDto> favoriteDtoList = favoriteService.findByStock(memberId);
         return new ResponseEntity<>(new ResponseDto("OK", favoriteDtoList), HttpStatus.OK);
     }
 
-    @GetMapping("/keyword/my")
+    @GetMapping("/client/keyword/my")
     public ResponseEntity<ResponseDto> getMyFavoriteKeyword() {
         Long memberId = getMemberId();
         List<FavoriteDto> favoriteDtoList = favoriteService.findByKeyword(memberId);
         return new ResponseEntity<>(new ResponseDto("OK", favoriteDtoList), HttpStatus.OK);
     }
 
-    @GetMapping("industry/check/{industryId}")
+    @GetMapping("/client/industry/check/{industryId}")
     public ResponseEntity<ResponseDto> checkFavoriteIndustry(@PathVariable Long industryId) {
         Long memberId = getMemberId();
         boolean result = favoriteService.existsByMemberAndIndustry(industryId, memberId);
         return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
     }
 
-    @GetMapping("stock/check/{stockId}")
+    @GetMapping("/client/stock/check/{stockId}")
     public ResponseEntity<ResponseDto> checkFavoriteStock(@PathVariable Long stockId) {
         Long memberId = getMemberId();
         boolean result = favoriteService.existsByMemberAndStock(stockId, memberId);
@@ -62,46 +63,47 @@ public class FavoriteController {
         return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
     }
 
-    @PostMapping("industry/{industryId}")
+    @PostMapping("/client/industry/{industryId}")
     public ResponseEntity<ResponseDto> createFavoriteIndustry(@PathVariable Long industryId) {
         Long memberId = getMemberId();
         favoriteService.createFavoriteIndustry(industryId, memberId);
         return new ResponseEntity<>(new ResponseDto("CREATED", null), HttpStatus.CREATED);
     }
 
-    @PostMapping("stock/{stockId}")
+    @PostMapping("/client/stock/{stockId}")
     public ResponseEntity<ResponseDto> createFavoriteStock(@PathVariable Long stockId) {
         Long memberId = getMemberId();
         favoriteService.createFavoriteStock(stockId, memberId);
         return new ResponseEntity<>(new ResponseDto("CREATED", null), HttpStatus.CREATED);
     }
 
-    @PostMapping("keyword/{keywordId}")
+    @PostMapping("/client/keyword/{keywordId}")
     public ResponseEntity<ResponseDto> createFavoriteKeyword(@PathVariable Long keywordId) {
         Long memberId = getMemberId();
         favoriteService.createFavoriteKeyword(keywordId, memberId);
         return new ResponseEntity<>(new ResponseDto("CREATED", null), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/keyword/{industryId}")
+    @DeleteMapping("/client/keyword/{industryId}")
     public ResponseEntity<Void> deleteFavoriteIndustry(@PathVariable Long industryId) {
         Long memberId = getMemberId();
         favoriteService.deleteFavoriteIndustry(industryId, memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @DeleteMapping("/keyword/{stockId}")
+    @DeleteMapping("/client/keyword/{stockId}")
     public ResponseEntity<Void> deleteFavoriteStock(@PathVariable Long stockId) {
         Long memberId = getMemberId();
         favoriteService.deleteFavoriteStock(stockId, memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/keyword/{keywordId}")
+    @DeleteMapping("/client/keyword/{keywordId}")
     public ResponseEntity<Void> deleteFavoriteKeyword(@PathVariable Long keywordId) {
         Long memberId = getMemberId();
         favoriteService.deleteFavoriteKeyword(keywordId, memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    /* --------------  다른 서비스에서 호출하는 메소드 [end]  ----------------  */
 
 
 

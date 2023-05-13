@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient(name = "favorite-service")
 public interface FavoriteClient {
 
-    @GetMapping("/keyword/my")
+    @GetMapping("/favorite/keyword/my")
     ResponseDto getMyFavoriteKeyword();
 
-    @GetMapping("keyword/check/{keywordId}")
+    @GetMapping("/favorite/keyword/check/{keywordId}")
     ResponseDto checkFavoriteKeyword(@PathVariable Long keywordId);
 
-    @PostMapping("keyword/{keywordId}")
+    @PostMapping("/favorite/keyword/{keywordId}")
     ResponseDto createFavoriteKeyword(@PathVariable Long keywordId);
 
-    @DeleteMapping("/keyword/{keywordId}")
+    @DeleteMapping("/favorite/keyword/{keywordId}")
     Void deleteFavorite(@PathVariable Long keywordId);
 
 }

@@ -80,6 +80,16 @@ public class InvestmentController {
     }
 
     /*
+        이번주 내 보유 주식 정보
+     */
+    @GetMapping("/my/weeklyasset")
+    public ResponseEntity<ResponseDto> getWeeklyAssetInfo() throws Exception {
+        List<AccountFlowDto> accountFlowDtoList = investmentService.getWeeklyAssetInfo(getMemberId());
+        return new ResponseEntity<>(new ResponseDto("이번주 내 보유 주식 정보 제공 완료!", accountFlowDtoList), HttpStatus.OK);
+    }
+
+
+    /*
         http 헤더에서 member id 가져오는 메소드
      */
     private Long getMemberId() throws Exception {

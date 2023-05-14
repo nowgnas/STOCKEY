@@ -21,7 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -357,5 +360,43 @@ class InvestmentServiceApplicationTests {
         return inputList.stream()
                 .limit(N)
                 .toList();
+    }
+
+    @Test
+    public void testGetWeekDates() {
+        LocalDate today = LocalDate.of(2023, 5, 14); // 예시로 2023년 5월 14일을 사용합니다.
+
+        LocalDate sunday = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        LocalDate monday = sunday.minusDays(6);
+
+        List<LocalDate> expectedDates = new ArrayList<>();
+        LocalDate date = monday;
+        while (!date.isAfter(sunday)) {
+            expectedDates.add(date);
+            date = date.plusDays(1);
+        }
+
+        List<LocalDate> actualDates = getWeekDates(today);
+
+        assertEquals(expectedDates, actualDates);
+    }
+
+    private List<LocalDate> getWeekDates(LocalDate date) {
+        LocalDate sunday = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        LocalDate monday = sunday.minusDays(6);
+
+        List<LocalDate> weekDates = new ArrayList<>();
+        LocalDate currentDay = monday;
+        while (!currentDay.isAfter(sunday)) {
+            weekDates.add(currentDay);
+            currentDay = currentDay.plusDays(1);
+        }
+
+        return weekDates;
+    }
+
+    @Test
+    private void getWeeklyAssetInfoTest() {
+        investmentService.getWeeklyAssetInfo(1L);
     }
 }

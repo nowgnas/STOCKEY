@@ -19,5 +19,8 @@ public interface FavoriteClient {
     @GetMapping("/favorite/client/industry/check/{industryId}")
     Boolean checkFavoriteIndustry(@PathVariable Long industryId);
 
+    @PostMapping("/favorite/client/industry/{industryId}")
+    Void createFavoriteIndustry(@PathVariable Long industryId);
+
 
     }

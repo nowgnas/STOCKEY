@@ -12,6 +12,8 @@ import kr.stockey.industryservice.dto.core.FavoriteDto;
 import kr.stockey.industryservice.dto.core.IndustryDto;
 import kr.stockey.industryservice.dto.core.StockDto;
 import kr.stockey.industryservice.entity.Industry;
+import kr.stockey.industryservice.exception.favorite.FavoriteException;
+import kr.stockey.industryservice.exception.favorite.FavoriteExceptionType;
 import kr.stockey.industryservice.exception.industry.IndustryException;
 import kr.stockey.industryservice.exception.industry.IndustryExceptionType;
 import kr.stockey.industryservice.mapper.IndustryDtoMapper;
@@ -110,17 +112,13 @@ public class IndustryServiceImpl implements IndustryService {
     // 관심 산업 등록
     @Transactional
     public void addFavorite(Long id) {
-        Industry industry = getIndustry(id);
+        getIndustry(id);
         boolean isFavorite = checkFavorite(id);
         //이미 관심등록했다면
         if (isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.ALREADY_EXIST);
         }
-        Favorite favorite = Favorite.industryBuilder()
-                .member(member)
-                .industry(industry)
-                .build();
-        favoriteRepository.save(favorite);
+        favoriteClient.createFavoriteIndustry(id);
 
     }
 

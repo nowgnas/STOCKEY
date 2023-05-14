@@ -77,7 +77,11 @@ spring:
           predicates:
             - Path=/lab/**
           filters:
-            - RewritePath=/lab/?(?<segment>.*), /$\{segment}
+            - RewritePath=/lab/(?<segment>.*), /$\{segment}
+        - id: actuator-health
+          uri: lb://LABORATORY-SERVICE/actuator/health
+          predicates:
+            - Path=/api/actuator/health
 
 jwt:
   # base64? ???? ?? ?, HS512? ??? ??? ???, 512??(64???) ??? ??? ???. ?? ????

@@ -19,6 +19,12 @@ import java.util.List;
 public class LaboratoryController {
     private final LaboratoryService laboratoryService;
 
+    @GetMapping("getfeign")
+    public ResponseEntity<ResponseDto> getTest() {
+        ResponseDto feign = laboratoryService.feignTest("feign");
+        return ResponseEntity.ok(feign);
+    }
+
     @GetMapping("feign/data/{data}")
     public ResponseEntity<ResponseDto> feignTest(@PathVariable String data) {
         return ResponseEntity.ok(

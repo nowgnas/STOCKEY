@@ -20,10 +20,10 @@ public interface FavoriteClient {
     Boolean checkFavoriteStock(@PathVariable Long stockId);
 
 
-    @PostMapping("/client/stock/{stockId}")
+    @PostMapping("/favorite/client/stock/{stockId}")
     Void createFavoriteStock(@PathVariable Long stockId);
 
-    @DeleteMapping("/client/keyword/{stockId}")
+    @DeleteMapping("/favorite/client/keyword/{stockId}")
     Void deleteFavoriteStock(@PathVariable Long stockId);
 
 

@@ -12,6 +12,9 @@ import reactor.core.publisher.Mono;
 @Component
 @Slf4j
 public class MicroServiceFilter extends AbstractGatewayFilterFactory<MicroServiceFilter.Config> {
+    public MicroServiceFilter(){
+        super(Config.class);
+    }
     @Override
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {

@@ -45,11 +45,10 @@ public class StockController {
             }
     )
     @GetMapping("/{stockId}")
-    public ResponseEntity<GetStockResponse> getStock(@PathVariable("stockId") Long stockId)  {
+    public ResponseEntity<GetStockResponse> getStock(@PathVariable("stockId") Long stockId) {
         StockSummaryDto stockDto = stockService.getStock(stockId);
         return ResponseEntity.ok(stockDtoMapper.toGetStockResponse(stockDto));
     }
-
 
 
     @Operation(summary = "종목 리스트", description = "종목의 간결한 설명 및 현재 가격을 반환합니다.")
@@ -60,7 +59,7 @@ public class StockController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<StockPreviewDto>> getStock()  {
+    public ResponseEntity<List<StockPreviewDto>> getStock() {
         List<StockPreviewDto> stockPreviewDtos = stockService.getStock();
         return ResponseEntity.ok(stockPreviewDtos);
     }
@@ -73,7 +72,7 @@ public class StockController {
             }
     )
     @GetMapping("/random")
-    public ResponseEntity<List<StockPreviewDto>> getStockRandom(@RequestParam Integer count)  {
+    public ResponseEntity<List<StockPreviewDto>> getStockRandom(@RequestParam Integer count) {
         List<StockPreviewDto> stockPreviewDtos = stockService.getStockRandom(count);
         return ResponseEntity.ok(stockPreviewDtos);
     }
@@ -85,7 +84,7 @@ public class StockController {
             }
     )
     @GetMapping("/search")
-    public ResponseEntity<List<StockSearchDto>> getStockSearch(@RequestParam String keyword)  {
+    public ResponseEntity<List<StockSearchDto>> getStockSearch(@RequestParam String keyword) {
         List<StockSearchDto> stockSearchDtos = stockService.getSearchStock(keyword);
         return ResponseEntity.ok(stockSearchDtos);
     }
@@ -98,7 +97,7 @@ public class StockController {
             }
     )
     @GetMapping("/{stockId}/keyword")
-    public ResponseEntity<List<StockKeywordDto>> getStockKeyword(@PathVariable("stockId") Long stockId)  {
+    public ResponseEntity<List<StockKeywordDto>> getStockKeyword(@PathVariable("stockId") Long stockId) {
         List<StockKeywordDto> keywords = stockService.getStockKeyword(stockId);
         return ResponseEntity.ok(keywords);
     }
@@ -124,7 +123,7 @@ public class StockController {
             }
     )
     @GetMapping("/my")
-    public ResponseEntity<ResponseDto> getMyIndustries(@RequestHeader String userId) {
+    public ResponseEntity<ResponseDto> getMyStock(@RequestHeader String userId) {
         MemberDto memberDto = getMember(userId);
         List<GetStockTodayResponse> myStocks = stockService.getMyStocks(memberDto);
         return new ResponseEntity<>(new ResponseDto("OK", myStocks), HttpStatus.OK);
@@ -142,7 +141,7 @@ public class StockController {
             }
     )
     @GetMapping("/my/{id}")
-    public ResponseEntity<ResponseDto> checkFavorite(@RequestHeader String userId,@PathVariable Long id) {
+    public ResponseEntity<ResponseDto> checkFavorite(@RequestHeader String userId, @PathVariable Long id) {
         MemberDto memberDto = getMember(userId);
         boolean result = stockService.checkFavorite(memberDto.getId(), id);
         return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
@@ -174,7 +173,7 @@ public class StockController {
             }
     )
     @DeleteMapping("/my/{id}")
-    public ResponseEntity<ResponseDto> deleteFavorite(@RequestHeader String userId,@PathVariable Long id) {
+    public ResponseEntity<ResponseDto> deleteFavorite(@RequestHeader String userId, @PathVariable Long id) {
         MemberDto memberDto = getMember(userId);
         stockService.deleteFavorite(memberDto, id);
         return new ResponseEntity<>(new ResponseDto("DELETED", null), HttpStatus.OK);
@@ -206,63 +205,10 @@ public class StockController {
     )
     @GetMapping("/keyword/correlation/{id}/high")
     public ResponseEntity<ResponseDto> getAllCorrelation(@PathVariable Long id,
-                                                      @Valid @ModelAttribute GetCorrelationRequest getCorrelationRequest){
+                                                         @Valid @ModelAttribute GetCorrelationRequest getCorrelationRequest) {
         List<ResultCorrelationDto> top3StockCorrelation = stockService.getAllStockCorrelation(id, getCorrelationRequest);
-        return new ResponseEntity<>(new ResponseDto("OK",top3StockCorrelation),HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto("OK", top3StockCorrelation), HttpStatus.OK);
     }
-
-
-    @Operation(summary = "산업별 종목", description = "산업별 종목을 출력합니다.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-                    @ApiResponse(responseCode = "404", description = "산업 없음"),
-            }
-    )
-    @GetMapping("/industry/{industryId}")
-    public ResponseEntity<ResponseDto> getByIndustryId(@PathVariable Long industryId){
-        List<StockDto> stockList = stockService.getByIndustryId(industryId);
-        return new ResponseEntity<>(new ResponseDto("OK", stockList), HttpStatus.OK);
-    }
-
-    @Operation(summary = "시가총액 기준 N개 종목", description = "시가총액 기준으로 N개 종목을 출력")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
-    @GetMapping("/")
-    public ResponseEntity<ResponseDto> getNStock(@RequestParam int page,@RequestParam int size){
-        List<StockDto> stockTop5 = stockService.getNStock(page, size);
-        return new ResponseEntity<>(new ResponseDto("OK", stockTop5), HttpStatus.OK);
-    }
-
-    @Operation(summary = "산업별 종목들 시가총액 기준 N개 종목", description = "시가총액 기준으로 N개 종목을 출력")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
-    @GetMapping("/marketcap-by-industry/{industryId}")
-    public ResponseEntity<ResponseDto> industry(@PathVariable Long industryId,@RequestParam int page,@RequestParam int size){
-        List<StockDto> stockTopN = stockService.getNStock(industryId, page, size);
-        return new ResponseEntity<>(new ResponseDto("OK", stockTopN), HttpStatus.OK);
-    }
-
-
-
-    @Operation(summary = "산업별 날짜별 시가총액합", description = "산업의 시가총액을 날짜별로 출력합니다.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
-    @GetMapping("/marketcap-by-date/industry/{industryId}")
-    public ResponseEntity<ResponseDto> getMarketList(@PathVariable Long industryId){
-        List<IndustrySumDto> marketList = stockService.getMarketList(industryId);
-        return new ResponseEntity<>(new ResponseDto("OK", marketList), HttpStatus.OK);
-    }
-
 
 
     private MemberDto getMember(String userId) {
@@ -273,6 +219,76 @@ public class StockController {
         return memberDto;
 
     }
+
+    /* --------------  다른 서비스에서 호출하는 메소드 [start] ----------------  */
+
+    @Operation(summary = "산업별 종목", description = "산업별 종목을 출력합니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "성공"),
+                    @ApiResponse(responseCode = "404", description = "산업 없음"),
+            }
+    )
+    @GetMapping("/client/industry/{industryId}")
+    public ResponseEntity<List<StockDto>> getByIndustryId(@PathVariable Long industryId) {
+        List<StockDto> stockList = stockService.getByIndustryId(industryId);
+        return new ResponseEntity<>(stockList, HttpStatus.OK);
+    }
+
+    @Operation(summary = "시가총액 기준 N개 종목", description = "시가총액 기준으로 N개 종목을 출력")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "성공"),
+            }
+    )
+    @GetMapping("/client")
+    public ResponseEntity<List<StockDto>> getNStock(@RequestParam int page, @RequestParam int size) {
+        List<StockDto> stockTop5 = stockService.getNStock(page, size);
+        return new ResponseEntity<>(stockTop5, HttpStatus.OK);
+    }
+
+    @Operation(summary = "산업별 종목들 시가총액 기준 N개 종목", description = "시가총액 기준으로 N개 종목을 출력")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "성공"),
+            }
+    )
+    @GetMapping("/client/marketcap-by-industry/{industryId}")
+    public ResponseEntity<List<StockDto>> industry(@PathVariable Long industryId, @RequestParam int page, @RequestParam int size) {
+        List<StockDto> stockTopN = stockService.getNStock(industryId, page, size);
+        return new ResponseEntity<>(stockTopN, HttpStatus.OK);
+    }
+
+
+    @Operation(summary = "산업별 날짜별 시가총액합", description = "산업의 시가총액을 날짜별로 출력합니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "성공"),
+            }
+    )
+    @GetMapping("/client/marketcap-by-date/industry/{industryId}")
+    public ResponseEntity<List<IndustrySumDto>> getMarketList(@PathVariable Long industryId) {
+        List<IndustrySumDto> marketList = stockService.getMarketList(industryId);
+        return new ResponseEntity<>(marketList, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/client/industry/{industryId}")
+    public ResponseEntity<List<StockDto>> getByIndustryId_client(@PathVariable Long industryId) {
+        List<StockDto> stockList = stockService.getByIndustryId(industryId);
+        return new ResponseEntity<>(stockList, HttpStatus.OK);
+    }
+
+    @GetMapping("/client/today/{industryId}")
+    public ResponseEntity<List<GetStockTodayResponse>> findTodayDailyStock(@PathVariable Long industryId) {
+        List<GetStockTodayResponse> stockList = stockService.findTodayDailyStock(industryId);
+        return new ResponseEntity<>(stockList, HttpStatus.OK);
+    }
+
+
+
+
+    /* --------------  다른 서비스에서 호출하는 메소드 [end]  ----------------  */
 
 
 }

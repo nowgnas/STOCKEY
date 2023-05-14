@@ -42,5 +42,7 @@ public interface StockService {
      // 산업별 날짜별 시가총액 합
      List<IndustrySumDto> getMarketList(Long industryId);
 
+     List<GetStockTodayResponse> findTodayDailyStock(Long industryId);
+
 
 }

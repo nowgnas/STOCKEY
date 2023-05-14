@@ -5,8 +5,3 @@ spring:
         - http://localhost:8888
         - http://config:8888
       name: apigateway-service
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh, health, beans,httptrace, busrefresh

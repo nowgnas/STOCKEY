@@ -38,16 +38,8 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class IndustryServiceImpl implements IndustryService {
     private final IndustryRepository industryRepository;
-    private final StockRepository stockRepository;
     private final IndustryMapper industryMapper;
     private final IndustryDtoMapper industryDtoMapper;
-    private final StockMapper stockMapper;
-    private final StockDtoMapper stockDtoMapper;
-
-    private final FavoriteService favoriteService;
-
-    private final FavoriteRepository favoriteRepository;
-    private final DailyStockRepository dailyStockRepository;
 
     private final StockClient stockClient;
     private final FavoriteClient favoriteClient;

@@ -1,31 +1,25 @@
 package kr.stockey.investmentservice.service;
 
-import kr.stockey.investmentservice.dto.ContractDto;
-import kr.stockey.investmentservice.dto.OrderListDto;
-import kr.stockey.investmentservice.dto.OrderProducerDto;
-import kr.stockey.investmentservice.entity.Contract;
-import kr.stockey.investmentservice.entity.Deposit;
-import kr.stockey.investmentservice.entity.MyStock;
+import kr.stockey.investmentservice.dto.*;
+import kr.stockey.investmentservice.entity.*;
 import kr.stockey.investmentservice.enums.ContractType;
 import kr.stockey.investmentservice.enums.InvCategory;
 import kr.stockey.investmentservice.kafka.producer.StockOrderProducer;
 import kr.stockey.investmentservice.mapper.InvestmentMapper;
 import kr.stockey.investmentservice.redis.Order;
 import kr.stockey.investmentservice.redis.OrderRedisRepository;
-import kr.stockey.investmentservice.repository.ContractRepository;
-import kr.stockey.investmentservice.repository.DepositRepository;
-import kr.stockey.investmentservice.repository.MyStockRepository;
+import kr.stockey.investmentservice.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -35,12 +29,24 @@ import java.util.stream.Collectors;
 public class InvestmentServiceImpl implements InvestmentService{
 
     private final long DEFAULT_CREDIT = 10000000;
+    private Map<Long, Long> stockPriceMap; // 데이터 캐싱
+    public Map<Long, String> stockIdToNameMap; // 변하지 않는 주식 정보 캐싱
+    public List<TraderRankDto> traderRankDtoList; // 유저 랭킹 정보 캐싱 -> 주문 체결시마다 update
+
     private final StockOrderProducer stockOrderProducer;
     private final OrderRedisRepository orderRedisRepository;
     private final DepositRepository depositRepository;
     private final MyStockRepository myStockRepository;
     private final ContractRepository contractRepository;
+    private final DailyStockRepository dailyStockRepository;
+    private final StockRepository stockRepository;
     private final InvestmentMapper investmentMapper;
+
+    @PostConstruct
+    public void init() {
+        stockIdToNameMap = makeStockIdToNameMap();
+        traderRankDtoList = updateUserRank();
+    }
 
 
     /**
@@ -59,10 +65,9 @@ public class InvestmentServiceImpl implements InvestmentService{
         LocalDateTime now = LocalDateTime.now(); // 한국 시간 기준으로 현재 시간을 가져옴
 
         int hour = now.getHour();
-        int minute = now.getMinute();
 
-        // 주문 가능시간: 9시 ~ 15시 && 매 05분 ~ 다음 시간 00분까지
-        if (!(hour >= 9 && hour < 15) && minute >= 1 && minute <= 4) {
+        // 주문 가능시간: 9시 ~ 15시
+        if (!(hour >= 9 && hour < 15)) {
             throw new Exception("주문 가능한 시간이 아닙니다.");
         }
         return true;
@@ -76,12 +81,75 @@ public class InvestmentServiceImpl implements InvestmentService{
     public void orderExecuteScheduler() throws Exception {
         // 실행할 메소드 내용 작성
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        // 오전 9시 ~ 오후 3시 사이, 2분일 때 실행
         if (now.getHour() >= 9 && now.getHour() <= 15 && now.getMinute() == 2) {
-            // 오전 9시 ~ 오후 3시 사이, 2분일 때 실행
-            // 실행할 코드 작성
+            // 주문 체결 실행
             orderExecute();
+            // 랭킹 업데이트
+            traderRankDtoList = updateUserRank();
         }
     }
+
+    private List<TraderRankDto> updateUserRank() {
+        List<TraderRankDto> traderRankDtos = new ArrayList<>();
+        // 전체 회원 가져오기
+        Map<Long, String> memberIdAndNicknameMap = getWholeMemberInfo();
+        // member id만 모으기
+        Set<Long> memberIds = memberIdAndNicknameMap.keySet();
+        for (Long memberId : memberIds) {
+            String nickname = memberIdAndNicknameMap.get(memberId);
+            // 회원의 자산 정보 가져오기
+            Long totalAssets = getMyAccount(memberId).getTotalAssets();
+            traderRankDtos.add(new TraderRankDto(nickname, totalAssets, null));
+        }
+        assignRanks(traderRankDtos);
+        return traderRankDtos;
+    }
+
+    private void assignRanks(List<TraderRankDto> traders) {
+        List<TraderRankDto> sortedTraders = traders.stream()
+                .sorted((o1, o2) -> o2.getTotalAsset().compareTo(o1.getTotalAsset()))
+                .toList();
+
+        long rank = 1;
+        long count = 1;
+        Long previousAsset = null;
+
+        for (TraderRankDto trader : sortedTraders) {
+            if (previousAsset != null && !trader.getTotalAsset().equals(previousAsset)) {
+                rank = count;
+            }
+
+            trader.setRanking(rank);
+            previousAsset = trader.getTotalAsset();
+            count++;
+        }
+    }
+
+    @Override
+    public List<TraderRankDto> getTraderRank(Long num) {
+        return getFirstNElements(traderRankDtoList, num);
+    }
+
+    private  <T> List<T> getFirstNElements(List<T> inputList, Long N) {
+        return inputList.stream()
+                .limit(N)
+                .toList();
+    }
+
+    private Map<Long, String> getWholeMemberInfo() {
+        // http 통신으로 가져오기
+        // 임시 구현
+        Map<Long, String> memberInfo = new HashMap<>();
+        memberInfo.put(1L, "jun");
+        memberInfo.put(2L, "kong");
+        memberInfo.put(3L, "gang2");
+        memberInfo.put(4L, "won2");
+        memberInfo.put(5L, "chol2");
+        memberInfo.put(6L, "gitfairy");
+        return memberInfo;
+    }
+
 
     @Override
     public Boolean checkOrderSubmit(Long memberId) {
@@ -93,27 +161,117 @@ public class InvestmentServiceImpl implements InvestmentService{
     }
 
     @Override
-    public List<ContractDto> getOrderHistory(Long memberId) {
+    public List<OrderHistoryDto> getOrderHistory(Long memberId) {
         List<Contract> orderHistory = contractRepository.findByMemberId(memberId).stream()
                 .filter(contract -> contract.getCategory() == InvCategory.ORDER)
                 .toList();
-        return investmentMapper.toContractDtoList(orderHistory);
+
+        List<OrderHistoryDto> orderHistoryDtoList = investmentMapper.toOrderHistoryDtoList(orderHistory);
+
+        for (OrderHistoryDto orderHistoryDto : orderHistoryDtoList) {
+            String stockName = stockIdToNameMap.get(orderHistoryDto.getStockId());
+            orderHistoryDto.setStockName(stockName);
+        }
+        return orderHistoryDtoList;
+    }
+
+    private Map<Long, String> makeStockIdToNameMap() {
+        List<Stock> stocks = stockRepository.findAll();
+        Map<Long, String> idNameMap = new HashMap<>();
+        for (Stock stock : stocks) {
+            idNameMap.put(stock.getId(), stock.getName());
+        }
+        return idNameMap;
+    }
+
+    @Override
+    public AccountDto getMyAccount(Long memberId) {
+        // 총 자산 = 주식 평가금액 + 예수금
+        Long curDeposit = 0L; // 예수금
+        Long curStockValuation = 0L; // 주식 평가금액
+        Long totalAsset = 0L; // 총 자산
+
+        // 예수금 -> history에서 최신 가져오기
+        Optional<Deposit> depositOptional = depositRepository.findLatestDepositByMemberId(memberId);
+        if (depositOptional.isEmpty()) {
+            // 첫거래면 보유 주식이 없음. 돈은 기본 크레딧
+            curDeposit = DEFAULT_CREDIT;
+            return new AccountDto(curDeposit, curStockValuation, curDeposit);
+        } else {
+            Deposit deposit = depositOptional.get();
+            curDeposit = deposit.getMoney();
+        }
+
+        // 주식 평가금액 -> myStock 데이터 가져와서 특정 stockId에 해당하는 주식 현재가 가져와서 count랑 곱하기
+        List<MyStock> myStocks = myStockRepository.findByMemberId(memberId);
+        for (MyStock myStock : myStocks) {
+            Long curStockId = myStock.getStockId();
+            Long curStockPrice = stockPriceMap.get(curStockId);
+            curStockValuation += curStockPrice * myStock.getCount();
+        }
+
+        // 총 자산 = 주식 평가금액 + 예수금
+        totalAsset = curDeposit + curStockValuation;
+        return new AccountDto(totalAsset, curStockValuation, curDeposit);
+    }
+
+    @Override
+    public List<MyStockInfoDto> getMyStockInfo(Long memberId) throws Exception {
+        List<MyStockInfoDto> resLst = new ArrayList<>();
+
+        // 1. 주식 목록
+        List<MyStock> myStocks = myStockRepository.findByMemberId(memberId);
+        if (myStocks.isEmpty()) {
+            throw new Exception("구매한 주식 목록 없음! (204)");
+        }
+
+        // 전체 주식 평가 금액
+        double totalSv = myStocks.stream()
+                .mapToDouble(this::calcMyStockValuation)
+                .sum();
+
+        for (MyStock myStock : myStocks) {
+            Long curStockId = myStock.getStockId();
+            // 2. 평가액 비중 = 해당 종목의 평가금액 / 전체 주식 평가금액
+            Long curSv = stockPriceMap.get(curStockId) * myStock.getCount(); // 해당 종목의 평가금액
+            Double curSvp = curSv / totalSv;
+
+            // 3. 수익률 = (현재가 - 매입 평균단가) / 매입 평균단가
+            Double avgPrice = myStock.getAvgPrice(); // 매입 평균단가
+            Long curStockPrice = stockPriceMap.get(curStockId); // 현재가
+            Double curRrp = (curStockPrice - avgPrice) * 100 / avgPrice; // 수익률
+
+            // 현재 주식명
+            String curStockName = stockIdToNameMap.get(myStock.getStockId());
+            resLst.add(new MyStockInfoDto(curStockId, curStockName, curSvp, curRrp));
+        }
+        return resLst;
+    }
+
+    private double calcMyStockValuation(MyStock myStock) {
+        Long stockId = myStock.getStockId();
+        Long stockPrice = stockPriceMap.get(stockId);
+        double sv = stockPrice * myStock.getCount();
+        return sv;
     }
 
 
     @Transactional
     public void orderExecute() throws Exception {
         // 주식 현재가 테이블 가져오기 (매 2분마다 갱신된 최신 주가정보 가져오기)
-        Map<Long, Long> stockPriceMap = getStockPrice();
+//        Map<Long, Long> stockPriceMap = getStockPrice();
 
         // 레디스에 쌓인 모든 order 데이터 가져와 list로 만들기
         Iterable<Order> orderIterable = orderRedisRepository.findAll();
-        List<Order> wholeOrderList = new ArrayList<>();
+        List<Order> rawOrderList = new ArrayList<>();
         for (Order order : orderIterable) {
-            wholeOrderList.add(order);
+            rawOrderList.add(order);
         }
         // 시간순 정렬
-        Collections.sort(wholeOrderList);
+        Collections.sort(rawOrderList);
+
+        // 이전 라운드에 대한 주문만 남기기
+        List<Order> wholeOrderList = filterOrders(rawOrderList);
 
         // wholeOrderList 내용 DB에 적재
         loadOrderIntoDB(wholeOrderList);
@@ -185,6 +343,7 @@ public class InvestmentServiceImpl implements InvestmentService{
                                 .memberId(curMemberId)
                                 .stockId(curStockId)
                                 .count(actualBuyNum)
+                                .contractPrice(curStockPrice)
                                 .contractType(ContractType.BUY)
                                 .createdAt(LocalDateTime.now())
                                 .category(InvCategory.CONTRACT)
@@ -212,6 +371,7 @@ public class InvestmentServiceImpl implements InvestmentService{
                                 .memberId(curMemberId)
                                 .stockId(curStockId)
                                 .count(actualSellQuantity)
+                                .contractPrice(curStockPrice)
                                 .contractType(ContractType.SELL)
                                 .createdAt(LocalDateTime.now())
                                 .category(InvCategory.CONTRACT)
@@ -262,10 +422,32 @@ public class InvestmentServiceImpl implements InvestmentService{
         return result;
     }
 
-    private Map<Long, Long> getStockPrice() {
-        // 주식 서버와 통신하여 현재 가격 가져오기
-        return null;
+    @Scheduled(cron = "0 0/5 * * * *", zone = "Asia/Seoul")  // 0분부터 55분까지 5분 간격으로 실행
+    protected void updateStockPriceMap() {
+        LocalDate today = LocalDate.now();
+        List<DailyStock> dailyStockList = dailyStockRepository.findByStockDate(today);
+        for (DailyStock dailyStock : dailyStockList) {
+            stockPriceMap.put(dailyStock.getStockId(), Long.valueOf(dailyStock.getClosePrice()));
+        }
     }
+
+    private List<Order> filterOrders(List<Order> rawOrderList) {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime oneHourAgo = currentDateTime.minusHours(1);
+        LocalDateTime desiredStartTime = LocalDateTime.of(oneHourAgo.getYear(), oneHourAgo.getMonth(), oneHourAgo.getDayOfMonth(), oneHourAgo.getHour(), 0, 0);
+        LocalDateTime desiredEndTime = LocalDateTime.of(oneHourAgo.getYear(), oneHourAgo.getMonth(), oneHourAgo.getDayOfMonth(), currentDateTime.getHour(), 0, 0);
+
+        List<Order> filteredOrderList = new ArrayList<>();
+        for (Order order : rawOrderList) {
+            LocalDateTime orderTime = order.getOrderTime();
+            if (orderTime.isAfter(desiredStartTime) && orderTime.isBefore(desiredEndTime)) {
+                filteredOrderList.add(order);
+            }
+        }
+
+        return filteredOrderList;
+    }
+
 
     private double calculateNewAvgUnitPrice(double currentAvgUnitPrice, long numStocksOwned,
                                             double newPurchasePrice, long numNewStocks) {

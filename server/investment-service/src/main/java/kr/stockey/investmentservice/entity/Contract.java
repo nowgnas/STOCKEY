@@ -7,8 +7,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -30,8 +28,13 @@ public class Contract {
     @Column(name = "stock_id", nullable = false)
     private Long stockId;
 
+    @NotNull
     @Column(name = "count", columnDefinition = "INT UNSIGNED not null")
     private Long count;
+
+    @NotNull
+    @Column(name = "contract_price", nullable = false)
+    private Long contractPrice;
 
     @Size(max = 10)
     @NotNull
@@ -48,11 +51,12 @@ public class Contract {
     private InvCategory category;
 
     @Builder
-    public Contract(Long memberId, Long stockId, Long count, ContractType contractType,
-                    LocalDateTime createdAt, InvCategory category) {
+    public Contract(Long memberId, Long stockId, Long count, Long contractPrice,
+                    ContractType contractType, LocalDateTime createdAt, InvCategory category) {
         this.memberId = memberId;
         this.stockId = stockId;
         this.count = count;
+        this.contractPrice = contractPrice;
         this.contractType = contractType;
         this.createdAt = createdAt;
         this.category = category;

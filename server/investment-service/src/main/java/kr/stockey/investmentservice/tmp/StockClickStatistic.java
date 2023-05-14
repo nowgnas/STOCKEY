@@ -1,5 +1,6 @@
 package kr.stockey.investmentservice.tmp;
 
+import kr.stockey.investmentservice.entity.Stock;
 import lombok.Getter;
 import lombok.Setter;
 

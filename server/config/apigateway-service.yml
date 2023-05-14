@@ -84,3 +84,9 @@ jwt:
     expiration: 100
   refresh:
     expiration: 14400
+
+management:
+ endpoints:
+   web:
+     exposure:
+       include: refresh, healtth, beans,httptrace, busrefresh

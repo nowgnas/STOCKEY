@@ -1,4 +1,4 @@
-package kr.stockey.laboratoryservice.dto;
+package kr.stockey.laboratoryservice.domain.laboratory.dto;
 
 import lombok.Builder;
 import lombok.Getter;

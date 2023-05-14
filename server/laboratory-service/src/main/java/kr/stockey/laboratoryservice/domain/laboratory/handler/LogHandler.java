@@ -1,4 +1,4 @@
-package kr.stockey.laboratoryservice.handler;
+package kr.stockey.laboratoryservice.domain.laboratory.handler;
 
 import com.google.common.base.Joiner;
 import org.aspectj.lang.ProceedingJoinPoint;

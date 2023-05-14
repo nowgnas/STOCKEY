@@ -43,6 +43,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     runtimeOnly 'com.mysql:mysql-connector-j'
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.0.0'
 
 
 }

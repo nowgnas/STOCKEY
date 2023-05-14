@@ -1,25 +1,25 @@
-package kr.stockey.investmentservice.tmp;
+package kr.stockey.investmentservice.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+
 @Getter
-@Setter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stock")
+@ToString
 public class Stock {
     @Id
     @Column(name = "stock_id", nullable = false)
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "industry_id", nullable = false)
-    private Industry industry;
+    @Column(name = "industry_id", nullable = false)
+    private Long industryId;
 
     @Size(max = 30)
     @NotNull
@@ -58,5 +58,7 @@ public class Stock {
     @Size(max = 200)
     @Column(name = "basic_info", length = 200)
     private String basicInfo;
+
+
 
 }

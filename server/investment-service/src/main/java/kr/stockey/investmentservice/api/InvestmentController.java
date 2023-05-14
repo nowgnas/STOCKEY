@@ -1,12 +1,7 @@
 package kr.stockey.investmentservice.api;
 
 import kr.stockey.investmentservice.api.request.OrderRequest;
-import kr.stockey.investmentservice.dto.ContractDto;
-import kr.stockey.investmentservice.dto.OrderListDto;
-import kr.stockey.investmentservice.dto.OrderProducerDto;
-import kr.stockey.investmentservice.dto.ResponseDto;
-import kr.stockey.investmentservice.entity.Contract;
-import kr.stockey.investmentservice.kafka.producer.StockOrderProducer;
+import kr.stockey.investmentservice.dto.*;
 import kr.stockey.investmentservice.mapper.InvestmentDtoMapper;
 import kr.stockey.investmentservice.service.InvestmentService;
 import lombok.RequiredArgsConstructor;
@@ -51,12 +46,42 @@ public class InvestmentController {
     /*
         내가 주문한 history 제공
      */
-    @GetMapping("/orders")
+    @GetMapping("/my/orders")
     public ResponseEntity<ResponseDto> getOrderHistory() throws Exception {
-        List<ContractDto> ordersHistory = investmentService.getOrderHistory(getMemberId());
+        List<OrderHistoryDto> ordersHistory = investmentService.getOrderHistory(getMemberId());
         return new ResponseEntity<>(new ResponseDto("주문 내역 제공 완료!", ordersHistory), HttpStatus.OK);
     }
 
+    /*
+        내 계좌 정보 가져오기 (총자산, 주식, 예수금)
+     */
+    @GetMapping("/my/asset")
+    public ResponseEntity<ResponseDto> getMyAccount() throws Exception {
+        AccountDto accountDto = investmentService.getMyAccount(getMemberId());
+        return new ResponseEntity<>(new ResponseDto("내 계좌 정보 제공 완료!", accountDto), HttpStatus.OK);
+    }
+
+    /*
+        내 보유 주식 정보 (목록, 평가액 비중, 수익률)
+     */
+    @GetMapping("/my/stock")
+    public ResponseEntity<ResponseDto> getMyStockInfo() throws Exception {
+        List<MyStockInfoDto> myStockInfoDtoList = investmentService.getMyStockInfo(getMemberId());
+        return new ResponseEntity<>(new ResponseDto("내 보유 주식 정보 제공 완료!", myStockInfoDtoList), HttpStatus.OK);
+    }
+
+    /*
+        내 보유 주식 정보 (목록, 평가액 비중, 수익률)
+     */
+    @GetMapping("/rank")
+    public ResponseEntity<ResponseDto> getTraderRank(@RequestParam Long num) throws Exception {
+        List<TraderRankDto> traderRankDtoList = investmentService.getTraderRank(num);
+        return new ResponseEntity<>(new ResponseDto("유저 랭킹 정보 제공 완료!", traderRankDtoList), HttpStatus.OK);
+    }
+
+    /*
+        http 헤더에서 member id 가져오는 메소드
+     */
     private Long getMemberId() throws Exception {
         // http 헤더에서 "X-UserId" 내용 가져와서 리턴하는 로직으로 채우기
         HttpServletRequest request
@@ -67,4 +92,6 @@ public class InvestmentController {
         }
         return Long.valueOf(userId);
     }
+
+
 }

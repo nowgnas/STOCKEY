@@ -1,7 +1,5 @@
 package kr.stockey.investmentservice.entity;
 
-import kr.stockey.investmentservice.tmp.Member;
-import kr.stockey.investmentservice.tmp.Stock;
 import lombok.*;
 
 import javax.persistence.*;

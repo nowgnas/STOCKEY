@@ -7,6 +7,7 @@ import kr.stockey.industryservice.client.FavoriteClient;
 import kr.stockey.industryservice.client.StockClient;
 import kr.stockey.industryservice.dto.GetStockTodayResponse;
 import kr.stockey.industryservice.dto.IndustryEpochSumDto;
+import kr.stockey.industryservice.dto.IndustrySumDto;
 import kr.stockey.industryservice.dto.StockBriefDto;
 import kr.stockey.industryservice.dto.core.FavoriteDto;
 import kr.stockey.industryservice.dto.core.IndustryDto;
@@ -31,7 +32,6 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -126,8 +126,8 @@ public class IndustryServiceImpl implements IndustryService {
     }
 
     public List<GetIndustryMarketCapResponse> getMarketCapList(Long id) {
-        Industry industry = getIndustry(id);
-        List<IndustrySumDto> marketList = stockRepository.getMarketList(industry.getId());
+        getIndustry(id);
+        List<IndustrySumDto> marketList = stockClient.getMarketList(id);
         List<IndustryEpochSumDto> result = new ArrayList<>();
 
         // LocalDate -> epochTime
@@ -147,30 +147,8 @@ public class IndustryServiceImpl implements IndustryService {
     }
 
     public List<GetStockTodayResponse> getStockListPrice(Long id) {
-        Industry industry = getIndustry(id);
-        List<Stock> stockList = stockRepository.findByIndustry(industry);
-
-        // 해당 주식의 현재가격 가져오기
-        List<DailyStock> dailyStockList = stockList.stream()
-                .map(o -> dailyStockRepository.findTodayDailyStock(o.getId()).get())
-                .collect(Collectors.toList());
-        //결과를 담을 result 리스트
-        List<StockTodayDto> result = new ArrayList<>();
-        for (DailyStock dailyStock : dailyStockList) {
-            Long stock_id = dailyStock.getStock().getId();
-            String name = dailyStock.getStock().getName();
-            Integer close_price = dailyStock.getClosePrice();
-            Float change_rate = dailyStock.getChangeRate() * 100;
-
-            StockTodayDto stockTodayDto = StockTodayDto.builder()
-                    .id(stock_id)
-                    .name(name)
-                    .price(close_price)
-                    .rate(change_rate)
-                    .build();
-            result.add(stockTodayDto);
-        }
-        return stockDtoMapper.toGetStockTodayResponse(result);
+        getIndustry(id);
+        return stockClient.findTodayDailyStock(id);
     }
 
 
@@ -181,7 +159,7 @@ public class IndustryServiceImpl implements IndustryService {
     }
 
     // 관심 산업 여부 체크
-    public boolean checkFavorite(Long industryId){
+    public boolean checkFavorite(Long industryId) {
         return favoriteClient.checkFavoriteIndustry(industryId);
     }
 

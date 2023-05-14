@@ -3,10 +3,14 @@ package kr.stockey.industryservice.service;
 
 import kr.stockey.industryservice.api.response.GetIndustryMarketCapResponse;
 import kr.stockey.industryservice.api.response.IndustryCapitalDto;
+import kr.stockey.industryservice.client.FavoriteClient;
+import kr.stockey.industryservice.client.StockClient;
 import kr.stockey.industryservice.dto.GetStockTodayResponse;
 import kr.stockey.industryservice.dto.IndustryEpochSumDto;
 import kr.stockey.industryservice.dto.StockBriefDto;
+import kr.stockey.industryservice.dto.core.FavoriteDto;
 import kr.stockey.industryservice.dto.core.IndustryDto;
+import kr.stockey.industryservice.dto.core.StockDto;
 import kr.stockey.industryservice.entity.Industry;
 import kr.stockey.industryservice.exception.industry.IndustryException;
 import kr.stockey.industryservice.exception.industry.IndustryExceptionType;
@@ -14,8 +18,7 @@ import kr.stockey.industryservice.mapper.IndustryDtoMapper;
 import kr.stockey.industryservice.mapper.IndustryMapper;
 import kr.stockey.industryservice.repository.IndustryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +47,9 @@ public class IndustryServiceImpl implements IndustryService {
     private final FavoriteRepository favoriteRepository;
     private final DailyStockRepository dailyStockRepository;
 
+    private final StockClient stockClient;
+    private final FavoriteClient favoriteClient;
+
     //모든 산업 반환
     public List<IndustryDto> getAll() {
         List<Industry> industries = industryRepository.findAll();
@@ -63,8 +69,8 @@ public class IndustryServiceImpl implements IndustryService {
         for (Industry industry : industries) {
             long sum = 0;
             // 해당 산업의 모든 종목들
-            List<Stock> stocks = stockRepository.findByIndustry(industry);
-            for (Stock stock : stocks) {
+            List<StockDto> stockDtoList = stockClient.getByIndustryId(industry.getId());
+            for (StockDto stock : stockDtoList) {
                 sum += stock.getMarketCap();
             }
             // 시가총액이 존재한다면
@@ -78,43 +84,34 @@ public class IndustryServiceImpl implements IndustryService {
 
     //시가총액 상위 5개 종목
     public List<StockBriefDto> getStockList() {
-        Pageable pageable = PageRequest.of(0, 5);
-        List<Stock> stockList = stockRepository.findTop5Stocks(pageable);
-        return stockMapper.toDto(stockList);
+        List<StockDto> nStock = stockClient.getNStock(0, 5);
+        List<StockBriefDto> result = new ArrayList<>();
+        nStock.forEach(o -> result.add(new ModelMapper().map(o, StockBriefDto.class)));
+        return result;
 
     }
 
     //해당 산업의 시가총액 상위 5개 종목
     public List<StockBriefDto> getStockList(Long id) {
-        Pageable pageable = PageRequest.of(0, 5);
-        // 단방향 매핑으로 찾기
-        Industry industry = getIndustry(id);
-        List<Stock> stockList = stockRepository.findTop5Stocks(industry, pageable);
-        return stockMapper.toDto(stockList);
+        List<StockBriefDto> result = new ArrayList<>();
+        List<StockDto> nStockByindustry = stockClient.getNStockByindustry(id, 0, 5);
+        nStockByindustry.forEach(o -> result.add(new ModelMapper().map(o, StockBriefDto.class)));
+        return result;
     }
 
     // 관심  산업 리스트 출력
-    public List<IndustryDto> getMyIndustries(Member member) {
-        List<Favorite> favorites = favoriteService._findByIndustry(member);
+    public List<IndustryDto> getMyIndustries() {
+        List<FavoriteDto> myFavoriteIndustry = favoriteClient.getMyFavoriteIndustry();
         List<Industry> industryList = new ArrayList<>();
-        for (Favorite favorite : favorites) {
-            industryList.add(favorite.getIndustry());
-        }
+        myFavoriteIndustry.forEach(o -> industryList.add(getIndustry(o.getIndustryId())));
         return industryMapper.toDto(industryList);
-    }
-
-    // 관심 여부 확인
-    public boolean checkFavorite(Member member, Long id) {
-        Industry industry = getIndustry(id);
-        boolean result = favoriteService.existsByMemberAndIndustry(industry, member);
-        return result;
     }
 
     // 관심 산업 등록
     @Transactional
-    public void addFavorite(Member member, Long id) {
+    public void addFavorite(Long id) {
         Industry industry = getIndustry(id);
-        boolean isFavorite = checkFavorite(member, id);
+        boolean isFavorite = checkFavorite(id);
         //이미 관심등록했다면
         if (isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.ALREADY_EXIST);
@@ -128,9 +125,9 @@ public class IndustryServiceImpl implements IndustryService {
     }
 
     @Transactional
-    public void deleteFavorite(Member member, Long id) {
+    public void deleteFavorite(Long id) {
         Industry industry = getIndustry(id);
-        boolean isFavorite = checkFavorite(member, id);
+        boolean isFavorite = checkFavorite(id);
         // 관심 등록하지 않았다면
         if (!isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.NOT_FOUND);
@@ -146,7 +143,7 @@ public class IndustryServiceImpl implements IndustryService {
         List<IndustryEpochSumDto> result = new ArrayList<>();
 
         // LocalDate -> epochTime
-        for(IndustrySumDto industryDto : marketList){
+        for (IndustrySumDto industryDto : marketList) {
             LocalDate stockDate = industryDto.getStockDate();
             LocalDateTime localDateTime = stockDate.atStartOfDay();
             Instant instant = localDateTime.toInstant(ZoneOffset.UTC);

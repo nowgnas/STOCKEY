@@ -23,7 +23,7 @@ public interface FavoriteClient {
     @PostMapping("/favorite/client/stock/{stockId}")
     Void createFavoriteStock(@PathVariable Long stockId);
 
-    @DeleteMapping("/favorite/client/keyword/{stockId}")
+    @DeleteMapping("/favorite/client/stock/{stockId}")
     Void deleteFavoriteStock(@PathVariable Long stockId);
 
 

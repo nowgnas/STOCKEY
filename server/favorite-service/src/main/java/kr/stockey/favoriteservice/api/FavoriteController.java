@@ -88,7 +88,7 @@ public class FavoriteController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/client/keyword/{stockId}")
+    @DeleteMapping("/client/stock/{stockId}")
     public ResponseEntity<Void> deleteFavoriteStock(@PathVariable Long stockId) {
         Long memberId = getMemberId();
         favoriteService.deleteFavoriteStock(stockId, memberId);

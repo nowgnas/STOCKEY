@@ -141,9 +141,7 @@ public class StockServiceImpl implements StockService {
 
     // 관심 종목 리스트 출력
     public List<GetStockTodayResponse> getMyStocks(MemberDto memberdto) {
-        ResponseDto responseDto = favoriteClient.findByStockAndMember(memberdto.getId());
-        List<FavoriteDto> favorites = (List<FavoriteDto>) responseDto.getData();
-//                List<FavoriteDto> favorites = favoriteClient.findByStockAndMember(memberdto.getUserId());
+        List<FavoriteDto> favorites= favoriteClient.getMyFavoriteStock();
         List<Stock> stockList = new ArrayList<>();
 
 

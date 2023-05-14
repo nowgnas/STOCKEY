@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @FeignClient(name = "favorite-service")
 public interface FavoriteClient {
-    
-    // TODO : url 작성
-    @GetMapping("")
-    ResponseDto findByStockAndMember(Long memberId);
-    
+
+    @GetMapping("/favorite/client/stock/my")
+    List<FavoriteDto> getMyFavoriteStock();
     // TODO url 작성
     @GetMapping("")
     ResponseDto existsByMemberAndStock(Long memberId,Long stockId);

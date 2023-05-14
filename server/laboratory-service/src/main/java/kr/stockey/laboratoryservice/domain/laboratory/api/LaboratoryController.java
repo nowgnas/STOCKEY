@@ -1,21 +1,32 @@
-package kr.stockey.laboratoryservice.api;
+package kr.stockey.laboratoryservice.domain.laboratory.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import kr.stockey.laboratoryservice.api.response.SearchStockResponse;
-import kr.stockey.laboratoryservice.dto.ResponseDto;
-import kr.stockey.laboratoryservice.service.LaboratoryService;
+import kr.stockey.laboratoryservice.domain.laboratory.dto.ResponseDto;
+import kr.stockey.laboratoryservice.domain.laboratory.service.LaboratoryService;
+import kr.stockey.laboratoryservice.domain.stock.dto.StockSearchDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class LaboratoryController {
     private final LaboratoryService laboratoryService;
+
+    @GetMapping("feign/data/{data}")
+    public ResponseEntity<ResponseDto> feignTest(@PathVariable String data) {
+        return ResponseEntity.ok(
+                ResponseDto.builder()
+                        .data("test success data is: " + data)
+                        .build()
+        );
+    }
 
     /**
      * 주식 이름으로 일치하는 주식 종목 찾기
@@ -35,19 +46,27 @@ public class LaboratoryController {
     )
     @GetMapping("stock/{stock}")
     public ResponseEntity<ResponseDto> searchStock(@PathVariable String stock) {
-        SearchStockResponse searchStockResponse = laboratoryService.searchStock(stock);
+        List<StockSearchDto> stockSearchDtos = laboratoryService.searchStocks(stock);
 
         return ResponseEntity.ok(ResponseDto.builder()
                 .message("request success")
-                .data(searchStockResponse)
+                .data(stockSearchDtos)
                 .build());
     }
 
     /**
      * 키워드 검색
+     *
      * @param keyword 사용자 입력 키워드 이름
      * @return 사용자 입력 이름을 포함한 키워드 검색
      */
+    @Operation(summary = "Get keyword list", description = "키워드 리스트 가져오기")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청")
+            }
+    )
     @GetMapping("keywork/{keyword}")
     public ResponseEntity<ResponseDto> searchKeyword(@PathVariable String keyword) {
         return ResponseEntity.ok(ResponseDto.builder()
@@ -56,4 +75,6 @@ public class LaboratoryController {
                 .build());
 
     }
+
+
 }

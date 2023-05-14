@@ -16,14 +16,7 @@ spring:
         - id: member-service
           uri: lb://member-service
           predicates:
-            - Path=/auth/logout
-          filters:
-            - AuthorizationHeaderFilter
-
-        - id: member-service
-          uri: lb://member-service
-          predicates:
-            - Path=/auth/nickname
+            - Path=/auth/logout , /auth/nickname
           filters:
             - AuthorizationHeaderFilter
 
@@ -42,10 +35,16 @@ spring:
         - id: member-service
           uri: lb://member-service
           predicates:
-            - Path=/member/nickname
-            - Path=/member
+            - Path=/member, /member/nickname
           filters:
             - AuthorizationHeaderFilter
+
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/member/client/**
+          filters:
+            - MicroServiceFilter
 
         - id: member-service
           uri: lb://member-service

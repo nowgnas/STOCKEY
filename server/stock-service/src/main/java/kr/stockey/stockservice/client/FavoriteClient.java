@@ -2,7 +2,6 @@ package kr.stockey.stockservice.client;
 
 
 import kr.stockey.stockservice.dto.core.FavoriteDto;
-import kr.stockey.stockservice.dto.core.ResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,12 +23,8 @@ public interface FavoriteClient {
     @PostMapping("/client/stock/{stockId}")
     Void createFavoriteStock(@PathVariable Long stockId);
 
-    //TODO url 작성
-    @DeleteMapping("")
-    Void deleteFavorite(FavoriteDto favoriteDto);
+    @DeleteMapping("/client/keyword/{stockId}")
+    Void deleteFavoriteStock(@PathVariable Long stockId);
 
-    //TODO url 작성
-    @GetMapping("")
-    ResponseDto findByMemberAndStock(Long memberId, Long stockId);
 
 }

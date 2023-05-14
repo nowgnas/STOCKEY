@@ -193,11 +193,7 @@ public class StockServiceImpl implements StockService {
         if (!isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.NOT_FOUND);
         }
-        ResponseDto responseDto = favoriteClient.findByMemberAndStock(memberdto.getId(), stock.getId());
-        FavoriteDto favoriteDto = (FavoriteDto) responseDto.getData();
-//        Favorite favorite = favoriteRepository.findByMemberAndStock(memberdto.getUserId(), stock.getId());
-        checkUser(memberdto, favoriteDto);
-        favoriteClient.deleteFavorite(favoriteDto);
+        favoriteClient.deleteFavoriteStock(id);
     }
 
     /**
@@ -328,13 +324,6 @@ public class StockServiceImpl implements StockService {
     // Stock Entity 반환
     private Stock getStockEntity(Long id) {
         return stockRepository.findById(id).orElseThrow(() -> new StockException(StockExceptionType.NOT_FOUND));
-    }
-
-    // 유저가 같은지 체크
-    private static void checkUser(MemberDto memberDto, FavoriteDto favoriteDto) {
-        if (!favoriteDto.getUserId().equals(memberDto.getId())) {
-            throw new FavoriteException(FavoriteExceptionType.DIFFERENT_USER);
-        }
     }
 
 

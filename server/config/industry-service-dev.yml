@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql/stockey?serverTimezone=Asia/Seoul
+    username: '{cipher}a3e697d77ad9f3e43af6baae3f1b3ceb276791e8323a9b0ef35e6847208d7cad'
+    password: '{cipher}e83a4090147d9b528b00819fd53311c6e785f59384434fe7da5ece88618fb6b6'

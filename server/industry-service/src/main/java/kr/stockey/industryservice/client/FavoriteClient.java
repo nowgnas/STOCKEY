@@ -22,5 +22,6 @@ public interface FavoriteClient {
     @PostMapping("/favorite/client/industry/{industryId}")
     Void createFavoriteIndustry(@PathVariable Long industryId);
 
-
+    @DeleteMapping("/favorite/client/keyword/{industryId}")
+    Void deleteFavoriteIndustry(@PathVariable Long industryId);
     }

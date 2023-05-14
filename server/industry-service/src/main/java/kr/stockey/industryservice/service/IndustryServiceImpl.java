@@ -124,15 +124,13 @@ public class IndustryServiceImpl implements IndustryService {
 
     @Transactional
     public void deleteFavorite(Long id) {
-        Industry industry = getIndustry(id);
+        getIndustry(id);
         boolean isFavorite = checkFavorite(id);
         // 관심 등록하지 않았다면
         if (!isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.NOT_FOUND);
         }
-        Favorite favorite = favoriteRepository.findByMemberAndIndustry(member, industry);
-        checkUser(member, favorite);
-        favoriteRepository.delete(favorite);
+        favoriteClient.deleteFavoriteIndustry(id);
     }
 
     public List<GetIndustryMarketCapResponse> getMarketCapList(Long id) {
@@ -183,12 +181,6 @@ public class IndustryServiceImpl implements IndustryService {
         return stockDtoMapper.toGetStockTodayResponse(result);
     }
 
-    // 유저가 동일한지 체크
-    private static void checkUser(Member member, Favorite favorite) {
-        if (favorite.getMember() != member) {
-            throw new FavoriteException(FavoriteExceptionType.DIFFERENT_USER);
-        }
-    }
 
     // 산업 엔티티 반환
     private Industry getIndustry(Long id) {

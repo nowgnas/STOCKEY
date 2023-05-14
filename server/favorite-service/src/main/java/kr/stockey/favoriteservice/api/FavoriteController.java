@@ -81,7 +81,7 @@ public class FavoriteController {
         favoriteService.createFavoriteKeyword(keywordId, memberId);
         return new ResponseEntity<>(null, HttpStatus.CREATED);    }
 
-    @DeleteMapping("/client/keyword/{industryId}")
+    @DeleteMapping("/client/stock/{industryId}")
     public ResponseEntity<Void> deleteFavoriteIndustry(@PathVariable Long industryId) {
         Long memberId = getMemberId();
         favoriteService.deleteFavoriteIndustry(industryId, memberId);

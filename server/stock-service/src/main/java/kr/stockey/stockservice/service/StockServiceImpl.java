@@ -141,7 +141,7 @@ public class StockServiceImpl implements StockService {
 
     // 관심 종목 리스트 출력
     public List<GetStockTodayResponse> getMyStocks(MemberDto memberdto) {
-        List<FavoriteDto> favorites= favoriteClient.getMyFavoriteStock();
+        List<FavoriteDto> favorites = favoriteClient.getMyFavoriteStock();
         List<Stock> stockList = new ArrayList<>();
 
 
@@ -170,9 +170,7 @@ public class StockServiceImpl implements StockService {
 
     // 관심 여부 확인
     public boolean checkFavorite(Long userId, Long stockId) {
-        ResponseDto responseDto = favoriteClient.existsByMemberAndStock(userId, stockId);
-        Boolean result = (Boolean) responseDto.getData();
-        return result;
+        return favoriteClient.checkFavoriteStock(stockId);
     }
 
     // 관심 산업 등록

@@ -1,6 +1,5 @@
 package kr.stockey.stockservice.service;
 
-import kr.stockey.stockservice.api.request.CreateFavoriteStockRequest;
 import kr.stockey.stockservice.api.request.GetCorrelationRequest;
 import kr.stockey.stockservice.api.response.GetStockTodayResponse;
 import kr.stockey.stockservice.client.FavoriteClient;
@@ -176,18 +175,13 @@ public class StockServiceImpl implements StockService {
     // 관심 산업 등록
     @Transactional
     public void addFavorite(MemberDto memberDto, Long id) {
-        Stock stock = getStockEntity(id);
+        getStockEntity(id);
         boolean isFavorite = checkFavorite(memberDto.getId(), id);
         //이미 관심등록했다면
         if (isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.ALREADY_EXIST);
         }
-
-        CreateFavoriteStockRequest favoriteRequest = CreateFavoriteStockRequest.builder()
-                .stockId(id)
-                .memberId(memberDto.getId())
-                .build();
-        favoriteClient.saveStock(favoriteRequest);
+        favoriteClient.createFavoriteStock(id);
     }
 
     @Transactional

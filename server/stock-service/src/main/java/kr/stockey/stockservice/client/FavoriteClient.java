@@ -1,11 +1,9 @@
 package kr.stockey.stockservice.client;
 
 
-import kr.stockey.stockservice.api.request.CreateFavoriteStockRequest;
 import kr.stockey.stockservice.dto.core.FavoriteDto;
 import kr.stockey.stockservice.dto.core.ResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,9 +21,8 @@ public interface FavoriteClient {
     Boolean checkFavoriteStock(@PathVariable Long stockId);
 
 
-    //TODO url 작성
-    @PostMapping("")
-    Void saveStock(CreateFavoriteStockRequest request);
+    @PostMapping("/client/stock/{stockId}")
+    Void createFavoriteStock(@PathVariable Long stockId);
 
     //TODO url 작성
     @DeleteMapping("")

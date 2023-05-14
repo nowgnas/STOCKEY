@@ -16,9 +16,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 
@@ -129,6 +131,39 @@ public class InvestmentServiceImpl implements InvestmentService{
     @Override
     public List<TraderRankDto> getTraderRank(Long num) {
         return getFirstNElements(traderRankDtoList, num);
+    }
+
+    @Override
+    public List<AccountFlowDto> getWeeklyAssetInfo(Long memberId) {
+
+        // 현재 보유 주식 정보 가져오기
+
+
+        List<LocalDate> weekDates = getWeekDates(LocalDate.now());
+        // 최신 날짜 순으로 정렬
+        weekDates.sort(Collections.reverseOrder());
+
+        // 특정 날짜에 대해 모든 체결 데이터 가져오기
+        for (LocalDate date : weekDates) {
+            System.out.println(date);
+        }
+
+        return null;
+    }
+
+    // 인자로 들어온 날짜가 속한 주의 날짜들 리턴 (월 ~ 일)
+    private List<LocalDate> getWeekDates(LocalDate date) {
+        LocalDate sunday = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        LocalDate monday = sunday.minusDays(6);
+
+        List<LocalDate> weekDates = new ArrayList<>();
+        LocalDate currentDay = monday;
+        while (!currentDay.isAfter(sunday)) {
+            weekDates.add(currentDay);
+            currentDay = currentDay.plusDays(1);
+        }
+
+        return weekDates;
     }
 
     private  <T> List<T> getFirstNElements(List<T> inputList, Long N) {

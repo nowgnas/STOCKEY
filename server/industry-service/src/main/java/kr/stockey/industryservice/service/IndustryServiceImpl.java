@@ -198,5 +198,10 @@ public class IndustryServiceImpl implements IndustryService {
         return industryRepository.findById(id).orElseThrow(() -> new IndustryException(IndustryExceptionType.NOT_FOUND));
     }
 
+    // 관심 산업 여부 체크
+    public boolean checkFavorite(Long industryId){
+        return favoriteClient.checkFavoriteIndustry(industryId);
+    }
+
 
 }

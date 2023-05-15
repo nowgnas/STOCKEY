@@ -1,7 +1,12 @@
 import styled from "styled-components"
 import dayjs from "dayjs"
+import { useRecoilValue } from "recoil"
 
 import TradeStepperItem from "./TradeStepperItem"
+import {
+  currentTimeState,
+  nextTradeTimeState,
+} from "../../../stores/TradeAtoms"
 
 interface LineProps {
   nowHour: number
@@ -9,8 +14,11 @@ interface LineProps {
 
 const TradeStepper = () => {
   // 현재 시간 가져오기
-  const nowHour: number = Number(dayjs().format("H"))
-  // const nowHour: number = 10
+  const now = useRecoilValue(currentTimeState)
+  const nowHour = Number(now.format("H"))
+
+  const nextTime = useRecoilValue(nextTradeTimeState)
+  const nextHour = nextTime.format("H")
 
   // 더미데이터 -> 시간별 거래 내역 여부까지 가져오기 (API통신)
   const TIMES = [9, 10, 11, 12, 13, 14, 15]
@@ -18,16 +26,16 @@ const TradeStepper = () => {
     <Container>
       <Header>
         {nowHour > 7 && nowHour < 15
-          ? `지금 ${nowHour + 1}시 거래 주문이 진행 중이에요!`
+          ? `지금 ${nextHour}시 거래 주문이 진행 중이에요!`
           : "장이 마감되었습니다."}
       </Header>
       {nowHour > 7 && nowHour < 15 && (
-        <BodyText>{nowHour + 1}시 전까지 주문서 제출을 완료해주세요.</BodyText>
+        <BodyText>{nextHour}시 전까지 주문서 제출을 완료해주세요.</BodyText>
       )}
       <TimeWrapper>
         <Line nowHour={nowHour} />
         {TIMES.map((time) => (
-          <TradeStepperItem time={time} nowHour={nowHour} />
+          <TradeStepperItem time={time} nextTime={nextTime} />
         ))}
       </TimeWrapper>
     </Container>

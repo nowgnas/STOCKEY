@@ -1,36 +1,35 @@
 import styled from "styled-components"
 import { shimmer } from "../../../Keyframes"
+import dayjs, { Dayjs } from "dayjs"
 
 interface Props {
   time: number
-  nowHour: number
+  nextTime: Dayjs
 }
 
 interface TimeDivProps {
   isTimeOver: boolean
 }
 
-const TradeStepperItem = ({ time, nowHour }: Props) => {
-  // 이후 시간인지 확인
-  const isAfterNow = (hour: number) => {
-    return hour > nowHour
+const TradeStepperItem = ({ time, nextTime }: Props) => {
+  const isBeforeAfter = (time: number) => {
+    const thisTime = dayjs().hour(time).startOf("hour")
+    return thisTime.isAfter(nextTime)
   }
-  // 바로 다음 시간인지 확인
-  const isNextTime = (hour: number) => {
-    return hour - nowHour === 1
-  }
+
+  const nextHour = Number(nextTime.format("H"))
 
   return (
     <>
-      {isNextTime(time) ? (
+      {time === nextHour ? (
         <TimeSection>
           <TimeText>{time}시</TimeText>
-          <NextTimeDiv isTimeOver={isAfterNow(time)} />
+          <NextTimeDiv isTimeOver={isBeforeAfter(time)} />
         </TimeSection>
       ) : (
         <TimeSection>
           <TimeText>{time}시</TimeText>
-          <TimeDiv isTimeOver={isAfterNow(time)} />
+          <TimeDiv isTimeOver={isBeforeAfter(time)} />
         </TimeSection>
       )}
     </>

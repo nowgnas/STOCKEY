@@ -103,9 +103,9 @@ public class MemberController {
             }
     )
     @GetMapping("/client/{memberId}")
-    public ResponseEntity<ResponseDto> GetMember(@PathVariable String memberId){
+    public ResponseEntity<MemberDto> GetMember(@PathVariable String memberId){
         MemberDto memberDto = memberService.getMember(memberId);
-        return new ResponseEntity<>(new ResponseDto("회원 정보 반환!", memberDto), HttpStatus.OK);
+        return new ResponseEntity<>(memberDto, HttpStatus.OK);
     }
 
     /* --------------  다른 서비스에서 호출하는 메소드 [end]  ----------------  */

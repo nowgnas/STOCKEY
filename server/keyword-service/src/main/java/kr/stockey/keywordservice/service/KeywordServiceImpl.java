@@ -68,7 +68,7 @@ public class KeywordServiceImpl implements KeywordService {
     @Override
     public List<KeywordDto> getMyKeywords() {
         // 내 관심 키워드들
-        List<FavoriteDto> myFavoriteKeyword = (List<FavoriteDto>) favoriteClient.getMyFavoriteKeyword().getData();
+        List<FavoriteDto> myFavoriteKeyword = favoriteClient.getMyFavoriteKeyword();
         List<KeywordDto> keywordDtoList = new ArrayList<>();
 
         // 관심 키워드 ID -> 키워드 entity => dto
@@ -84,8 +84,7 @@ public class KeywordServiceImpl implements KeywordService {
 
     @Override
     public boolean checkFavorite(Long id) {
-        boolean result = (boolean) favoriteClient.checkFavoriteKeyword(id).getData();
-        return result;
+        return favoriteClient.checkFavoriteKeyword(id);
     }
 
     @Override

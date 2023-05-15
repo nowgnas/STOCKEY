@@ -4,10 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import kr.stockey.keywordservice.api.request.GetKeyphraseRequest;
+import kr.stockey.keywordservice.api.request.GetTopNKeywordRequest;
+import kr.stockey.keywordservice.api.response.GetTopNKeywordResponse;
 import kr.stockey.keywordservice.api.response.KeywordDetailResponse;
 import kr.stockey.keywordservice.api.response.KeywordSearchResponse;
 import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
 import kr.stockey.keywordservice.dto.KeywordStatisticDto;
+import kr.stockey.keywordservice.dto.TopKeywordDTO;
 import kr.stockey.keywordservice.dto.core.KeywordDto;
 import kr.stockey.keywordservice.dto.core.ResponseDto;
 import kr.stockey.keywordservice.mapper.KeywordDtoMapper;
@@ -124,19 +127,19 @@ public class KeywordController {
 
 
     // TODO topNKeyword
-//    @Operation(summary = "TopN 키워드 리턴", description = "economy, industry, stock 가각에 대해 특정 기간의 TopN 키워드 리턴")
-//    @ApiResponses(
-//            value = {
-//                    @ApiResponse(responseCode = "200", description = "요청 성공")
-//            }
-//    )
-//    @GetMapping("/topN")
-//    public ResponseEntity<ResponseDto> getTopNKeyword(@Valid @ModelAttribute GetTopNKeywordRequest getTopNKeywordRequest) {
-//        Long totalNewsCount = keywordService.getTargetNewsCount(getTopNKeywordRequest);
-//        List<TopKeywordDTO> topKeywordDTO = keywordService.getTopNKeyword(getTopNKeywordRequest);
-//        GetTopNKeywordResponse getTopNKeywordResponse = new GetTopNKeywordResponse(totalNewsCount, topKeywordDTO);
-//        return new ResponseEntity<>(new ResponseDto("OK", getTopNKeywordResponse), HttpStatus.OK);
-//    }
+    @Operation(summary = "TopN 키워드 리턴", description = "economy, industry, stock 가각에 대해 특정 기간의 TopN 키워드 리턴")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공")
+            }
+    )
+    @GetMapping("/topN")
+    public ResponseEntity<ResponseDto> getTopNKeyword(@Valid @ModelAttribute GetTopNKeywordRequest getTopNKeywordRequest) {
+        Long totalNewsCount = keywordService.getTargetNewsCount(getTopNKeywordRequest);
+        List<TopKeywordDTO> topKeywordDTO = keywordService.getTopNKeyword(getTopNKeywordRequest);
+        GetTopNKeywordResponse getTopNKeywordResponse = new GetTopNKeywordResponse(totalNewsCount, topKeywordDTO);
+        return new ResponseEntity<>(new ResponseDto("OK", getTopNKeywordResponse), HttpStatus.OK);
+    }
 
 
     @Operation(summary = "keyphrase 제공", description = "특정 기간의 클러스터링 keyphrase을 제공합니다.")

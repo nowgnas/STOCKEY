@@ -89,18 +89,6 @@ public class StockController {
         return ResponseEntity.ok(stockSearchDtos);
     }
 
-    @Operation(summary = "종목과 연관성 있는 키워드 top6", description = "종목과 연관성 있는 키워드 top6을 반환합니다.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", description = "종목 없음")
-            }
-    )
-    @GetMapping("/{stockId}/keyword")
-    public ResponseEntity<List<StockKeywordDto>> getStockKeyword(@PathVariable("stockId") Long stockId) {
-        List<StockKeywordDto> keywords = stockService.getStockKeyword(stockId);
-        return ResponseEntity.ok(keywords);
-    }
 
     @Operation(summary = "주식 데이터 조회", description = "해당 종목의 주식 데이터 조회(2022.01.01~)")
     @ApiResponses(

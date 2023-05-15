@@ -110,11 +110,6 @@ public class StockServiceImpl implements StockService {
     }
 
 
-    public List<StockKeywordDto> getStockKeyword(Long stockId) {
-        ResponseDto responseDto = keywordClient.findStockKeywords(stockId);
-        List<StockKeywordDto> stockKeyword = (List<StockKeywordDto>) responseDto.getData();
-        return stockKeyword;
-    }
 
     public List<DailyStockDto> getDailyStock(Long stockId) {
         List<DailyStock> dailyStock = dailyStockRepository.findByStockId(stockId);

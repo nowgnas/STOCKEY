@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import TradeShortcutCard from "../../TradeMainPage/TradeShortcutCard"
 import { PanelTitle } from "../../StockDetailPage/SubPanel/KeywordPanel/KeywordPanel"
+import { useMyAsset } from "../../../hooks/useMyAsset"
 
 interface AccountProps {
   total: number
@@ -9,6 +10,8 @@ interface AccountProps {
 }
 
 const MyAccountCard = ({ total, stock, deposit }: AccountProps) => {
+  // const {total, stock, deposit} = useMyAsset()
+
   return (
     <>
       <PanelTitle style={{ marginTop: "0", marginBottom: "1.6rem" }}>

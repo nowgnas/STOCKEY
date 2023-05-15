@@ -9,7 +9,6 @@ import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
 import kr.stockey.keywordservice.dto.KeywordStatisticDto;
 import kr.stockey.keywordservice.dto.core.FavoriteDto;
 import kr.stockey.keywordservice.dto.core.KeywordDto;
-import kr.stockey.keywordservice.dto.core.ResponseDto;
 import kr.stockey.keywordservice.entity.Keyword;
 import kr.stockey.keywordservice.exception.favorite.FavoriteException;
 import kr.stockey.keywordservice.exception.favorite.FavoriteExceptionType;
@@ -113,8 +112,7 @@ public class KeywordServiceImpl implements KeywordService {
     @Override
     public Long getTargetNewsCount(GetTopNKeywordRequest getTopNKeywordRequest) {
         NewsCountRequest request = new ModelMapper().map(getTopNKeywordRequest, NewsCountRequest.class);
-        ResponseDto responseDto = newsClient.getNewsCountByDomain(request);
-        return (Long) responseDto.getData();
+        return newsClient.getNewsCountByDomain(request);
     }
 
     // TODO TopNKeyword

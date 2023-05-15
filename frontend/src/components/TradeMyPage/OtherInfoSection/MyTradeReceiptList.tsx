@@ -41,9 +41,9 @@ const MyTradeReceiptList = ({type, itemList, amount} : Props) => {
     <ContentFooter>
       {
         type === "buy" ? (
-          `총 ${amount.toLocaleString("ko-kr")}원 지출했어요`
+          `지출 : ${amount.toLocaleString("ko-kr")}원`
         ) : (
-          `총 ${amount.toLocaleString("ko-kr")}원 벌었어요`
+          `수익 : ${amount.toLocaleString("ko-kr")}원`
         )
       }
     </ContentFooter>
@@ -66,7 +66,7 @@ const ContentWrapper = styled.div`
 const ContentHeader = styled.div<{ color: string }>`
   color: ${(props) => props.color};
   height: 10%;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: bold;
 `;
 
@@ -108,4 +108,5 @@ const ContentFooter = styled.div`
   display: flex;
   justify-content: flex-end;
   font-size: 1.6rem;
+  font-weight: bold;
 `

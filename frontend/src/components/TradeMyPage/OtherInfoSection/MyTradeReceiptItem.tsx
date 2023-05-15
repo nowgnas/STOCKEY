@@ -35,5 +35,5 @@ export const ItemContainer = styled.div`
 `;
 export const ItemWrapper = styled.div<{ width: number }>`
   width: ${(props) => props.width}%;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
 `;

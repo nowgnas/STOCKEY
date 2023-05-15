@@ -31,7 +31,7 @@ const sampleItem = {
       contractedAmount: 13200,
     },
   ],
-  buyAmount: 548200,      // 없으면 0원
+  buyAmount: 548200, // 없으면 0원
   sellList: [
     {
       name: "naver",
@@ -52,7 +52,7 @@ const sampleItem = {
       contractedAmount: 13200,
     },
   ],
-  sellAmount: 4890000,   // 없으면 0원
+  sellAmount: 4890000, // 없으면 0원
 };
 
 const MyTradeReceipt = ({ date, open, tradeModalHandler }: Props) => {
@@ -62,6 +62,8 @@ const MyTradeReceipt = ({ date, open, tradeModalHandler }: Props) => {
   return (
     <DialogContainer open={open}>
       <DialogWrapper>
+        <TriangleArr cnt={15} position="top" />
+
         <TitleWrapper>{date} 거래 주문서</TitleWrapper>
 
         <SubTitleWrapper>
@@ -90,6 +92,8 @@ const MyTradeReceipt = ({ date, open, tradeModalHandler }: Props) => {
         >
           확인
         </ButtonComp>
+
+        <TriangleArr cnt={15} position="bottom" />
       </DialogWrapper>
     </DialogContainer>
   );
@@ -99,9 +103,10 @@ export default MyTradeReceipt;
 
 const DialogContainer = styled(Dialog)`
   & > .MuiDialog-container > .MuiPaper-root {
-    height: 90%;  
+    height: 85%;
     width: 60%;
-    border-radius: 32px;
+    overflow-y: visible;
+    border-radius: 0px;
     ::-webkit-scrollbar {
       display: none;
     }
@@ -117,14 +122,15 @@ const DialogContainer = styled(Dialog)`
 const DialogWrapper = styled.div`
   width: 100%;
   height: 100%;
-  padding: 36px;
+  padding: 24px 36px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
 `;
 
 const TitleWrapper = styled.div`
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   font-weight: bold;
 `;
 
@@ -132,6 +138,9 @@ const SubTitleWrapper = styled.div`
   font-size: 1.8rem;
   font-weight: bold;
   text-align: center;
+  border: 4px solid #faf5f7;
+  border-radius: 12px;
+  padding: 0.5rem;
 `;
 
 const ButtonComp = styled.div<{ color: string }>`
@@ -145,4 +154,43 @@ const ButtonComp = styled.div<{ color: string }>`
   font-size: 1.4rem;
   font-weight: bold;
   cursor: pointer;
+`;
+
+
+// 영수증 형태 css 
+interface TriangelArrProps {
+  cnt: number;
+  position: string;
+}
+const TriangleArr = ({ cnt, position }: TriangelArrProps) => {
+  const arr = [];
+  for (let i = 0; i < cnt; i++) {
+    arr.push(i);
+  }
+
+  return (
+    <TriangelWrapper position={position}>
+      {arr.map((num) => {
+        return <Triangle key={num} position={position} />;
+      })}
+    </TriangelWrapper>
+  );
+};
+
+const TriangelWrapper = styled.div<{ position: string }>`
+  position: absolute;
+  ${(props) => props.position}: -24px;
+  left: 0;
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+`;
+
+const Triangle = styled.div<{ position: string }>`
+  width: 40px;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-${(props) =>
+    props.position === "top" ? "bottom" : "top"}: 24px solid white;
 `;

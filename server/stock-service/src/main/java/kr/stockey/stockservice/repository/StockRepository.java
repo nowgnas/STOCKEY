@@ -1,6 +1,5 @@
 package kr.stockey.stockservice.repository;
 
-import kr.stockey.stockservice.dto.CorrelationDto;
 import kr.stockey.stockservice.dto.IndustrySumDto;
 import kr.stockey.stockservice.entity.Stock;
 import org.springframework.data.domain.Pageable;
@@ -8,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,15 +69,6 @@ public interface StockRepository extends JpaRepository<Stock,Long> {
     List<Stock> findByName(String keyword);
 
 
-    // TODO => JOIN문 구현
-//    @Query("SELECT ds.stockDate as stockDate,ds.closePrice as closePrice,ks.count as count" +
-//            " FROM DailyStock  ds" +
-//            " left JOIN KeywordStatistic ks" +
-//            " ON ds.stockDate = ks.statisticDate " +
-//            " WHERE ds.stock = :stock" +
-//            " AND ds.stockDate BETWEEN :startDate and :endDate" +
-//            " AND ks.keyword = :keyword")
-//    List<CorrelationDto> getTest(Stock stock, Keyword keyword, LocalDate startDate, LocalDate endDate);
 
     @Query("select s from Stock s where s != :stock and s.industryId = :industryId ")
     List<Stock> getStocksExceptMe(Stock stock,Long industryId);

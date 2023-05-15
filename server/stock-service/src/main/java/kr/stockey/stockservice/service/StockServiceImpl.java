@@ -27,9 +27,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -108,7 +111,6 @@ public class StockServiceImpl implements StockService {
         }
         return stockPreviewDtos;
     }
-
 
 
     public List<DailyStockDto> getDailyStock(Long stockId) {
@@ -191,37 +193,34 @@ public class StockServiceImpl implements StockService {
         favoriteClient.deleteFavoriteStock(id);
     }
 
-    /**
-     * // TODO 상관관계 추가
-     * <p>
-     * <p>
-     * public Double getCorrelation(Long id, GetCorrelationRequest getCorrelationRequest){
-     * Stock stock = getStockEntity(id);
-     * ResponseDto responseDto = keywordClient.findAll();
-     * List<KeywordDto> all = (List<KeywordDto>) responseDto;
-     * System.out.println("all.size() = " + all.size());
-     * <p>
-     * Long keywordId = getCorrelationRequest.getKeywordId();
-     * //        System.out.println("getCorrelationRequest = " + getCorrelationRequest.getKeywordId());
-     * //        System.out.println("keywordRepository = " + keywordRepository.findById(keywordId).get());
-     * KeywordDto keywordDto = keywordClient.getKeyword(keywordId);
-     * //        Keyword keyword = keywordRepository.findById(keywordId).orElseThrow(() ->
-     * //                new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
-     * LocalDate startDate = getCorrelationRequest.getStartDate();
-     * LocalDate endDate = getCorrelationRequest.getEndDate();
-     * //        System.out.println("stock. = " + stock.getName()+" "+keyword.getName());
-     * List<CorrelationDto> test = stockRepository.getTest(stock, keyword,startDate, endDate);
-     * List<Double> priceList = new ArrayList<>();
-     * List<Double> countList = new ArrayList<>();
-     * for(CorrelationDto dto : test){
-     * countList.add(Double.valueOf(dto.getCount()));
-     * priceList.add(Double.valueOf(dto.getClosePrice()));
-     * }
-     * System.out.println("test = " + test.size());
-     * double correlationCoefficient = getCorrelationResult(countList, priceList);
-     * return correlationCoefficient;
-     * }
-     */
+
+    public Double getCorrelation(Long id, GetCorrelationRequest getCorrelationRequest) {
+        Stock stock = getStockEntity(id);
+        Long keywordId = getCorrelationRequest.getKeywordId();
+
+        LocalDate startDate = getCorrelationRequest.getStartDate();
+        LocalDate endDate = getCorrelationRequest.getEndDate();
+        List<KeywordCountDateDto> countDateList = keywordClient.getCountDate(keywordId, startDate, endDate);
+        List<PriceDateDto> priceDateList = dailyStockRepository.getPriceDate(stock, startDate, endDate);
+
+        List<Double> priceList = new ArrayList<>();
+        List<Double> countList = new ArrayList<>();
+
+        // HashMap 생성
+        Map<LocalDate, KeywordCountDateDto> countDateDtoMap = countDateList.stream()
+                .collect(Collectors.toMap(KeywordCountDateDto::getStatisticDate, Function.identity()));
+
+        // 동일한 날짜일때 리스트에 추가
+        priceDateList.stream()
+                .filter(priceDate -> !countDateDtoMap.containsKey(priceDate.getStockDate()))
+                .forEach(priceDate -> {
+                    KeywordCountDateDto countDateDto = countDateDtoMap.get(priceDate.getStockDate());
+                    countList.add(Double.valueOf(countDateDto.getCount()));
+                    priceList.add(Double.valueOf(priceDate.getClosePrice()));
+                });
+        return  getCorrelationResult(countList, priceList);
+    }
+
 
     public List<ResultCorrelationDto> getAllStockCorrelation(Long id, GetCorrelationRequest getCorrelationRequest) {
         Stock stock = getStockEntity(id);
@@ -230,9 +229,8 @@ public class StockServiceImpl implements StockService {
         List<Stock> stocksExceptMe = stockRepository.getStocksExceptMe(stock, industryId);
         // 해당 종목을 제외한 주식들에 대하여 상관분석
         for (Stock s : stocksExceptMe) {
-            //TODO 상관관계 추가
-//            Double correlation = getCorrelation(s.getId(), getCorrelationRequest);
-//            stockList.add(new StockCorrelationDto(s,correlation));
+            Double correlation = getCorrelation(s.getId(), getCorrelationRequest);
+            stockList.add(new StockCorrelationDto(s,correlation));
         }
         Collections.sort(stockList);
 

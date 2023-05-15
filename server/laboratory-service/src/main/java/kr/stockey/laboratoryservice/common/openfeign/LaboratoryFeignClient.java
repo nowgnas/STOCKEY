@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "laboratory-service", url = "https://stockey.kr")
+@FeignClient(name = "laboratory-service", url = "https://stockey.kr/api")
 public interface LaboratoryFeignClient {
     @GetMapping("/stock/search")
     List<StockSearchDto> getStockSearch(@RequestParam String stock);

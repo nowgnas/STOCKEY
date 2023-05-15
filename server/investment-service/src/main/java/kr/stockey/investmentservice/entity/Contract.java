@@ -50,9 +50,13 @@ public class Contract {
     @Column(name = "category", nullable = false, length = 20)
     private InvCategory category;
 
+    @Setter
+    @Column(name = "match_order_id", nullable = true)
+    private Long matchOrderId;
+
     @Builder
-    public Contract(Long memberId, Long stockId, Long count, Long contractPrice,
-                    ContractType contractType, LocalDateTime createdAt, InvCategory category) {
+    public Contract(Long id, Long memberId, Long stockId, Long count, Long contractPrice, ContractType contractType,
+                    LocalDateTime createdAt, InvCategory category, Long matchOrderId) {
         this.memberId = memberId;
         this.stockId = stockId;
         this.count = count;
@@ -60,5 +64,6 @@ public class Contract {
         this.contractType = contractType;
         this.createdAt = createdAt;
         this.category = category;
+        this.matchOrderId = matchOrderId;
     }
 }

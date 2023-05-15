@@ -1,6 +1,7 @@
 package kr.stockey.investmentservice.mapper;
 
 import kr.stockey.investmentservice.dto.ContractDto;
+import kr.stockey.investmentservice.dto.OrderDto;
 import kr.stockey.investmentservice.dto.OrderHistoryDto;
 import kr.stockey.investmentservice.entity.Contract;
 import org.mapstruct.Mapper;
@@ -13,4 +14,7 @@ public interface InvestmentMapper {
 
     OrderHistoryDto toOrderHistoryDto(Contract orderHistory);
     List<OrderHistoryDto> toOrderHistoryDtoList(List<Contract> orderHistory);
+
+    OrderDto toOrderDto(Contract contract);
+    List<OrderDto> toOrderDtoList(List<Contract> contracts);
 }

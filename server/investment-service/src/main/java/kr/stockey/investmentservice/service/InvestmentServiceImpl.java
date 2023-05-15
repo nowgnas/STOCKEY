@@ -306,13 +306,17 @@ public class InvestmentServiceImpl implements InvestmentService{
         Collections.sort(rawOrderList);
 
         // 이전 라운드에 대한 주문만 남기기
-        List<Order> wholeOrderList = filterOrders(rawOrderList);
+        List<Order> wholeRedisOrderList = filterOrders(rawOrderList);
 
         // wholeOrderList 내용 DB에 적재
-        loadOrderIntoDB(wholeOrderList);
+        loadOrderIntoDB(wholeRedisOrderList);
+
+        // 방금 적재한 주문들 가져오기 (현 시간 기준 직전 라운드 시간대의 주문 리스트 가져오기)
+        List<OrderDto> justOrders = getJustOrders();
+        List<MemberOrderDto> memberOrderList = justOrdersToMemberOrderList(justOrders);
 
         // 앞에서 부터 주문 체결 진행 (각 멤버 id는 고유)
-        for (Order memberOrder : wholeOrderList) {
+        for (MemberOrderDto memberOrder : memberOrderList) {
             // member id로 가장 최신 deposit history 체크 -> 없다면 최초거래이므로 기본크레딧에서 시작
             Long curMemberId = memberOrder.getMemberId();
             Optional<Deposit> depositOptional = depositRepository.findLatestDepositByMemberId(curMemberId);
@@ -382,6 +386,7 @@ public class InvestmentServiceImpl implements InvestmentService{
                                 .contractType(ContractType.BUY)
                                 .createdAt(LocalDateTime.now())
                                 .category(InvCategory.CONTRACT)
+                                .matchOrderId(memberOrder.getMemberId())
                                 .build();
                         contractRepository.save(contract);
                     }
@@ -410,13 +415,14 @@ public class InvestmentServiceImpl implements InvestmentService{
                                 .contractType(ContractType.SELL)
                                 .createdAt(LocalDateTime.now())
                                 .category(InvCategory.CONTRACT)
+                                .matchOrderId(memberOrder.getMemberId())
                                 .build();
                         contractRepository.save(contract);
                     }
                 }
             }
 
-            orderRedisRepository.delete(memberOrder); // 주문에 사용된 데이터는 레디스에서 삭제
+            orderRedisRepository.deleteById(String.valueOf(memberOrder.getMemberId())); // 주문에 사용된 데이터는 레디스에서 삭제
 
             // 정산 완료된 금액을 deposit history에 넣기
             Deposit resultDeposit = Deposit.builder()
@@ -425,6 +431,37 @@ public class InvestmentServiceImpl implements InvestmentService{
                     .money(curMoney).build();
             depositRepository.save(resultDeposit);
         }
+    }
+
+    private List<MemberOrderDto> justOrdersToMemberOrderList(List<OrderDto> justOrders) {
+        List<MemberOrderDto> memberOrderDtos = new ArrayList<>();
+        for (OrderDto o : justOrders) {
+            OrderListDto orderListDto = new OrderListDto(o.getId(), o.getStockId(), o.getCount(), ContractType.valueOf(o.getContractType()));
+            Optional<MemberOrderDto> foundMemberOrderDto = memberOrderDtos.stream()
+                    .filter(dto -> o.getMemberId().equals(dto.getMemberId()))
+                    .findFirst();
+
+            if (foundMemberOrderDto.isPresent()) {
+                // 존재한다면 주문 리스트에 add
+                foundMemberOrderDto.get().getOrders().add(orderListDto);
+            } else {
+                // 처음 나왔다면 주문 리스트 새로 생성
+                memberOrderDtos.add(new MemberOrderDto(o.getMemberId(), List.of(orderListDto), o.getCreatedAt()));
+            }
+        }
+        return memberOrderDtos;
+    }
+
+    private List<OrderDto> getJustOrders() {
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime previousHour = currentTime.minusHours(1);
+
+        // Set the minutes and seconds to zero for the previous hour
+        LocalDateTime startOfPreviousHour = previousHour.withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime endOfPreviousHour = previousHour.withMinute(0).withSecond(0).withNano(0).plusHours(1);
+
+        List<Contract> justOrders = contractRepository.getJustOrders(startOfPreviousHour, endOfPreviousHour);
+        return investmentMapper.toOrderDtoList(justOrders);
     }
 
     private void loadOrderIntoDB(List<Order> wholeOrderList) {
@@ -438,6 +475,7 @@ public class InvestmentServiceImpl implements InvestmentService{
                         .contractType(orderListDto.getOrderType())
                         .createdAt(order.getOrderTime())
                         .category(InvCategory.ORDER)
+                        .matchOrderId(null)
                         .build();
                 contractRepository.save(contract);
             }

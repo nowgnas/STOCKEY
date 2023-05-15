@@ -91,7 +91,10 @@ public class MemberController {
         return new ResponseEntity<>(new ResponseDto("닉네임 변경 완료!", null), HttpStatus.OK);
     }
 
-    @Operation(summary = "get member", description = "회원 정보 수정")
+
+    /* --------------  다른 서비스에서 호출하는 메소드 [start] ----------------  */
+
+    @Operation(summary = "get member", description = "회원 정보 반환")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "요청 성공"),
@@ -99,9 +102,12 @@ public class MemberController {
                     @ApiResponse(responseCode = "404", description = "회원 정보 없음"),
             }
     )
-    @GetMapping("/{memberId}")
+    @GetMapping("/client/{memberId}")
     public ResponseEntity<ResponseDto> GetMember(@PathVariable String memberId){
         MemberDto memberDto = memberService.getMember(memberId);
         return new ResponseEntity<>(new ResponseDto("회원 정보 반환!", memberDto), HttpStatus.OK);
     }
+
+    /* --------------  다른 서비스에서 호출하는 메소드 [end]  ----------------  */
+
 }

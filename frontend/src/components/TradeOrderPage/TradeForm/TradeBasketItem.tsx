@@ -123,6 +123,7 @@ export default TradeBasketItem
 const StockLogoImage = styled.img`
   height: 90%;
   width: 10%;
+  border-radius: 16px;
 `
 
 const StockText = styled.p`

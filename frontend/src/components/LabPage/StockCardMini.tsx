@@ -1,5 +1,5 @@
-import { StockCardType } from '../../stores/LaboratoryAtoms';
-import styled from 'styled-components';
+import { StockCardType } from "../../stores/LaboratoryAtoms"
+import styled from "styled-components"
 
 interface Props {
   item: StockCardType
@@ -9,13 +9,13 @@ interface Props {
 const StockCardMini = ({ item }: Props) => {
   return (
     <CardWrapper>
-      <LogoImg src={`logo_images/${item.name}.png`} />
+      <LogoImg src={`/logo_images/${item.name}.png`} />
       {item.name}
     </CardWrapper>
   )
 }
 
-export default StockCardMini;
+export default StockCardMini
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -26,7 +26,7 @@ const CardWrapper = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  
+
   font-size: 1.2rem;
   font-weight: 400;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
@@ -35,7 +35,7 @@ const CardWrapper = styled.div`
   box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.15),
     0px 1px 3px rgba(0, 0, 0, 0.3);
   border-radius: 24px;
-`;
+`
 
 const LogoImg = styled.img`
   width: 30%;

@@ -23,11 +23,6 @@ const TradeStockItem = ({ item }: TradeStockItemProps) => {
         //isDragging 변수가 현재 드래깅중인지 아닌지를 리턴
         isDragging: monitor.isDragging(),
       }),
-      end: (item, monitor) => {
-        // 드래그가 끝났을때
-        const dropResult: { dropEffect: string; name: string } | null =
-          monitor.getDropResult()
-      },
     }),
     [item]
   )
@@ -117,6 +112,7 @@ const StockItemWrapper = styled(Grid)<{ opacity: string }>`
 const StockImage = styled.img`
   width: 80%;
   height: 100%;
+  border-radius: 16px;
 `
 
 const StockInfo = styled(Grid)``

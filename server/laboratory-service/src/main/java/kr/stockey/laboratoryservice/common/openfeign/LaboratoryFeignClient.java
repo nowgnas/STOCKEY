@@ -15,6 +15,6 @@ public interface LaboratoryFeignClient {
     @GetMapping("/stock/search")
     List<StockSearchDto> getStockSearch(@RequestParam String stock);
 
-    @GetMapping("/api/lab/feign/data/{data}")
+    @GetMapping("/lab/feign/data/{data}")
     ResponseEntity<ResponseDto> testFeign(@PathVariable String data);
 }

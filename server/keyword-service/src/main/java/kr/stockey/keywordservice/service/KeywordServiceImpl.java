@@ -178,8 +178,11 @@ public class KeywordServiceImpl implements KeywordService {
         return keywordMapper.toDto(keywordList);
     }
 
-
-
-
+    @Override
+    public List<KeywordStatisticDto> getCountDate(Long keywordId, LocalDate startDate, LocalDate endDate) {
+        keywordRepository.findById(keywordId).orElseThrow(()
+                -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
+        return keywordStatisticRepository.getCountDate(keywordId, startDate, endDate);
+    }
 }
 

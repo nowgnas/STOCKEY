@@ -3,10 +3,10 @@ package kr.stockey.keywordservice.service;
 import kr.stockey.keywordservice.api.request.GetKeyphraseRequest;
 import kr.stockey.keywordservice.api.request.GetTopNKeywordRequest;
 import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
-import kr.stockey.keywordservice.dto.core.KeywordDto;
 import kr.stockey.keywordservice.dto.KeywordStatisticDto;
-import kr.stockey.keywordservice.dto.TopKeywordDTO;
+import kr.stockey.keywordservice.dto.core.KeywordDto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface KeywordService {
@@ -29,5 +29,8 @@ public interface KeywordService {
     List<GetKeyPhraseResponse.Message> getKeyphrase(Long keywordId, GetKeyphraseRequest getKeyphraseRequest);
 
     List<KeywordDto> getSearchKeyword(String name);
+
+    List<KeywordStatisticDto> getCountDate(Long keywordId, LocalDate startDate, LocalDate endDate);
+
 
 }

@@ -7,6 +7,8 @@ import kr.stockey.keywordservice.client.FavoriteClient;
 import kr.stockey.keywordservice.client.NewsClient;
 import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
 import kr.stockey.keywordservice.dto.KeywordStatisticDto;
+import kr.stockey.keywordservice.dto.TopKeywordCountDto;
+import kr.stockey.keywordservice.dto.TopKeywordDTO;
 import kr.stockey.keywordservice.dto.core.FavoriteDto;
 import kr.stockey.keywordservice.dto.core.KeywordDto;
 import kr.stockey.keywordservice.entity.Keyword;
@@ -32,6 +34,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -115,32 +118,21 @@ public class KeywordServiceImpl implements KeywordService {
         return newsClient.getNewsCountByDomain(request);
     }
 
-    // TODO TopNKeyword
-//    @Override
-//    public List<TopKeywordDTO> getTopNKeyword(GetTopNKeywordRequest getTopNKeywordRequest) {
-//        Pageable topN = PageRequest.of(0, getTopNKeywordRequest.getTopN());
-//        String newsType = getTopNKeywordRequest.getNewsType();
-//        Long domainId = getTopNKeywordRequest.getId();
-//        LocalDate startDate = getTopNKeywordRequest.getStartDate();
-//        LocalDate endDate = getTopNKeywordRequest.getEndDate();
-//
-//        List<TopKeywordDTO> topKeywords = new ArrayList<>();
-//
-//        switch (newsType) {
-//            case "ECONOMY":
-//                topKeywords = newsRelationRepository.getTopNKeywordsForEconomy(startDate, endDate, topN);
-//                break;
-//            case "INDUSTRY":
-//                topKeywords = newsRelationRepository.getTopNKeywordsForIndustry(startDate, endDate, topN, domainId);
-//                break;
-//            case "STOCK":
-//                topKeywords = newsRelationRepository.getTopNKeywordsForStock(startDate, endDate, topN, domainId);
-//                break;
-//            default:
-//                break;
-//        }
-//        return topKeywords;
-//    }
+
+    // TopN 키워드 리턴
+    @Override
+    public List<TopKeywordDTO> getTopNKeyword(GetTopNKeywordRequest getTopNKeywordRequest) {
+        List<TopKeywordCountDto> topKeywordCount = newsClient.getTopNKeywords(getTopNKeywordRequest);
+        // keyword의 name 필드 추가
+        List<TopKeywordDTO> topKeywords = topKeywordCount.stream()
+                .map(o -> {
+                    Keyword keyword = keywordRepository.findById(o.getKeywordId())
+                            .orElseThrow(() -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
+                    return new TopKeywordDTO(o.getKeywordId(), o.getKeywordCount(), keyword.getName());
+                })
+                .collect(Collectors.toList());
+        return topKeywords;
+    }
 
     @Override
     public List<GetKeyPhraseResponse.Message> getKeyphrase(Long keywordId, GetKeyphraseRequest getKeyphraseRequest) {

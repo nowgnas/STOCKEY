@@ -328,8 +328,7 @@ public class StockServiceImpl implements StockService {
 
 
     private IndustryDto getIndustry(Long industryId) {
-        ResponseDto responseDto = industryClient.geIndustry(industryId);
-        IndustryDto industryDto = (IndustryDto) responseDto.getData();
+        IndustryDto industryDto = industryClient.geIndustry(industryId);
         return industryDto;
     }
 }

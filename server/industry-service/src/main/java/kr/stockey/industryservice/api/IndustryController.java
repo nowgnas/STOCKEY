@@ -39,20 +39,7 @@ public class IndustryController {
         return new ResponseEntity<>(new ResponseDto("OK", all), HttpStatus.OK);
     }
 
-    // 산업 상세 설명
 
-    @Operation(summary = "단일 산업 반환 ", description = "산업 하나의 정보를 반환해주는 메소드입니다.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", description = "해당 산업 없음")
-            }
-    )
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseDto> getOne(@PathVariable Long id) {
-        IndustryDto one = industryService.getOne(id);
-        return new ResponseEntity<>(new ResponseDto("OK", one), HttpStatus.OK);
-    }
 
     @Operation(summary = "산업별 시가총액 리스트", description = "산업별 시가총액 리스트를 반환합니다. 시가총액 순으로 정렬")
     @ApiResponses(
@@ -185,7 +172,16 @@ public class IndustryController {
         return new ResponseEntity<>(new ResponseDto("OK", marketCapList), HttpStatus.OK);
     }
 
+    /* --------------  다른 서비스에서 호출하는 메소드 [start] ----------------  */
 
+    // 산업 상세 설명
+    @GetMapping("/client/{id}")
+    public ResponseEntity<IndustryDto> getOne(@PathVariable Long id) {
+        IndustryDto one = industryService.getOne(id);
+        return new ResponseEntity<>(one, HttpStatus.OK);
+    }
+
+    /* --------------  다른 서비스에서 호출하는 메소드 [end]  ----------------  */
 
 
 

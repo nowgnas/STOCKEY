@@ -1,8 +1,7 @@
 package kr.stockey.newsservice.dto;
 
-public interface TopKeywordDto {
+public interface TopKeywordCountDto {
     Long getKeywordId();
     Long getKeywordCount();
-    String getKeywordName();
 }
 

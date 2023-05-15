@@ -1,9 +1,11 @@
-import styled from "styled-components"
-import dayjs from "dayjs"
+import { useState } from "react";
+import styled from "styled-components";
+import dayjs from "dayjs";
+import MyTradeReceipt from "./MyTradeReceipt";
 
 interface TradeHistoryProps {
-  date: string
-  realizedProfit: number
+  date: string;
+  realizedProfit: number;
 }
 
 const MyTradeHistoryCard = ({
@@ -16,7 +18,7 @@ const MyTradeHistoryCard = ({
       ? `+ ${realizedProfit.toLocaleString()}`
       : realizedProfit < 0
       ? `- ${Math.abs(realizedProfit).toLocaleString()}`
-      : `0`
+      : `0`;
 
   // 실현 손익이 +, -, 0 인 경우에 따라 폰트 색상을 다르게 표시
   const footerClassName =
@@ -24,18 +26,35 @@ const MyTradeHistoryCard = ({
       ? "positive"
       : realizedProfit < 0
       ? "negative"
-      : "neutral"
+      : "neutral";
+
+  // modal handler
+  const [tradeModalOpen, setTradeModalOpen] = useState<boolean>(false);
+  const tradeModalHandler = (status: boolean) => {
+    setTradeModalOpen(status);
+  };
 
   return (
-    <CardWrapper>
-      <CardHeader>{date}</CardHeader>
-      <CardImg src="/tradeLogos/bill.png" alt="card-img" />
-      <CardFooter className={footerClassName}>{profit}원</CardFooter>
-    </CardWrapper>
-  )
-}
+    <>
+      <CardWrapper>
+        <CardHeader>{date}</CardHeader>
+        <CardImg
+          src="/tradeLogos/bill.png"
+          alt="card-img"
+          onClick={() => tradeModalHandler(true)}
+        />
+        <CardFooter className={footerClassName}>{profit}원</CardFooter>
+      </CardWrapper>
+      <MyTradeReceipt
+        date={date}
+        open={tradeModalOpen}
+        tradeModalHandler={tradeModalHandler}
+      />
+    </>
+  );
+};
 
-export default MyTradeHistoryCard
+export default MyTradeHistoryCard;
 
 const CardWrapper = styled.div`
   // 레이아웃
@@ -62,13 +81,13 @@ const CardWrapper = styled.div`
     -ms-user-select: none;
     user-select: none;
   }
-`
+`;
 
 const CardHeader = styled.p`
   // 스타일
   color: var(--custom-gray-1);
   font-size: 1.7rem;
-`
+`;
 const CardImg = styled.img`
   // 레이아웃
   width: 7em;
@@ -92,8 +111,8 @@ const CardImg = styled.img`
   -moz-user-drag: none;
   -o-user-drag: none;
   user-drag: none;
-`
+`;
 const CardFooter = styled.p`
   // 스타일
   font-size: 1.6rem;
-`
+`;

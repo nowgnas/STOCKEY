@@ -202,10 +202,7 @@ public class StockController {
     private MemberDto getMember() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String memberId = request.getHeader("X-UserId");
-        ResponseDto responseDto = memberClient.getMember(memberId);
-        MemberDto memberDto = (MemberDto) responseDto.getData();
-        return memberDto;
-
+        return memberClient.getMember(memberId);
     }
 
     /* --------------  다른 서비스에서 호출하는 메소드 [start] ----------------  */

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -148,9 +149,9 @@ public class KeywordController {
     )
     @GetMapping("/{keywordsId}/keyphrase")
     public ResponseEntity<ResponseDto> GetKeyphrase(@PathVariable Long keywordsId,
-                                                    @Valid @ModelAttribute GetKeyphraseRequest getKeyphraseRequest){
+                                                    @Valid @ModelAttribute GetKeyphraseRequest getKeyphraseRequest) {
         List<GetKeyPhraseResponse.Message> keyphrase = keywordService.getKeyphrase(keywordsId, getKeyphraseRequest);
-        return new ResponseEntity<>(new ResponseDto("OK",keyphrase),HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto("OK", keyphrase), HttpStatus.OK);
     }
 
     @Operation(summary = "검색", description = "keyword 검색 결과를 제공합니다.")
@@ -161,10 +162,10 @@ public class KeywordController {
             }
     )
     @GetMapping("/search")
-    public ResponseEntity<ResponseDto> getStockSearch(@RequestParam String keyword)  {
+    public ResponseEntity<ResponseDto> getStockSearch(@RequestParam String keyword) {
         List<KeywordDto> searchKeyword = keywordService.getSearchKeyword(keyword);
         List<KeywordSearchResponse> keywordSearchResponses = keywordDtoMapper.toKeywordSearchResponse(searchKeyword);
-        return new ResponseEntity<>(new ResponseDto("OK",keywordSearchResponses),HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto("OK", keywordSearchResponses), HttpStatus.OK);
     }
 
     /* --------------  다른 서비스에서 호출하는 메소드 [start] ----------------  */
@@ -175,9 +176,16 @@ public class KeywordController {
         return new ResponseEntity<>(keywordDto, HttpStatus.OK);
     }
 
+
+    @GetMapping("/client/correlation/{keywordId}")
+    public ResponseEntity<List<KeywordStatisticDto>> getCountDate(@PathVariable Long keywordId,
+                                                            @RequestParam LocalDate startDate,
+                                                            @RequestParam LocalDate endDate) {
+        List<KeywordStatisticDto> countDate = keywordService.getCountDate(keywordId, startDate, endDate);
+        return new ResponseEntity<>(countDate, HttpStatus.OK);
+    }
+
     /* --------------  다른 서비스에서 호출하는 메소드 [end]  ----------------  */
-
-
 
 
 }

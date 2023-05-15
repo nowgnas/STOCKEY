@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface KeywordStatisticRepository extends JpaRepository<KeywordStatistic, Long> {
@@ -13,6 +14,15 @@ public interface KeywordStatisticRepository extends JpaRepository<KeywordStatist
             "FROM KeywordStatistic ks " +
             "WHERE ks.category = 'FREQ' AND ks.keyword.id = :keywordId")
     List<KeywordStatisticDto> findFreqStatisticsByKeywordId(@Param("keywordId") Long keywordId);
+
+
+
+    @Query("SELECT ks.statisticDate as statisticDate, ks.count as count " +
+            " FROM KeywordStatistic ks " +
+            " WHERE ks.category = 'FREQ' AND ks.keyword = :keywordId " +
+            " AND ks.statisticDate between :startDate and :endDate")
+    List<KeywordStatisticDto> getCountDate(Long keywordId, LocalDate startDate, LocalDate endDate);
+
 
 
 }

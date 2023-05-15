@@ -16,7 +16,6 @@ public interface StockService {
      Float getAverageIndustryChangeRate(Long industryId) ;
      List<StockPreviewDto> getStock() ;
      List<StockPreviewDto> getStockRandom(Integer count) ;
-     List<StockKeywordDto> getStockKeyword(Long stockId) ;
      List<DailyStockDto> getDailyStock(Long stockId);
      DailyStockDto getTodayDailyStock(Long stockId);
      List<StockSearchDto> getSearchStock(String keyword);

@@ -89,18 +89,6 @@ public class StockController {
         return ResponseEntity.ok(stockSearchDtos);
     }
 
-    @Operation(summary = "종목과 연관성 있는 키워드 top6", description = "종목과 연관성 있는 키워드 top6을 반환합니다.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", description = "종목 없음")
-            }
-    )
-    @GetMapping("/{stockId}/keyword")
-    public ResponseEntity<List<StockKeywordDto>> getStockKeyword(@PathVariable("stockId") Long stockId) {
-        List<StockKeywordDto> keywords = stockService.getStockKeyword(stockId);
-        return ResponseEntity.ok(keywords);
-    }
 
     @Operation(summary = "주식 데이터 조회", description = "해당 종목의 주식 데이터 조회(2022.01.01~)")
     @ApiResponses(
@@ -123,8 +111,8 @@ public class StockController {
             }
     )
     @GetMapping("/my")
-    public ResponseEntity<ResponseDto> getMyStock(@RequestHeader String userId) {
-        MemberDto memberDto = getMember(userId);
+    public ResponseEntity<ResponseDto> getMyStock() {
+        MemberDto memberDto = getMember();
         List<GetStockTodayResponse> myStocks = stockService.getMyStocks(memberDto);
         return new ResponseEntity<>(new ResponseDto("OK", myStocks), HttpStatus.OK);
 
@@ -141,8 +129,8 @@ public class StockController {
             }
     )
     @GetMapping("/my/{id}")
-    public ResponseEntity<ResponseDto> checkFavorite(@RequestHeader String userId, @PathVariable Long id) {
-        MemberDto memberDto = getMember(userId);
+    public ResponseEntity<ResponseDto> checkFavorite(@PathVariable Long id) {
+        MemberDto memberDto = getMember();
         boolean result = stockService.checkFavorite(memberDto.getId(), id);
         return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
     }
@@ -157,8 +145,8 @@ public class StockController {
             }
     )
     @PostMapping("/my/{id}")
-    public ResponseEntity<ResponseDto> addFavorite(@RequestHeader String userId, @PathVariable Long id) {
-        MemberDto memberDto = getMember(userId);
+    public ResponseEntity<ResponseDto> addFavorite(@PathVariable Long id) {
+        MemberDto memberDto = getMember();
         stockService.addFavorite(memberDto, id);
         return new ResponseEntity<>(new ResponseDto("CREATED", null), HttpStatus.CREATED);
     }
@@ -173,8 +161,8 @@ public class StockController {
             }
     )
     @DeleteMapping("/my/{id}")
-    public ResponseEntity<ResponseDto> deleteFavorite(@RequestHeader String userId, @PathVariable Long id) {
-        MemberDto memberDto = getMember(userId);
+    public ResponseEntity<ResponseDto> deleteFavorite(@PathVariable Long id) {
+        MemberDto memberDto = getMember();
         stockService.deleteFavorite(memberDto, id);
         return new ResponseEntity<>(new ResponseDto("DELETED", null), HttpStatus.OK);
     }
@@ -211,7 +199,7 @@ public class StockController {
     }
 
 
-    private MemberDto getMember(String userId) {
+    private MemberDto getMember() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String memberId = request.getHeader("X-UserId");
         ResponseDto responseDto = memberClient.getMember(memberId);

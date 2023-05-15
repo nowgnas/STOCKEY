@@ -1,6 +1,5 @@
 package kr.stockey.stockservice.service;
 
-import kr.stockey.stockservice.api.request.CreateFavoriteStockRequest;
 import kr.stockey.stockservice.api.request.GetCorrelationRequest;
 import kr.stockey.stockservice.api.response.GetStockTodayResponse;
 import kr.stockey.stockservice.client.FavoriteClient;
@@ -111,11 +110,6 @@ public class StockServiceImpl implements StockService {
     }
 
 
-    public List<StockKeywordDto> getStockKeyword(Long stockId) {
-        ResponseDto responseDto = keywordClient.findStockKeywords(stockId);
-        List<StockKeywordDto> stockKeyword = (List<StockKeywordDto>) responseDto.getData();
-        return stockKeyword;
-    }
 
     public List<DailyStockDto> getDailyStock(Long stockId) {
         List<DailyStock> dailyStock = dailyStockRepository.findByStockId(stockId);
@@ -141,9 +135,7 @@ public class StockServiceImpl implements StockService {
 
     // 관심 종목 리스트 출력
     public List<GetStockTodayResponse> getMyStocks(MemberDto memberdto) {
-        ResponseDto responseDto = favoriteClient.findByStockAndMember(memberdto.getId());
-        List<FavoriteDto> favorites = (List<FavoriteDto>) responseDto.getData();
-//                List<FavoriteDto> favorites = favoriteClient.findByStockAndMember(memberdto.getUserId());
+        List<FavoriteDto> favorites = favoriteClient.getMyFavoriteStock();
         List<Stock> stockList = new ArrayList<>();
 
 
@@ -172,26 +164,19 @@ public class StockServiceImpl implements StockService {
 
     // 관심 여부 확인
     public boolean checkFavorite(Long userId, Long stockId) {
-        ResponseDto responseDto = favoriteClient.existsByMemberAndStock(userId, stockId);
-        Boolean result = (Boolean) responseDto.getData();
-        return result;
+        return favoriteClient.checkFavoriteStock(stockId);
     }
 
     // 관심 산업 등록
     @Transactional
     public void addFavorite(MemberDto memberDto, Long id) {
-        Stock stock = getStockEntity(id);
+        getStockEntity(id);
         boolean isFavorite = checkFavorite(memberDto.getId(), id);
         //이미 관심등록했다면
         if (isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.ALREADY_EXIST);
         }
-
-        CreateFavoriteStockRequest favoriteRequest = CreateFavoriteStockRequest.builder()
-                .stockId(id)
-                .memberId(memberDto.getId())
-                .build();
-        favoriteClient.saveStock(favoriteRequest);
+        favoriteClient.createFavoriteStock(id);
     }
 
     @Transactional
@@ -203,11 +188,7 @@ public class StockServiceImpl implements StockService {
         if (!isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.NOT_FOUND);
         }
-        ResponseDto responseDto = favoriteClient.findByMemberAndStock(memberdto.getId(), stock.getId());
-        FavoriteDto favoriteDto = (FavoriteDto) responseDto.getData();
-//        Favorite favorite = favoriteRepository.findByMemberAndStock(memberdto.getUserId(), stock.getId());
-        checkUser(memberdto, favoriteDto);
-        favoriteClient.deleteFavorite(favoriteDto);
+        favoriteClient.deleteFavoriteStock(id);
     }
 
     /**
@@ -340,17 +321,9 @@ public class StockServiceImpl implements StockService {
         return stockRepository.findById(id).orElseThrow(() -> new StockException(StockExceptionType.NOT_FOUND));
     }
 
-    // 유저가 같은지 체크
-    private static void checkUser(MemberDto memberDto, FavoriteDto favoriteDto) {
-        if (!favoriteDto.getUserId().equals(memberDto.getId())) {
-            throw new FavoriteException(FavoriteExceptionType.DIFFERENT_USER);
-        }
-    }
-
 
     private IndustryDto getIndustry(Long industryId) {
-        ResponseDto responseDto = industryClient.geIndustry(industryId);
-        IndustryDto industryDto = (IndustryDto) responseDto.getData();
+        IndustryDto industryDto = industryClient.geIndustry(industryId);
         return industryDto;
     }
 }

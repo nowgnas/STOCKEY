@@ -6,6 +6,7 @@ import { getEmptyImage } from "react-dnd-html5-backend"
 import { useDrag } from "react-dnd"
 import { TradeStockItemProps } from "./TradeStockList"
 import { Grid } from "@mui/material"
+import { useOrderSituation } from "../../../hooks/useTradeForm"
 
 interface ExpectedProfitProps {
   expectedProfit: number
@@ -26,9 +27,15 @@ const TradeStockItem = ({ item }: TradeStockItemProps) => {
     }),
     [item]
   )
+
   useEffect(() => {
     previewRef(getEmptyImage(), { captureDraggingState: true })
   }, [])
+
+  const { data, isSuccess } = useOrderSituation(
+    item.id,
+    item.buyPrice ? "myStock" : "allStock"
+  )
 
   const [isHover, setIsHover] = useState(false)
   const expectedProfit = item.stockNums * (item.currentPrice - item.buyPrice!)
@@ -85,8 +92,8 @@ const TradeStockItem = ({ item }: TradeStockItemProps) => {
             </>
           )}
         </StockItemWrapper>
-        {isHover && (
-          <TradeBuySellBar buyPop={item.buyPop} sellPop={item.sellPop} />
+        {isHover && isSuccess && (
+          <TradeBuySellBar buyPop={data.buy} sellPop={data.sell} />
         )}
       </StockItemContainer>
     </>

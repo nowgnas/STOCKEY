@@ -1,12 +1,13 @@
 import styled from "styled-components"
+import { useEffect, useMemo, useState } from "react"
+import dayjs from "dayjs"
 
+import { useCheckOrder, useMyBalance } from "../../../hooks/useTradeForm"
 import TradeFormBalance from "./TradeFormBalance"
 import Grid from "@mui/material/Grid"
 import TradeStockList from "./TradeStockList"
 import TradeBasketList from "./TradeBasketList"
 import { CustomDragLayer } from "../../common/DragDrop/CustomDragLayer"
-import { useEffect, useMemo, useState } from "react"
-import dayjs from "dayjs"
 
 import TradeQuantityInputModal from "./TradeQuantityInputModal"
 import { SimpleDialogProps } from "./TradeQuantityInputModal"
@@ -24,7 +25,12 @@ export type BasketList = {
 
 const TradeForm = () => {
   // 더미데이터,,,,, 정각 단위로 useQuery써서 가져와야함
+  // const { data: myBalance, isSuccess, isError } = useMyBalance()
   const myBalance = 1000000
+
+  // 주문 여부 API
+  // const { data: isOrderSubmit, isSuccess, isError } = useCheckOrder()
+  const isOrderSubmit = true // 더미
 
   // 판매 목록
   const [sellList, setSellList] = useState<BasketList[]>([])
@@ -40,13 +46,16 @@ const TradeForm = () => {
     const list = localStorage.getItem(status)
       ? JSON.parse(localStorage.getItem(status)!)
       : []
-    if (list && dayjs().isAfter(list.expiry)) localStorage.removeItem(status)
-    return list
+    if (list && dayjs().isAfter(list.expiry)) {
+      localStorage.removeItem(status)
+      return []
+    }
+    return list.value
   }
 
   useEffect(() => {
     setSellList(getList("sellList"))
-    setSellList(getList("buyList"))
+    setBuyList(getList("buyList"))
   }, [])
 
   // modal에 줄 데이터들
@@ -77,9 +86,21 @@ const TradeForm = () => {
       <TradeFormContainer container columns={13} justifyContent="center">
         <TradeFormWrapper item direction="column" md={6} xs={12}>
           <TradeFormBalance myBalance={myBalance} />
+          {/* <TradeFormBalance myBalance={myBalance.deposit} /> */}
           <TradeStockList />
         </TradeFormWrapper>
-        <TradeFormWrapper item md={6} xs={12}>
+        <TradeBasketWrapper
+          item
+          md={6}
+          xs={12}
+          justifyContent="space-between"
+          direction="column"
+        >
+          {isOrderSubmit && (
+            <LockSection>
+              <LockImg src={"/tradeLogos/Lock.png"} />
+            </LockSection>
+          )}
           <TradeBasketList
             status={"팔래요"}
             text={"수익"}
@@ -98,13 +119,21 @@ const TradeForm = () => {
             modalDataHandler={modalDataHandler}
             listHandler={listHandler}
           />
-        </TradeFormWrapper>
+        </TradeBasketWrapper>
         <ButtonConfirmComp
+          isOrderSubmit={isOrderSubmit}
+          disabled={isOrderSubmit ? true : false}
           variant="contained"
           onClick={() => confirmModalHandler(true)}
         >
-          주문서 제출하기
-          <ConfirmImage src={"/tradeLogos/paymentCheck.png"} />
+          {isOrderSubmit ? (
+            "주문 완료"
+          ) : (
+            <>
+              주문서 제출하기
+              <ConfirmImage src={"/tradeLogos/paymentCheck.png"} />
+            </>
+          )}
         </ButtonConfirmComp>
       </TradeFormContainer>
       <TradeQuantityInputModal
@@ -120,6 +149,7 @@ const TradeForm = () => {
         buyList={buyList}
         open={confirmModalOpen}
         confirmModalHandler={confirmModalHandler}
+        listHandler={listHandler}
       />
       <CustomDragLayer />
     </>
@@ -138,25 +168,53 @@ const TradeFormContainer = styled(Grid)`
   }
 `
 const TradeFormWrapper = styled(Grid)`
-  min-height: 80vh;
-  max-height: 80vh;
-  width: 100%;
+  position: relative;
+  max-height: 68vh;
+  min-height: 68vh;
 
   @media (max-width: 900px) {
     min-height: 120vh;
     max-height: 120vh;
   }
 `
+const TradeBasketWrapper = styled(TradeFormWrapper)`
+  display: flex;
+`
+
 const Header = styled.p`
   font-size: 32px;
   font-weight: bold;
 `
-const ButtonConfirmComp = styled(Button)`
+const ButtonConfirmComp = styled(Button)<{ isOrderSubmit: boolean }>`
   width: 100%;
   height: 7rem;
   background-color: #625b71 !important;
   border-radius: 96px !important;
   font-size: 32px !important;
   font-weight: bold !important;
+  opacity: ${(props) => (props.isOrderSubmit ? "50%" : "100%")};
+  color: white !important;
 `
 const ConfirmImage = styled.img``
+
+const LockSection = styled.section`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 900px) {
+    height: 110vh;
+    width: 75%;
+  }
+  background: rgba(255, 254, 254, 0.8);
+  border-radius: 24px;
+`
+
+const LockImg = styled.img`
+  width: 30%;
+`

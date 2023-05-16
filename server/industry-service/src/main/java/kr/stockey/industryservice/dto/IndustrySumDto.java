@@ -1,8 +1,11 @@
 package kr.stockey.industryservice.dto;
 
+import lombok.Getter;
+
 import java.time.LocalDate;
 
-public interface IndustrySumDto {
-    LocalDate getStockDate();
-    Long getMarketCap();
+@Getter
+public class IndustrySumDto {
+    LocalDate stockDate;
+    Long marketCap;
 }

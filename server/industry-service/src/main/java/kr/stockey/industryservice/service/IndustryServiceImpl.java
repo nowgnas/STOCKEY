@@ -80,7 +80,9 @@ public class IndustryServiceImpl implements IndustryService {
     public List<StockBriefDto> getStockList() {
         List<StockDto> nStock = stockClient.getNStock(0, 5);
         List<StockBriefDto> result = new ArrayList<>();
-        nStock.forEach(o -> result.add(new ModelMapper().map(o, StockBriefDto.class)));
+        nStock.forEach(o -> {
+            result.add(new ModelMapper().map(o, StockBriefDto.class));
+        });
         return result;
 
     }

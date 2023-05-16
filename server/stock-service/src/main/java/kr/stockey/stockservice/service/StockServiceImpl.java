@@ -1,6 +1,7 @@
 package kr.stockey.stockservice.service;
 
 import kr.stockey.stockservice.api.request.GetCorrelationRequest;
+import kr.stockey.stockservice.api.request.GetLikeStockRankRequest;
 import kr.stockey.stockservice.api.response.GetStockTodayResponse;
 import kr.stockey.stockservice.client.FavoriteClient;
 import kr.stockey.stockservice.client.IndustryClient;
@@ -76,13 +77,17 @@ public class StockServiceImpl implements StockService {
         return rank;
     }
 
+    // 산업에서  해당 종목의 관심 순위
     public Integer getStockIndustryFavoriteRank(Long stockId, Long industryId) {
-//        Integer rank = stockRepository.findIndustryFavoriteRank(stockId, industryId);
-        Integer rank = 1;
-        if (rank == null) {
-            return 0;
-        }
-        return rank;
+        // 종목리스트
+        List<Stock> stockList = stockRepository.findByIndustryId(industryId);
+        // 종목 id 리스트
+        List<Long> stockIdList = stockList
+                .stream()
+                .map(o -> o.getId())
+                .collect(Collectors.toList());
+        GetLikeStockRankRequest request = new GetLikeStockRankRequest(stockIdList, stockId);
+        return favoriteClient.getLikeStockRank(request);
     }
 
     public Float getAverageIndustryChangeRate(Long industryId) {

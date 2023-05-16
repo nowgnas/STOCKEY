@@ -17,12 +17,10 @@ import styled from "styled-components";
 interface ParamProps {
   type: string;
   item: StockCardType | KeywordCardType;
-  size?: string;
 }
 
-const DndCard = ({ type, item, size = "100px" }: ParamProps) => {
+const DndCard = ({ type, item }: ParamProps) => {
   const setCard = useSetRecoilState(draggedLabCardState);
-
 
   //isDragging:  아이템이 드래깅 중일때 true, 아닐때 false. 드래깅 중인 아이템을 스타일링 할때 사용 (opactiy)
   //dragRef는 리액트의 useRef처럼 작동한다. 드래그될 부분에 선언
@@ -53,7 +51,7 @@ const DndCard = ({ type, item, size = "100px" }: ParamProps) => {
 
 
   return (
-    <DragWrapper ref={dragRef} opacity={`${isDragging ? 0.4 : 1}`} size={size}>
+    <DragWrapper ref={dragRef} opacity={`${isDragging ? 0.4 : 1}`}>
       {type === "STOCK" ? (
         <StockCardMini item={item} />
       ) : (
@@ -65,9 +63,9 @@ const DndCard = ({ type, item, size = "100px" }: ParamProps) => {
 
 export default memo(DndCard);
 
-const DragWrapper = styled.div<{ opacity: string; size: string }>`
-  width: ${(props) => props.size};
-  height: ${(props) => props.size};
+const DragWrapper = styled.div<{ opacity: string }>`
+  width: 100%;
+  height: 100%;
   background-color: white;
 
   border-radius: 24px;

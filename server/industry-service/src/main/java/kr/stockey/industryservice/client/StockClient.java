@@ -15,20 +15,20 @@ import java.util.List;
 public interface StockClient {
 
     @GetMapping("/stock/client/industry/{industryId}")
-    List<StockDto> getByIndustryId(@PathVariable Long industryId);
+    List<StockDto> getByIndustryId(@PathVariable("industryId") Long industryId);
 
     @GetMapping("/stock/client")
     List<StockDto> getNStock(@RequestParam int page, @RequestParam int size);
 
     @GetMapping("/stock/client/marketcap-by-industry/{industryId}")
-    List<StockDto> getNStockByindustry(@PathVariable Long industryId, @RequestParam int page, @RequestParam int size);
+    List<StockDto> getNStockByindustry(@PathVariable("industryId") Long industryId, @RequestParam int page, @RequestParam int size);
 
 
     @GetMapping("/stock/client/marketcap-by-date/industry/{industryId}")
-    List<IndustrySumDto> getMarketList(@PathVariable Long industryId);
+    List<IndustrySumDto> getMarketList(@PathVariable("industryId") Long industryId);
 
     @GetMapping("/stock/client/today/{industryId}")
-    List<GetStockTodayResponse> findTodayDailyStock(@PathVariable Long industryId);
+    List<GetStockTodayResponse> findTodayDailyStock(@PathVariable("industryId") Long industryId);
 
 
 }

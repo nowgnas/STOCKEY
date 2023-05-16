@@ -12,7 +12,10 @@ public class ContractDto {
     private Long memberId;
     private Long stockId;
     private Long count;
+    private Long contractPrice;
     private ContractType contractType;
     private LocalDateTime createdAt;
     private InvCategory category;
+    private Long matchOrderId;
+    private Double profit;
 }

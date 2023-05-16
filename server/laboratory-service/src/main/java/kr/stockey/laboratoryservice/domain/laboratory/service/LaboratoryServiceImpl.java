@@ -16,8 +16,8 @@ public class LaboratoryServiceImpl implements LaboratoryService {
     private final LaboratoryFeignClient laboratoryFeignClient;
 
     @Override
-    public List<StockSearchDto> searchStocks(String stock) {
-        return laboratoryFeignClient.getStockSearch(stock);
+    public List<StockSearchDto> searchStocks(String keyword) {
+        return laboratoryFeignClient.getStockSearch(keyword);
     }
 
     @Override

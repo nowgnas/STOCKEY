@@ -11,7 +11,7 @@ import java.util.List;
 @FeignClient(name = "laboratory-service", url = "https://stockey.kr/api")
 public interface LaboratoryFeignClient {
     @GetMapping("/stock/search")
-    List<StockSearchDto> getStockSearch(@RequestParam String stock);
+    List<StockSearchDto> getStockSearch(@RequestParam String keyword);
 
     @GetMapping("/keyword/search")
     List<KeywordSearchDto> getKeywordSearch(@RequestParam String keyword);

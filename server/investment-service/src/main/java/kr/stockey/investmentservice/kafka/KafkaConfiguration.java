@@ -56,7 +56,7 @@ public class KafkaConfiguration {
         "latest": the consumer will only consume messages that are produced after the consumer has subscribed to the topic partition
         "none": if no committed offset is available, the consumer will throw an exception.
          */
-        factory.setConsumerFactory(consumerFactory("group-id-1", "earliest", OrderProducerDto.class));
+        factory.setConsumerFactory(consumerFactory("stock-order-consumer", "earliest", OrderProducerDto.class));
         factory.setConcurrency(3); // Set the desired level of concurrency
         return factory;
     }

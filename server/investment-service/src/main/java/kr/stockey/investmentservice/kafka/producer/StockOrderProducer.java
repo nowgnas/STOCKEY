@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class StockOrderProducer {
-    private static final String TOPIC = "stock-orders";
+    private static final String TOPIC = "stock-order";
 
     private final KafkaTemplate<String, OrderProducerDto> kafkaTemplate;
 

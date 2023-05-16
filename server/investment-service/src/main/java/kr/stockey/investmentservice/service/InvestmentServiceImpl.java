@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class InvestmentServiceImpl implements InvestmentService{
 
     private final long DEFAULT_CREDIT = 10000000;
-    private Map<Long, Long> stockPriceMap; // 데이터 캐싱
+    public Map<Long, Long> stockPriceMap = new HashMap<>();; // 데이터 캐싱
     public Map<Long, String> stockIdToNameMap; // 변하지 않는 주식 정보 캐싱
     public List<TraderRankDto> traderRankDtoList; // 유저 랭킹 정보 캐싱 -> 주문 체결시마다 update
 
@@ -47,6 +47,9 @@ public class InvestmentServiceImpl implements InvestmentService{
 
     @PostConstruct
     public void init() {
+        System.out.println("Ddddddsfadfdsfdsa");
+        System.out.println("stockPriceMap = " + stockPriceMap);
+        initStockPriceMap();
         stockIdToNameMap = makeStockIdToNameMap();
         traderRankDtoList = updateUserRank();
     }
@@ -299,6 +302,7 @@ public class InvestmentServiceImpl implements InvestmentService{
         // 주식 평가금액 -> myStock 데이터 가져와서 특정 stockId에 해당하는 주식 현재가 가져와서 count랑 곱하기
         List<MyStock> myStocks = myStockRepository.findByMemberId(memberId);
         for (MyStock myStock : myStocks) {
+            System.out.println("myStock = " + myStock);
             Long curStockId = myStock.getStockId();
             Long curStockPrice = stockPriceMap.get(curStockId);
             curStockValuation += curStockPrice * myStock.getCount();
@@ -574,6 +578,15 @@ public class InvestmentServiceImpl implements InvestmentService{
         LocalDate today = LocalDate.now();
         List<DailyStock> dailyStockList = dailyStockRepository.findByStockDate(today);
         for (DailyStock dailyStock : dailyStockList) {
+            stockPriceMap.put(dailyStock.getStockId(), Long.valueOf(dailyStock.getClosePrice()));
+        }
+    }
+
+    private void initStockPriceMap() {
+        LocalDate today = LocalDate.now();
+        List<DailyStock> dailyStockList = dailyStockRepository.findByStockDate(today);
+        for (DailyStock dailyStock : dailyStockList) {
+            System.out.println("Long.valueOf(dailyStock.getClosePrice()) = " + Long.valueOf(dailyStock.getClosePrice()));
             stockPriceMap.put(dailyStock.getStockId(), Long.valueOf(dailyStock.getClosePrice()));
         }
     }

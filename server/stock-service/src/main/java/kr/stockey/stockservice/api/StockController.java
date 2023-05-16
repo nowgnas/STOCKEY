@@ -129,7 +129,7 @@ public class StockController {
             }
     )
     @GetMapping("/my/{id}")
-    public ResponseEntity<ResponseDto> checkFavorite(@PathVariable Long id) {
+    public ResponseEntity<ResponseDto> checkFavorite(@PathVariable("id") Long id) {
         MemberDto memberDto = getMember();
         boolean result = stockService.checkFavorite(memberDto.getId(), id);
         return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
@@ -145,7 +145,7 @@ public class StockController {
             }
     )
     @PostMapping("/my/{id}")
-    public ResponseEntity<ResponseDto> addFavorite(@PathVariable Long id) {
+    public ResponseEntity<ResponseDto> addFavorite(@PathVariable("id") Long id) {
         MemberDto memberDto = getMember();
         stockService.addFavorite(memberDto, id);
         return new ResponseEntity<>(new ResponseDto("CREATED", null), HttpStatus.CREATED);
@@ -161,7 +161,7 @@ public class StockController {
             }
     )
     @DeleteMapping("/my/{id}")
-    public ResponseEntity<ResponseDto> deleteFavorite(@PathVariable Long id) {
+    public ResponseEntity<ResponseDto> deleteFavorite(@PathVariable("id") Long id) {
         MemberDto memberDto = getMember();
         stockService.deleteFavorite(memberDto, id);
         return new ResponseEntity<>(new ResponseDto("DELETED", null), HttpStatus.OK);
@@ -192,7 +192,7 @@ public class StockController {
             }
     )
     @GetMapping("/keyword/correlation/{id}/high")
-    public ResponseEntity<ResponseDto> getAllCorrelation(@PathVariable Long id,
+    public ResponseEntity<ResponseDto> getAllCorrelation(@PathVariable("id") Long id,
                                                          @Valid @ModelAttribute GetCorrelationRequest getCorrelationRequest) {
         List<ResultCorrelationDto> top3StockCorrelation = stockService.getAllStockCorrelation(id, getCorrelationRequest);
         return new ResponseEntity<>(new ResponseDto("OK", top3StockCorrelation), HttpStatus.OK);
@@ -215,7 +215,7 @@ public class StockController {
             }
     )
     @GetMapping("/client/industry/{industryId}")
-    public ResponseEntity<List<StockDto>> getByIndustryId(@PathVariable Long industryId) {
+    public ResponseEntity<List<StockDto>> getByIndustryId(@PathVariable("industryId") Long industryId) {
         List<StockDto> stockList = stockService.getByIndustryId(industryId);
         return new ResponseEntity<>(stockList, HttpStatus.OK);
     }
@@ -239,7 +239,7 @@ public class StockController {
             }
     )
     @GetMapping("/client/marketcap-by-industry/{industryId}")
-    public ResponseEntity<List<StockDto>> industry(@PathVariable Long industryId, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<List<StockDto>> industry(@PathVariable("industryId") Long industryId, @RequestParam int page, @RequestParam int size) {
         List<StockDto> stockTopN = stockService.getNStock(industryId, page, size);
         return new ResponseEntity<>(stockTopN, HttpStatus.OK);
     }
@@ -252,14 +252,14 @@ public class StockController {
             }
     )
     @GetMapping("/client/marketcap-by-date/industry/{industryId}")
-    public ResponseEntity<List<IndustrySumDto>> getMarketList(@PathVariable Long industryId) {
+    public ResponseEntity<List<IndustrySumDto>> getMarketList(@PathVariable("industryId") Long industryId) {
         List<IndustrySumDto> marketList = stockService.getMarketList(industryId);
         return new ResponseEntity<>(marketList, HttpStatus.OK);
     }
 
 
     @GetMapping("/client/today/{industryId}")
-    public ResponseEntity<List<GetStockTodayResponse>> findTodayDailyStock(@PathVariable Long industryId) {
+    public ResponseEntity<List<GetStockTodayResponse>> findTodayDailyStock(@PathVariable("industryId") Long industryId) {
         List<GetStockTodayResponse> stockList = stockService.findTodayDailyStock(industryId);
         return new ResponseEntity<>(stockList, HttpStatus.OK);
     }

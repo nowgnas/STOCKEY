@@ -52,7 +52,7 @@ public class StockServiceImpl implements StockService {
     public StockSummaryDto getStock(Long stockId) {
         Stock stock = stockRepository.findById(stockId).orElseThrow(() -> new StockException(StockExceptionType.NOT_FOUND));
         StockSummaryDto stockDto = stockMapper.toStockDto(stock);
-        int industryTotalCount = stockRepository.findByIndustry(stock.getIndustryId()).size();
+        int industryTotalCount = stockRepository.findByIndustryId(stock.getIndustryId()).size();
         stockDto.setIndustryTotalCount(industryTotalCount);
         Long industryId = stock.getIndustryId();
         IndustryDto industryDto = getIndustry(industryId);
@@ -262,7 +262,7 @@ public class StockServiceImpl implements StockService {
 
     // 산업에 해당하는 종목들
     public List<StockDto> getByIndustryId(Long industryId) {
-        List<Stock> stockList = stockRepository.findByIndustry(industryId);
+        List<Stock> stockList = stockRepository.findByIndustryId(industryId);
         return stockMapper.toStockDto(stockList);
     }
 
@@ -288,7 +288,7 @@ public class StockServiceImpl implements StockService {
 
     // 산업에 해당하는 종목들의 현재가
     public List<GetStockTodayResponse> findTodayDailyStock(Long industryId) {
-        List<Stock> stockList = stockRepository.findByIndustry(industryId);
+        List<Stock> stockList = stockRepository.findByIndustryId(industryId);
 
         // 해당 주식의 현재가격 가져오기
         List<DailyStock> dailyStockList = stockList.stream()

@@ -13,7 +13,7 @@ import java.util.List;
 @FeignClient(name = "keyword-service")
 public interface KeywordClient {
 
-    @GetMapping("/keyword/client/correlation/{keywordId}")
+    @GetMapping("/keywords/client/correlation/{keywordId}")
     List<KeywordCountDateDto> getCountDate(@PathVariable("keywordId") Long keywordId,
                                            @RequestParam("startDate") LocalDate startDate,
                                            @RequestParam("endDate") LocalDate endDate);

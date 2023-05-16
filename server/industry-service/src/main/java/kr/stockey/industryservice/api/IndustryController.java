@@ -31,6 +31,21 @@ public class IndustryController {
     private final IndustryService industryService;
     private final IndustryDtoMapper dtoMapper;
 
+    // 산업 상세 설명
+
+    @Operation(summary = "단일 산업 반환 ", description = "산업 하나의 정보를 반환해주는 메소드입니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "404", description = "해당 산업 없음")
+            }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDto> getIndustry(@PathVariable Long id) {
+        IndustryDto one = industryService.getOne(id);
+        return new ResponseEntity<>(new ResponseDto("OK", one), HttpStatus.OK);
+    }
+
 
     @Operation(summary = "산업 리스트 목록 반환 ", description = "산업 리스트를 반환해주는 메소드입니다.")
     @GetMapping

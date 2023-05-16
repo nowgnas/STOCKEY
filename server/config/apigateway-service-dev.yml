@@ -65,5 +65,3 @@ spring:
           uri: lb://stock-service
           predicates:
             - Path=/stock/**
-          filters:
-            - RewritePath=/stock/(?<segment>.*), /$\{segment}

@@ -3,6 +3,7 @@ package kr.stockey.laboratoryservice.domain.laboratory.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import kr.stockey.laboratoryservice.domain.keyword.dto.KeywordSearchDto;
 import kr.stockey.laboratoryservice.domain.laboratory.dto.ResponseDto;
 import kr.stockey.laboratoryservice.domain.laboratory.service.LaboratoryService;
 import kr.stockey.laboratoryservice.domain.stock.dto.StockSearchDto;
@@ -19,20 +20,6 @@ import java.util.List;
 public class LaboratoryController {
     private final LaboratoryService laboratoryService;
 
-    @GetMapping("getfeign")
-    public ResponseEntity<ResponseDto> getTest() {
-        ResponseDto feign = laboratoryService.feignTest("feign");
-        return ResponseEntity.ok(feign);
-    }
-
-    @GetMapping("feign/data/{data}")
-    public ResponseEntity<ResponseDto> feignTest(@PathVariable String data) {
-        return ResponseEntity.ok(
-                ResponseDto.builder()
-                        .data("test success data is: " + data)
-                        .build()
-        );
-    }
 
     /**
      * 주식 이름으로 일치하는 주식 종목 찾기
@@ -73,11 +60,13 @@ public class LaboratoryController {
                     @ApiResponse(responseCode = "400", description = "잘못된 요청")
             }
     )
-    @GetMapping("keywork/{keyword}")
+    @GetMapping("keyword/search/{keyword}")
     public ResponseEntity<ResponseDto> searchKeyword(@PathVariable String keyword) {
+        List<KeywordSearchDto> keywordSearchDtos = laboratoryService.searchKeyword(keyword);
+
         return ResponseEntity.ok(ResponseDto.builder()
-                .message("")
-                .data("")
+                .message("search keyword request success")
+                .data(keywordSearchDtos)
                 .build());
 
     }

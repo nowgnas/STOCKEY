@@ -1,9 +1,14 @@
+eureka:
+  instance:
+    hostname: localhost
+
 server:
   port: 0
 
 spring:
   application:
     name: keyword-service
+
 
 # springdoc swagger
 springdoc:

@@ -3,15 +3,23 @@ import customAxios from "../utils/customAxios"
 import { useNavigate } from "react-router-dom"
 import { useRecoilState } from "recoil"
 import { accessTokenSelector } from "../stores/atoms"
+import axios from "axios"
 
 export const useMyAsset = () => {
   const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
   const navigate = useNavigate()
 
   const fetchMyAsset = () => {
-    return customAxios(accessToken, setAccessToken, navigate).get(
-      `/investment/my/asset`
+    const testAxios = axios.get(
+      `${process.env.REACT_APP_SERVER_BASE_URL}/investment/my/asset`,
+      {
+        headers: { "X-UserId": 1 },
+      }
     )
+    return testAxios
+    // return customAxios(accessToken, setAccessToken, navigate).get(
+    //   `/investment/my/asset`
+    // )
   }
 
   return useQuery(["my", "asset"], fetchMyAsset, {
@@ -23,8 +31,7 @@ export const useMyAsset = () => {
 }
 
 const select = (response: any) => {
-  const rawData = response.data
-  const selectedData = rawData
+  const selectedData = response.data.data
   console.log("selectedData >> ", selectedData)
   return selectedData
 }

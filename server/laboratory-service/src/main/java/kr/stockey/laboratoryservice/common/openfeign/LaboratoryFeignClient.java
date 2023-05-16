@@ -1,6 +1,6 @@
 package kr.stockey.laboratoryservice.common.openfeign;
 
-import kr.stockey.laboratoryservice.domain.keyword.dto.KeywordSearchDto;
+import kr.stockey.laboratoryservice.domain.laboratory.dto.ResponseDto;
 import kr.stockey.laboratoryservice.domain.stock.dto.StockSearchDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,5 +14,5 @@ public interface LaboratoryFeignClient {
     List<StockSearchDto> getStockSearch(@RequestParam String keyword);
 
     @GetMapping("/keywords/search")
-    List<KeywordSearchDto> getKeywordSearch(@RequestParam String keyword);
+    ResponseDto getKeywordSearch(@RequestParam String keyword);
 }

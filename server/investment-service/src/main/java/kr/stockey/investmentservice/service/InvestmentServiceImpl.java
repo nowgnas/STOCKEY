@@ -197,9 +197,26 @@ public class InvestmentServiceImpl implements InvestmentService{
 
     @Override
     public List<OrderHistoryDto> getOrderHistory(Long memberId) {
+        // 현재 날짜 기준 이번주 첫날, 끝날 날짜 정보 가져오기
+        List<LocalDateTime> stEdWeekDates = getStEdWeekDates();// 월요일, 일요일 시간 정보
+        LocalDateTime startTime = stEdWeekDates.get(0);
+        LocalDateTime endTime = stEdWeekDates.get(1);
+
+        List<Contract> byMemberIdAndCreatedAtBetween = contractRepository.findByMemberIdAndCreatedAtBetween(memberId, startTime, endTime);
+
+        // order 가져오기
         List<Contract> orderHistory = contractRepository.findByMemberId(memberId).stream()
                 .filter(contract -> contract.getCategory() == InvCategory.ORDER)
                 .toList();
+
+        // order id만 빼서 저장
+        List<Long> orderId = new ArrayList<>();
+        for (Contract contract : orderHistory) {
+            orderId.add(contract.getId());
+        }
+
+        // 주문 정보에 매치되는 체결 정보 가져오기
+//        contractRepository.getContractsByMatchOrderIdsAndDateRange()
 
         List<OrderHistoryDto> orderHistoryDtoList = investmentMapper.toOrderHistoryDtoList(orderHistory);
 
@@ -208,6 +225,14 @@ public class InvestmentServiceImpl implements InvestmentService{
             orderHistoryDto.setStockName(stockName);
         }
         return orderHistoryDtoList;
+    }
+
+    private List<LocalDateTime> getStEdWeekDates() {
+        // Get this week's Monday and Sunday information based on today's date and time
+        LocalDateTime dateTime = LocalDateTime.now();
+        LocalDateTime sunday = dateTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).withHour(23).withMinute(59).withSecond(59);
+        LocalDateTime monday = sunday.minusDays(6).withHour(0).withMinute(0).withSecond(0);
+        return Arrays.asList(monday, sunday);
     }
 
     private Map<Long, String> makeStockIdToNameMap() {

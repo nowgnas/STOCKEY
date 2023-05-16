@@ -44,7 +44,7 @@ public class InvestmentController {
     }
 
     /*
-        내가 주문한 history 제공
+        내가 주문한 history 제공 -> 이번주 정보
      */
     @GetMapping("/my/orders")
     public ResponseEntity<ResponseDto> getOrderHistory() throws Exception {

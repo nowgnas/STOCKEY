@@ -8,6 +8,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.List;
@@ -77,6 +78,30 @@ public class JustTest {
         LocalDate sunday = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
         LocalDate monday = sunday.minusDays(6);
 
+        return Arrays.asList(monday, sunday);
+    }
+
+    @Test
+    public void testGetStEdWeekDates() {
+        List<LocalDateTime> weekDates = getStEdWeekDates();
+
+        // Verify the size of the returned list is 2
+        Assertions.assertEquals(2, weekDates.size());
+
+        // Verify Monday's date and time
+        LocalDateTime monday = weekDates.get(0);
+        System.out.println("monday = " + monday);
+
+        // Verify Sunday's date and time
+        LocalDateTime sunday = weekDates.get(1);
+        System.out.println("sunday = " + sunday);
+    }
+
+    private List<LocalDateTime> getStEdWeekDates() {
+        // Get this week's Monday and Sunday information based on today's date and time
+        LocalDateTime dateTime = LocalDateTime.now();
+        LocalDateTime sunday = dateTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).withHour(23).withMinute(59).withSecond(59);
+        LocalDateTime monday = sunday.minusDays(6).withHour(0).withMinute(0).withSecond(0);
         return Arrays.asList(monday, sunday);
     }
 

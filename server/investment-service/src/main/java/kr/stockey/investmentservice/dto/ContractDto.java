@@ -8,14 +8,14 @@ import java.time.LocalDateTime;
 
 @Data
 public class ContractDto {
-    private Long id;
-    private Long memberId;
-    private Long stockId;
-    private Long count;
-    private Long contractPrice;
-    private ContractType contractType;
-    private LocalDateTime createdAt;
-    private InvCategory category;
-    private Long matchOrderId;
-    private Double profit;
+    private final Long id;
+    private final Long memberId;
+    private final Long stockId;
+    private final Long count;
+    private final Long contractPrice;
+    private final ContractType contractType;
+    private final LocalDateTime createdAt;
+    private final InvCategory category;
+    private final Long matchOrderId;
+    private final Double profit;
 }

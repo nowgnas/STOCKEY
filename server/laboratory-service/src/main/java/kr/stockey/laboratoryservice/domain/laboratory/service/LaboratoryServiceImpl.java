@@ -3,6 +3,8 @@ package kr.stockey.laboratoryservice.domain.laboratory.service;
 import kr.stockey.laboratoryservice.common.openfeign.LaboratoryFeignClient;
 import kr.stockey.laboratoryservice.domain.keyword.dto.KeywordSearchDto;
 import kr.stockey.laboratoryservice.domain.laboratory.dto.ResponseDto;
+import kr.stockey.laboratoryservice.domain.laboratory.mapper.LaboratoryMapper;
+import kr.stockey.laboratoryservice.domain.stock.dto.StockPreviewDto;
 import kr.stockey.laboratoryservice.domain.stock.dto.StockSearchDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,11 +19,18 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class LaboratoryServiceImpl implements LaboratoryService {
     private final LaboratoryFeignClient laboratoryFeignClient;
+    private final LaboratoryMapper laboratoryMapper;
+
+    @Override
+    public List<StockSearchDto> getAllStock() {
+        List<StockPreviewDto> allStock = laboratoryFeignClient.getAllStock();
+        return laboratoryMapper.toStockList(allStock);
+    }
 
     /**
      * 주식 종목 검색
      *
-     * @param stock 사용자 입력
+     * @param keyword 사용자 입력
      * @return 주식 종목 리스트
      */
     @Override

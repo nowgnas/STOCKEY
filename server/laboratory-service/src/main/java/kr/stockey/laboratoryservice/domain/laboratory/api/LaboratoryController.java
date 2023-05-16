@@ -20,6 +20,16 @@ import java.util.List;
 public class LaboratoryController {
     private final LaboratoryService laboratoryService;
 
+    @GetMapping("stock/list")
+    public ResponseEntity<ResponseDto> stockList() {
+        List<StockSearchDto> allStock = laboratoryService.getAllStock();
+        return ResponseEntity.ok(
+                ResponseDto.builder()
+                        .data(allStock)
+                        .message("request stock list success")
+                        .build());
+    }
+
 
     /**
      * 주식 이름으로 일치하는 주식 종목 찾기

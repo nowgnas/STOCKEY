@@ -17,14 +17,14 @@ public interface FavoriteClient {
     List<FavoriteDto> getMyFavoriteStock();
 
     @GetMapping("/favorite/client/stock/check/{stockId}")
-    Boolean checkFavoriteStock(@PathVariable Long stockId);
+    Boolean checkFavoriteStock(@PathVariable("stockId") Long stockId);
 
 
     @PostMapping("/favorite/client/stock/{stockId}")
-    Void createFavoriteStock(@PathVariable Long stockId);
+    Void createFavoriteStock(@PathVariable("stockId") Long stockId);
 
     @DeleteMapping("/favorite/client/stock/{stockId}")
-    Void deleteFavoriteStock(@PathVariable Long stockId);
+    Void deleteFavoriteStock(@PathVariable("stockId") Long stockId);
 
 
 }

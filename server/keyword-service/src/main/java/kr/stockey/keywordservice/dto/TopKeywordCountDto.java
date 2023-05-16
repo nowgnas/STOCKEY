@@ -1,7 +1,10 @@
 package kr.stockey.keywordservice.dto;
 
-public interface TopKeywordCountDto {
-    Long getKeywordId();
-    Long getKeywordCount();
+import lombok.Getter;
+
+@Getter
+public class TopKeywordCountDto {
+    Long keywordId;
+    Long keywordCount;
 }
 

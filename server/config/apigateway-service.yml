@@ -149,7 +149,7 @@ spring:
         - id: keyword-service
           uri: lb://keyword-service
           predicates:
-            - Path=/keywords/client/**
+            - Path=/keywords/**
 
 
 

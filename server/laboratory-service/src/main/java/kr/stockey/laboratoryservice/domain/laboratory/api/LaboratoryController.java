@@ -37,7 +37,7 @@ public class LaboratoryController {
                     @ApiResponse(responseCode = "400", description = "잘못된 요청")
             }
     )
-    @GetMapping("stock/{stock}")
+    @GetMapping("stock/search/{stock}")
     public ResponseEntity<ResponseDto> searchStock(@PathVariable String stock) {
         List<StockSearchDto> stockSearchDtos = laboratoryService.searchStocks(stock);
 

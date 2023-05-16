@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class AccountDto {
-    private final Long totalAssets;
-    private final Long stockValuation;
-    private final Long deposit;
+    private Long totalAssets;
+    private Long stockValuation;
+    private Long deposit;
 }

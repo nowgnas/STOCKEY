@@ -28,12 +28,13 @@ public class LaboratoryServiceImpl implements LaboratoryService {
     public List<KeywordSearchDto> searchKeyword(String keyword) {
         ResponseDto keywordSearch = laboratoryFeignClient.getKeywordSearch(keyword);
         List<Object> data = (List<Object>) keywordSearch.getData();
-        System.out.println(data.getClass());
+
         List<KeywordSearchDto> keywordSearchDtos = new ArrayList<>();
         for (Object item :
                 data) {
             if (!data.isEmpty()) {
                 Map<String, String> map = (Map<String, String>) item;
+                System.out.println(map.get("id"));
                 keywordSearchDtos.add(KeywordSearchDto.builder()
                         .id(Long.valueOf(map.get("id")))
                         .name(map.get("name"))

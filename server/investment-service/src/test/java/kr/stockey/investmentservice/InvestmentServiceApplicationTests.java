@@ -1,15 +1,20 @@
 package kr.stockey.investmentservice;
 
+import kr.stockey.investmentservice.dto.MyStockInfoDto;
 import kr.stockey.investmentservice.dto.OrderListDto;
 import kr.stockey.investmentservice.dto.OrderProducerDto;
 import kr.stockey.investmentservice.dto.TraderRankDto;
 import kr.stockey.investmentservice.entity.Contract;
+import kr.stockey.investmentservice.entity.DailyStock;
+import kr.stockey.investmentservice.entity.MyStock;
 import kr.stockey.investmentservice.entity.Stock;
 import kr.stockey.investmentservice.enums.ContractType;
 import kr.stockey.investmentservice.enums.InvCategory;
 import kr.stockey.investmentservice.mapper.InvestmentDtoMapper;
 import kr.stockey.investmentservice.redis.Order;
 import kr.stockey.investmentservice.redis.OrderRedisRepository;
+import kr.stockey.investmentservice.repository.DailyStockRepository;
+import kr.stockey.investmentservice.repository.MyStockRepository;
 import kr.stockey.investmentservice.service.InvestmentService;
 
 import kr.stockey.investmentservice.service.InvestmentServiceImpl;
@@ -47,6 +52,87 @@ class InvestmentServiceApplicationTests {
 
     @Autowired
     InvestmentDtoMapper investmentDtoMapper;
+    @Autowired
+    private MyStockRepository myStockRepository;
+    @Autowired
+    private DailyStockRepository dailyStockRepository;
+
+
+    @Test
+    void getMyStockInfoTest() throws Exception{
+        MyStock myStock1 = MyStock.builder()
+                .memberId(1L)
+                .stockId(2L)
+                .avgPrice(10.5)
+                .count(100L)
+                .build();
+
+        MyStock myStock2 = MyStock.builder()
+                .memberId(1L)
+                .stockId(4L)
+                .avgPrice(8.9)
+                .count(50L)
+                .build();
+
+        MyStock myStock3 = MyStock.builder()
+                .memberId(1L)
+                .stockId(6L)
+                .avgPrice(15.2)
+                .count(200L)
+                .build();
+
+        MyStock myStock4 = MyStock.builder()
+                .memberId(1L)
+                .stockId(8L)
+                .avgPrice(6.4)
+                .count(75L)
+                .build();
+
+        MyStock myStock5 = MyStock.builder()
+                .memberId(1L)
+                .stockId(10L)
+                .avgPrice(12.1)
+                .count(120L)
+                .build();
+
+        myStockRepository.save(myStock1);
+        myStockRepository.save(myStock2);
+        myStockRepository.save(myStock3);
+        myStockRepository.save(myStock4);
+        myStockRepository.save(myStock5);
+
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            Long stockId = (i % 5 + 1) * 2L; // Generates stockId from 2L, 4L, 6L, 8L, 10L
+            LocalDate stockDate = LocalDate.now();
+            Integer openPrice = random.nextInt(1000);
+            Integer closePrice = random.nextInt(1000);
+            Integer lowPrice = random.nextInt(1000);
+            Integer highPrice = random.nextInt(1000);
+            Integer volume = random.nextInt(1000);
+            Float changeRate = random.nextFloat();
+
+            DailyStock dailyStock = DailyStock.builder()
+                    .stockId(stockId)
+                    .stockDate(stockDate)
+                    .openPrice(openPrice)
+                    .closePrice(closePrice)
+                    .lowPrice(lowPrice)
+                    .highPrice(highPrice)
+                    .volume(volume)
+                    .changeRate(changeRate)
+                    .build();
+
+            dailyStockRepository.save(dailyStock);
+        }
+
+        investmentServiceImpl.init();
+
+        List<MyStockInfoDto> myStockInfo = investmentService.getMyStockInfo(1L);
+        for (MyStockInfoDto myStockInfoDto : myStockInfo) {
+            System.out.println("myStockInfoDto = " + myStockInfoDto);
+        }
+    }
 
     @Test
     void 주문적재_테스트() throws Exception {
@@ -261,10 +347,10 @@ class InvestmentServiceApplicationTests {
     @Test
     public void testCalculateSumOfValuations() {
         // Create a sample list of MyStock objects
-        List<MyStock> myStocks = new ArrayList<>();
-        myStocks.add(new MyStock(1L, 10));
-        myStocks.add(new MyStock(2L, 5));
-        myStocks.add(new MyStock(3L, 8));
+        List<MyStockTest> myStocks = new ArrayList<>();
+        myStocks.add(new MyStockTest(1L, 10));
+        myStocks.add(new MyStockTest(2L, 5));
+        myStocks.add(new MyStockTest(3L, 8));
 
         // Calculate the sum of valuations using lambda expression
         double sum = myStocks.stream()
@@ -275,17 +361,17 @@ class InvestmentServiceApplicationTests {
         assertEquals(230.0, sum);
     }
 
-    private double calcMyStockValuation(MyStock myStock) {
+    private double calcMyStockValuation(MyStockTest myStock) {
         double stockPrice = 10.0; // Replace with your desired stock price
         double valuation = stockPrice * myStock.getCount();
         return valuation;
     }
 
-    private static class MyStock {
+    private static class MyStockTest {
         private Long stockId;
         private int count;
 
-        public MyStock(Long stockId, int count) {
+        public MyStockTest(Long stockId, int count) {
             this.stockId = stockId;
             this.count = count;
         }

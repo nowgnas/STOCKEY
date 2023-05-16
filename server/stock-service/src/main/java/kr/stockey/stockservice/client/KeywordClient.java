@@ -14,8 +14,8 @@ import java.util.List;
 public interface KeywordClient {
 
     @GetMapping("/keyword/client/correlation/{keywordId}")
-    List<KeywordCountDateDto> getCountDate(@PathVariable Long keywordId,
-                                           @RequestParam LocalDate startDate,
-                                           @RequestParam LocalDate endDate);
+    List<KeywordCountDateDto> getCountDate(@PathVariable("keywordId") Long keywordId,
+                                           @RequestParam("startDate") LocalDate startDate,
+                                           @RequestParam("endDate") LocalDate endDate);
 
 }

@@ -4,9 +4,13 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
 public class KeywordSearchDto {
     private final Long id;
     private final String name;
 
+    @Builder
+    public KeywordSearchDto(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +29,14 @@ public class LaboratoryServiceImpl implements LaboratoryService {
         ResponseDto keywordSearch = laboratoryFeignClient.getKeywordSearch(keyword);
         List<Object> data = (List<Object>) keywordSearch.getData();
         System.out.println(data.getClass());
-        return null;
+        List<KeywordSearchDto> keywordSearchDtos = new ArrayList<>();
+        if (!data.isEmpty()) {
+            Map<String, String> map = (Map<String, String>) data;
+            keywordSearchDtos.add(KeywordSearchDto.builder()
+                    .id(Long.valueOf(map.get("id")))
+                    .name(map.get("name"))
+                    .build());
+        }
+        return keywordSearchDtos;
     }
 }

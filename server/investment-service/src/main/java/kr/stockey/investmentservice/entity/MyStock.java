@@ -9,8 +9,10 @@ import javax.validation.constraints.NotNull;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "my_stock")
+@ToString
 public class MyStock {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "my_stock_id", nullable = false)
     private Long id;
 

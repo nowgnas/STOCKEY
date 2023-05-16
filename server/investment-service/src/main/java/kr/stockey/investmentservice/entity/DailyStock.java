@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @ToString
 public class DailyStock {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "daily_stock_id", nullable = false)
     private Long id;
 
@@ -48,4 +49,17 @@ public class DailyStock {
     @Column(name = "change_rate", nullable = false)
     private Float changeRate;
 
+    @Builder
+    public DailyStock(Long id, Long stockId, LocalDate stockDate, Integer openPrice, Integer closePrice,
+                      Integer lowPrice, Integer highPrice, Integer volume, Float changeRate) {
+        this.id = id;
+        this.stockId = stockId;
+        this.stockDate = stockDate;
+        this.openPrice = openPrice;
+        this.closePrice = closePrice;
+        this.lowPrice = lowPrice;
+        this.highPrice = highPrice;
+        this.volume = volume;
+        this.changeRate = changeRate;
+    }
 }

@@ -3,10 +3,12 @@ package kr.stockey.investmentservice.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class MyStockInfoDto {
     private Long stockId;
     private String stockName;

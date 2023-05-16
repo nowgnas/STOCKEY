@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 @ToString
 public class Stock {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stock_id", nullable = false)
     private Long id;
 

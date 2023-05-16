@@ -29,7 +29,7 @@ public class MyStock {
     @Column(name = "avg_price", nullable = false)
     private Double avgPrice;
 
-    @Column(name = "count", columnDefinition = "INT UNSIGNED not null")
+    @Column(name = "count", nullable = false)
     @Setter
     private Long count;
 

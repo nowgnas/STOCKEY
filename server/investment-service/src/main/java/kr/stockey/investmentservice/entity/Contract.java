@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "constract_id", nullable = false)
+    @Column(name = "contract_id", nullable = false)
     private Long id;
 
     @NotNull
@@ -29,7 +29,7 @@ public class Contract {
     private Long stockId;
 
     @NotNull
-    @Column(name = "count", columnDefinition = "INT UNSIGNED not null")
+    @Column(name = "count", nullable = false)
     private Long count;
 
     @Column(name = "contract_price", nullable = true)

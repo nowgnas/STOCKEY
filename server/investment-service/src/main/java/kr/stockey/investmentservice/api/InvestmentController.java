@@ -88,6 +88,14 @@ public class InvestmentController {
         return new ResponseEntity<>(new ResponseDto("이번주 내 보유 주식 정보 제공 완료!", accountFlowDtoList), HttpStatus.OK);
     }
 
+    /*
+        현 시점 특정 종목의 주문 현황 가져오기
+     */
+    @GetMapping("/orderstatus/{stockId}")
+    public ResponseEntity<ResponseDto> getOrderStatus(@PathVariable("stockId") Long stockId) throws Exception {
+        OrderStatusDto orderStatusDto = investmentService.getOrderStatus(stockId);
+        return new ResponseEntity<>(new ResponseDto("현 시점 특정 종목의 주문 현황 가져오기!", orderStatusDto), HttpStatus.OK);
+    }
 
     /*
         http 헤더에서 member id 가져오는 메소드

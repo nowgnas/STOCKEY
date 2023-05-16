@@ -152,6 +152,27 @@ public class InvestmentServiceImpl implements InvestmentService{
         return null;
     }
 
+    @Override
+    public OrderStatusDto getOrderStatus(Long stockId) {
+        Long buyCnt = 0L;
+        Long sellCnt = 0L;
+
+        List<Order> allOrders = (List<Order>) orderRedisRepository.findAll();
+        for (Order order : allOrders) {
+            List<OrderListDto> orderListDtos = order.getOrders().stream()
+                    .filter(dto -> dto.getStockId().equals(stockId))
+                    .toList();
+            for (OrderListDto orderListDto : orderListDtos) {
+                if (orderListDto.getOrderType().equals(ContractType.BUY)) {
+                    buyCnt++;
+                } else {
+                    sellCnt++;
+                }
+            }
+        }
+        return OrderStatusDto.builder().buy(buyCnt).sell(sellCnt).build();
+    }
+
     // 인자로 들어온 날짜가 속한 주의 날짜들 리턴 (월 ~ 일)
     private List<LocalDate> getWeekDates(LocalDate date) {
         LocalDate sunday = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));

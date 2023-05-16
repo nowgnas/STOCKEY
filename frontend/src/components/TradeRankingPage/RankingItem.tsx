@@ -1,10 +1,13 @@
 import styled from "styled-components"
 import Slide from "@mui/material/Slide"
-import { useState, useRef } from "react"
-import { shimmer } from "../../Keyframes"
+import Fade from "@mui/material/Fade"
+import { Grid } from "@mui/material"
+import { useState } from "react"
+import { shimmer, fadeIn } from "../../Keyframes"
 import Avatar, { genConfig } from "react-nice-avatar"
-import Lottie from "react-lottie"
+import Lottie from "lottie-react"
 import LottieData from "./67650-aaaa.json"
+import PeekedStockCarousel from "./PeekedStockCarousel"
 
 export interface RankingProps {
   rank: number
@@ -14,7 +17,7 @@ export interface RankingProps {
 
 const RankingItem = ({ rank, name, account }: RankingProps) => {
   const [isHovered, setIsHovered] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const [isPeeking, setIsPeeking] = useState(false)
   const config = genConfig({
     bgColor:
       rank <= 3
@@ -23,92 +26,105 @@ const RankingItem = ({ rank, name, account }: RankingProps) => {
   })
 
   return (
-    <ItemWrapper
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      ref={containerRef}
-      rank={rank}
-    >
-      <div>
-        <span>{rank}</span>
-        <div style={{ position: "relative" }}>
-          {/* 1 ~ 3등 프로필 이미지에 효과 주기 */}
-          {rank <= 3 && (
-            <Lottie
-              options={{
-                loop: true,
-                autoplay: true,
-                animationData: LottieData,
-              }}
+    <Grid item display="flex" flexDirection="column" rowGap={2} xs={12}>
+      <RankWrapper
+        item
+        xs={12}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => {
+          setIsHovered(false)
+          setIsPeeking(false)
+        }}
+        rank={rank}
+      >
+        <div>
+          <span>{rank}</span>
+          <div style={{ position: "relative" }}>
+            {/* 1 ~ 3등 프로필 이미지에 효과 주기 */}
+            {rank <= 3 && (
+              <Lottie
+                loop={true}
+                autoplay={true}
+                animationData={LottieData}
+                style={{
+                  position: "absolute",
+                  left: "-6rem",
+                  width: "18rem",
+                  height: "18rem",
+                  filter: `brightness(${1 - (rank - 1) * 0.2}) opacity(${
+                    1 - (rank - 1) * 0.3
+                  })`,
+                }}
+              />
+            )}
+            <Avatar
+              shape="circle"
+              {...config}
               style={{
-                position: "absolute",
-                left: "-6rem",
-                width: "18rem",
-                height: "18rem",
-                filter: `brightness(${1 - (rank - 1) * 0.2}) opacity(${
-                  1 - (rank - 1) * 0.3
-                })`,
+                width: "6rem",
+                height: "6rem",
+                marginRight: "6rem",
               }}
             />
-          )}
-          <Avatar
-            shape="circle"
-            {...config}
-            style={{
-              width: "6rem",
-              height: "6rem",
-              marginRight: "6rem",
-            }}
-          />
-        </div>
-        <span>{name}</span>
-      </div>
-      <Slide
-        direction="up"
-        in={!isHovered}
-        mountOnEnter
-        unmountOnExit
-        container={containerRef.current}
-        timeout={{ enter: 200, exit: 0 }}
-        children={
-          <div>
-            <img
-              width="48"
-              height="48"
-              src="https://img.icons8.com/parakeet/48/money-bag.png"
-              alt="money-bag"
-            />
-            <span>{account.toLocaleString()}</span>
           </div>
-        }
-      />
+          <span style={{ whiteSpace: "nowrap" }}>{name}</span>
+        </div>
+        <Fade
+          in={!isHovered}
+          mountOnEnter
+          unmountOnExit
+          easing="ease-in-out"
+          timeout={{ enter: 500, exit: 0 }}
+          children={
+            <div>
+              <img
+                width="48"
+                height="48"
+                src="https://img.icons8.com/parakeet/48/money-bag.png"
+                alt="money-bag"
+              />
+              <span>{account.toLocaleString()}</span>
+            </div>
+          }
+        />
 
-      <Slide
-        direction="left"
-        in={isHovered}
-        mountOnEnter
-        unmountOnExit
-        container={containerRef.current}
-        timeout={{ enter: 500, exit: 0 }}
-        children={
-          <PeekBtn>
-            <img
-              width="36"
-              height="36"
-              src="https://img.icons8.com/material/48/ski-mask.png"
-              alt="ski-mask"
-            />
-            <span>주문서 엿보기</span>
-          </PeekBtn>
-        }
+        <Slide
+          direction="left"
+          in={isHovered}
+          mountOnEnter
+          unmountOnExit
+          timeout={{ enter: 500, exit: 0 }}
+          children={
+            <PeekBtn onClick={() => setIsPeeking(true)}>
+              <img
+                width="36"
+                height="36"
+                src="https://img.icons8.com/material/48/ski-mask.png"
+                alt="ski-mask"
+              />
+              <span>주문서 엿보기</span>
+            </PeekBtn>
+          }
+        />
+      </RankWrapper>
+      <PeekWrapper
+        item
+        xs={12}
+        children={<PeekedStockCarousel />}
+        show={isPeeking}
       />
-    </ItemWrapper>
+    </Grid>
   )
 }
 
 export default RankingItem
 
-export const ItemWrapper = styled.div<{ rank: number }>`
+const PeekWrapper = styled(Grid)<{ show: boolean }>`
+  display: ${({ show }) => (show ? "flex" : "none")};
+  animation: ${fadeIn} 0.7s ease-in-out;
+`
+
+export const RankWrapper = styled(Grid)<{ rank: number }>`
   // 레이아웃
 
   // 모든 div에 적용

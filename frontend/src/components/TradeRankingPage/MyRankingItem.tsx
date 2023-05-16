@@ -1,11 +1,11 @@
-import { ItemWrapper, RankingProps } from "./RankingItem"
+import { RankWrapper, RankingProps } from "./RankingItem"
 import Avatar, { genConfig } from "react-nice-avatar"
 
 const MyRankingItem = ({ rank, name, account }: RankingProps) => {
   const config = genConfig()
 
   return (
-    <ItemWrapper
+    <RankWrapper
       style={{
         borderColor: "var(--custom-mint)",
         backgroundColor: "#E9FBF5",
@@ -38,7 +38,7 @@ const MyRankingItem = ({ rank, name, account }: RankingProps) => {
         />
         <span>{account.toLocaleString()}</span>
       </div>
-    </ItemWrapper>
+    </RankWrapper>
   )
 }
 

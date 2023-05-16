@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import TradeShortcutCard from "../../TradeMainPage/TradeShortcutCard"
 import { PanelTitle } from "../../StockDetailPage/SubPanel/KeywordPanel/KeywordPanel"
+import { useMyAsset } from "../../../hooks/useMyAsset"
 
 interface AccountProps {
   total: number
@@ -8,7 +9,10 @@ interface AccountProps {
   deposit: number
 }
 
-const MyAccountCard = ({ total, stock, deposit }: AccountProps) => {
+const MyAccountCard = () => {
+  // const {total, stock, deposit} = useMyAsset()
+  const { data: my } = useMyAsset()
+
   return (
     <>
       <PanelTitle style={{ marginTop: "0", marginBottom: "1.6rem" }}>
@@ -18,7 +22,7 @@ const MyAccountCard = ({ total, stock, deposit }: AccountProps) => {
         <TotalBalance>
           <TradeShortcutCard
             title="총 자산"
-            content={`₩ ${total.toLocaleString()}`}
+            content={`₩ ${my?.totalAssets.toLocaleString()}`}
             imageSrc="moneyBag"
             bgColor="--custom-purple-3"
             navPage=""
@@ -30,11 +34,11 @@ const MyAccountCard = ({ total, stock, deposit }: AccountProps) => {
             style={{ borderBottom: "2px solid var(--custom-purple-3)" }}
           >
             <span>주식</span>
-            <p>{`₩ ${stock.toLocaleString()}`}</p>
+            <p>{`₩ ${my?.stockValuation.toLocaleString()}`}</p>
           </BalanceItem>
           <BalanceItem>
             <span>예수금</span>
-            <p>{`₩ ${deposit.toLocaleString()}`}</p>
+            <p>{`₩ ${my?.deposit.toLocaleString()}`}</p>
           </BalanceItem>
         </DetailedBalance>
       </AccountCardWrapper>

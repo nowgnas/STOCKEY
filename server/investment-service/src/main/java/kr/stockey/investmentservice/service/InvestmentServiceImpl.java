@@ -316,7 +316,18 @@ public class InvestmentServiceImpl implements InvestmentService{
 
             // 현재 주식명
             String curStockName = stockIdToNameMap.get(myStock.getStockId());
-            resLst.add(new MyStockInfoDto(curStockId, curStockName, curSvp, curRrp, null, null, null));
+
+            // MyStockInfo 객체 생성
+            MyStockInfoDto myStockInfoDto = MyStockInfoDto.builder()
+                    .stockId(curStockId)
+                    .stockName(curStockName)
+                    .svp(curSvp)
+                    .rrp(curRrp)
+                    .curStockPrice(stockPriceMap.get(curStockId))
+                    .avgPrice(avgPrice)
+                    .count(myStock.getCount()).build();
+
+            resLst.add(myStockInfoDto);
         }
         return resLst;
     }

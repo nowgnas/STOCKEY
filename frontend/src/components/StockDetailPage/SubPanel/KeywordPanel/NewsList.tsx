@@ -1,4 +1,3 @@
-import NewsListItem from "./NewsListItem"
 import NewsThumbnail from "./NewsThumbnail"
 
 export interface NewsProps {
@@ -12,7 +11,6 @@ const NewsList = ({ newsList }: { newsList: NewsProps[] }) => {
     <>
       {newsList !== undefined &&
         newsList.map((news, index) => (
-          // <NewsListItem key={`news-${index}}`} news={news} order={index + 1} />
           <NewsThumbnail  key={`news-${index}}`} news={news} order={index + 1}/>
         ))}
     </>

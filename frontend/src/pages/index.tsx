@@ -19,8 +19,6 @@ import TradeMainPage from "./TradeMainPage"
 import TradeOrderPage from "./TradeOrderPage"
 import TradeRankingPage from "./TradeRankingPage"
 
-import NewsTestPage from "./NewsTestPage"
-
 const router = createBrowserRouter([
   {
     path: "",
@@ -100,11 +98,6 @@ const router = createBrowserRouter([
       {
         path: "/user/signup",
         element: <SignupPage />,
-      },
-      // 임시 (삭제 예정)
-      {
-        path: "/news-test",
-        element: <NewsTestPage />
       },
       // 404 페이지
       {

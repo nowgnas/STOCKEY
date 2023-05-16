@@ -17,13 +17,24 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class LaboratoryServiceImpl implements LaboratoryService {
     private final LaboratoryFeignClient laboratoryFeignClient;
-//    private final LaboratoryMapper laboratoryMapper;
 
+    /**
+     * 주식 종목 검색
+     *
+     * @param stock 사용자 입력
+     * @return 주식 종목 리스트
+     */
     @Override
     public List<StockSearchDto> searchStocks(String keyword) {
         return laboratoryFeignClient.getStockSearch(keyword);
     }
 
+    /**
+     * 키워드 검색
+     *
+     * @param keyword 사용자 입력
+     * @return 키워드 리스트
+     */
     @Override
     public List<KeywordSearchDto> searchKeyword(String keyword) {
         ResponseDto keywordSearch = laboratoryFeignClient.getKeywordSearch(keyword);

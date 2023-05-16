@@ -7,7 +7,19 @@ import java.util.List;
 
 public interface LaboratoryService {
 
+    /**
+     * 주식 종목 검색
+     *
+     * @param stock 사용자 입력
+     * @return 주식 종목 리스트
+     */
     List<StockSearchDto> searchStocks(String stock);
 
+    /**
+     * 키워드 검색
+     *
+     * @param keyword 사용자 입력
+     * @return 키워드 리스트
+     */
     List<KeywordSearchDto> searchKeyword(String keyword);
 }

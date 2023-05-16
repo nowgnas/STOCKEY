@@ -10,8 +10,21 @@ import java.util.List;
 
 @FeignClient(name = "laboratory-service", url = "https://stockey.kr/api")
 public interface LaboratoryFeignClient {
+    /**
+     * 주식 종목 조회
+     *
+     * @param keyword 사용자 입력
+     * @return 사용자 입력 단어 포함 주식 종목 리스트
+     */
     @GetMapping("/stock/search")
     List<StockSearchDto> getStockSearch(@RequestParam String keyword);
+
+    /**
+     * 주식 키워드 검색
+     *
+     * @param keyword 사용자 입력 키워드
+     * @return 사용자 입력 키워드 포함 키워드 리스트
+     */
 
     @GetMapping("/keywords/search")
     ResponseDto getKeywordSearch(@RequestParam String keyword);

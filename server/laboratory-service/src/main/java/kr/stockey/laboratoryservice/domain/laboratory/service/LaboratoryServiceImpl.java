@@ -3,21 +3,19 @@ package kr.stockey.laboratoryservice.domain.laboratory.service;
 import kr.stockey.laboratoryservice.common.openfeign.LaboratoryFeignClient;
 import kr.stockey.laboratoryservice.domain.keyword.dto.KeywordSearchDto;
 import kr.stockey.laboratoryservice.domain.laboratory.dto.ResponseDto;
-import kr.stockey.laboratoryservice.domain.laboratory.mapper.LaboratoryMapper;
 import kr.stockey.laboratoryservice.domain.stock.dto.StockSearchDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class LaboratoryServiceImpl implements LaboratoryService {
     private final LaboratoryFeignClient laboratoryFeignClient;
-    private final LaboratoryMapper laboratoryMapper;
+//    private final LaboratoryMapper laboratoryMapper;
 
     @Override
     public List<StockSearchDto> searchStocks(String keyword) {
@@ -28,6 +26,7 @@ public class LaboratoryServiceImpl implements LaboratoryService {
     public List<KeywordSearchDto> searchKeyword(String keyword) {
         ResponseDto keywordSearch = laboratoryFeignClient.getKeywordSearch(keyword);
         List<Object> data = (List<Object>) keywordSearch.getData();
-        return data.stream().map(laboratoryMapper::mapToDto).collect(Collectors.toList());
+        System.out.println(data.getClass());
+        return null;
     }
 }

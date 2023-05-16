@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -28,19 +28,15 @@ public class LaboratoryServiceImpl implements LaboratoryService {
     public List<KeywordSearchDto> searchKeyword(String keyword) {
         ResponseDto keywordSearch = laboratoryFeignClient.getKeywordSearch(keyword);
         List<Object> data = (List<Object>) keywordSearch.getData();
-
-        List<KeywordSearchDto> keywordSearchDtos = new ArrayList<>();
+        List<KeywordSearchDto> list = new ArrayList<>();
         for (Object item :
                 data) {
-            if (!data.isEmpty()) {
-                Map<String, String> map = (Map<String, String>) item;
-                System.out.println(map.get("id"));
-                keywordSearchDtos.add(KeywordSearchDto.builder()
-                        .id(Long.valueOf(map.get("id")))
-                        .name(map.get("name"))
-                        .build());
-            }
+            LinkedHashMap<String, ?> map = (LinkedHashMap<String, ?>) item;
+            list.add(KeywordSearchDto.builder()
+                    .id(((Integer) map.get("id")).longValue())
+                    .name((String) map.get("name"))
+                    .build());
         }
-        return keywordSearchDtos;
+        return list;
     }
 }

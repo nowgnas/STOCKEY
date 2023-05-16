@@ -30,7 +30,7 @@ public interface StockRepository extends JpaRepository<Stock,Long> {
 
     Optional<Stock> findById(Long id);
 
-    List<Stock> findByIndustry(Long industryId);
+    List<Stock> findByIndustryId(Long industryId);
 
     @Query(value = "SELECT * FROM stock ORDER BY RAND() LIMIT :count", nativeQuery = true)
     List<Stock> findStockRandom(Integer count);

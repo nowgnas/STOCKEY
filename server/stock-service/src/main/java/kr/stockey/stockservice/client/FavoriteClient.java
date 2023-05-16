@@ -27,7 +27,7 @@ public interface FavoriteClient {
     @DeleteMapping("/favorite/client/stock/{stockId}")
     Void deleteFavoriteStock(@PathVariable("stockId") Long stockId);
 
-    @PostMapping("/favorite/clinet/stock/rank")
+    @PostMapping("/favorite/client/stock/rank")
     Integer getLikeStockRank(GetLikeStockRankRequest request);
 
 

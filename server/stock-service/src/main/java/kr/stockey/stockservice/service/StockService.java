@@ -26,8 +26,7 @@ public interface StockService {
      void deleteFavorite(MemberDto member,Long id);
      boolean checkFavorite(Long memberId,Long id);
 
-     // TODO 상관관계 추가
-//     Double getCorrelation(Long id, GetCorrelationRequest getCorrelationRequest);
+     Double getCorrelation(Long id, GetCorrelationRequest getCorrelationRequest);
      List<ResultCorrelationDto> getAllStockCorrelation(Long id , GetCorrelationRequest getCorrelationRequest);
 
      // 산업별 종목

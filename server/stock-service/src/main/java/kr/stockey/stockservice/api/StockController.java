@@ -167,22 +167,21 @@ public class StockController {
         return new ResponseEntity<>(new ResponseDto("DELETED", null), HttpStatus.OK);
     }
 
-//    @Operation(summary = "종목과 키워드 추이 상관분석", description = "종목과 키워드 추이 상관분석 결과를 진행합니다.")
-//    @ApiResponses(
-//            value = {
-//                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-//                    @ApiResponse(responseCode = "404", description = "종목 없음, 키워드 없음"),
-//            }
-//    )
-//
-//    // TODO 상관관계 추가
-//    @GetMapping("/keyword/correlation/{id}")
-//    public ResponseEntity<ResponseDto> getCorrelation(@PathVariable Long id,
-//                                                      @Valid @ModelAttribute GetCorrelationRequest getCorrelationRequest){
-//        Double correlation = stockService.getCorrelation(id, getCorrelationRequest);
-//        System.out.println("correlation = " + correlation);
-//        return new ResponseEntity<>(new ResponseDto("OK",correlation),HttpStatus.OK);
-//    }
+    @Operation(summary = "종목과 키워드 추이 상관분석", description = "종목과 키워드 추이 상관분석 결과를 진행합니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "404", description = "종목 없음, 키워드 없음"),
+            }
+    )
+
+    @GetMapping("/keyword/correlation/{id}")
+    public ResponseEntity<ResponseDto> getCorrelation(@PathVariable("id") Long id,
+                                                      @Valid @ModelAttribute GetCorrelationRequest getCorrelationRequest){
+        Double correlation = stockService.getCorrelation(id, getCorrelationRequest);
+        System.out.println("correlation = " + correlation);
+        return new ResponseEntity<>(new ResponseDto("OK",correlation),HttpStatus.OK);
+    }
 
     @Operation(summary = "같은 산업내 종목과 키워드 추이 상관분석", description = "모든종목과 키워드 추이 상관분석 결과를 상위 3개를 보여줍니다.")
     @ApiResponses(

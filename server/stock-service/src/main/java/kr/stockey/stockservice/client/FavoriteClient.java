@@ -1,6 +1,7 @@
 package kr.stockey.stockservice.client;
 
 
+import kr.stockey.stockservice.api.request.GetLikeStockRankRequest;
 import kr.stockey.stockservice.dto.core.FavoriteDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,6 +26,9 @@ public interface FavoriteClient {
 
     @DeleteMapping("/favorite/client/stock/{stockId}")
     Void deleteFavoriteStock(@PathVariable("stockId") Long stockId);
+
+    @PostMapping("/favorite/clinet/stock/rank")
+    Integer getLikeStockRank(GetLikeStockRankRequest request);
 
 
 }

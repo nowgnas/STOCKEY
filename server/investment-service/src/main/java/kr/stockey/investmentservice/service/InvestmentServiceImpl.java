@@ -202,7 +202,8 @@ public class InvestmentServiceImpl implements InvestmentService{
         LocalDateTime startTime = stEdWeekDates.get(0);
         LocalDateTime endTime = stEdWeekDates.get(1);
 
-        List<Contract> byMemberIdAndCreatedAtBetween = contractRepository.findByMemberIdAndCreatedAtBetween(memberId, startTime, endTime);
+        // 특정 유저의 이번주에 주문, 체결 정보 모두 가져오기
+        List<Contract> contractsAndOrders = contractRepository.findByMemberIdAndCreatedAtBetween(memberId, startTime, endTime);
 
         // order 가져오기
         List<Contract> orderHistory = contractRepository.findByMemberId(memberId).stream()
@@ -218,7 +219,7 @@ public class InvestmentServiceImpl implements InvestmentService{
         // 주문 정보에 매치되는 체결 정보 가져오기
 //        contractRepository.getContractsByMatchOrderIdsAndDateRange()
 
-        List<OrderHistoryDto> orderHistoryDtoList = investmentMapper.toOrderHistoryDtoList(orderHistory);
+//        List<OrderHistoryDto> orderHistoryDtoList = investmentMapper.toOrderHistoryDtoList(orderHistory);
 
         for (OrderHistoryDto orderHistoryDto : orderHistoryDtoList) {
             String stockName = stockIdToNameMap.get(orderHistoryDto.getStockId());
@@ -421,6 +422,9 @@ public class InvestmentServiceImpl implements InvestmentService{
                         Long myStockCount = myStock.getCount();
                         Long actualSellQuantity = Math.min(myStockCount, orderStockCount);
 
+                        // profit 계산 ((매도가 - 매입 평균 단가) * 매도 수량)
+                        Double profit = (curStockPrice - myStock.getAvgPrice()) * orderStockCount;
+
                         // 보유주식 감소, 만약 모든 보유 주식을 팔았다면 mystock 엔티티 삭제 진행
                         if (myStockCount.equals(actualSellQuantity)) {
                             myStockRepository.deleteById(myStock.getId());
@@ -441,6 +445,7 @@ public class InvestmentServiceImpl implements InvestmentService{
                                 .createdAt(LocalDateTime.now())
                                 .category(InvCategory.CONTRACT)
                                 .matchOrderId(memberOrder.getMemberId())
+                                .profit(profit)
                                 .build();
                         contractRepository.save(contract);
                     }

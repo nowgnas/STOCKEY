@@ -14,4 +14,5 @@ public class OrderHistoryDto {
     private ContractType contractType;
     private LocalDateTime createdAt;
     private InvCategory category;
+    private Double profit;
 }

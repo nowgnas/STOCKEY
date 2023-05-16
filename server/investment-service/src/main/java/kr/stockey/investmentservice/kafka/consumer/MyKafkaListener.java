@@ -21,7 +21,7 @@ public class MyKafkaListener {
         orderRedisRepository.save(order);
     }
 
-    @KafkaListener(topics = "stock-orders",groupId = "group-id-1", containerFactory = "kafkaListenerContainerFactory1")
+    @KafkaListener(topics = "stock-order",groupId = "stock-order-consumer", containerFactory = "kafkaListenerContainerFactory1")
     public void receive1(OrderProducerDto order) throws Exception {
         // 들어온 주문을 레디스에 저장
         Order orderRedis = investmentDtoMapper.toRedisOrderDto(order);

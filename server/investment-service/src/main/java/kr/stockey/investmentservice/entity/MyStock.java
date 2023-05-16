@@ -9,8 +9,10 @@ import javax.validation.constraints.NotNull;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "my_stock")
+@ToString
 public class MyStock {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "my_stock_id", nullable = false)
     private Long id;
 
@@ -27,7 +29,7 @@ public class MyStock {
     @Column(name = "avg_price", nullable = false)
     private Double avgPrice;
 
-    @Column(name = "count", columnDefinition = "INT UNSIGNED not null")
+    @Column(name = "count", nullable = false)
     @Setter
     private Long count;
 

@@ -22,4 +22,6 @@ public interface InvestmentService {
     List<TraderRankDto> getTraderRank(Long num);
 
     List<AccountFlowDto> getWeeklyAssetInfo(Long memberId);
+
+    OrderStatusDto getOrderStatus(Long stockId);
 }

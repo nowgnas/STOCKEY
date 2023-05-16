@@ -25,8 +25,14 @@ const AccordionLayout = ({ type, items, openState, setOpenState }: Props) => {
       <Collapse in={openState} timeout={500}>
         <ContentWrapper>
           {items.map((item) => {
-            return <DndCard key={item.id} item={item} type={type} />;
+            return (
+              <CardWrapper>
+                <DndCard key={item.id} item={item} type={type} />
+              </CardWrapper>
+            );
           })}
+          {/* item 홀수개인 경우 layout 위해 fake wrapper 하나 추가 */}
+          {items.length % 2 === 1 && <CardWrapper />}
         </ContentWrapper>
       </Collapse>
       <TailWrapper>
@@ -70,9 +76,9 @@ const ContentWrapper = styled.div`
   padding: 12px 18px;
 
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
   gap: 2.5rem;
 
   overflow-y: scroll;
@@ -91,6 +97,11 @@ const ContentWrapper = styled.div`
   }
 
 `;
+
+const CardWrapper = styled.div`
+  width: 100px;
+  height: 100px;
+`
 
 const TailWrapper = styled.div`
   width: 100%;

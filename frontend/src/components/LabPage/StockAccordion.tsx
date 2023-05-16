@@ -26,18 +26,18 @@ const sampleItem: StockCardType[] = [
     id: 5,
     name: "HD현대",
   },
-  {
-    id: 6,
-    name: "HMM",
-  },
-  {
-    id: 7,
-    name: "KB금융",
-  },
-  {
-    id: 8,
-    name: "KT&G",
-  },
+  // {
+  //   id: 6,
+  //   name: "HMM",
+  // },
+  // {
+  //   id: 7,
+  //   name: "KB금융",
+  // },
+  // {
+  //   id: 8,
+  //   name: "KT&G",
+  // },
 ];
 
 const StockAccordion = () => {

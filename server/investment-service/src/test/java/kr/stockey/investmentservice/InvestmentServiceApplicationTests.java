@@ -132,6 +132,7 @@ class InvestmentServiceApplicationTests {
         for (MyStockInfoDto myStockInfoDto : myStockInfo) {
             System.out.println("myStockInfoDto = " + myStockInfoDto);
         }
+        assertThat(myStockInfo.size()).isEqualTo(5);
     }
 
     @Test

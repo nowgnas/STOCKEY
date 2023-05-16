@@ -258,12 +258,6 @@ public class StockController {
     }
 
 
-    @GetMapping("/client/industry/{industryId}")
-    public ResponseEntity<List<StockDto>> getByIndustryId_client(@PathVariable Long industryId) {
-        List<StockDto> stockList = stockService.getByIndustryId(industryId);
-        return new ResponseEntity<>(stockList, HttpStatus.OK);
-    }
-
     @GetMapping("/client/today/{industryId}")
     public ResponseEntity<List<GetStockTodayResponse>> findTodayDailyStock(@PathVariable Long industryId) {
         List<GetStockTodayResponse> stockList = stockService.findTodayDailyStock(industryId);

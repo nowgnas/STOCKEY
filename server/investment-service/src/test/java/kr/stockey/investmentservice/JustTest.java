@@ -1,5 +1,7 @@
 package kr.stockey.investmentservice;
 
+import kr.stockey.investmentservice.enums.InvCategory;
+import lombok.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,8 +14,11 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class JustTest {
@@ -104,5 +109,105 @@ public class JustTest {
         LocalDateTime monday = sunday.minusDays(6).withHour(0).withMinute(0).withSecond(0);
         return Arrays.asList(monday, sunday);
     }
+
+    @Test
+    public void testContractsByCategory() {
+        // Initialize the list of ContractDto objects
+        List<ContractDto> contracts = Arrays.asList(
+                new ContractDto(1L, 1L, "Contract 1", InvCategory.CONTRACT),
+                new ContractDto(1L, 1L,"Contract 2", InvCategory.CONTRACT),
+                new ContractDto(1L, 1L,"Order 1", InvCategory.ORDER),
+                new ContractDto(1L, 1L,"Order 2", InvCategory.ORDER),
+                new ContractDto(1L, 1L,"Contract 3", InvCategory.CONTRACT)
+        );
+
+        // Apply the grouping operation
+        Map<InvCategory, List<ContractDto>> contractsByCategory = contracts.stream()
+                .collect(Collectors.groupingBy(ContractDto::getCategory));
+
+        // Verify the correctness of the grouping
+        List<ContractDto> contractList = contractsByCategory.get(InvCategory.CONTRACT);
+        List<ContractDto> orderList = contractsByCategory.get(InvCategory.ORDER);
+
+        // Assert the expected results
+        Assertions.assertNotNull(contractList);
+        Assertions.assertEquals(3, contractList.size());
+
+        Assertions.assertNotNull(orderList);
+        Assertions.assertEquals(2, orderList.size());
+    }
+
+    public static class ContractDto {
+        private Long id;
+        private Long matchOrderId;
+        private String name;
+        private InvCategory category;
+
+        public ContractDto() {
+        }
+
+        public ContractDto(Long id, Long matchOrderId, String name, InvCategory category) {
+            this.id = id;
+            this.matchOrderId = matchOrderId;
+            this.name = name;
+            this.category = category;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public Long getMatchOrderId() {
+            return matchOrderId;
+        }
+
+        public void setMatchOrderId(Long matchOrderId) {
+            this.matchOrderId = matchOrderId;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public InvCategory getCategory() {
+            return category;
+        }
+
+        public void setCategory(InvCategory category) {
+            this.category = category;
+        }
+    }
+
+    @Test
+    void testContractMapping() {
+        // Given
+        ContractDto contract1 = new ContractDto(1L, 3L, "contract1", InvCategory.CONTRACT);
+        ContractDto contract2 = new ContractDto(2L, 4L, "contract2", InvCategory.CONTRACT);
+
+        ContractDto order1 = new ContractDto(3L, null, "order1", InvCategory.ORDER);
+        ContractDto order2 = new ContractDto(4L, null, "order2", InvCategory.ORDER);
+
+        List<ContractDto> contractList = Arrays.asList(contract1, contract2);
+
+        // When
+        Map<Long, ContractDto> contractMap = contractList.stream()
+                .collect(Collectors.toMap(ContractDto::getMatchOrderId, contract -> contract));
+
+        // Then
+        assertEquals(2, contractMap.size());
+        assertTrue(contractMap.containsKey(3L));
+        assertTrue(contractMap.containsKey(4L));
+        assertEquals(contract1, contractMap.get(order1.getId()));
+        assertEquals(contract2, contractMap.get(order2.getId()));
+    }
+
 
 }

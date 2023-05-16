@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -204,26 +205,37 @@ public class InvestmentServiceImpl implements InvestmentService{
 
         // 특정 유저의 이번주에 주문, 체결 정보 모두 가져오기
         List<Contract> contractsAndOrders = contractRepository.findByMemberIdAndCreatedAtBetween(memberId, startTime, endTime);
+        List<ContractDto> contractsAndOrdersDtoList = investmentMapper.toContractDtoList(contractsAndOrders);
 
-        // order 가져오기
-        List<Contract> orderHistory = contractRepository.findByMemberId(memberId).stream()
-                .filter(contract -> contract.getCategory() == InvCategory.ORDER)
-                .toList();
+        // contract, order 리스트 나누기
+        Map<InvCategory, List<ContractDto>> contractsByCategory = contractsAndOrdersDtoList.stream()
+                .collect(Collectors.groupingBy(ContractDto::getCategory));
 
-        // order id만 빼서 저장
-        List<Long> orderId = new ArrayList<>();
-        for (Contract contract : orderHistory) {
-            orderId.add(contract.getId());
-        }
+        // Then you can access the lists by the category
+        List<ContractDto> contractList = contractsByCategory.get(InvCategory.CONTRACT);
+        List<ContractDto> orderList = contractsByCategory.get(InvCategory.ORDER);
 
-        // 주문 정보에 매치되는 체결 정보 가져오기
-//        contractRepository.getContractsByMatchOrderIdsAndDateRange()
+        // First, create a map from the contractList for easy access
+        Map<Long, ContractDto> contractMap = contractList.stream()
+                .collect(Collectors.toMap(ContractDto::getMatchOrderId, contract -> contract));
 
-//        List<OrderHistoryDto> orderHistoryDtoList = investmentMapper.toOrderHistoryDtoList(orderHistory);
+        List<OrderHistoryDto> orderHistoryDtoList = new ArrayList<>();
 
-        for (OrderHistoryDto orderHistoryDto : orderHistoryDtoList) {
-            String stockName = stockIdToNameMap.get(orderHistoryDto.getStockId());
-            orderHistoryDto.setStockName(stockName);
+        // Then, for each order, find the corresponding contract
+        for (ContractDto order : orderList) {
+            ContractDto matchingContract = contractMap.get(order.getId());
+
+            OrderHistoryDto orderHistoryDto = OrderHistoryDto.builder()
+                    .stockId(order.getStockId())
+                    .stockName(stockIdToNameMap.get(order.getStockId()))
+                    .orderCount(order.getCount())
+                    .contractCount(matchingContract.getCount())
+                    .contractPrice(matchingContract.getContractPrice())
+                    .profit(matchingContract.getProfit())
+                    .contractType(order.getContractType())
+                    .createdAt(order.getCreatedAt())
+                    .build();
+            orderHistoryDtoList.add(orderHistoryDto);
         }
         return orderHistoryDtoList;
     }

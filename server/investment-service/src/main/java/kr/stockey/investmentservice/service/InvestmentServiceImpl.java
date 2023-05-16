@@ -316,7 +316,7 @@ public class InvestmentServiceImpl implements InvestmentService{
 
             // 현재 주식명
             String curStockName = stockIdToNameMap.get(myStock.getStockId());
-            resLst.add(new MyStockInfoDto(curStockId, curStockName, curSvp, curRrp));
+            resLst.add(new MyStockInfoDto(curStockId, curStockName, curSvp, curRrp, null, null, null));
         }
         return resLst;
     }

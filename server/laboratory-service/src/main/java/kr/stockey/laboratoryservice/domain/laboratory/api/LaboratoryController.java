@@ -20,6 +20,11 @@ import java.util.List;
 public class LaboratoryController {
     private final LaboratoryService laboratoryService;
 
+    /**
+     * 전체 주식 리스트
+     *
+     * @return 주식 종목 리스트 반환
+     */
     @GetMapping("stock/list")
     public ResponseEntity<ResponseDto> stockList() {
         List<StockSearchDto> allStock = laboratoryService.getAllStock();

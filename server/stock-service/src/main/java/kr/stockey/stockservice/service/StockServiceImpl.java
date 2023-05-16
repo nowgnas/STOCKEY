@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class StockServiceImpl implements StockService {
 
 
@@ -76,7 +77,8 @@ public class StockServiceImpl implements StockService {
     }
 
     public Integer getStockIndustryFavoriteRank(Long stockId, Long industryId) {
-        Integer rank = stockRepository.findIndustryFavoriteRank(stockId, industryId);
+//        Integer rank = stockRepository.findIndustryFavoriteRank(stockId, industryId);
+        Integer rank = 1;
         if (rank == null) {
             return 0;
         }

@@ -1,5 +1,6 @@
 package kr.stockey.favoriteservice.api;
 
+import kr.stockey.favoriteservice.api.request.GetLikeStockRankRequest;
 import kr.stockey.favoriteservice.dto.core.FavoriteDto;
 import kr.stockey.favoriteservice.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
@@ -101,6 +102,13 @@ public class FavoriteController {
         favoriteService.deleteFavoriteKeyword(keywordId, memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
+    @PostMapping("/client/stock/rank")
+    Integer getLikeStockRank(@RequestBody GetLikeStockRankRequest request){
+        return favoriteService.getLikeStockRank(request);
+    }
+
     /* --------------  다른 서비스에서 호출하는 메소드 [end]  ----------------  */
 
 

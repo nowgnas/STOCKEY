@@ -1,5 +1,6 @@
 package kr.stockey.favoriteservice.service;
 
+import kr.stockey.favoriteservice.api.request.GetLikeStockRankRequest;
 import kr.stockey.favoriteservice.dto.core.FavoriteDto;
 import kr.stockey.favoriteservice.entity.Favorite;
 import kr.stockey.favoriteservice.repository.FavoriteRepository;
@@ -102,6 +103,20 @@ public class FavoriteServiceImpl implements FavoriteService {
                 .keywordId(keywordId)
                 .build();
         favoriteRepository.save(favorite);
+    }
+
+    public Integer getLikeStockRank(GetLikeStockRankRequest request){
+        List<Long> stockList = request.getStockList();
+        Long targetId = request.getStockId();
+        int rank = 1;
+        Long target = favoriteRepository.countByStockId(targetId);
+        for(Long stockId : stockList){
+            // 해당 종목의 관심 개수가 더 적은 경우
+            if(target> favoriteRepository.countByStockId(stockId)){
+                rank++;
+            }
+        }
+        return rank;
     }
 
     // List Favorite => FavoriteDto

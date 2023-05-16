@@ -1,6 +1,7 @@
 package kr.stockey.favoriteservice.service;
 
 
+import kr.stockey.favoriteservice.api.request.GetLikeStockRankRequest;
 import kr.stockey.favoriteservice.dto.core.FavoriteDto;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public interface FavoriteService {
     void deleteFavoriteStock(Long stockId,Long memberId);
     void deleteFavoriteKeyword(Long keywordId,Long memberId);
 
-
+    Integer getLikeStockRank(GetLikeStockRankRequest request);
 
 
 

@@ -1,7 +1,8 @@
-import { memo } from 'react';
+import { memo } from "react";
 import { SetterOrUpdater } from "recoil";
 import { StockCardType, KeywordCardType } from "../../stores/LaboratoryAtoms";
-import AccordionSearchBar from "./AccordionSearchBar";
+import StockSearchBar from "./StockSearchBar";
+import KeywordSearchBar from "./KeywordSearchBar";
 import DndCard from "./DndCard";
 import Collapse from "@mui/material/Collapse";
 import styled from "styled-components";
@@ -20,8 +21,9 @@ const AccordionLayout = ({ type, items, openState, setOpenState }: Props) => {
     <PanelLayout>
       <HeaderWrapper>
         {headerText}
-        <AccordionSearchBar type={type}/>
+        {type === "STOCK" ? <StockSearchBar /> : <KeywordSearchBar />}
       </HeaderWrapper>
+
       <Collapse in={openState} timeout={500}>
         <ContentWrapper>
           {items.map((item) => {
@@ -35,6 +37,7 @@ const AccordionLayout = ({ type, items, openState, setOpenState }: Props) => {
           {items.length % 2 === 1 && <CardWrapper />}
         </ContentWrapper>
       </Collapse>
+
       <TailWrapper>
         <ChevonWrapper
           src={"labImages/chevon.png"}
@@ -95,13 +98,12 @@ const ContentWrapper = styled.div`
   ::-webkit-scrollbar-track {
     width: 1.8rem;
   }
-
 `;
 
 const CardWrapper = styled.div`
   width: 100px;
   height: 100px;
-`
+`;
 
 const TailWrapper = styled.div`
   width: 100%;

@@ -24,7 +24,7 @@ public interface StockRepository extends JpaRepository<Stock,Long> {
             "WHERE \n" +
             "ds.stock_id in (select stock_id from stock t where t.industry_id=:industryId)) AS temp \n" +
             "GROUP BY temp.stock_date;",nativeQuery = true)
-    List<IndustrySumDto> getMarketList(Long industryId);
+    List<IndustrySumDto> getMarketList(@Param("industryId") Long industryId);
 
     Optional<Stock> findById(Long id);
 
@@ -45,18 +45,6 @@ public interface StockRepository extends JpaRepository<Stock,Long> {
             "WHERE stock_id = :stockId ;", nativeQuery = true)
     Integer findIndustryMarketCapRank(@Param("stockId")Long stockId,
                                       @Param("industryId")Long industryId);
-
-//    @Query(value = "SELECT ranking\n" +
-//            " FROM  (\n" +
-//                " SELECT s.stock_id, count(*), rank() over (order by count(*) desc) as ranking \n" +
-//                " FROM  favorite f \n" +
-//                " JOIN stock s" +
-//                " ON s.industry_id = f.industry_id \n"+
-//                " WHERE f.industry_id = :industryId \n" +
-//                " GROUP BY s.stock_id \n" +
-//            " ) qs \n" +
-//            " where qs.stock_id = :stockId ;" ,nativeQuery = true)
-//    Integer findIndustryFavoriteRank(@Param("stockId") Long stockId,@Param("industryId")Long industryId);
 
     @Query(value = "select avg(change_rate), stock_date\n" +
             "from daily_stock\n" +

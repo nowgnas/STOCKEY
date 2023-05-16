@@ -4,6 +4,25 @@ spring:
 
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - http://localhost:3000
+              - http://127.0.0.1:3000
+            allow-credentials: true
+            allowedHeaders:
+              - authorization
+              - content-type
+              - credential
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+              - OPTIONS
+
       default-filters:
         - name: GlobalFilter
           args:
@@ -16,7 +35,7 @@ spring:
         - id: member-service
           uri: lb://member-service
           predicates:
-            - Path=/auth/logout , /auth/nickname
+            - Path=/auth/logout
           filters:
             - AuthorizationHeaderFilter
 

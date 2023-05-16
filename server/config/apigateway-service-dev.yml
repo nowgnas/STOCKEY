@@ -60,3 +60,10 @@ spring:
           uri: lb://LABORATORY-SERVICE/actuator/health
           predicates:
             - Path=/api/actuator/health
+        # stock
+        - id: stock-service
+          uri: lb://stock-service
+          predicates:
+            - Path=/stock/**
+          filters:
+            - RewritePath=/stock/(?<segment>.*), /$\{segment}

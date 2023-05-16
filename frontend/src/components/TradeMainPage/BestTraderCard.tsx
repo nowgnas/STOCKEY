@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined"
 import BestTraderCarousel from "./BestTraderCarousel"
-import Lottie from "react-lottie"
+import Lottie from "lottie-react"
 import LottieData from "./fanfare.json"
 
 const BestTraderCard = () => {
@@ -13,11 +13,9 @@ const BestTraderCard = () => {
       </CardHeader>
       <BestTraderCarousel />
       <Lottie
-        options={{
-          loop: true,
-          autoplay: true,
-          animationData: LottieData,
-        }}
+        loop={true}
+        autoplay={true}
+        animationData={LottieData}
         style={{
           position: "absolute",
           rotate: "270deg",

@@ -54,6 +54,10 @@ dependencies {
     // servlet 추가
     implementation 'javax.servlet:javax.servlet-api:4.0.1'
 
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
+
+
 }
 
 dependencyManagement {

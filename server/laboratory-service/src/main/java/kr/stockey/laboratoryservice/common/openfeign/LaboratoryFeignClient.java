@@ -13,6 +13,6 @@ public interface LaboratoryFeignClient {
     @GetMapping("/stock/search")
     List<StockSearchDto> getStockSearch(@RequestParam String keyword);
 
-    @GetMapping("/keyword/search")
+    @GetMapping("/keywords/search")
     List<KeywordSearchDto> getKeywordSearch(@RequestParam String keyword);
 }

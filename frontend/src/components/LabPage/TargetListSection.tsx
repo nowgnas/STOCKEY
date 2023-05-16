@@ -63,6 +63,10 @@ const TargetListSection = () => {
       setStockAccordionOpen(false);
       setKeywordAccordionOpen(true);
       setResultBoardOpen(false);
+
+      // keyword list get 하는 query refetch 보내기
+
+      
     } else if (
       // keyword drop한 경우
       draggedItem.type === "KEYWORD" &&

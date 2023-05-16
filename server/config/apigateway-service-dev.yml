@@ -60,8 +60,15 @@ spring:
           uri: lb://LABORATORY-SERVICE/actuator/health
           predicates:
             - Path=/api/actuator/health
+
         # stock
         - id: stock-service
           uri: lb://stock-service
           predicates:
             - Path=/stock/**
+
+        # keyword
+        - id: keyword-service
+          uri: lb://keyword-service
+          predicates:
+            - Path=/keyword/**

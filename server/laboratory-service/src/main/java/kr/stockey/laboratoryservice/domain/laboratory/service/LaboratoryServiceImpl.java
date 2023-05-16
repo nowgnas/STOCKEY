@@ -30,12 +30,15 @@ public class LaboratoryServiceImpl implements LaboratoryService {
         List<Object> data = (List<Object>) keywordSearch.getData();
         System.out.println(data.getClass());
         List<KeywordSearchDto> keywordSearchDtos = new ArrayList<>();
-        if (!data.isEmpty()) {
-            Map<String, String> map = (Map<String, String>) data;
-            keywordSearchDtos.add(KeywordSearchDto.builder()
-                    .id(Long.valueOf(map.get("id")))
-                    .name(map.get("name"))
-                    .build());
+        for (Object item :
+                data) {
+            if (!data.isEmpty()) {
+                Map<String, String> map = (Map<String, String>) item;
+                keywordSearchDtos.add(KeywordSearchDto.builder()
+                        .id(Long.valueOf(map.get("id")))
+                        .name(map.get("name"))
+                        .build());
+            }
         }
         return keywordSearchDtos;
     }

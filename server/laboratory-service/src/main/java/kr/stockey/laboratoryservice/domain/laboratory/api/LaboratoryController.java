@@ -20,6 +20,17 @@ import java.util.List;
 public class LaboratoryController {
     private final LaboratoryService laboratoryService;
 
+    @GetMapping("regression")
+    public ResponseEntity<ResponseDto> getRegressionCoefficient() {
+        List<Double> regressionCoefficient = laboratoryService.getRegressionCoefficient();
+
+        return ResponseEntity.ok(
+                ResponseDto.builder()
+                        .data(regressionCoefficient)
+                        .build()
+        );
+    }
+
     /**
      * 전체 주식 리스트
      *

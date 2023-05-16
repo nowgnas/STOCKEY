@@ -1,7 +1,6 @@
 package kr.stockey.laboratoryservice.domain.laboratory.service;
 
 import kr.stockey.laboratoryservice.domain.keyword.dto.KeywordSearchDto;
-import kr.stockey.laboratoryservice.domain.stock.dto.StockPreviewDto;
 import kr.stockey.laboratoryservice.domain.stock.dto.StockSearchDto;
 
 import java.util.List;
@@ -25,4 +24,6 @@ public interface LaboratoryService {
     List<KeywordSearchDto> searchKeyword(String keyword);
 
     List<StockSearchDto> getAllStock();
+
+    List<Double> getRegressionCoefficient();
 }

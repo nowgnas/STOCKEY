@@ -1,10 +1,12 @@
 package kr.stockey.laboratoryservice.common.openfeign;
 
 import kr.stockey.laboratoryservice.domain.laboratory.dto.ResponseDto;
+import kr.stockey.laboratoryservice.domain.stock.dto.DailyStockDto;
 import kr.stockey.laboratoryservice.domain.stock.dto.StockPreviewDto;
 import kr.stockey.laboratoryservice.domain.stock.dto.StockSearchDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -33,5 +35,9 @@ public interface LaboratoryFeignClient {
     @GetMapping("/keywords/search")
     ResponseDto getKeywordSearch(@RequestParam String keyword);
 
+    @GetMapping("/keywords/{keywordsId}/frequency")
+    ResponseDto getkeywordFreq(@PathVariable Long keywordsId);
 
+    @GetMapping("stock/{stockId}/dailystock")
+    List<DailyStockDto> getDailyStock(@PathVariable Long stockId);
 }

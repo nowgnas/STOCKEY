@@ -17,4 +17,7 @@ public interface InvestmentMapper {
 
     OrderDto toOrderDto(Contract contract);
     List<OrderDto> toOrderDtoList(List<Contract> contracts);
+
+    ContractDto toContractDto(Contract contract);
+    List<ContractDto> toContractDtoList(List<Contract> contracts);
 }

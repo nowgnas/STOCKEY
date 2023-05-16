@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -197,17 +198,54 @@ public class InvestmentServiceImpl implements InvestmentService{
 
     @Override
     public List<OrderHistoryDto> getOrderHistory(Long memberId) {
-        List<Contract> orderHistory = contractRepository.findByMemberId(memberId).stream()
-                .filter(contract -> contract.getCategory() == InvCategory.ORDER)
-                .toList();
+        // 현재 날짜 기준 이번주 첫날, 끝날 날짜 정보 가져오기
+        List<LocalDateTime> stEdWeekDates = getStEdWeekDates();// 월요일, 일요일 시간 정보
+        LocalDateTime startTime = stEdWeekDates.get(0);
+        LocalDateTime endTime = stEdWeekDates.get(1);
 
-        List<OrderHistoryDto> orderHistoryDtoList = investmentMapper.toOrderHistoryDtoList(orderHistory);
+        // 특정 유저의 이번주에 주문, 체결 정보 모두 가져오기
+        List<Contract> contractsAndOrders = contractRepository.findByMemberIdAndCreatedAtBetween(memberId, startTime, endTime);
+        List<ContractDto> contractsAndOrdersDtoList = investmentMapper.toContractDtoList(contractsAndOrders);
 
-        for (OrderHistoryDto orderHistoryDto : orderHistoryDtoList) {
-            String stockName = stockIdToNameMap.get(orderHistoryDto.getStockId());
-            orderHistoryDto.setStockName(stockName);
+        // contract, order 리스트 나누기
+        Map<InvCategory, List<ContractDto>> contractsByCategory = contractsAndOrdersDtoList.stream()
+                .collect(Collectors.groupingBy(ContractDto::getCategory));
+
+        // Then you can access the lists by the category
+        List<ContractDto> contractList = contractsByCategory.get(InvCategory.CONTRACT);
+        List<ContractDto> orderList = contractsByCategory.get(InvCategory.ORDER);
+
+        // First, create a map from the contractList for easy access
+        Map<Long, ContractDto> contractMap = contractList.stream()
+                .collect(Collectors.toMap(ContractDto::getMatchOrderId, contract -> contract));
+
+        List<OrderHistoryDto> orderHistoryDtoList = new ArrayList<>();
+
+        // Then, for each order, find the corresponding contract
+        for (ContractDto order : orderList) {
+            ContractDto matchingContract = contractMap.get(order.getId());
+
+            OrderHistoryDto orderHistoryDto = OrderHistoryDto.builder()
+                    .stockId(order.getStockId())
+                    .stockName(stockIdToNameMap.get(order.getStockId()))
+                    .orderCount(order.getCount())
+                    .contractCount(matchingContract.getCount())
+                    .contractPrice(matchingContract.getContractPrice())
+                    .profit(matchingContract.getProfit())
+                    .contractType(order.getContractType())
+                    .createdAt(order.getCreatedAt())
+                    .build();
+            orderHistoryDtoList.add(orderHistoryDto);
         }
         return orderHistoryDtoList;
+    }
+
+    private List<LocalDateTime> getStEdWeekDates() {
+        // Get this week's Monday and Sunday information based on today's date and time
+        LocalDateTime dateTime = LocalDateTime.now();
+        LocalDateTime sunday = dateTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).withHour(23).withMinute(59).withSecond(59);
+        LocalDateTime monday = sunday.minusDays(6).withHour(0).withMinute(0).withSecond(0);
+        return Arrays.asList(monday, sunday);
     }
 
     private Map<Long, String> makeStockIdToNameMap() {
@@ -396,6 +434,9 @@ public class InvestmentServiceImpl implements InvestmentService{
                         Long myStockCount = myStock.getCount();
                         Long actualSellQuantity = Math.min(myStockCount, orderStockCount);
 
+                        // profit 계산 ((매도가 - 매입 평균 단가) * 매도 수량)
+                        Double profit = (curStockPrice - myStock.getAvgPrice()) * orderStockCount;
+
                         // 보유주식 감소, 만약 모든 보유 주식을 팔았다면 mystock 엔티티 삭제 진행
                         if (myStockCount.equals(actualSellQuantity)) {
                             myStockRepository.deleteById(myStock.getId());
@@ -416,6 +457,7 @@ public class InvestmentServiceImpl implements InvestmentService{
                                 .createdAt(LocalDateTime.now())
                                 .category(InvCategory.CONTRACT)
                                 .matchOrderId(memberOrder.getMemberId())
+                                .profit(profit)
                                 .build();
                         contractRepository.save(contract);
                     }

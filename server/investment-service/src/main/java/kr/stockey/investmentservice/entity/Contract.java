@@ -32,8 +32,7 @@ public class Contract {
     @Column(name = "count", columnDefinition = "INT UNSIGNED not null")
     private Long count;
 
-    @NotNull
-    @Column(name = "contract_price", nullable = false)
+    @Column(name = "contract_price", nullable = true)
     private Long contractPrice;
 
     @Size(max = 10)
@@ -54,9 +53,12 @@ public class Contract {
     @Column(name = "match_order_id", nullable = true)
     private Long matchOrderId;
 
+    @Column(name = "profit", nullable = true, length = 20)
+    private Double profit;
+
     @Builder
     public Contract(Long id, Long memberId, Long stockId, Long count, Long contractPrice, ContractType contractType,
-                    LocalDateTime createdAt, InvCategory category, Long matchOrderId) {
+                    LocalDateTime createdAt, InvCategory category, Long matchOrderId, Double profit) {
         this.memberId = memberId;
         this.stockId = stockId;
         this.count = count;
@@ -65,5 +67,6 @@ public class Contract {
         this.createdAt = createdAt;
         this.category = category;
         this.matchOrderId = matchOrderId;
+        this.profit = profit;
     }
 }

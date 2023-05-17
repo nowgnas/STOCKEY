@@ -33,5 +33,6 @@ public interface LaboratoryFeignClient {
     @GetMapping("/keywords/search")
     ResponseDto getKeywordSearch(@RequestParam String keyword);
 
-
+    @GetMapping("/keywords/{id}/frequency")
+    void getKeywordDaily(Long id);
 }

@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import kr.stockey.laboratoryservice.domain.keyword.dto.KeywordSearchDto;
+import kr.stockey.laboratoryservice.domain.laboratory.api.response.GraphDataResponse;
+import kr.stockey.laboratoryservice.domain.laboratory.api.response.RegressionResponse;
 import kr.stockey.laboratoryservice.domain.laboratory.dto.ResponseDto;
 import kr.stockey.laboratoryservice.domain.laboratory.service.LaboratoryService;
 import kr.stockey.laboratoryservice.domain.stock.dto.StockSearchDto;
@@ -11,14 +13,52 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class LaboratoryController {
     private final LaboratoryService laboratoryService;
+
+    @GetMapping("data/graph")
+    public ResponseEntity<ResponseDto> getGraphData(
+            @RequestParam("id1") Long id1,
+            @RequestParam("id2") Long id2,
+            @RequestParam("id3") Long id3
+
+    ) {
+        List<Long> idList = new ArrayList<>();
+        idList.add(id1);
+        idList.add(id2);
+        idList.add(id3);
+        GraphDataResponse graphData = laboratoryService.getGraphData(idList);
+
+        return ResponseEntity.ok(
+                ResponseDto.builder().build()
+        );
+    }
+
+    @GetMapping("regression")
+    public ResponseEntity<ResponseDto> getRegressionData(
+            @RequestParam("stock") String stock,
+            @RequestParam("id1") Long id1,
+            @RequestParam("id2") Long id2,
+            @RequestParam("id3") Long id3
+    ) {
+        List<Long> idList = new ArrayList<>();
+        idList.add(id1);
+        idList.add(id2);
+        idList.add(id3);
+        RegressionResponse regression = laboratoryService.getRegression(stock, idList);
+
+        return ResponseEntity.ok(
+                ResponseDto.builder().build()
+        );
+    }
 
     /**
      * 전체 주식 종목 조회

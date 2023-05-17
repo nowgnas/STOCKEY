@@ -6,6 +6,7 @@ import Tab from "@mui/material/Tab"
 import TradeStockTabPanel from "./TradeStockTabPanel"
 import TradeStockItem from "./TradeStockItem"
 import { Divider, TextField } from "@mui/material"
+import { useMyStocks, useWholeStocks } from "../../../hooks/useTradeForm"
 
 export interface TradeStockItemProps {
   item: TradeStockItem
@@ -14,14 +15,15 @@ export interface TradeStockItemProps {
 interface TradeStockItem {
   id: number
   name: string
-  stockNums: number
+  stockNums?: number
   currentPrice: number
   buyPrice?: number
 }
 
 const TradeStockList = () => {
   // 나중에 useQuery 사용 전체종목도 해서 넣기
-
+  // const { data: myStock } = useMyStocks()
+  const { data: wholeStock } = useWholeStocks()
   const [value, setValue] = useState(0)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
@@ -33,17 +35,17 @@ const TradeStockList = () => {
     setSearchInput(event.target.value)
   }
 
-  useEffect(() => {
-    if (!searchInput.trim()) {
-      setSearchData([])
-      return
-    }
-    setSearchData(
-      MY_STOCK_DUMMY_DATA.filter((stock) => {
-        return stock.name.toUpperCase().includes(searchInput.toUpperCase())
-      })
-    )
-  }, [searchInput])
+  // useEffect(() => {
+  //   if (!searchInput.trim() || !myStock) {
+  //     setSearchData([])
+  //     return
+  //   }
+  //   setSearchData(
+  //     myStock.filter((stock: TradeStockItem) => {
+  //       return stock.name.toUpperCase().includes(searchInput.toUpperCase())
+  //     })
+  //   )
+  // }, [searchInput])
 
   return (
     <StockContainer>
@@ -59,19 +61,70 @@ const TradeStockList = () => {
       {/* 내 종목 */}
       <TradeStockTabPanel value={value} index={0}>
         {searchInput
-          ? searchData.map((stock) => {
+          ? searchData.map((stock, index) => {
               return (
                 <>
-                  <TradeStockItem item={stock} />
-                  <Divider />
+                  <TradeStockItem
+                    item={stock}
+                    key={`myStock-search-${index}`}
+                  />
+                  <Divider key={`myStock-search-${index}-divider`} />
                 </>
               )
             })
-          : MY_STOCK_DUMMY_DATA.map((stock) => {
+          : // : myStock &&
+            //   myStock.map((stock: TradeStockItem) => {
+            //     return (
+            //       <>
+            //         <TradeStockItem item={stock} />
+            //         <Divider />
+            //       </>
+            //     )
+            //   })}
+            MY_STOCK_DUMMY_DATA &&
+            MY_STOCK_DUMMY_DATA.map((stock: TradeStockItem, index) => {
               return (
                 <>
-                  <TradeStockItem item={stock} />
-                  <Divider />
+                  <TradeStockItem
+                    item={stock}
+                    key={`myStock-${stock.name}-${index}`}
+                  />
+                  <Divider key={`myStock-${stock.name}-${index}-divider`} />
+                </>
+              )
+            })}
+      </TradeStockTabPanel>
+      <TradeStockTabPanel value={value} index={1}>
+        {searchInput
+          ? searchData.map((stock, index) => {
+              return (
+                <>
+                  <TradeStockItem
+                    item={stock}
+                    key={`wholeStock-search-${index}`}
+                  />
+                  <Divider key={`wholeStock-search-${index}-divider`} />
+                </>
+              )
+            })
+          : // : wholeStock &&
+            //   wholeStock.map((stock: TradeStockItem) => {
+            //     return (
+            //       <>
+            //         <TradeStockItem item={stock} />
+            //         <Divider />
+            //       </>
+            //     )
+            //   })}
+            wholeStock &&
+            wholeStock.map((stock: TradeStockItem, index: number) => {
+              return (
+                <>
+                  <TradeStockItem
+                    item={stock}
+                    key={`wholeStock-${stock.name}-${index}`}
+                  />
+                  <Divider key={`wholeStock-${stock.name}-${index}-divider`} />
                 </>
               )
             })}

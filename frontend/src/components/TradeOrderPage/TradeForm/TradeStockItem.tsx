@@ -6,7 +6,7 @@ import { getEmptyImage } from "react-dnd-html5-backend"
 import { useDrag } from "react-dnd"
 import { TradeStockItemProps } from "./TradeStockList"
 import { Grid } from "@mui/material"
-import { useOrderSituation } from "../../../hooks/useTradeForm"
+import { useOrderStatus } from "../../../hooks/useTradeForm"
 
 interface ExpectedProfitProps {
   expectedProfit: number
@@ -28,17 +28,20 @@ const TradeStockItem = ({ item }: TradeStockItemProps) => {
     [item]
   )
 
+  const [isHover, setIsHover] = useState(false)
+  const [expectedProfit, setExpectedProfit] = useState<number>(0)
+
+  // buy, sell 주문 현황
+  const { data, isSuccess, refetch } = useOrderStatus(item.id)
+
   useEffect(() => {
     previewRef(getEmptyImage(), { captureDraggingState: true })
+    if (item.stockNums) {
+      const expectedProfit =
+        item.stockNums * (item.currentPrice - item.buyPrice!)
+      setExpectedProfit(expectedProfit)
+    }
   }, [])
-
-  const { data, isSuccess } = useOrderSituation(
-    item.id,
-    item.buyPrice ? "myStock" : "allStock"
-  )
-
-  const [isHover, setIsHover] = useState(false)
-  const expectedProfit = item.stockNums * (item.currentPrice - item.buyPrice!)
 
   const hoverControlHandler = (status: boolean) => {
     setIsHover(status)
@@ -57,16 +60,18 @@ const TradeStockItem = ({ item }: TradeStockItemProps) => {
           columns={15}
           opacity={`${isDragging ? 0.4 : 1}`}
         >
-          <StockInfo xs={2}>
-            <StockImage src={`/logo_images/${item.name}.png`} />
-          </StockInfo>
+          <StockTitle item xs={5}>
+            <StockInfo>
+              <StockImage src={`/logo_images/${item.name}.png`} />
+            </StockInfo>
 
-          <StockInfo xs={3} direction="column">
-            <InfoText>{item.name}</InfoText>
-            <SubText>{item.stockNums}주</SubText>
-          </StockInfo>
+            <StockInfo>
+              <InfoText>{item.name}</InfoText>
+              {item.buyPrice && <SubText>{item.stockNums}주</SubText>}
+            </StockInfo>
+          </StockTitle>
 
-          <StockInfo xs={3} direction="column">
+          <StockInfo item xs={3}>
             <SubText>현재가</SubText>
             <InfoText>
               {internationalNumberFormat.format(item.currentPrice)}
@@ -75,13 +80,13 @@ const TradeStockItem = ({ item }: TradeStockItemProps) => {
 
           {item.buyPrice && (
             <>
-              <StockInfo xs={3} direction="column">
+              <StockInfo item xs={3}>
                 <SubText>매입 단가</SubText>
                 <InfoText>
                   {internationalNumberFormat.format(item.buyPrice)}
                 </InfoText>
               </StockInfo>
-              <StockInfo xs={4} direction="column">
+              <StockInfo item xs={4}>
                 <SubText>예상 수익</SubText>
                 <ExpectedProfitText expectedProfit={expectedProfit}>
                   {expectedProfit > 0
@@ -111,6 +116,8 @@ const StockItemContainer = styled.section`
 `
 
 const StockItemWrapper = styled(Grid)<{ opacity: string }>`
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   height: 100%;
   opacity: ${(props) => props.opacity};
@@ -121,8 +128,15 @@ const StockImage = styled.img`
   height: 100%;
   border-radius: 16px;
 `
-
-const StockInfo = styled(Grid)``
+const StockTitle = styled(Grid)`
+  display: flex;
+  flex-direction: center;
+  justify-content: center;
+  align-items: center;
+`
+const StockInfo = styled(Grid)`
+  width: 50%;
+`
 
 const InfoText = styled.p`
   font-size: 10px;

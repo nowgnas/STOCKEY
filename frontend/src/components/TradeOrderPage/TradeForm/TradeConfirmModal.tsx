@@ -9,7 +9,8 @@ import TradeConfirmModalList from "./TradeConfirmModalList"
 
 import { Dialog, DialogTitle, Button } from "@mui/material"
 import { useEffect, useState } from "react"
-import { QueryClient } from "react-query"
+import { useQueryClient } from "react-query"
+
 interface Props {
   sellList: BasketList[]
   buyList: BasketList[]
@@ -27,8 +28,7 @@ const TradeConfirmModal = ({
 }: Props) => {
   const [submitList, setSubmitList] = useState<SubmitProps[]>([])
   const { mutate: submit, isSuccess, isError } = useSubmitTradeMutation()
-  const queryClient = new QueryClient()
-
+  const queryClient = useQueryClient()
   const formatList = (myList: BasketList[], status: string) => {
     const formatList = myList.map((stock) => {
       return { stockId: stock.id, count: stock.quantity, orderType: status }
@@ -36,12 +36,10 @@ const TradeConfirmModal = ({
     return formatList
   }
   const submitListHandler = () => {
+    console.log(submitList)
     submit(submitList)
-    if (isSuccess) {
-      queryClient.invalidateQueries("orderStatus")
-    } else if (isError) {
-      console.log("error")
-    }
+    queryClient.invalidateQueries({ queryKey: ["checkOrder"] })
+    confirmModalHandler(false)
   }
 
   useEffect(() => {

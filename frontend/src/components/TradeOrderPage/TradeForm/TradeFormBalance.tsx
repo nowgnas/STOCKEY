@@ -46,6 +46,7 @@ const BalanceWrapper = styled.section`
   justify-content: center;
   aligin-items: center;
   font-weight: bold;
+  width: 30%;
 `
 const BalanceText = styled.p`
   font-size: 16px;

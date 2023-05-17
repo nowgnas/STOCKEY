@@ -24,13 +24,11 @@ export type BasketList = {
 }
 
 const TradeForm = () => {
-  // 더미데이터,,,,, 정각 단위로 useQuery써서 가져와야함
-  // const { data: myBalance, isSuccess, isError } = useMyBalance()
-  const myBalance = 1000000
+  const { data: myBalance, isSuccess: isSuccessMyBalance } = useMyBalance()
 
   // 주문 여부 API
-  // const { data: isOrderSubmit, isSuccess, isError } = useCheckOrder()
-  const isOrderSubmit = true // 더미
+  const { data: isOrderSubmit, isSuccess: isSuccessCheck } = useCheckOrder()
+  // const isOrderSubmit = true // 더미
 
   // 판매 목록
   const [sellList, setSellList] = useState<BasketList[]>([])
@@ -84,18 +82,13 @@ const TradeForm = () => {
     <>
       <Header>주문서 작성하기</Header>
       <TradeFormContainer container columns={13} justifyContent="center">
-        <TradeFormWrapper item direction="column" md={6} xs={12}>
-          <TradeFormBalance myBalance={myBalance} />
-          {/* <TradeFormBalance myBalance={myBalance.deposit} /> */}
+        <TradeFormWrapper item md={6} xs={12}>
+          <TradeFormBalance
+            myBalance={isSuccessMyBalance ? myBalance.deposit : 0}
+          />
           <TradeStockList />
         </TradeFormWrapper>
-        <TradeBasketWrapper
-          item
-          md={6}
-          xs={12}
-          justifyContent="space-between"
-          direction="column"
-        >
+        <TradeBasketWrapper item md={6} xs={12} justifyContent="space-between">
           {isOrderSubmit && (
             <LockSection>
               <LockImg src={"/tradeLogos/Lock.png"} />
@@ -106,7 +99,7 @@ const TradeForm = () => {
             text={"수익"}
             color={"--custom-blue"}
             data={sellList}
-            myBalance={myBalance}
+            myBalance={isSuccessMyBalance ? myBalance.deposit : 0}
             modalDataHandler={modalDataHandler}
             listHandler={listHandler}
           />
@@ -115,16 +108,16 @@ const TradeForm = () => {
             text={"지출"}
             color={"--custom-pink-4"}
             data={buyList}
-            myBalance={myBalance}
+            myBalance={isSuccessMyBalance ? myBalance.deposit : 0}
             modalDataHandler={modalDataHandler}
             listHandler={listHandler}
           />
         </TradeBasketWrapper>
         <ButtonConfirmComp
-          isOrderSubmit={isOrderSubmit}
           disabled={isOrderSubmit ? true : false}
           variant="contained"
           onClick={() => confirmModalHandler(true)}
+          orderstatus={`${isOrderSubmit}`}
         >
           {isOrderSubmit ? (
             "주문 완료"
@@ -136,14 +129,16 @@ const TradeForm = () => {
           )}
         </ButtonConfirmComp>
       </TradeFormContainer>
-      <TradeQuantityInputModal
-        id={modalData?.id}
-        status={modalData?.status}
-        stockInfo={modalData?.stockInfo}
-        open={modalData?.open}
-        modalDataHandler={modalDataHandler}
-        listHandler={listHandler}
-      />
+      {modalData && (
+        <TradeQuantityInputModal
+          id={modalData?.id}
+          status={modalData?.status}
+          stockInfo={modalData?.stockInfo}
+          open={modalData.open}
+          modalDataHandler={modalDataHandler}
+          listHandler={listHandler}
+        />
+      )}
       <TradeConfirmModal
         sellList={sellList}
         buyList={buyList}
@@ -179,20 +174,21 @@ const TradeFormWrapper = styled(Grid)`
 `
 const TradeBasketWrapper = styled(TradeFormWrapper)`
   display: flex;
+  flex-direction: column !important;
 `
 
 const Header = styled.p`
   font-size: 32px;
   font-weight: bold;
 `
-const ButtonConfirmComp = styled(Button)<{ isOrderSubmit: boolean }>`
+const ButtonConfirmComp = styled(Button)<{ orderstatus: string }>`
   width: 100%;
   height: 7rem;
   background-color: #625b71 !important;
   border-radius: 96px !important;
   font-size: 32px !important;
   font-weight: bold !important;
-  opacity: ${(props) => (props.isOrderSubmit ? "50%" : "100%")};
+  opacity: ${(props) => (props.orderstatus === "true" ? "50%" : "100%")};
   color: white !important;
 `
 const ConfirmImage = styled.img``
@@ -207,10 +203,6 @@ const LockSection = styled.section`
   justify-content: center;
   align-items: center;
 
-  @media (max-width: 900px) {
-    height: 110vh;
-    width: 75%;
-  }
   background: rgba(255, 254, 254, 0.8);
   border-radius: 24px;
 `

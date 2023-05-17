@@ -84,11 +84,21 @@ const TradeBasketList = ({
 
   return (
     <BasketContainer color={color} ref={dropRef}>
-      <BasketHeader>{status}</BasketHeader>
+      <BasketHeader>
+        {status}
+        {status == "살래요" && isOver ? (
+          <OverText>
+            위에서부터 체결이 진행됩니다.(주문서에서 바꿀 수 있습니다)
+          </OverText>
+        ) : (
+          ""
+        )}
+      </BasketHeader>
       <BasketWrapper>
-        {data?.map((data) => {
+        {data?.map((data, index) => {
           return (
             <BasketItemSection
+              key={`${index}-BasketItem`}
               container
               direction="row"
               justifyContent="space-between"
@@ -121,11 +131,6 @@ const TradeBasketList = ({
             </StatusText>
           </InfoSection>
         )}
-        {status == "살래요" && isOver ? (
-          <OverText>위에서부터 체결이 진행됩니다.</OverText>
-        ) : (
-          ""
-        )}
         <PriceText isOver={isOver} status={status}>
           {sumPrice ? internationalNumberFormat.format(sumPrice) : 0}원
         </PriceText>
@@ -140,23 +145,26 @@ const BasketContainer = styled.section<ContainerProps>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 45%;
+  height: 48%;
   padding: 3%;
   border-radius: 24px;
   background: var(${(props) => props.color});
 `
 
-const BasketHeader = styled.p`
+const BasketHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   font-size: 18px;
   font-weight: bold;
-  margin: 3%;
+  margin: 0;
 `
 
 const BasketWrapper = styled.section`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 70%;
+  height: 100%;
   padding: 5px 0 5px 0;
   gap: 5px;
   overflow-y: scroll;

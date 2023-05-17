@@ -31,8 +31,10 @@ const StatusBar = styled.div<StatusBarProps>`
   padding: 0 3% 0 3%;
   background: ${(props) =>
     `linear-gradient(to right,var(--custom-pink-3) 0% ${
-      (props.buyPop / props.sumPop) * 100
-    }%, var(--custom-blue) ${(props.buyPop / props.sumPop) * 100 + 10}%)`};
+      props.sumPop ? (props.buyPop / props.sumPop) * 100 : "30"
+    }%, var(--custom-blue) ${
+      props.sumPop ? (props.buyPop / props.sumPop) * 100 + 10 : "100"
+    }%)`};
   border-radius: 24px;
   width: 100%;
   height: 100%;

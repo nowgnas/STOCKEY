@@ -14,7 +14,7 @@ const TradeFormBalance = ({ myBalance }: Props) => {
       <BalanceWrapper>
         <BalanceText>내 잔액</BalanceText>
         <BalanceMoneyText>
-          \{internationalNumberFormat.format(myBalance)}
+          {internationalNumberFormat.format(myBalance)}
         </BalanceMoneyText>
       </BalanceWrapper>
       <BalanceImg src={"/tradeLogos/moneyBag.png"} />
@@ -31,7 +31,7 @@ const BalanceContainer = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 15%;
+  height: 20%;
   overflow: hidden;
   margin-bottom: 5%;
 
@@ -46,6 +46,7 @@ const BalanceWrapper = styled.section`
   justify-content: center;
   aligin-items: center;
   font-weight: bold;
+  width: 30%;
 `
 const BalanceText = styled.p`
   font-size: 16px;

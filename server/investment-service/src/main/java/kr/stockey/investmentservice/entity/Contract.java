@@ -37,6 +37,7 @@ public class Contract {
 
     @Size(max = 10)
     @NotNull
+    @Enumerated(EnumType.STRING) // Specify the mapping strategy
     @Column(name = "contract_type", nullable = false, length = 10)
     private ContractType contractType;
 
@@ -46,9 +47,9 @@ public class Contract {
 
     @Size(max = 20)
     @NotNull
+    @Enumerated(EnumType.STRING) // Specify the mapping strategy
     @Column(name = "category", nullable = false, length = 20)
     private InvCategory category;
-
     @Setter
     @Column(name = "match_order_id", nullable = true)
     private Long matchOrderId;

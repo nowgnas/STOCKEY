@@ -62,7 +62,7 @@ const PredictSlider = ({ item, index, setSliderList }: Props) => {
         </BtnWrapper>
 
         <PrettoSlider
-          colorPalette={colorPalette[index]}
+          colorpalette={colorPalette[index]}
           valueLabelDisplay={"on"}
           value={sliderPercentage}
           onChange={changeHandler}
@@ -142,15 +142,15 @@ export const colorPalette = [
 ];
 
 type sliderProps = {
-  colorPalette: {
+  colorpalette: {
     color: string;
     backgroundColor: string;
     tooltipColor: string;
   };
 };
 
-const PrettoSlider = emotionStyled(Slider)<sliderProps>(({ colorPalette }) => ({
-  color: colorPalette.color,
+const PrettoSlider = emotionStyled(Slider)<sliderProps>(({ colorpalette }) => ({
+  color: colorpalette.color,
   height: 8,
   width: "70%",
   cursor: "default",
@@ -178,7 +178,7 @@ const PrettoSlider = emotionStyled(Slider)<sliderProps>(({ colorPalette }) => ({
     width: 32,
     height: 32,
     borderRadius: "50% 50% 50% 0",
-    backgroundColor: colorPalette.tooltipColor,
+    backgroundColor: colorpalette.tooltipColor,
     transformOrigin: "bottom left",
     transform: "translate(50%, -100%) rotate(-45deg) scale(0)",
     top: -4,

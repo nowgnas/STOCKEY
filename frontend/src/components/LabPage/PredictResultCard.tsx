@@ -24,7 +24,7 @@ const PredictResultCard = () => {
 
           <CardWrapper>
             {sliderList.map((item) => {
-              return <PredictKeywordCard sliderItem={item} />;
+              return <PredictKeywordCard key={item.keyword} sliderItem={item} />;
             })}
           </CardWrapper>
 

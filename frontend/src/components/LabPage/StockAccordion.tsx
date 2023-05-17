@@ -1,64 +1,51 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  StockCardType,
   stockAccordionOpenState,
   labStockSearchInput,
 } from "../../stores/LaboratoryAtoms";
+import { useLabStockEntire, useLabStockSearch } from "../../hooks/useLabAccordion";
 import AccordionLayout from "./AccordionLayout";
-
-const sampleItemAll: StockCardType[] = [
-  {
-    id: 1,
-    name: "BGF리테일",
-  },
-  {
-    id: 2,
-    name: "CJ제일제당",
-  },
-  {
-    id: 3,
-    name: "DB손해보험",
-  },
-  {
-    id: 4,
-    name: "F&F",
-  },
-  {
-    id: 5,
-    name: "HD현대",
-  },
-];
-
-const sampleItemSearch: StockCardType[] = [
-  {
-    id: 6,
-    name: "HMM",
-  },
-  {
-    id: 7,
-    name: "KB금융",
-  },
-  {
-    id: 8,
-    name: "KT&G",
-  },
-];
 
 const StockAccordion = () => {
   const [openState, setOpenState] = useRecoilState(stockAccordionOpenState);
   const searchInput = useRecoilValue(labStockSearchInput);
 
-  // 전체 stock query
+  // 전체 stock query hook
+  const {data: stockEntire} = useLabStockEntire();
 
+  // 검색 stock query hook
+  const {data: stockSearch} = useLabStockSearch(searchInput.trim());
+  
+  // data 흐름
+  // 1. 검색어 있을 경우
+  // 1.1 결과 있는 경우 > 검색 결과
+  // 1.2 결과 없는 경우 > 빈 배열
+  // 2. 검색어 없는 경우  > 전체
 
-  // 검색 stock query
-
+  const stockItem = () => {
+    // 1.
+    if (searchInput.trim().length > 0) {
+      if (stockSearch) {
+        // 1.1
+        return stockSearch
+      } else {
+        // 1.2
+        return []
+      }
+    } else {
+      // 2.
+      if (stockEntire) {
+        return stockEntire
+      } else {
+        return []
+      }
+    }
+  }
 
   return (
     <AccordionLayout
       type="STOCK"
-      // 검색어 있을 경우 (검색 결과) > 전체 stock
-      items={searchInput.trim().length > 0 ? sampleItemSearch : sampleItemAll}
+      items={stockItem()}
       openState={openState}
       setOpenState={setOpenState}
     />

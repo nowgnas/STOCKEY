@@ -25,11 +25,12 @@ const AccordionLayout = ({ type, items, openState, setOpenState }: Props) => {
       </HeaderWrapper>
 
       <Collapse in={openState} timeout={500}>
+        {/* 추후 keyword accordion의 경우 infinite scroll 추가해야함 */}
         <ContentWrapper>
           {items.map((item) => {
             return (
-              <CardWrapper>
-                <DndCard key={item.id} item={item} type={type} />
+              <CardWrapper key={item.id}>
+                <DndCard item={item} type={type} />
               </CardWrapper>
             );
           })}
@@ -42,7 +43,7 @@ const AccordionLayout = ({ type, items, openState, setOpenState }: Props) => {
         <ChevonWrapper
           src={"labImages/chevon.png"}
           alt=""
-          rotate={openState}
+          openState={openState}
           onClick={() => setOpenState((prev) => !prev)}
         />
       </TailWrapper>
@@ -112,8 +113,8 @@ const TailWrapper = styled.div`
   align-items: center;
   padding-top: 12px;
 `;
-const ChevonWrapper = styled.img<{ rotate: boolean }>`
-  transform: ${(props) => (props.rotate ? "scaleY(-1)" : null)};
+const ChevonWrapper = styled.img<{ openState: boolean }>`
+  transform: ${(props) => (props.openState ? "scaleY(-1)" : undefined)};
   transition: 0.5s;
   cursor: pointer;
 `;

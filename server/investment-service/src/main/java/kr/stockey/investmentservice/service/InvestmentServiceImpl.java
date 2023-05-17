@@ -303,10 +303,16 @@ public class InvestmentServiceImpl implements InvestmentService{
         // 주식 평가금액 -> myStock 데이터 가져와서 특정 stockId에 해당하는 주식 현재가 가져와서 count랑 곱하기
         List<MyStock> myStocks = myStockRepository.findByMemberId(memberId);
         for (MyStock myStock : myStocks) {
-            System.out.println("myStock = " + myStock);
-            Long curStockId = myStock.getStockId();
-            Long curStockPrice = stockPriceMap.get(curStockId);
-            curStockValuation += curStockPrice * myStock.getCount();
+            try {
+                System.out.println("myStock = " + myStock);
+                Long curStockId = myStock.getStockId();
+                Long curStockPrice = stockPriceMap.get(curStockId);
+                curStockValuation += curStockPrice * myStock.getCount();
+            } catch (NullPointerException e) {
+                String curStockName = stockIdToNameMap.get(myStock.getStockId());
+                log.error("일일 주가 크롤링러로 부터 온 오늘 날짜의 데이터가 존재하지 않음. 주식명: " + curStockName);
+            }
+
         }
 
         // 총 자산 = 주식 평가금액 + 예수금

@@ -1,5 +1,5 @@
 # Build stage
-FROM adoptopenjdk/openjdk17:armv7l-debian-jdk-17.0.0_35-b01 AS builder
+FROM openjdk:17-ea-17-slim AS builder
 
 WORKDIR /app
 COPY server/investment-service/gradlew .
@@ -11,7 +11,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew clean bootJar --no-daemon
 
 # Final stage
-FROM adoptopenjdk/openjdk17:armv7l-debian-jdk-17.0.0_35-b01
+FROM openjdk:17-ea-17-slim
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 ENTRYPOINT ["java", "-jar", \

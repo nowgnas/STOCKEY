@@ -38,7 +38,7 @@ const PeriodSelectBox = () => {
       >
         {selectItem.map((item) => {
           return (
-            <MenuItem value={item.value} sx={{ fontSize: "1.3rem" }}>
+            <MenuItem key={item.value} value={item.value} sx={{ fontSize: "1.3rem" }}>
               {item.text}
             </MenuItem>
           );

@@ -1,3 +1,5 @@
+// lab page useQuery 모음
+
 import customAxios from "../utils/customAxios";
 import { useQuery } from "react-query";
 
@@ -31,7 +33,7 @@ const onError = (err: any) => {
 }
 
 // stock 전체 list get
-export const useStockEntire = () => {
+export const useLabStockEntire = () => {
   return useQuery(["lab", "stock", "entire"], () => getLab("/lab/stock/list"), {
     staleTime: Infinity,
     select,
@@ -40,7 +42,7 @@ export const useStockEntire = () => {
 };
 
 // stock 검색 get
-export const useStockSearch = (searchValue: string | undefined) => {
+export const useLabStockSearch = (searchValue: string | undefined) => {
   const params = { pathVariable: searchValue};
   
   return useQuery(
@@ -56,3 +58,22 @@ export const useStockSearch = (searchValue: string | undefined) => {
     }
   );
 };
+
+// keyword 검색 get
+// infinite query로 변경 예정
+export const useLabKeywordSearch = (searchValue: string | undefined) => {
+  const params = { pathVariable: searchValue};
+  
+  return useQuery(
+    ["lab", "keyword", "search", searchValue],
+    () => getLab('lab/keyword/search', params),
+    {
+      staleTime: 1000 * 10,
+      cacheTime: 1000 * 20,
+      select,
+      onError,
+      // searchValue 있을때만 실행
+      enabled: !!searchValue,
+    }
+  );
+}

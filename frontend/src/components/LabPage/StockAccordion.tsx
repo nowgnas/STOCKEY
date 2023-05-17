@@ -3,7 +3,7 @@ import {
   stockAccordionOpenState,
   labStockSearchInput,
 } from "../../stores/LaboratoryAtoms";
-import { useStockEntire, useStockSearch } from "../../hooks/useLabAccordion";
+import { useLabStockEntire, useLabStockSearch } from "../../hooks/useLabAccordion";
 import AccordionLayout from "./AccordionLayout";
 
 const StockAccordion = () => {
@@ -11,10 +11,10 @@ const StockAccordion = () => {
   const searchInput = useRecoilValue(labStockSearchInput);
 
   // 전체 stock query hook
-  const {data: stockEntire} = useStockEntire();
+  const {data: stockEntire} = useLabStockEntire();
 
   // 검색 stock query hook
-  const {data: stockSearch} = useStockSearch(searchInput.trim());
+  const {data: stockSearch} = useLabStockSearch(searchInput.trim());
   
   // data 흐름
   // 1. 검색어 있을 경우

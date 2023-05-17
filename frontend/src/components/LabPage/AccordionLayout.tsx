@@ -25,6 +25,7 @@ const AccordionLayout = ({ type, items, openState, setOpenState }: Props) => {
       </HeaderWrapper>
 
       <Collapse in={openState} timeout={500}>
+        {/* 추후 keyword accordion의 경우 infinite scroll 추가해야함 */}
         <ContentWrapper>
           {items.map((item) => {
             return (

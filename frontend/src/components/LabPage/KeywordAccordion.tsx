@@ -5,6 +5,7 @@ import {
   selectedLabStockState,
   labKeywordSearchInput
 } from "../../stores/LaboratoryAtoms";
+import { useLabKeywordSearch } from "../../hooks/useLabAccordion";
 import AccordionLayout from "./AccordionLayout";
 
 const sampleItemStock: KeywordCardType[] = [
@@ -30,22 +31,6 @@ const sampleItemStock: KeywordCardType[] = [
   },
 ];
 
-const sampleItemSearch: KeywordCardType[] = [
-  {
-    id: 6,
-    name: "keyword6",
-  },
-  {
-    id: 7,
-    name: "keyword7",
-  },
-  {
-    id: 8,
-    name: "keyword8",
-  },
-]
-
-
 const KeywordAccordion = () => {
   const [openState, setOpenState] = useRecoilState(keywordAccordionOpenState);
   const selectedStock = useRecoilValue(selectedLabStockState);
@@ -55,13 +40,42 @@ const KeywordAccordion = () => {
 
 
   // 검색 keyword query
+  const {data: keywordSearch} = useLabKeywordSearch(searchInput.trim());
 
+
+  // data 흐름
+  // 1. 검색어 있을 경우
+  // 1.1 결과 있는 경우 > 검색 결과
+  // 1.2 결과 없는 경우 > 빈 배열
+  // 2. 검색어 없을 경우
+  // 2.1 stock 선택한 경우 > stock 관련 keyword
+  // 2.2 stock 선택안한 경우 > 빈 배열
+
+  const keywordItem = () => {
+    if (searchInput.trim().length > 0 ) {
+      if (keywordSearch) {
+        // 1.1
+        return keywordSearch
+      } else {
+        // 1.2
+        return []
+      }
+    } else {
+      // 2. 
+      if (selectedStock) {
+        // 2.1
+        return sampleItemStock
+      } else {
+        // 2.2
+        return []
+      }
+    }
+  }
 
   return (
     <AccordionLayout
       type="KEYWORD"
-      // 검색어 있을 경우 (검색결과) > stock 선택했을 경우 (stock에 맞는 keyword) > 아무것도 없을 경우 (빈 배열)
-      items={searchInput.trim().length > 0 ? sampleItemSearch : selectedStock ? sampleItemStock : []}
+      items={keywordItem()}
       openState={openState}
       setOpenState={setOpenState}
     />

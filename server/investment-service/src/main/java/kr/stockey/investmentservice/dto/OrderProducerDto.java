@@ -1,16 +1,15 @@
 package kr.stockey.investmentservice.dto;
 
-import kr.stockey.investmentservice.enums.ContractType;
-import kr.stockey.investmentservice.enums.InvCategory;
 import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class OrderProducerDto implements Serializable {
     private Long memberId;
     private List<OrderListDto> orders;

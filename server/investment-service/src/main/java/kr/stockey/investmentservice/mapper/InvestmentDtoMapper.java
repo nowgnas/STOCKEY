@@ -5,7 +5,6 @@ import kr.stockey.investmentservice.dto.OrderListDto;
 import kr.stockey.investmentservice.dto.OrderProducerDto;
 import kr.stockey.investmentservice.redis.Order;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 

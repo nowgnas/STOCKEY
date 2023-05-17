@@ -15,7 +15,7 @@ public interface ContractRepository extends CrudRepository<Contract, Long> {
             "FROM Contract c " +
             "WHERE c.createdAt >= :startTime AND c.createdAt < :endTime " +
             "AND c.category = kr.stockey.investmentservice.enums.InvCategory.ORDER")
-    List<Contract> getJustOrders(LocalDateTime startTime, LocalDateTime endTime);
+    List<Contract> getJustOrders(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
 
     @Query("SELECT c FROM Contract c " +
             "WHERE c.matchOrderId IN :matchOrderIds " +

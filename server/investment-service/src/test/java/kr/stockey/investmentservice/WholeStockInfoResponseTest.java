@@ -2,6 +2,7 @@ package kr.stockey.investmentservice;
 
 import kr.stockey.investmentservice.api.response.WholeStockInfoResponse;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 public class WholeStockInfoResponseTest {
     private Map<Long, Long> stockPriceMap = new HashMap<>();
     private Map<Long, String> stockIdToNameMap = new HashMap<>();

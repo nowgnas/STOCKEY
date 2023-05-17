@@ -1,5 +1,7 @@
 # Build stage
 FROM arm64v8/openjdk:17-ea-16-jdk AS builder
+# Update package list and install xargs
+RUN opkg update && opkg install xargs
 WORKDIR /app
 COPY server/investment-service/gradlew .
 COPY server/investment-service/gradle gradle

@@ -14,7 +14,6 @@ const getLab = async (baseUrl: string, params?: ParamsType | undefined) => {
   if (params && params.pathVariable) {
     url += `/${params.pathVariable}`;
   }
-
   console.log(url, "get!");
   const response = await axios.get(url);
   console.log(response);
@@ -26,12 +25,34 @@ const select = (response: any) => {
   return response.data.data;
 };
 
+// onError
+const onError = (err: any) => {
+  console.warn("onError >> ", err)
+}
+
 // stock 전체 list get
 export const useStockEntire = () => {
   return useQuery(["lab", "stock", "entire"], () => getLab("/lab/stock/list"), {
     staleTime: Infinity,
     select,
+    onError,
   });
 };
 
-
+// stock 검색 get
+export const useStockSearch = (searchValue: string | undefined) => {
+  const params = { pathVariable: searchValue};
+  
+  return useQuery(
+    ["lab", "stock", "search", searchValue],
+    () => getLab('lab/stock/search', params),
+    {
+      staleTime: 1000 * 10,
+      cacheTime: 1000 * 20,
+      select,
+      onError,
+      // searchValue 있을때만 실행
+      enabled: !!searchValue,
+    }
+  );
+};

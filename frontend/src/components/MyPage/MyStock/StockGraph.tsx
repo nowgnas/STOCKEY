@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { useQuery } from "react-query"
 import { useNavigate } from "react-router-dom"
 import { useRecoilState } from "recoil"
-import { accessTokenSelector } from "../../../stores/atoms"
+import { accessTokenState } from "../../../stores/atoms"
 import customAxios from "../../../utils/customAxios"
 // sub component
 import StockAxis from "./StockAxis"
@@ -20,7 +20,7 @@ export interface MyStockType {
 
 const StockGraph = () => {
   // accessTokenState
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   // useNavigate
   const navigate = useNavigate()
   // customAxios

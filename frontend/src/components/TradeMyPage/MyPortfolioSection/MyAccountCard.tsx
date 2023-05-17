@@ -3,14 +3,7 @@ import TradeShortcutCard from "../../TradeMainPage/TradeShortcutCard"
 import { PanelTitle } from "../../StockDetailPage/SubPanel/KeywordPanel/KeywordPanel"
 import { useMyAsset } from "../../../hooks/useMyAsset"
 
-interface AccountProps {
-  total: number
-  stock: number
-  deposit: number
-}
-
 const MyAccountCard = () => {
-  // const {total, stock, deposit} = useMyAsset()
   const { data: my } = useMyAsset()
 
   return (

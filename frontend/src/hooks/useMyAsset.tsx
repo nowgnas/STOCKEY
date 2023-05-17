@@ -2,11 +2,11 @@ import { useQuery } from "react-query"
 import customAxios from "../utils/customAxios"
 import { useNavigate } from "react-router-dom"
 import { useRecoilState } from "recoil"
-import { accessTokenSelector } from "../stores/atoms"
+import { accessTokenState } from "../stores/atoms"
 import axios from "axios"
 
 export const useMyAsset = () => {
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const navigate = useNavigate()
 
   const fetchMyAsset = () => {
@@ -32,7 +32,6 @@ export const useMyAsset = () => {
 
 const select = (response: any) => {
   const selectedData = response.data.data
-  console.log("selectedData >> ", selectedData)
   return selectedData
 }
 

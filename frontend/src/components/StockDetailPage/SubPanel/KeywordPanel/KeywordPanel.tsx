@@ -7,7 +7,7 @@ import { useRecoilState } from "recoil"
 // useQuery
 import { useQuery } from "react-query"
 import customAxios from "../../../../utils/customAxios"
-import { accessTokenSelector } from "../../../../stores/atoms"
+import { accessTokenState } from "../../../../stores/atoms"
 import { HighlightedSpan } from "../../MainSection/PriceSection/PriceSection"
 import { Suspense } from "react"
 import LoadingComponent from "../../../common/Loading/LoadingComponent"
@@ -18,7 +18,7 @@ export interface KeywordPanelProps {
 }
 const KeywordPanel = ({ keywordId, keyword }: KeywordPanelProps) => {
   // accesstoken state
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   // customAxios
   const axios = customAxios(accessToken, setAccessToken)
   // useQuery: get whether the keyword is bookmarked

@@ -19,7 +19,7 @@ import { useEffect, useState } from "react"
 import AnalysisSection from "../../StockDetailPage/MainSection/KeywordSection/AnalysisSection"
 import AllIncludedStockListArea from "../AllIncludedStockListArea/AllIncludedStockListArea"
 import { useRecoilState } from "recoil"
-import { accessTokenSelector } from "../../../stores/atoms"
+import { accessTokenState } from "../../../stores/atoms"
 import customAxios from "../../../utils/customAxios"
 import { useQuery } from "react-query"
 
@@ -29,7 +29,7 @@ const OnIndustrySelectorLayout = ({
   industryInfo,
 }: LayoutProps) => {
   // 북마크 여부 체크(로그인 상태에서만)
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const axios = customAxios(accessToken, setAccessToken)
   const fetchMyIndustryCheck = ({ queryKey }: any) => {
     const industryId = queryKey[1]

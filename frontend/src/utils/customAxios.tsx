@@ -54,10 +54,8 @@ const customAxios = (
       refreshSubscribers = []
 
       if (setAccessToken) {
-        console.log("reset")
         setAccessToken(newAccessToken?.data)
       } else {
-        console.log("not work")
       }
 
       return newAccessToken?.data

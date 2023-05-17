@@ -14,7 +14,7 @@ const fetchUserInfo = ({ queryKey }: { queryKey: string[] }) => {
 }
 
 export const useUserInfo = (userId: string) => {
-  return useQuery(["userInfo", userId], fetchUserInfo, {
+  return useQuery(["user", userId], fetchUserInfo, {
     staleTime: 10000,
     select,
     onError,
@@ -24,6 +24,7 @@ export const useUserInfo = (userId: string) => {
 }
 
 const select = (response: any) => {
+  console.log("useUserInfo야", response)
   return response
 }
 

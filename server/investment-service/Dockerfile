@@ -1,6 +1,5 @@
 # Build stage
-FROM arm64v8/openjdk:17-ea-16-jdk AS builder
-RUN apt install findutils
+FROM adoptopenjdk/openjdk17:armv7l-debian-jdk-17.0.0_35-b01 AS builder
 
 WORKDIR /app
 COPY server/investment-service/gradlew .
@@ -12,7 +11,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew clean bootJar --no-daemon
 
 # Final stage
-FROM arm64v8/openjdk:17-ea-16-jdk
+FROM adoptopenjdk/openjdk17:armv7l-debian-jdk-17.0.0_35-b01
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 ENTRYPOINT ["java", "-jar", \

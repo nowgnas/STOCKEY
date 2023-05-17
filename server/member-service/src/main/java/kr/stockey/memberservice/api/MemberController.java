@@ -7,6 +7,7 @@ import kr.stockey.memberservice.api.response.MemberResponse;
 import kr.stockey.memberservice.dto.MemberDto;
 import kr.stockey.memberservice.dto.ResponseDto;
 import kr.stockey.memberservice.mapper.MemberDtoMapper;
+import kr.stockey.memberservice.repository.MemberRepository;
 import kr.stockey.memberservice.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +28,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberDtoMapper memberDtoMapper;
+    private final MemberRepository memberRepository;
 
 
     @Operation(summary = "check duplicated nickname", description = "닉네임 중복 검사")
@@ -106,6 +109,15 @@ public class MemberController {
     public ResponseEntity<MemberDto> GetMember(@PathVariable String memberId){
         MemberDto memberDto = memberService.getMember(memberId);
         return new ResponseEntity<>(memberDto, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/client/entire")
+    public ResponseEntity<Map<Long, String>> getWholeMemberInfo() {
+        // http 통신으로 가져오기
+        // 임시 구현
+        Map<Long, String> wholeMemberInfo = memberService.getWholeMemberInfo();
+        return new ResponseEntity(wholeMemberInfo, HttpStatus.OK);
     }
 
     /* --------------  다른 서비스에서 호출하는 메소드 [end]  ----------------  */

@@ -5,7 +5,7 @@ import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded
 import customAxios from "../../../utils/customAxios"
 // recoil
 import { useRecoilState } from "recoil"
-import { accessTokenSelector } from "../../../stores/atoms"
+import { accessTokenState } from "../../../stores/atoms"
 // react - query
 import { useMutation } from "react-query"
 
@@ -27,7 +27,7 @@ const BookmarkBtn = ({ isBookmarked, page, num }: BookmarkProps) => {
   // hover state
   const [isHovered, setIsHovered] = useState(false)
   // accessToken selector
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   // customAxios
   const axios = customAxios(accessToken, setAccessToken)
   // fetchUrl

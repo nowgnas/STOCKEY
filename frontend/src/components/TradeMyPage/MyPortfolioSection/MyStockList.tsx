@@ -9,8 +9,11 @@ import {
 } from "@mui/material"
 import { SelectChangeEvent } from "@mui/material/Select"
 import { useState } from "react"
+import { useMyStockList } from "../../../hooks/useMyStockList"
 
 const MyStockList = ({ id }: any) => {
+  const { data: myStocks } = useMyStockList()
+
   const dummyData = [1, 2, 3, 4, 5]
   const [sorter, setSorter] = useState("1")
   const handleChange = (event: SelectChangeEvent) => {

@@ -23,7 +23,7 @@ const GraphSection = () => {
   return (
     <GraphSectionWrapper cnt={GraphItemSixMonth.length}>
       {GraphItemSixMonth.map((item, index) => (
-        <GraphComp item={item} index={index} coefficient={getCoefficient(item.keyword)}/>
+        <GraphComp key={index} item={item} index={index} coefficient={getCoefficient(item.keyword)}/>
       ))}
     </GraphSectionWrapper>
   );

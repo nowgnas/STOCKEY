@@ -10,7 +10,7 @@ const StockCardMini = ({ item }: Props) => {
   return (
     <CardWrapper>
       <LogoImg src={`/logo_images/${item.name}.png`} />
-      {item.name}
+      <LogoTxt>{item.name}</LogoTxt>
     </CardWrapper>
   )
 }
@@ -20,7 +20,8 @@ export default StockCardMini
 const CardWrapper = styled.div`
   width: 100%;
   height: 100%;
-
+  padding: 1rem;
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -28,16 +29,20 @@ const CardWrapper = styled.div`
   gap: 1rem;
 
   font-size: 1.2rem;
-  font-weight: 400;
-  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
 
   background: #ffffff;
   box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.15),
     0px 1px 3px rgba(0, 0, 0, 0.3);
   border-radius: 24px;
+  overflow: hidden;
 `
 
 const LogoImg = styled.img`
-  width: 30%;
-  height: 30%;
+  width: 40%;
+  height: 40%;
+`
+
+const LogoTxt = styled.div`
+  overflow: hidden;
 `

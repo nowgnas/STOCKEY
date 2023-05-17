@@ -27,7 +27,7 @@ const PredictSliderSection = () => {
   return (
     <SectionWrapper resultBoardSize={resultBoardSize}>
       {sliderList.map((item, index) => {
-        return <PredictSlider item={item} index={index} setSliderList={setSliderList} />;
+        return <PredictSlider key={index} item={item} index={index} setSliderList={setSliderList} />;
       })}
     </SectionWrapper>
   );

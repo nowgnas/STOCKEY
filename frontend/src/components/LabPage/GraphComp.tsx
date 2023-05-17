@@ -59,6 +59,9 @@ const GraphComp = ({ item, index, coefficient }: Props) => {
       backgroundColor: "white",
     },
     colors: [colorPalette[index].color],
+    accessibility: {
+      enabled: false,
+    },
     xAxis: {
       title: chartWidth > 240 ? { text: "빈도" } : undefined,
       gridLineWidth: 1,

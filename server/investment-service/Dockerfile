@@ -1,5 +1,5 @@
 # Build stage
-FROM adoptopenjdk:17-jdk-hotspot AS builder
+FROM arm64v8/openjdk:17-ea-16-jdk AS builder
 WORKDIR /app
 COPY server/investment-service/gradlew .
 COPY server/investment-service/gradle gradle
@@ -10,7 +10,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew clean bootJar --no-daemon
 
 # Final stage
-FROM adoptopenjdk:17-jdk-hotspot
+FROM arm64v8/openjdk:17-ea-16-jdk
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 ENTRYPOINT ["java", "-jar", \

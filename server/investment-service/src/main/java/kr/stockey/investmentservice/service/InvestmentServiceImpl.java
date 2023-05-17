@@ -243,12 +243,36 @@ public class InvestmentServiceImpl implements InvestmentService{
 
     @Override
     public List<OrderHistoryDto> getOrderHistory(Long memberId) {
+        // 리턴 데이터
+        List<OrderHistoryDto> orderHistoryDtoList = new ArrayList<>();
+
         // 현재 날짜 기준 이번주 첫날, 끝날 날짜 정보 가져오기
         List<LocalDateTime> stEdWeekDates = getStEdWeekDates();// 월요일, 일요일 시간 정보
         LocalDateTime startTime = stEdWeekDates.get(0);
         LocalDateTime endTime = stEdWeekDates.get(1);
 
         // 특정 유저의 이번주에 주문, 체결 정보 모두 가져오기
+
+        // redis에 존재하는 주문 정보 가져오기 -> 체결 데이터 없는 정보
+        List<Order> allOrders = (List<Order>) orderRedisRepository.findAll();
+        for (Order order : allOrders) {
+            List<OrderListDto> orderListDtos = order.getOrders();
+            for (OrderListDto orderListDto : orderListDtos) {
+                OrderHistoryDto orderHistoryDto = OrderHistoryDto.builder()
+                        .stockId(orderListDto.getStockId())
+                        .stockName(stockIdToNameMap.get(orderListDto.getStockId()))
+                        .orderCount(Long.valueOf(orderListDto.getCount()))
+                        .contractCount(null)
+                        .contractPrice(null)
+                        .profit(null)
+                        .contractType(orderListDto.getOrderType())
+                        .createdAt(order.getOrderTime())
+                        .build();
+                orderHistoryDtoList.add(orderHistoryDto);
+            }
+        }
+
+        // db에 저장된 주문, 체결 정보 가져오기
         List<Contract> contractsAndOrders = contractRepository.findByMemberIdAndCreatedAtBetween(memberId, startTime, endTime);
         List<ContractDto> contractsAndOrdersDtoList = investmentMapper.toContractDtoList(contractsAndOrders);
 
@@ -260,27 +284,27 @@ public class InvestmentServiceImpl implements InvestmentService{
         List<ContractDto> contractList = contractsByCategory.get(InvCategory.CONTRACT);
         List<ContractDto> orderList = contractsByCategory.get(InvCategory.ORDER);
 
-        // First, create a map from the contractList for easy access
-        Map<Long, ContractDto> contractMap = contractList.stream()
-                .collect(Collectors.toMap(ContractDto::getMatchOrderId, contract -> contract));
+        if (orderList!=null) {
+            // First, create a map from the contractList for easy access
+            Map<Long, ContractDto> contractMap = contractList.stream()
+                    .collect(Collectors.toMap(ContractDto::getMatchOrderId, contract -> contract));
 
-        List<OrderHistoryDto> orderHistoryDtoList = new ArrayList<>();
+            // Then, for each order, find the corresponding contract
+            for (ContractDto order : orderList) {
+                ContractDto matchingContract = contractMap.get(order.getId());
 
-        // Then, for each order, find the corresponding contract
-        for (ContractDto order : orderList) {
-            ContractDto matchingContract = contractMap.get(order.getId());
-
-            OrderHistoryDto orderHistoryDto = OrderHistoryDto.builder()
-                    .stockId(order.getStockId())
-                    .stockName(stockIdToNameMap.get(order.getStockId()))
-                    .orderCount(order.getCount())
-                    .contractCount(matchingContract.getCount())
-                    .contractPrice(matchingContract.getContractPrice())
-                    .profit(matchingContract.getProfit())
-                    .contractType(order.getContractType())
-                    .createdAt(order.getCreatedAt())
-                    .build();
-            orderHistoryDtoList.add(orderHistoryDto);
+                OrderHistoryDto orderHistoryDto = OrderHistoryDto.builder()
+                        .stockId(order.getStockId())
+                        .stockName(stockIdToNameMap.get(order.getStockId()))
+                        .orderCount(order.getCount())
+                        .contractCount(matchingContract.getCount())
+                        .contractPrice(matchingContract.getContractPrice())
+                        .profit(matchingContract.getProfit())
+                        .contractType(order.getContractType())
+                        .createdAt(order.getCreatedAt())
+                        .build();
+                orderHistoryDtoList.add(orderHistoryDto);
+            }
         }
         return orderHistoryDtoList;
     }

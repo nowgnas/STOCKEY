@@ -35,7 +35,7 @@ public class Contract {
     @Column(name = "contract_price", nullable = true)
     private Long contractPrice;
 
-    @Size(max = 10)
+//    @Size(max = 10)
     @NotNull
     @Enumerated(EnumType.STRING) // Specify the mapping strategy
     @Column(name = "contract_type", nullable = false, length = 10)
@@ -45,7 +45,7 @@ public class Contract {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Size(max = 20)
+//    @Size(max = 20)
     @NotNull
     @Enumerated(EnumType.STRING) // Specify the mapping strategy
     @Column(name = "category", nullable = false, length = 20)

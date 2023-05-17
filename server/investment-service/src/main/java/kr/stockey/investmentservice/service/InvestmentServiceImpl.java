@@ -90,12 +90,17 @@ public class InvestmentServiceImpl implements InvestmentService{
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         // 오전 9시 ~ 오후 3시 사이, 2분일 때 실행
         if (now.getHour() >= 9 && now.getHour() <= 15 && now.getMinute() == 2) {
-            // 주문 체결 실행
-            orderExecute();
-            // 랭킹 업데이트
-            traderRankDtoList = updateUserRank();
+            executeRun();
         }
     }
+
+    public void executeRun() {
+        // 주문 체결 실행
+        orderExecute();
+        // 랭킹 업데이트
+        traderRankDtoList = updateUserRank();
+    }
+
 
     private List<TraderRankDto> updateUserRank() {
         List<TraderRankDto> traderRankDtos = new ArrayList<>();
@@ -432,7 +437,6 @@ public class InvestmentServiceImpl implements InvestmentService{
 
         // 이전 라운드에 대한 주문만 남기기
         List<Order> wholeRedisOrderList = filterOrders(rawOrderList);
-
         // wholeOrderList 내용 DB에 적재
         loadOrderIntoDB(wholeRedisOrderList);
 
@@ -465,6 +469,8 @@ public class InvestmentServiceImpl implements InvestmentService{
                 Long curStockId = stockOrder.getStockId(); // 현재 주문 주식 id
                 Long curStockPrice = stockPriceMap.get(curStockId); // 주식 현재가
                 int orderStockCount = stockOrder.getCount(); // 주문한 주식 수
+                System.out.println("stockOrder = " + stockOrder);
+                System.out.println("curStockPrice = " + curStockPrice);
 
                 // 현재 주문에 대해 기존 보유종목 가져오기
                 Optional<MyStock> myCurStockOptional = myStocks.stream()
@@ -475,6 +481,10 @@ public class InvestmentServiceImpl implements InvestmentService{
                     case BUY -> {
                         // 소지금보다 결제할 수량이 더 크다면 돈 되는 만큼만 구매
                         // [0]: 지불금액 [1]: 구매수량
+                        System.out.println("stockPriceMap = " + stockPriceMap);
+                        System.out.println("curMoney = " + curMoney);
+                        System.out.println("curStockPrice = " + curStockPrice);
+                        System.out.println("orderStockCount = " + orderStockCount);
                         Long[] buyInfo = calcBuyPayInfo(curMoney, curStockPrice, orderStockCount);
                         Long actualPayMoney = buyInfo[0];
                         Long actualBuyNum = buyInfo[1];
@@ -518,6 +528,7 @@ public class InvestmentServiceImpl implements InvestmentService{
                     case SELL -> {
                         if (myCurStockOptional.isEmpty()) {
                             log.error("보유 종목이 없으면 판매 하지 못함");
+                            break;
                         }
 
                         MyStock myStock = myCurStockOptional.get();
@@ -569,17 +580,24 @@ public class InvestmentServiceImpl implements InvestmentService{
         List<MemberOrderDto> memberOrderDtos = new ArrayList<>();
         for (OrderDto o : justOrders) {
             OrderListDto orderListDto = new OrderListDto(o.getId(), o.getStockId(), o.getCount(), ContractType.valueOf(o.getContractType()));
-            Optional<MemberOrderDto> foundMemberOrderDto = memberOrderDtos.stream()
+            System.out.println("orderListDto = " + orderListDto);
+            Optional<MemberOrderDto> foundMemberOrderDtoOptional = memberOrderDtos.stream()
                     .filter(dto -> o.getMemberId().equals(dto.getMemberId()))
                     .findFirst();
 
-            if (foundMemberOrderDto.isPresent()) {
+            if (foundMemberOrderDtoOptional.isPresent()) {
                 // 존재한다면 주문 리스트에 add
-                foundMemberOrderDto.get().getOrders().add(orderListDto);
+                System.out.println("foundMemberOrderDtoOptional.get().getOrders() = " + foundMemberOrderDtoOptional.get().getOrders());
+                System.out.println("foundMemberOrderDtoOptional.get().getOrders().class = " + foundMemberOrderDtoOptional.get().getOrders().getClass());
+                foundMemberOrderDtoOptional.get().getOrders().add(orderListDto);
             } else {
                 // 처음 나왔다면 주문 리스트 새로 생성
-                memberOrderDtos.add(new MemberOrderDto(o.getMemberId(), List.of(orderListDto), o.getCreatedAt()));
+                List<OrderListDto> orderListDtoLst = new ArrayList<>();
+                orderListDtoLst.add(orderListDto);
+                memberOrderDtos.add(new MemberOrderDto(o.getMemberId(), orderListDtoLst, o.getCreatedAt()));
             }
+            System.out.println("foundMemberOrderDto = " + foundMemberOrderDtoOptional);
+            System.out.println("memberOrderDtos = " + memberOrderDtos);
         }
         return memberOrderDtos;
     }
@@ -596,18 +614,20 @@ public class InvestmentServiceImpl implements InvestmentService{
         return investmentMapper.toOrderDtoList(justOrders);
     }
 
-    private void loadOrderIntoDB(List<Order> wholeOrderList) {
+    public void loadOrderIntoDB(List<Order> wholeOrderList) {
         for (Order order : wholeOrderList) {
             for (OrderListDto orderListDto : order.getOrders()) {
                 // DB에 넣을 엔티티 생성
                 Contract contract = Contract.builder()
                         .memberId(order.getMemberId())
                         .stockId(orderListDto.getStockId())
-                        .count((long)orderListDto.getCount())
+                        .count(Long.valueOf(orderListDto.getCount()))
                         .contractType(orderListDto.getOrderType())
                         .createdAt(order.getOrderTime())
                         .category(InvCategory.ORDER)
                         .matchOrderId(null)
+                        .contractPrice(null)
+                        .profit(null)
                         .build();
                 contractRepository.save(contract);
             }
@@ -622,7 +642,7 @@ public class InvestmentServiceImpl implements InvestmentService{
         Long payMoney = curStockPrice * actualQuantity;
 
         Long[] result = new Long[2];
-        result[0] = payMoney;
+        result[0] = payMoney; // *
         result[1] = actualQuantity;
         return result;
     }

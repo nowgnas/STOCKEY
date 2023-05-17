@@ -1,6 +1,8 @@
 server:
   port: 8086
 spring:
+  application:
+    name: investment-service
   kafka:
     bootstrap-servers:
       - "{cipher}e86b25b27bb1f4c51a35652be9fc06fd3834edad0ad35ba448b4b1cceb9d34fad9581e52c8e0ecaee9e30cbb5671824b"

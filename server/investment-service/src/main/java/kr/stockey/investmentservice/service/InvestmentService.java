@@ -1,5 +1,6 @@
 package kr.stockey.investmentservice.service;
 
+import kr.stockey.investmentservice.api.response.WholeStockInfoResponse;
 import kr.stockey.investmentservice.dto.*;
 
 import java.util.List;
@@ -26,4 +27,7 @@ public interface InvestmentService {
     OrderStatusDto getOrderStatus(Long stockId);
 
     Long getMyRank(String nickname);
+
+    List<WholeStockInfoResponse> getWholeStockInfo();
+
 }

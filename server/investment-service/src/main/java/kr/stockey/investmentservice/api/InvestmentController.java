@@ -2,6 +2,7 @@ package kr.stockey.investmentservice.api;
 
 import kr.stockey.investmentservice.api.request.OrderRequest;
 import kr.stockey.investmentservice.api.response.TraderRankResponse;
+import kr.stockey.investmentservice.api.response.WholeStockInfoResponse;
 import kr.stockey.investmentservice.dto.*;
 import kr.stockey.investmentservice.mapper.InvestmentDtoMapper;
 import kr.stockey.investmentservice.service.InvestmentService;
@@ -107,6 +108,15 @@ public class InvestmentController {
     public ResponseEntity<ResponseDto> getMyRank(@RequestParam String nickname) {
         Long myRank = investmentService.getMyRank(nickname);
         return new ResponseEntity<>(new ResponseDto("내 랭킹 제공 완료!", myRank), HttpStatus.OK);
+    }
+
+    /*
+        전체 주식 정보 제공 (주식 id, 주식명, 현재가)
+     */
+    @GetMapping("/wholestockinfo")
+    public ResponseEntity<ResponseDto> getWholeStockInfo() {
+        List<WholeStockInfoResponse> wholeStockInfo = investmentService.getWholeStockInfo();
+        return new ResponseEntity<>(new ResponseDto("전체 주식 정보 제공 완료!", wholeStockInfo), HttpStatus.OK);
     }
 
     /*

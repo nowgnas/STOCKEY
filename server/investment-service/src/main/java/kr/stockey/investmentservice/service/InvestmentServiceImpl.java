@@ -1,5 +1,6 @@
 package kr.stockey.investmentservice.service;
 
+import kr.stockey.investmentservice.api.response.WholeStockInfoResponse;
 import kr.stockey.investmentservice.dto.*;
 import kr.stockey.investmentservice.entity.*;
 import kr.stockey.investmentservice.enums.ContractType;
@@ -183,6 +184,17 @@ public class InvestmentServiceImpl implements InvestmentService{
                 .findFirst()
                 .map(TraderRankDto::getRanking)
                 .orElseThrow(() -> new InvestmentException(InvestmentExceptionType.NO_USER_RANK));
+    }
+
+    @Override
+    public List<WholeStockInfoResponse> getWholeStockInfo() {
+        List<WholeStockInfoResponse> responses = new ArrayList<>();
+        for (Long stockId : stockPriceMap.keySet()) {
+            String stockName = stockIdToNameMap.get(stockId);
+            Long stockPrice = stockPriceMap.get(stockId);
+            responses.add(new WholeStockInfoResponse(stockId, stockName, stockPrice));
+        }
+        return responses;
     }
 
     // 인자로 들어온 날짜가 속한 주의 날짜들 리턴 (월 ~ 일)

@@ -1,7 +1,5 @@
 # Build stage
 FROM arm64v8/openjdk:17-ea-16-jdk AS builder
-# Install findutils package
-RUN apt-get update && apt-get install -y findutils
 WORKDIR /app
 COPY server/investment-service/gradlew .
 COPY server/investment-service/gradle gradle

@@ -4,6 +4,8 @@ import kr.stockey.investmentservice.dto.*;
 import kr.stockey.investmentservice.entity.*;
 import kr.stockey.investmentservice.enums.ContractType;
 import kr.stockey.investmentservice.enums.InvCategory;
+import kr.stockey.investmentservice.exception.investment.InvestmentException;
+import kr.stockey.investmentservice.exception.investment.InvestmentExceptionType;
 import kr.stockey.investmentservice.kafka.producer.StockOrderProducer;
 import kr.stockey.investmentservice.mapper.InvestmentMapper;
 import kr.stockey.investmentservice.redis.Order;
@@ -47,8 +49,6 @@ public class InvestmentServiceImpl implements InvestmentService{
 
     @PostConstruct
     public void init() {
-        System.out.println("Ddddddsfadfdsfdsa");
-        System.out.println("stockPriceMap = " + stockPriceMap);
         initStockPriceMap();
         stockIdToNameMap = makeStockIdToNameMap();
         traderRankDtoList = updateUserRank();
@@ -60,22 +60,21 @@ public class InvestmentServiceImpl implements InvestmentService{
      * 주문 가능시간: 9시 ~ 15시 && 매 05분 ~ 다음 시간 00분까지
      */
     @Override
-    public void takeStockOrder(OrderProducerDto orderProducerDto) throws Exception {
+    public void takeStockOrder(OrderProducerDto orderProducerDto) {
         // 주문 가능 시간일 때만 진행
-        System.out.println("orderProducerDto = " + orderProducerDto);
         if (checkOrderAvailableTime()) {
             stockOrderProducer.send(orderProducerDto);
         }
     }
 
-    private boolean checkOrderAvailableTime() throws Exception {
+    private boolean checkOrderAvailableTime() {
         LocalDateTime now = LocalDateTime.now(); // 한국 시간 기준으로 현재 시간을 가져옴
 
         int hour = now.getHour();
 
         // 주문 가능시간: 9시 ~ 15시
         if (!(hour >= 9 && hour < 15)) {
-            throw new Exception("주문 가능한 시간이 아닙니다.");
+            throw new InvestmentException(InvestmentExceptionType.NOT_ORDERING_TIME);
         }
         return true;
     }
@@ -85,7 +84,7 @@ public class InvestmentServiceImpl implements InvestmentService{
      */
 
     @Scheduled(cron = "0 2 * * * *", zone = "Asia/Seoul")
-    public void orderExecuteScheduler() throws Exception {
+    public void orderExecuteScheduler() {
         // 실행할 메소드 내용 작성
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         // 오전 9시 ~ 오후 3시 사이, 2분일 때 실행
@@ -321,13 +320,13 @@ public class InvestmentServiceImpl implements InvestmentService{
     }
 
     @Override
-    public List<MyStockInfoDto> getMyStockInfo(Long memberId) throws Exception {
+    public List<MyStockInfoDto> getMyStockInfo(Long memberId) {
         List<MyStockInfoDto> resLst = new ArrayList<>();
 
         // 1. 주식 목록
         List<MyStock> myStocks = myStockRepository.findByMemberId(memberId);
         if (myStocks.isEmpty()) {
-            throw new Exception("구매한 주식 목록 없음! (204)");
+            throw new InvestmentException(InvestmentExceptionType.NO_OWNED_STOCK);
         }
 
         // 전체 주식 평가 금액
@@ -373,7 +372,7 @@ public class InvestmentServiceImpl implements InvestmentService{
 
 
     @Transactional
-    public void orderExecute() throws Exception {
+    public void orderExecute() {
         // 주식 현재가 테이블 가져오기 (매 2분마다 갱신된 최신 주가정보 가져오기)
 //        Map<Long, Long> stockPriceMap = getStockPrice();
 
@@ -472,7 +471,10 @@ public class InvestmentServiceImpl implements InvestmentService{
                         contractRepository.save(contract);
                     }
                     case SELL -> {
-                        myCurStockOptional.orElseThrow(() -> new Exception("보유 종목이 없으면 판매 하지 못함"));
+                        if (myCurStockOptional.isEmpty()) {
+                            log.error("보유 종목이 없으면 판매 하지 못함");
+                        }
+
                         MyStock myStock = myCurStockOptional.get();
                         Long myStockCount = myStock.getCount();
                         Long actualSellQuantity = Math.min(myStockCount, orderStockCount);

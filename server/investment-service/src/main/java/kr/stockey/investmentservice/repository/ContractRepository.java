@@ -25,5 +25,7 @@ public interface ContractRepository extends CrudRepository<Contract, Long> {
                                                            LocalDateTime startDate, LocalDateTime endDate);
 
     @Query("SELECT c FROM Contract c WHERE c.memberId = :memberId AND c.createdAt BETWEEN :startDate AND :endDate")
-    List<Contract> findByMemberIdAndCreatedAtBetween(Long memberId, LocalDateTime startDate, LocalDateTime endDate);
+    List<Contract> findByMemberIdAndCreatedAtBetween(@Param("memberId") Long memberId,
+                                                     @Param("startDate") LocalDateTime startDate,
+                                                     @Param("endDate") LocalDateTime endDate);
 }

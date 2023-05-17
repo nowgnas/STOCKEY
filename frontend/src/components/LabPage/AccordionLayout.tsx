@@ -4,6 +4,7 @@ import { StockCardType, KeywordCardType } from "../../stores/LaboratoryAtoms";
 import StockSearchBar from "./StockSearchBar";
 import KeywordSearchBar from "./KeywordSearchBar";
 import DndCard from "./DndCard";
+import InfiniteScroll from "react-infinite-scroller";
 import Collapse from "@mui/material/Collapse";
 import styled from "styled-components";
 
@@ -12,9 +13,11 @@ interface Props {
   items: StockCardType[] | KeywordCardType[];
   openState: boolean;
   setOpenState: SetterOrUpdater<boolean>;
+  fetchNextPage?: any;
+  hasNextPage?: boolean | undefined;
 }
 
-const AccordionLayout = ({ type, items, openState, setOpenState }: Props) => {
+const AccordionLayout = ({ type, items, openState, setOpenState, fetchNextPage = () => {}, hasNextPage = false }: Props) => {
   const headerText = type === "STOCK" ? "종목" : "키워드";
 
   return (
@@ -25,18 +28,19 @@ const AccordionLayout = ({ type, items, openState, setOpenState }: Props) => {
       </HeaderWrapper>
 
       <Collapse in={openState} timeout={500}>
-        {/* 추후 keyword accordion의 경우 infinite scroll 추가해야함 */}
-        <ContentWrapper>
-          {items.map((item) => {
-            return (
-              <CardWrapper key={item.id}>
-                <DndCard item={item} type={type} />
-              </CardWrapper>
-            );
-          })}
-          {/* item 홀수개인 경우 layout 위해 fake wrapper 하나 추가 */}
-          {items.length % 2 === 1 && <CardWrapper />}
-        </ContentWrapper>
+        <InfiniteScroll hasMore={hasNextPage} loadMore={fetchNextPage}>
+          <ContentWrapper>
+            {items.map((item) => {
+              return (
+                <CardWrapper key={item.id}>
+                  <DndCard item={item} type={type} />
+                </CardWrapper>
+              );
+            })}
+            {/* item 홀수개인 경우 layout 위해 fake wrapper 하나 추가 */}
+            {items.length % 2 === 1 && <CardWrapper />}
+          </ContentWrapper>
+        </InfiniteScroll>
       </Collapse>
 
       <TailWrapper>

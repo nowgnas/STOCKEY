@@ -1,3 +1,4 @@
+import {useRef} from 'react';
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   KeywordCardType,
@@ -35,13 +36,15 @@ const KeywordAccordion = () => {
   const [openState, setOpenState] = useRecoilState(keywordAccordionOpenState);
   const selectedStock = useRecoilValue(selectedLabStockState);
   const searchInput = useRecoilValue(labKeywordSearchInput);
+  const fetchNext = useRef<any>(undefined);
+  const hasNext = useRef<boolean | undefined>(undefined);
+
 
   // 분석 stock에 해당하는 keyword query
 
 
   // 검색 keyword query
-  const {data: keywordSearch} = useLabKeywordSearch(searchInput.trim());
-
+  const {data: keywordSearch, fetchNextPage: fetchhNextPageSearch, hasNextPage: hasNextPageSearch} = useLabKeywordSearch(searchInput.trim());
 
   // data 흐름
   // 1. 검색어 있을 경우
@@ -53,9 +56,13 @@ const KeywordAccordion = () => {
 
   const keywordItem = () => {
     if (searchInput.trim().length > 0 ) {
+      // 1.
       if (keywordSearch) {
         // 1.1
-        return keywordSearch
+        fetchNext.current = fetchhNextPageSearch;
+        hasNext.current = hasNextPageSearch;
+        // 무한스크롤 위해 data.pages를 일차원으로 flat -> 추후 back 데이터랑 맞춰야함
+        return keywordSearch.pages.flatMap((ele) => ele)
       } else {
         // 1.2
         return []
@@ -72,12 +79,15 @@ const KeywordAccordion = () => {
     }
   }
 
+
   return (
     <AccordionLayout
       type="KEYWORD"
       items={keywordItem()}
       openState={openState}
       setOpenState={setOpenState}
+      fetchNextPage={fetchNext.current}
+      hasNextPage={hasNext.current}
     />
   );
 };

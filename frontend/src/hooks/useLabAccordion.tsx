@@ -1,12 +1,13 @@
 // lab page useQuery 모음
 
 import customAxios from "../utils/customAxios";
-import { useQuery } from "react-query";
+import { useQuery, useInfiniteQuery } from "react-query";
 
 const axios = customAxios();
 
 type ParamsType = {
-  pathVariable: string | undefined;
+  pathVariable?: string | undefined;
+  pageParam?: number | undefined;
 };
 
 // labPage get 요청
@@ -16,42 +17,40 @@ const getLab = async (baseUrl: string, params?: ParamsType | undefined) => {
   if (params && params.pathVariable) {
     url += `/${params.pathVariable}`;
   }
+  // page param 있는 경우 추가
+  if (params && params.pageParam) {
+    url += `/${params.pageParam}`;
+  }
   console.log(url, "get!");
   const response = await axios.get(url);
   console.log(response);
-  return response;
-};
-
-// select
-const select = (response: any) => {
   return response.data.data;
 };
 
 // onError
 const onError = (err: any) => {
-  console.warn("onError >> ", err)
-}
+  console.warn("onError >> ", err);
+};
 
 // stock 전체 list get
 export const useLabStockEntire = () => {
   return useQuery(["lab", "stock", "entire"], () => getLab("/lab/stock/list"), {
     staleTime: Infinity,
-    select,
     onError,
   });
 };
 
 // stock 검색 get
 export const useLabStockSearch = (searchValue: string | undefined) => {
-  const params = { pathVariable: searchValue};
-  
   return useQuery(
     ["lab", "stock", "search", searchValue],
-    () => getLab('lab/stock/search', params),
+    () =>
+      getLab("lab/stock/search", {
+        pathVariable: searchValue,
+      }),
     {
       staleTime: 1000 * 10,
       cacheTime: 1000 * 20,
-      select,
       onError,
       // searchValue 있을때만 실행
       enabled: !!searchValue,
@@ -60,20 +59,29 @@ export const useLabStockSearch = (searchValue: string | undefined) => {
 };
 
 // keyword 검색 get
-// infinite query로 변경 예정
 export const useLabKeywordSearch = (searchValue: string | undefined) => {
-  const params = { pathVariable: searchValue};
-  
-  return useQuery(
+  return useInfiniteQuery(
     ["lab", "keyword", "search", searchValue],
-    () => getLab('lab/keyword/search', params),
+    ({ pageParam = "" }) =>
+      getLab("lab/keyword/search", {
+        pathVariable: searchValue,
+        pageParam: pageParam,
+      }),
     {
       staleTime: 1000 * 10,
       cacheTime: 1000 * 20,
-      select,
       onError,
+      // select: (data) => ({
+      //   // 무한스크롤 위해 pages를 일차원 배열로 flat
+      //   pages: data.pages.flatMap((ele) => ele),
+      //   pageParams: data.pageParams,
+      // }),
+
       // searchValue 있을때만 실행
       enabled: !!searchValue,
+
+      // 무한스크롤 pageParam custom
+      getNextPageParam: (lastPage) => lastPage.next || undefined
     }
   );
-}
+};

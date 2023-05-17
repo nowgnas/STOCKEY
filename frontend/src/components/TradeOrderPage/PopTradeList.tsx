@@ -20,15 +20,19 @@ const PopTradeList = () => {
       <CarouselContainer>
         <Carousel
           autoplay
-          autoplayInterval={2000}
+          autoplayInterval={1500}
           withoutControls
           wrapAround
           cellAlign="center"
-          slidesToShow={5}
+          slidesToShow={7.5}
         >
-          {DUMMYDATA.map((item) => {
+          {DUMMYDATA.map((item, index) => {
             return (
-              <Wrapper id="slide" onClick={() => goToDetail(item.id)}>
+              <Wrapper
+                key={`${index}-popTrade`}
+                id="slide"
+                onClick={() => goToDetail(item.id)}
+              >
                 <StockCardMini item={item} />
               </Wrapper>
             )

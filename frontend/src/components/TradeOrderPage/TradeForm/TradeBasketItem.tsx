@@ -59,7 +59,6 @@ const TradeBasketItem = ({
       quantity: value,
       myStockNums: myStockNums,
       currentPrice: currentPrice,
-      time: dayjs().format("YYYY/MM/DD-HH:mm"),
     }
     value === 0
       ? (myList = myList.filter((stock: BasketList) => {
@@ -69,7 +68,7 @@ const TradeBasketItem = ({
           if (stock.id === id) return info
           else return stock
         }))
-
+    setEditValue(info.quantity!)
     setWithExpiry(list, null, myList)
     listHandler(status)
   }

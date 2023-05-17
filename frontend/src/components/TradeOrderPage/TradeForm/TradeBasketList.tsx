@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import HelpIcon from "@mui/icons-material/Help"
 import TradeBasketItem from "./TradeBasketItem"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useDrop } from "react-dnd"
 
 import { BasketList } from "./TradeForm"
@@ -23,8 +23,7 @@ interface ContainerProps {
 }
 
 interface PriceTextProps {
-  myBalance: number
-  sumPrice: number
+  isOver: boolean
   status: string
 }
 
@@ -39,12 +38,20 @@ const TradeBasketList = ({
 }: Props) => {
   // 숫자 포맷
   const internationalNumberFormat = new Intl.NumberFormat("en-US")
-
   // 합계
-  const sumPrice = data.reduce((sum, currValue) => {
-    return sum + currValue.quantity * currValue.currentPrice
-  }, 0)
+  const [sumPrice, setSumPrice] = useState<number>(0)
+  useEffect(() => {
+    if (data && data.length > 0) {
+      const sumPrice = data.reduce((sum, currValue) => {
+        return sum + currValue.quantity * currValue.currentPrice
+      }, 0)
+      setSumPrice(sumPrice)
+    }
+  }, [data])
 
+  const isOver = useMemo(() => {
+    return sumPrice > myBalance
+  }, [sumPrice])
   // '?' hover
   const [isHover, setIsHover] = useState(false)
 
@@ -77,11 +84,21 @@ const TradeBasketList = ({
 
   return (
     <BasketContainer color={color} ref={dropRef}>
-      <BasketHeader>{status}</BasketHeader>
+      <BasketHeader>
+        {status}
+        {status == "살래요" && isOver ? (
+          <OverText>
+            위에서부터 체결이 진행됩니다.(주문서에서 바꿀 수 있습니다)
+          </OverText>
+        ) : (
+          ""
+        )}
+      </BasketHeader>
       <BasketWrapper>
-        {data?.map((data) => {
+        {data?.map((data, index) => {
           return (
             <BasketItemSection
+              key={`${index}-BasketItem`}
               container
               direction="row"
               justifyContent="space-between"
@@ -114,7 +131,7 @@ const TradeBasketList = ({
             </StatusText>
           </InfoSection>
         )}
-        <PriceText myBalance={myBalance} sumPrice={sumPrice} status={status}>
+        <PriceText isOver={isOver} status={status}>
           {sumPrice ? internationalNumberFormat.format(sumPrice) : 0}원
         </PriceText>
       </BasketItemSection>
@@ -128,25 +145,26 @@ const BasketContainer = styled.section<ContainerProps>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 45%;
+  height: 48%;
   padding: 3%;
   border-radius: 24px;
   background: var(${(props) => props.color});
-
-  margin: 2.5% 0 2.5% 0;
 `
 
-const BasketHeader = styled.p`
+const BasketHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   font-size: 18px;
   font-weight: bold;
-  margin: 3%;
+  margin: 0;
 `
 
 const BasketWrapper = styled.section`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 70%;
+  height: 100%;
   padding: 5px 0 5px 0;
   gap: 5px;
   overflow-y: scroll;
@@ -182,11 +200,13 @@ const StatusText = styled.p`
   white-space: pre-wrap;
 `
 
+const OverText = styled(StatusText)`
+  color: var(--custom-increase-red);
+`
+
 const PriceText = styled(StatusText)<PriceTextProps>`
   color: ${(props) =>
-    props.status === "살래요" && props.myBalance < props.sumPrice
-      ? "red"
-      : "black"};
+    props.status === "살래요" && props.isOver ? "red" : "black"};
 `
 
 const InfoSection = styled.section`

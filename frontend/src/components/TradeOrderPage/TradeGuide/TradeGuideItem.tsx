@@ -9,13 +9,7 @@ interface Props {
 
 const TradeGuideItem = ({ title, mainText, imageSrc }: Props) => {
   return (
-    <GuideItemWrapper
-      direction="column"
-      alignItems="flex-start"
-      md={5}
-      sm={7}
-      xs={15}
-    >
+    <GuideItemWrapper item alignItems="flex-start" md={5} sm={7} xs={15}>
       <GuideImg src={`/tradeLogos/${imageSrc}.png`} alt="#" />
       <Header>{title}</Header>
       <MainTextWrapper>

@@ -1,14 +1,22 @@
 import styled from "styled-components"
 
+import {
+  SubmitProps,
+  useSubmitTradeMutation,
+} from "../../../hooks/useTradeForm"
 import { BasketList } from "./TradeForm"
+import TradeConfirmModalList from "./TradeConfirmModalList"
 
 import { Dialog, DialogTitle, Button } from "@mui/material"
-import TradeConfirmModalList from "./TradeConfirmModalList"
+import { useEffect, useState } from "react"
+import { useQueryClient } from "react-query"
+
 interface Props {
   sellList: BasketList[]
   buyList: BasketList[]
   open: boolean
   confirmModalHandler: (status: boolean) => void
+  listHandler: (status: string) => void
 }
 
 const TradeConfirmModal = ({
@@ -16,7 +24,36 @@ const TradeConfirmModal = ({
   buyList,
   open,
   confirmModalHandler,
+  listHandler,
 }: Props) => {
+  const [submitList, setSubmitList] = useState<SubmitProps[]>([])
+  const { mutate: submit, isSuccess, isError } = useSubmitTradeMutation()
+  const queryClient = useQueryClient()
+  const formatList = (myList: BasketList[], status: string) => {
+    const formatList = myList.map((stock) => {
+      return { stockId: stock.id, count: stock.quantity, orderType: status }
+    })
+    return formatList
+  }
+  const submitListHandler = () => {
+    console.log(submitList)
+    submit(submitList)
+    queryClient.invalidateQueries({ queryKey: ["checkOrder"] })
+    confirmModalHandler(false)
+  }
+
+  useEffect(() => {
+    let formatSellList: SubmitProps[] = []
+    let formatBuyList: SubmitProps[] = []
+    if (sellList) {
+      formatSellList = formatList(sellList, "SELL")
+    }
+    if (buyList) {
+      formatBuyList = formatList(buyList, "BUY")
+    }
+    setSubmitList([...formatSellList, ...formatBuyList])
+  }, [open, sellList, buyList])
+
   return (
     <DialogContainer open={open}>
       <DialogTitleText>거래 주문을 제출할까요?</DialogTitleText>
@@ -26,20 +63,39 @@ const TradeConfirmModal = ({
         </BodyText>
 
         <ComponentWrapper>
-          <MainText color="var(--custom-blue)">팔래요</MainText>
-          <SubText color="var(--custom-blue)">({sellList.length}종목)</SubText>
+          <MainText color="var(--custom-decrease-blue)">팔래요</MainText>
+          <SubText color="var(--custom-decrease-blue)">
+            ({sellList && sellList.length > 0 ? sellList.length : 0}종목)
+          </SubText>
         </ComponentWrapper>
-        <TradeConfirmModalList status="MYSELL" list={sellList} />
+        <TradeConfirmModalList
+          status="MYSELL"
+          list={sellList}
+          listHandler={listHandler}
+        />
 
         <ComponentWrapper>
-          <MainText color="var(--custom-pink-1)">살래요</MainText>
-          <SubText color="var(--custom-pink-1)">({buyList.length}종목)</SubText>
+          <MainText color="var(--custom-increase-red)">살래요</MainText>
+          <SubText color="var(--custom-increase-red)">
+            ({buyList && buyList.length > 0 ? buyList.length : 0}종목)
+          </SubText>
         </ComponentWrapper>
-        <TradeConfirmModalList status="MYBUY" list={buyList} />
+        <TradeConfirmModalList
+          status="MYBUY"
+          list={buyList}
+          listHandler={listHandler}
+        />
 
         <ButtonWrapper>
           {/* API 통신시 제출 */}
-          <ButtonConfirmComp variant="contained">제출할게요</ButtonConfirmComp>
+          <ButtonConfirmComp
+            variant="contained"
+            onClick={() => {
+              submitListHandler()
+            }}
+          >
+            제출할게요
+          </ButtonConfirmComp>
           <ButtonCancelComp
             variant="contained"
             onClick={() => confirmModalHandler(false)}
@@ -54,7 +110,7 @@ const TradeConfirmModal = ({
 
 export default TradeConfirmModal
 
-const DialogContainer = styled(Dialog)`
+export const DialogContainer = styled(Dialog)`
   & > .MuiDialog-container > .MuiPaper-root {
     height: 90%;
     width: 40%;
@@ -100,26 +156,6 @@ const MainText = styled(BodyText)<{ color: string }>`
 `
 const SubText = styled(MainText)`
   font-size: 8px;
-`
-const OrderList = styled.section`
-  width: 100%;
-  height: 50%;
-  border: 1px solid var(--custom-gray-3);
-  border-radius: 24px;
-  overflow-y: scroll;
-
-  ::-webkit-scrollbar {
-    width: 12px;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #d9d9d9;
-    border-radius: 24px;
-    border: 5px solid transparent;
-    background-clip: padding-box;
-  }
-  ::-webkit-scrollbar-track {
-    width: 12px;
-  }
 `
 
 const ButtonWrapper = styled(ComponentWrapper)`

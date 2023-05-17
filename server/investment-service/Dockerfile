@@ -1,4 +1,4 @@
-FROM arm64v8/openjdk:11-jdk AS builder
+FROM arm64v8/openjdk:17-jdk AS builder
 WORKDIR /app
 COPY server/investment-service/gradlew .
 COPY server/investment-service/gradle gradle
@@ -8,7 +8,7 @@ COPY server/investment-service/src src
 RUN chmod +x ./gradlew
 RUN ./gradlew clean bootJar
 
-FROM arm64v8/openjdk:11-jdk
+FROM arm64v8/openjdk:17-jdk
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 ENTRYPOINT ["java", "-jar", \

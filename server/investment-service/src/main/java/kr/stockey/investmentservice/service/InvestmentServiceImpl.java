@@ -62,6 +62,7 @@ public class InvestmentServiceImpl implements InvestmentService{
     @Override
     public void takeStockOrder(OrderProducerDto orderProducerDto) throws Exception {
         // 주문 가능 시간일 때만 진행
+        System.out.println("orderProducerDto = " + orderProducerDto);
         if (checkOrderAvailableTime()) {
             stockOrderProducer.send(orderProducerDto);
         }

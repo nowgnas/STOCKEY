@@ -4,30 +4,9 @@ import {
   stockAccordionOpenState,
   labStockSearchInput,
 } from "../../stores/LaboratoryAtoms";
+import { useStockEntire } from "../../hooks/useLabAccordion";
 import AccordionLayout from "./AccordionLayout";
 
-const sampleItemAll: StockCardType[] = [
-  {
-    id: 1,
-    name: "BGF리테일",
-  },
-  {
-    id: 2,
-    name: "CJ제일제당",
-  },
-  {
-    id: 3,
-    name: "DB손해보험",
-  },
-  {
-    id: 4,
-    name: "F&F",
-  },
-  {
-    id: 5,
-    name: "HD현대",
-  },
-];
 
 const sampleItemSearch: StockCardType[] = [
   {
@@ -48,17 +27,28 @@ const StockAccordion = () => {
   const [openState, setOpenState] = useRecoilState(stockAccordionOpenState);
   const searchInput = useRecoilValue(labStockSearchInput);
 
-  // 전체 stock query
-
+  // 전체 stock query hook
+  const {data: stockEntire} = useStockEntire();
 
   // 검색 stock query
 
 
+  // 검색어 있을 경우 (검색 결과) > 전체 stock
+  // 고도화 해야함
+  const stockItem = () => {
+    if (searchInput.trim().length > 0) {
+      return sampleItemSearch
+    } else if (stockEntire) {
+      return stockEntire
+    } else {
+      return []
+    }
+  }
+
   return (
     <AccordionLayout
       type="STOCK"
-      // 검색어 있을 경우 (검색 결과) > 전체 stock
-      items={searchInput.trim().length > 0 ? sampleItemSearch : sampleItemAll}
+      items={stockItem()}
       openState={openState}
       setOpenState={setOpenState}
     />

@@ -51,6 +51,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             
             // UserId 가져오기
             String userId = getuserId(jwt);
+            log.info(userId);
 
             // 헤더에 userId 추가
             ServerHttpRequest  newRequest = exchange.getRequest().mutate()

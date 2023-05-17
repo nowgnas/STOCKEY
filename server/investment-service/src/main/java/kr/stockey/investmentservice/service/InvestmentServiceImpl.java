@@ -176,6 +176,15 @@ public class InvestmentServiceImpl implements InvestmentService{
         return OrderStatusDto.builder().buy(buyCnt).sell(sellCnt).build();
     }
 
+    @Override
+    public Long getMyRank(String nickname) {
+        return traderRankDtoList.stream()
+                .filter(traderRankDto -> traderRankDto.getNickName().equals(nickname))
+                .findFirst()
+                .map(TraderRankDto::getRanking)
+                .orElseThrow(() -> new InvestmentException(InvestmentExceptionType.NO_USER_RANK));
+    }
+
     // 인자로 들어온 날짜가 속한 주의 날짜들 리턴 (월 ~ 일)
     private List<LocalDate> getWeekDates(LocalDate date) {
         LocalDate sunday = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));

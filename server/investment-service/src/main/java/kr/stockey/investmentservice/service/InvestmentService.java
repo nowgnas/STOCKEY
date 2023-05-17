@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface InvestmentService {
-    void takeStockOrder(OrderProducerDto orderProducerDto) throws Exception;
+    void takeStockOrder(OrderProducerDto orderProducerDto);
 
-    void orderExecuteScheduler() throws Exception;
+    void orderExecuteScheduler();
 
 
     Boolean checkOrderSubmit(Long memberId);
@@ -17,11 +17,13 @@ public interface InvestmentService {
 
     AccountDto getMyAccount(Long memberId);
 
-    List<MyStockInfoDto> getMyStockInfo(Long memberId) throws Exception;
+    List<MyStockInfoDto> getMyStockInfo(Long memberId);
 
     List<TraderRankDto> getTraderRank(Long num);
 
     List<AccountFlowDto> getWeeklyAssetInfo(Long memberId);
 
     OrderStatusDto getOrderStatus(Long stockId);
+
+    Long getMyRank(String nickname);
 }

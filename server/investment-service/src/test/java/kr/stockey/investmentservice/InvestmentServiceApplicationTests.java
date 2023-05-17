@@ -180,35 +180,21 @@ class InvestmentServiceApplicationTests {
     private List<OrderListDto> getOrderList() {
         List<OrderListDto> orderListDtoList = new ArrayList<>();
 
-        OrderListDto orderListDto1 = new OrderListDto();
-        orderListDto1.setStockId(1L);
-        orderListDto1.setCount(10);
-        orderListDto1.setOrderType(ContractType.BUY);
+        OrderListDto orderListDto1 = new OrderListDto(null, 1L, 10, ContractType.BUY);
         orderListDtoList.add(orderListDto1);
 
-        OrderListDto orderListDto2 = new OrderListDto();
-        orderListDto2.setStockId(2L);
-        orderListDto2.setCount(5);
-        orderListDto2.setOrderType(ContractType.SELL);
+        OrderListDto orderListDto2 = new OrderListDto(null, 2L, 5, ContractType.SELL);
         orderListDtoList.add(orderListDto2);
 
-        OrderListDto orderListDto3 = new OrderListDto();
-        orderListDto3.setStockId(3L);
-        orderListDto3.setCount(8);
-        orderListDto3.setOrderType(ContractType.BUY);
+        OrderListDto orderListDto3 = new OrderListDto(null, 3L, 8, ContractType.BUY);
         orderListDtoList.add(orderListDto3);
 
-        OrderListDto orderListDto4 = new OrderListDto();
-        orderListDto4.setStockId(4L);
-        orderListDto4.setCount(3);
-        orderListDto4.setOrderType(ContractType.SELL);
+        OrderListDto orderListDto4 = new OrderListDto(null, 4L, 3, ContractType.SELL);
         orderListDtoList.add(orderListDto4);
 
-        OrderListDto orderListDto5 = new OrderListDto();
-        orderListDto5.setStockId(5L);
-        orderListDto5.setCount(15);
-        orderListDto5.setOrderType(ContractType.BUY);
+        OrderListDto orderListDto5 = new OrderListDto(null, 5L, 15, ContractType.BUY);
         orderListDtoList.add(orderListDto5);
+
 
         return orderListDtoList;
     }

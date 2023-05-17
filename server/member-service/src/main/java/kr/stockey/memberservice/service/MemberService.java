@@ -7,6 +7,7 @@ import kr.stockey.memberservice.dto.OauthMemberDto;
 import kr.stockey.memberservice.entity.Member;
 import kr.stockey.memberservice.enums.OauthType;
 
+import java.util.Map;
 import java.util.Optional;
 
 public interface MemberService {
@@ -21,4 +22,6 @@ public interface MemberService {
     Member getMemberEntity();
     void saveMember(long oAuthId, String nickname, OauthType oAuthType);
     void deleteMember();
+
+    Map<Long, String> getWholeMemberInfo();
 }

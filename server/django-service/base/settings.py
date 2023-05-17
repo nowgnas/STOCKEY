@@ -45,7 +45,7 @@ SECRET_KEY = 'django-insecure-brtgx!3$rzzzjdoou=7y!y^x^78g9*y@y!koadmdr2v9n=*%d(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["j8a508.p.ssafy.io","localhost"]
+ALLOWED_HOSTS = ["stockey.kr","localhost"]
 
 
 # Application definition

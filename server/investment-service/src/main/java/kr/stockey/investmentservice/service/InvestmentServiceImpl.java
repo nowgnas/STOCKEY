@@ -1,6 +1,7 @@
 package kr.stockey.investmentservice.service;
 
 import kr.stockey.investmentservice.api.response.WholeStockInfoResponse;
+import kr.stockey.investmentservice.client.MemberClient;
 import kr.stockey.investmentservice.dto.*;
 import kr.stockey.investmentservice.entity.*;
 import kr.stockey.investmentservice.enums.ContractType;
@@ -47,12 +48,20 @@ public class InvestmentServiceImpl implements InvestmentService{
     private final DailyStockRepository dailyStockRepository;
     private final StockRepository stockRepository;
     private final InvestmentMapper investmentMapper;
+    private final MemberClient memberClient;
 
     @PostConstruct
     public void init() {
         initStockPriceMap();
         stockIdToNameMap = makeStockIdToNameMap();
         traderRankDtoList = updateUserRank();
+        log.info("Caching data initialization complete!");
+        log.info("stock price map:");
+        System.out.println(stockPriceMap);
+        log.info("stockIdToName map:");
+        System.out.println(stockIdToNameMap);
+        log.info("trader rank:");
+        System.out.println(traderRankDtoList);
     }
 
 
@@ -224,16 +233,7 @@ public class InvestmentServiceImpl implements InvestmentService{
     }
 
     private Map<Long, String> getWholeMemberInfo() {
-        // http 통신으로 가져오기
-        // 임시 구현
-        Map<Long, String> memberInfo = new HashMap<>();
-        memberInfo.put(1L, "jun");
-        memberInfo.put(2L, "kong");
-        memberInfo.put(3L, "gang2");
-        memberInfo.put(4L, "won2");
-        memberInfo.put(5L, "chol2");
-        memberInfo.put(6L, "gitfairy");
-        return memberInfo;
+        return memberClient.getWholeMembers();
     }
 
 

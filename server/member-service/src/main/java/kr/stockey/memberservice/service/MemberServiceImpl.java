@@ -1,6 +1,5 @@
 package kr.stockey.memberservice.service;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import kr.stockey.memberservice.dto.MemberDto;
 import kr.stockey.memberservice.dto.OauthMemberDto;
 import kr.stockey.memberservice.entity.Member;
@@ -17,8 +16,10 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -139,37 +140,13 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.deleteById(memberId);
     }
 
-
-//    @Override
-//    public void addMemberCoin(int addCoinVal) {
-//        long memberId = getMemberIdAndNicknameByJwtToken().getId();
-//        Optional<MemberCoin> optionalMemberCoin = memberCoinRepository.findByMemberId(memberId);
-//        if (optionalMemberCoin.isEmpty()) {
-//            throw new MemberException(MemberExceptionType.NOT_FOUND_MEMBER);
-//        }
-//        int coffeeBeanCount = optionalMemberCoin.get().getCoffeeBeanCount();
-//        optionalMemberCoin.get().setCoffeeBeanCount(coffeeBeanCount + addCoinVal);
-//    }
-//
-//    @Override
-//    public MemberCoinRespDto getMemberCoin() {
-//        MemberCoin memberCoin = memberCoinRepository.findByMemberId(getMemberIdAndNicknameByJwtToken().getId())
-//                .orElseThrow(() -> new MemberException(MemberExceptionType.MEMBER_DB_ERR));
-//        return MemberCoinRespDto.builder().CoffeeBeanCnt(memberCoin.getCoffeeBeanCount())
-//                .CoffeeCnt(memberCoin.getCoffeeCount()).build();
-//    }
-//
-//    @Override
-//    public void setHyncholAuth(SuperMemberCafeAuthReqDto superMemberCafeAuthReqDto) {
-//        String nickname = getMemberIdAndNicknameByJwtToken().getNickname();
-//        if (!nickname.equals("조현철")) {
-//            throw new MemberException(MemberExceptionType.HACKING_PREVENT);
-//        }
-//        CafeAuth cafeAuth = CafeAuth.builder()
-//                .cafeId(superMemberCafeAuthReqDto.getCafeId())
-//                .nickname(nickname)
-//                .expiration(6000000)
-//                .build();
-//        cafeAuthRepository.save(cafeAuth);
-//    }
+    @Override
+    public Map<Long, String> getWholeMemberInfo() {
+        Map<Long, String> result = new HashMap<>();
+        List<Member> members = memberRepository.findAll();
+        for(Member m : members){
+            result.put(m.getId(), m.getNickname());
+        }
+        return result;
+    }
 }

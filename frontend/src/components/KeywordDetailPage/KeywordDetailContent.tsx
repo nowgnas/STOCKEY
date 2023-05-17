@@ -3,7 +3,7 @@ import { TitleDiv } from "../IndustryDetailPage/PageLayouts/AnimatedComponent"
 import BookmarkBtn from "../common/Bookmark/BookmarkBtn"
 import { useRecoilState, useSetRecoilState } from "recoil"
 import { KeywordType } from "../../stores/KeywordPageAtoms"
-import { accessTokenSelector } from "../../stores/atoms"
+import { accessTokenState } from "../../stores/atoms"
 import customAxios from "../../utils/customAxios"
 import { useQuery } from "react-query"
 import { Suspense, useEffect, useState } from "react"
@@ -22,7 +22,7 @@ const KeywordDetailContent = ({
   keywordInfo: KeywordType
 }) => {
   // 북마크 여부 체크(로그인 상태에서만)
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const axios = customAxios(accessToken, setAccessToken)
   const fetchMyKeywordCheck = ({ queryKey }: any) => {
     const keywordId = queryKey[1]

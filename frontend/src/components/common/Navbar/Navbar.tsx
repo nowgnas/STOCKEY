@@ -37,9 +37,7 @@ const Navbar = ({ isNarrow }: Props) => {
 
   return (
     <>
-      <NavWrapper
-        className={isLogin && nickname === "" ? "isLoading" : undefined}
-      >
+      <NavWrapper className={!!isNarrow ? "isLoading" : undefined}>
         <StockeyLogo />
         <NavbarDiv
           className={
@@ -82,7 +80,7 @@ const Navbar = ({ isNarrow }: Props) => {
             selected={isSeleted("모의투자")}
             isNarrow={isNarrow}
           />
-          {isLogin ? <LogoutBtn isNarrow={isNarrow} /> : undefined}
+          {isLogin && <LogoutBtn isNarrow={isNarrow} />}
         </NavbarDiv>
       </NavWrapper>
     </>
@@ -127,6 +125,5 @@ const NavWrapper = styled.div`
 
   &.isLoading {
     opacity: 0;
-    // display: none;
   }
 `

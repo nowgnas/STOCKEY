@@ -1,6 +1,6 @@
 import styled from "@emotion/styled"
 import FavoriteIndustryCardList from "./FavoriteIndustryCardList"
-import { accessTokenSelector, nicknameState } from "../../../stores/atoms"
+import { accessTokenState, nicknameState } from "../../../stores/atoms"
 import customAxios from "../../../utils/customAxios"
 import { useQuery } from "react-query"
 import Spinner from "../../common/Spinner/Spinner"
@@ -16,7 +16,7 @@ export interface MyIndustryType {
 
 const FavoriteIndustryInfoArea = () => {
   const nickname = useRecoilValue(nicknameState)
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const axios = customAxios(accessToken, setAccessToken)
   const fetchMyIndustryList = () => {
     return axios.get("/industry/stocklist/my")

@@ -10,7 +10,6 @@ interface ChartProps {
 }
 
 const ChartWrapper = ({ chartOptions, height }: ChartProps) => {
-  console.log(chartOptions)
   const [chartWidth, setChartWidth] = useState<number>(754)
   const handleResize = () => {
     const chartWrapperDiv = document.getElementById("chart-wrapper")

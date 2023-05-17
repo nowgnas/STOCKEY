@@ -5,24 +5,24 @@ import { useRecoilState } from "recoil"
 import { accessTokenState } from "../stores/atoms"
 import axios from "axios"
 
-export const useMyAsset = () => {
+export const useMyStockList = () => {
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const navigate = useNavigate()
 
-  const fetchMyAsset = () => {
+  const fetchMyStockList = () => {
     const testAxios = axios.get(
-      `${process.env.REACT_APP_SERVER_BASE_URL}/investment/my/asset`,
+      `${process.env.REACT_APP_SERVER_BASE_URL}/investment/my/stock`,
       {
         headers: { "X-UserId": 1 },
       }
     )
     return testAxios
     // return customAxios(accessToken, setAccessToken, navigate).get(
-    //   `/investment/my/asset`
+    //   `/investment/my/stock`
     // )
   }
 
-  return useQuery(["my", "asset"], fetchMyAsset, {
+  return useQuery(["my", "stock"], fetchMyStockList, {
     staleTime: 60 * 60,
     select,
     onError,
@@ -31,7 +31,9 @@ export const useMyAsset = () => {
 }
 
 const select = (response: any) => {
-  const selectedData = response.data.data
+  console.log(response)
+  const selectedData = response.data
+  console.log("selectedData >> ", selectedData)
   return selectedData
 }
 

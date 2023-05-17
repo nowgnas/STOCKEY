@@ -8,7 +8,7 @@ import MyIndustry from "../components/MyPage/MyIndustry/MyIndustry"
 import MyKeyword from "../components/MyPage/MyKeyword/MyKeyword"
 import KeywordPanel from "../components/StockDetailPage/SubPanel/KeywordPanel/KeywordPanel"
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight"
-import { accessTokenSelector } from "../stores/atoms"
+import { accessTokenState } from "../stores/atoms"
 import { useNavigate } from "react-router-dom"
 
 const MyPage = () => {

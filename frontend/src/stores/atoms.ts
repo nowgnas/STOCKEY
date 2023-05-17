@@ -7,24 +7,28 @@ export const nicknameValidState = atom<boolean>({
 })
 
 // accessToken 저장 State
-const accessTokenState = atom<string | undefined>({
+export const accessTokenState = atom<string | undefined>({
   key: "accessToken",
   default: undefined,
 })
 
 // accessToken의 getter & setter
-export const accessTokenSelector = selector({
-  key: "setAccessToken",
-  get: ({ get }) => get(accessTokenState),
-  set: ({ set }, newValue) => {
-    set(accessTokenState, newValue)
-  },
-})
+// export const accessTokenState = selector({
+//   key: "setAccessToken",
+//   get: ({ get }) => get(accessTokenState),
+//   set: ({ set }, newValue) => {
+//     set(accessTokenState, newValue)
+//   },
+// })
 
-// login Stae
-export const logInState = atom<boolean>({
+// login State
+export const logInState = selector<boolean>({
   key: "logInState",
-  default: false,
+  get: ({ get }) => {
+    return Boolean(
+      get(accessTokenState) !== undefined || get(nicknameState) !== ""
+    )
+  },
 })
 
 // nickname State

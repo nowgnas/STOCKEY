@@ -9,7 +9,7 @@ import { useSignup } from "../hooks/useSignup"
 import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import {
   nicknameValidState,
-  accessTokenSelector,
+  accessTokenState,
   logInState,
 } from "../stores/atoms"
 import Spinner from "../components/common/Spinner/Spinner"
@@ -25,9 +25,9 @@ const SignupPage = () => {
     setNickname(name)
   }
   // accessToken state
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   // login State
-  const setLogIn = useSetRecoilState(logInState)
+  // const setLogIn = useSetRecoilState(logInState)
 
   // location state
   const oauthId = location.state.oauthId
@@ -53,7 +53,7 @@ const SignupPage = () => {
   useEffect(() => {
     if (token) {
       setAccessToken(token)
-      setLogIn(true)
+      // setLogIn(true)
     }
   }, [token])
 

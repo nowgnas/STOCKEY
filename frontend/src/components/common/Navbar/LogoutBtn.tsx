@@ -2,10 +2,10 @@ import { useEffect } from "react"
 import styled, { keyframes } from "styled-components"
 
 // recoil
-import { useRecoilState, useSetRecoilState } from "recoil"
+import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil"
 import {
   logInState,
-  accessTokenSelector,
+  accessTokenState,
   nicknameState,
 } from "../../../stores/atoms"
 
@@ -20,9 +20,9 @@ type LogoutBtnProps = {
 
 const LogoutBtn = ({ isNarrow }: LogoutBtnProps) => {
   // login State
-  const [isLogin, setIsLogin] = useRecoilState(logInState)
+  const isLogin = useRecoilValue(logInState)
   // accessToken State
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   // nickname State
   const setNickname = useSetRecoilState(nicknameState)
   // useNavigate
@@ -31,11 +31,12 @@ const LogoutBtn = ({ isNarrow }: LogoutBtnProps) => {
   const axios = customAxios(accessToken, setAccessToken)
 
   const handleClick = () => {
-    if (isLogin) {
+    if (accessToken) {
+      console.log("로그아웃해죠잉", accessToken)
       axios
         .post("auth/logout")
         .then((response) => {
-          setIsLogin(false)
+          setAccessToken(undefined)
           setNickname("")
           window.alert("로그아웃 되었습니다")
           navigate("/user/login")

@@ -23,7 +23,7 @@ import {
   selectedKeywordState,
 } from "../../../stores/StockDetailAtoms"
 import customAxios from "../../../utils/customAxios"
-import { accessTokenSelector } from "../../../stores/atoms"
+import { accessTokenState } from "../../../stores/atoms"
 import { useQuery } from "react-query"
 import styled from "styled-components"
 import Button from "@mui/material/Button"
@@ -34,7 +34,7 @@ const OnKeywordPanelLayout = ({
   industryInfo,
 }: LayoutProps) => {
   // 북마크 여부 체크(로그인 상태에서만)
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const axios = customAxios(accessToken, setAccessToken)
   const fetchMyIndustryCheck = ({ queryKey }: any) => {
     const industryId = queryKey[1]

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -53,7 +54,13 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
             // 헤더에 userId 추가
             ServerHttpRequest  newRequest = exchange.getRequest().mutate()
-                    .headers(httpHeaders -> httpHeaders.set(USER_ID_HEADER, userId))
+                    .headers(httpHeaders -> {
+                        httpHeaders.set(USER_ID_HEADER, userId);
+                        if(request.getCookies().containsKey("refreshToken")){
+                            HttpCookie refreshToken = request.getCookies().get("refreshToken").get(0);
+                            httpHeaders.set("refreshToken", refreshToken.getValue());
+                        }
+                    })
                     .build();
             // 새로운 exchange 생성
             ServerWebExchange newExchange = exchange.mutate().request(newRequest).build();

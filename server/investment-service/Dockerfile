@@ -1,5 +1,6 @@
 # Build stage
 FROM arm64v8/openjdk:17-ea-16-jdk AS builder
+RUN sudo yum install findutils
 
 WORKDIR /app
 COPY server/investment-service/gradlew .

@@ -6,10 +6,11 @@ spring:
     gateway:
       globalcors:
         cors-configurations:
-          '[/**]':
+          "[/**]":
             allowedOrigins:
               - http://localhost:3000
               - http://127.0.0.1:3000
+              - https://stockey.kr
             allow-credentials: true
             allowedHeaders:
               - authorization
@@ -122,7 +123,7 @@ spring:
             - Path=/news/client/**
           filters:
             - MicroServiceFilter
-            
+
         # favorite
         - id: favorite-service
           uri: lb://favorite-service
@@ -159,8 +160,6 @@ spring:
           filters:
             - RewritePath=/lab/(?<segment>.*), /$\{segment}
 
-
-
 jwt:
   # base64? ???? ?? ?, HS512? ??? ??? ???, 512??(64???) ??? ??? ???. ?? ????
   secretKey: "{cipher}10d6a9ef3db134316645ec176d42327e9055a5b380dcbe81a2662924b154fcb38774a7be9ac48ff17d91d512a297b79dbf5f39f0e7dd318c2a23b442fefb6202f798c269c52c21e85ab9a3a1d9854014"
@@ -170,8 +169,7 @@ jwt:
     expiration: 14400
 
 management:
- endpoints:
-   web:
-     exposure:
-       include: refresh, healtth, beans,httptrace, busrefresh
-
+  endpoints:
+    web:
+      exposure:
+        include: refresh, healtth, beans,httptrace, busrefresh

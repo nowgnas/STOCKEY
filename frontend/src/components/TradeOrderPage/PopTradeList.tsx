@@ -24,7 +24,7 @@ const PopTradeList = () => {
           autoplay
           autoplayInterval={1500}
           withoutControls
-          wrapAround
+          wrapAround={popList && popList.length > 0 ? true : false}
           cellAlign="center"
           slidesToShow={7.5}
         >

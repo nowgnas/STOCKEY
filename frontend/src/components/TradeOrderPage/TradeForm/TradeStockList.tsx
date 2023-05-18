@@ -24,6 +24,9 @@ const TradeStockList = () => {
   // 나중에 useQuery 사용 전체종목도 해서 넣기
   const { data: myStock } = useMyStocks()
   const { data: wholeStock } = useWholeStocks()
+  console.log("wholeStock", wholeStock)
+  console.log("myStock", myStock)
+
   const [value, setValue] = useState(0)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)

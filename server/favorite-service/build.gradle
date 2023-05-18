@@ -43,6 +43,11 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
     // HttpServlet추가
     implementation 'javax.servlet:javax.servlet-api:4.0.1'
+
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bus-amqp'
 }
 
 dependencyManagement {

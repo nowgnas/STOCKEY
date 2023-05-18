@@ -94,7 +94,7 @@ public class InvestmentServiceImpl implements InvestmentService{
      */
 
 //    @Scheduled(cron = "0 2 * * * *", zone = "Asia/Seoul")
-    @Scheduled(cron = "0 0/2 * * * *", zone = "Asia/Seoul")  // 0분부터 55분까지 2분 간격으로 실행 -> 개발용
+    @Scheduled(cron = "0 0/1 * * * *", zone = "Asia/Seoul")  // 0분부터 55분까지 1분 간격으로 실행 -> 개발용
     public void orderExecuteScheduler() {
         // 실행할 메소드 내용 작성
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
@@ -268,9 +268,9 @@ public class InvestmentServiceImpl implements InvestmentService{
                         .stockId(orderListDto.getStockId())
                         .stockName(stockIdToNameMap.get(orderListDto.getStockId()))
                         .orderCount(Long.valueOf(orderListDto.getCount()))
-                        .contractCount(null)
-                        .contractPrice(null)
-                        .profit(null)
+                        .contractCount(0L)
+                        .contractPrice(0L)
+                        .profit(0.0)
                         .contractType(orderListDto.getOrderType())
                         .createdAt(order.getOrderTime())
                         .build();
@@ -675,7 +675,7 @@ public class InvestmentServiceImpl implements InvestmentService{
 
     private List<Order> filterOrders(List<Order> rawOrderList) {
         LocalDateTime currentDateTime = LocalDateTime.now();
-        LocalDateTime oneHourAgo = currentDateTime.minusHours(1);
+        LocalDateTime oneHourAgo = currentDateTime.minusHours(0);
         LocalDateTime desiredStartTime = LocalDateTime.of(oneHourAgo.getYear(), oneHourAgo.getMonth(), oneHourAgo.getDayOfMonth(), oneHourAgo.getHour(), 0, 0);
         LocalDateTime desiredEndTime = LocalDateTime.of(oneHourAgo.getYear(), oneHourAgo.getMonth(), oneHourAgo.getDayOfMonth(), currentDateTime.getHour(), 0, 0);
 

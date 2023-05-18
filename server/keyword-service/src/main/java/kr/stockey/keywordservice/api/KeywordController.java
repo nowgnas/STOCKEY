@@ -43,7 +43,7 @@ public class KeywordController {
     private final KeywordDtoMapper keywordDtoMapper;
     private final MemberClient memberClient;
 
-    private Map<Long, GetKeyPhraseResponse> keyPhraseResponseStore;
+    private Map<Long, List<GetKeyPhraseResponse.Message>> keyPhraseResponseStore;
 
     @PostConstruct
     void init() {
@@ -183,14 +183,14 @@ public class KeywordController {
     @GetMapping("/keyphrase/poll")
     public ResponseEntity<ResponseDto> pollKeyphrase() {
         Long memberId = getMemberId();
-        GetKeyPhraseResponse getKeyPhraseResponse = keyPhraseResponseStore.get(memberId);
+        List<GetKeyPhraseResponse.Message> messages = keyPhraseResponseStore.get(memberId);
 
-        if (getKeyPhraseResponse == null) {
+        if (messages == null) {
             return new ResponseEntity<>(new ResponseDto("NO_CONTENT", null), HttpStatus.NO_CONTENT);
         } else {
             // poll 결과 데이터가 있으면 지운 후 리턴
             keyPhraseResponseStore.remove(memberId);
-            return new ResponseEntity<>(new ResponseDto("OK", getKeyPhraseResponse), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDto("OK", messages), HttpStatus.OK);
         }
     }
 

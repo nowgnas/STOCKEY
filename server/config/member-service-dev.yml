@@ -8,3 +8,7 @@ spring:
     port: 6379
     host: "redis-container"
     password: "{cipher}69dcaaa2ad3b7c6a777932a2a0b8016ae34acc8ef7eb171fbe738462a3fb133e"
+
+kakaoOauth:
+  REST_API_KEY: "{cipher}b6c2dc0c84f938c4659aa81a95fbf6b75c91013b343175609c6795ce78e07aee040614238fac6818e6e7c9b2912f399c142cd5b05a898f466d6da0488ae85c42"
+  REDIRECT_URL: "{cipher}7d18d29e8924c6b628805770a7c439c034dd280826d1ef05ba8f931c1d79bcf4966f7a71cdec30df9a8810c1dcab741d22c4320ee809ed58d4569f1834df9998caeec775749ff684c922d172c24743aa"

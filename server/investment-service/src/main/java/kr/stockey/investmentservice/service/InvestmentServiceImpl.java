@@ -612,7 +612,7 @@ public class InvestmentServiceImpl implements InvestmentService{
 
     private List<OrderDto> getJustOrders() {
         LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime previousHour = currentTime.minusHours(1);
+        LocalDateTime previousHour = currentTime.minusHours(0);
 
         // Set the minutes and seconds to zero for the previous hour
         LocalDateTime startOfPreviousHour = previousHour.withMinute(0).withSecond(0).withNano(0);

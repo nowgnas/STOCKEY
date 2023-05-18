@@ -4,94 +4,94 @@ spring:
 
   cloud:
     gateway:
-      # globalcors:
-      #   cors-configurations:
-      #     "[/**]":
-      #       allowedOriginPatterns:
-      #         - http://localhost:3000
-      #         - http://127.0.0.1:3000
-      #         - http://localhost:8000
-      #         - https://stockey.kr
-      #       allow-credentials: true
-      #       allowedHeaders:
-      #         - authorization
-      #         - content-type
-      #         - credential
-      #         - set-cookie
-      #       allowedMethods:
-      #         - GET
-      #         - POST
-      #         - PUT
-      #         - DELETE
-      #         - PATCH
-      #         - OPTIONS
+      globalcors:
+        cors-configurations:
+          "[/**]":
+            allowedOriginPatterns:
+              - http://localhost:3000
+              - http://127.0.0.1:3000
+              - http://localhost:8000
+              - https://stockey.kr
+            allow-credentials: true
+            allowedHeaders:
+              - authorization
+              - content-type
+              - credential
+              - set-cookie
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+              - OPTIONS
 
-      # default-filters:
-      #   - name: GlobalFilter
-      #     args:
-      #       baseMessage: Spring Cloud Gateway Global Filter
-      #       preLogger: true
-      #       postLogger: true
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway Global Filter
+            preLogger: true
+            postLogger: true
 
       routes:
         # auth
-        - id: member-service
-          uri: lb://member-service
-          predicates:
-            - Path=/auth/**
-
-        - id: member-service
-          uri: lb://member-service
-          predicates:
-            - Path=/member/**
-
-
-        # - id: member-service
-        #   uri: lb://member-service
-        #   predicates:
-        #     - Path=/auth/logout
-        #   filters:
-        #     - AuthorizationHeaderFilter
-            
-        # - id: member-service
-        #   uri: lb://member-service
-        #   predicates:
-        #     - Path=/auth/refresh
-        #   filters:
-        #     - RefreshTokenFilter
-
         # - id: member-service
         #   uri: lb://member-service
         #   predicates:
         #     - Path=/auth/**
 
-        # # member
-        # - id: member-service
-        #   uri: lb://member-service
-        #   predicates:
-        #     - Path=/member/nickname
-        #     - Method=GET
-
-        # - id: member-service
-        #   uri: lb://member-service
-        #   predicates:
-        #     - Path=/member, /member/nickname
-        #   filters:
-        #     - AuthorizationHeaderFilter
-
-        # - id: member-service
-        #   uri: lb://member-service
-        #   predicates:
-        #     - Path=/member/client/**
-        #   filters:
-        #     - MicroServiceFilter
-
-            
-
         # - id: member-service
         #   uri: lb://member-service
         #   predicates:
         #     - Path=/member/**
+
+
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/auth/logout
+          filters:
+            - AuthorizationHeaderFilter
+            
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/auth/refresh
+          filters:
+            - RefreshTokenFilter
+
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/auth/**
+
+        # member
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/member/nickname
+            - Method=GET
+
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/member, /member/nickname
+          filters:
+            - AuthorizationHeaderFilter
+
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/member/client/**
+          filters:
+            - MicroServiceFilter
+
+            
+
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/member/**
 
         # stock
         - id: stock-service

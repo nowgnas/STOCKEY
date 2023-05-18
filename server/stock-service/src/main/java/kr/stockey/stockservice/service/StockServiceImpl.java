@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -207,7 +208,13 @@ public class StockServiceImpl implements StockService {
 
         LocalDate startDate = getCorrelationRequest.getStartDate();
         LocalDate endDate = getCorrelationRequest.getEndDate();
-        List<KeywordCountDateDto> countDateList = keywordClient.getCountDate(keywordId, startDate, endDate);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+        String startDateString = startDate.format(formatter);
+        String endDateString = endDate.format(formatter);
+
+
+        System.out.println("keywordId, startDateString,endDateString = " + keywordId+" "+ startDateString+" "+endDateString);
+        List<KeywordCountDateDto> countDateList = keywordClient.getCountDate(keywordId, startDateString, endDateString);
         List<PriceDateDto> priceDateList = dailyStockRepository.getPriceDate(stock, startDate, endDate);
 
         List<Double> priceList = new ArrayList<>();
@@ -219,7 +226,7 @@ public class StockServiceImpl implements StockService {
 
         // 동일한 날짜일때 리스트에 추가
         priceDateList.stream()
-                .filter(priceDate -> !countDateDtoMap.containsKey(priceDate.getStockDate()))
+                .filter(priceDate -> countDateDtoMap.containsKey(priceDate.getStockDate()))
                 .forEach(priceDate -> {
                     KeywordCountDateDto countDateDto = countDateDtoMap.get(priceDate.getStockDate());
                     countList.add(Double.valueOf(countDateDto.getCount()));

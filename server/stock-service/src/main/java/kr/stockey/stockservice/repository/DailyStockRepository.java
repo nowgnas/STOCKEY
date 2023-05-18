@@ -22,8 +22,8 @@ public interface DailyStockRepository extends JpaRepository<DailyStock, Long> {
             " WHERE ds.stock = :stock" +
             " AND ds.stockDate BETWEEN :startDate and :endDate")
     List<PriceDateDto> getPriceDate(@Param("stock") Stock stock,
-                                    @Param("startDate") LocalDate startDate,
-                                    @Param("endDate") LocalDate endDate);
+                                   @Param("startDate") LocalDate startDate,
+                                   @Param("endDate") LocalDate endDate);
 
     List<DailyStock> findByStockId(@Param("stockId") Long stockId);
 

@@ -619,10 +619,11 @@ public class InvestmentServiceImpl implements InvestmentService{
         LocalDateTime previousHour = currentTime.minusMinutes(1);
         
         // Set the minutes and seconds to zero for the previous hour
-        LocalDateTime startOfPreviousHour = previousHour.withMinute(0).withSecond(0).withNano(0);
-        LocalDateTime endOfPreviousHour = previousHour.withMinute(0).withSecond(0).withNano(0).plusHours(1);
+//        LocalDateTime startOfPreviousHour = previousHour.withMinute(0).withSecond(0).withNano(0);
+//        LocalDateTime endOfPreviousHour = previousHour.withMinute(0).withSecond(0).withNano(0).plusHours(1);
 
-        List<Contract> justOrders = contractRepository.getJustOrders(startOfPreviousHour, endOfPreviousHour);
+        //List<Contract> justOrders = contractRepository.getJustOrders(startOfPreviousHour, endOfPreviousHour);
+        List<Contract> justOrders = contractRepository.getJustOrders(previousHour, currentTime);
         return investmentMapper.toOrderDtoList(justOrders);
     }
 
@@ -686,7 +687,7 @@ public class InvestmentServiceImpl implements InvestmentService{
         List<Order> filteredOrderList = new ArrayList<>();
         for (Order order : rawOrderList) {
             LocalDateTime orderTime = order.getOrderTime();
-            if (orderTime.isAfter(desiredStartTime) && orderTime.isBefore(desiredEndTime)) {
+            if (true || orderTime.isAfter(desiredStartTime) && orderTime.isBefore(desiredEndTime)) {
                 filteredOrderList.add(order);
             }
         }

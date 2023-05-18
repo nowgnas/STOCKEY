@@ -435,9 +435,12 @@ public class InvestmentServiceImpl implements InvestmentService{
         }
         // 시간순 정렬
         Collections.sort(rawOrderList);
+        System.out.println("rawOrderList = " + rawOrderList);
 
         // 이전 라운드에 대한 주문만 남기기
         List<Order> wholeRedisOrderList = filterOrders(rawOrderList);
+        System.out.println("wholeRedisOrderList = " + wholeRedisOrderList);
+
         // wholeOrderList 내용 DB에 적재
         loadOrderIntoDB(wholeRedisOrderList);
 
@@ -612,7 +615,7 @@ public class InvestmentServiceImpl implements InvestmentService{
 
     private List<OrderDto> getJustOrders() {
         LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime previousHour = currentTime.minusHours(0);
+        LocalDateTime previousHour = currentTime.minusHours(1);
 
         // Set the minutes and seconds to zero for the previous hour
         LocalDateTime startOfPreviousHour = previousHour.withMinute(0).withSecond(0).withNano(0);
@@ -633,9 +636,9 @@ public class InvestmentServiceImpl implements InvestmentService{
                         .contractType(orderListDto.getOrderType())
                         .createdAt(order.getOrderTime())
                         .category(InvCategory.ORDER)
-                        .matchOrderId(null)
-                        .contractPrice(null)
-                        .profit(null)
+                        .matchOrderId(-1L)
+                        .contractPrice(0L)
+                        .profit(0.0)
                         .build();
                 contractRepository.save(contract);
             }
@@ -682,7 +685,7 @@ public class InvestmentServiceImpl implements InvestmentService{
         List<Order> filteredOrderList = new ArrayList<>();
         for (Order order : rawOrderList) {
             LocalDateTime orderTime = order.getOrderTime();
-            if (true || orderTime.isAfter(desiredStartTime) && orderTime.isBefore(desiredEndTime)) {
+            if (orderTime.isAfter(desiredStartTime) && orderTime.isBefore(desiredEndTime)) {
                 filteredOrderList.add(order);
             }
         }

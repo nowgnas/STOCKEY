@@ -33,20 +33,29 @@ scheduler.start()
 @app.on_event('startup')
 def start_scheduler():
     print("현재시각" ,datetime.today().date())
+    print("시각 ",datetime.now())
     host = settings.host
     db = settings.db
     user = settings.user
     password = settings.password
     port = settings.port
+    print(host,db,user,password,port)
 
     stockCrawler = daily_stock.Stock(host,port,db,user,password)
-    @scheduler.scheduled_job(trigger=CronTrigger(hour =9))
+    @scheduler.scheduled_job(trigger=CronTrigger(hour ='9'))
     def stock_daily_create():
         print("주식 데이터 생성")
-        stockCrawler.daily_stock_insert()
+        stockCrawler.stock_daily_create()
+        print(stockCrawler.updateList)
+        print(stockCrawler.insertList)
 
         
 
-    @scheduler.scheduled_job(trigger=CronTrigger(hour ='10-18'))
+    @scheduler.scheduled_job(trigger=CronTrigger(hour ='9-18',minute='*/5'))
     def stock_daily_update():
+        start = time.time()
         stockCrawler.daily_stock_update()
+        end = time.time()
+        print("걸린시간 : " ,end-start)
+        print(stockCrawler.updateList)
+        print(stockCrawler.insertList)

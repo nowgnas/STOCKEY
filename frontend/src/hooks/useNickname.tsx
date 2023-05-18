@@ -1,12 +1,9 @@
 import { useQuery } from "react-query"
 import customAxios from "../utils/customAxios"
-import { useRecoilState, useSetRecoilState } from "recoil"
-import { accessTokenState } from "../stores/atoms"
-import { nicknameState } from "../stores/atoms"
+// import { useSetRecoilState } from "recoil"
 
 export const useNickname = () => {
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
-  const axios = customAxios(accessToken, setAccessToken)
+  const axios = customAxios({ isAuthNeeded: true })
 
   const fetchNickname = () => {
     return axios.get("/member")
@@ -16,16 +13,17 @@ export const useNickname = () => {
     return response.data.data.nickname
   }
 
-  const setNickname = useSetRecoilState(nicknameState)
-  const onSuccess = (nickname: string) => {
-    setNickname(nickname)
-  }
+  // const setNickname = useSetRecoilState(nicknameState)
+  // const onSuccess = (nickname: string) => {
+  //   setNickname(nickname)
+  // }
 
   return useQuery(["user", "nickname"], fetchNickname, {
     refetchOnWindowFocus: false,
     select,
-    onSuccess,
+    retryDelay: 1000,
+    // onSuccess,
     retry: 1,
-    enabled: !!accessToken,
+    // enabled: !!sessionStorage.getItem("accessToken"),
   })
 }

@@ -1,7 +1,7 @@
 import { useQuery } from "react-query"
 import customAxios from "../utils/customAxios"
 
-const axios = customAxios()
+const axios = customAxios({})
 
 const fetchRandomStock = ({ queryKey }: any) => {
   const count = queryKey[1]

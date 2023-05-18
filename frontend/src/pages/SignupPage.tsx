@@ -7,11 +7,7 @@ import { useSignup } from "../hooks/useSignup"
 
 // recoil
 import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
-import {
-  nicknameValidState,
-  accessTokenState,
-  logInState,
-} from "../stores/atoms"
+import { nicknameValidState } from "../stores/atoms"
 import Spinner from "../components/common/Spinner/Spinner"
 
 const SignupPage = () => {
@@ -25,7 +21,7 @@ const SignupPage = () => {
     setNickname(name)
   }
   // accessToken state
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
+  // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   // login State
   // const setLogIn = useSetRecoilState(logInState)
 
@@ -52,16 +48,16 @@ const SignupPage = () => {
   // 성공한 경우 token 처리
   useEffect(() => {
     if (token) {
-      setAccessToken(token)
+      sessionStorage.setItem("accessToken", token)
       // setLogIn(true)
     }
   }, [token])
 
   useEffect(() => {
-    if (accessToken) {
+    if (sessionStorage.getItem("accessToken")) {
       navigate("/keyword", { replace: true })
     }
-  }, [accessToken])
+  }, [sessionStorage.getItem("accessToken")])
 
   // 로딩 및 에러 상황의 경우
   if (isLoading) {

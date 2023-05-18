@@ -1,28 +1,16 @@
 import { useQuery } from "react-query"
 import customAxios from "../utils/customAxios"
-import { useNavigate } from "react-router-dom"
 import { useRecoilState } from "recoil"
-import { accessTokenState } from "../stores/atoms"
-import axios from "axios"
+// import { accessTokenState } from "../stores/atoms"
 
 export const useMyStockList = () => {
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
-  const navigate = useNavigate()
+  // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
 
   const fetchMyStockList = () => {
-    const testAxios = axios.get(
-      `${process.env.REACT_APP_SERVER_BASE_URL}/investment/my/stock`,
-      {
-        headers: { "X-UserId": 1 },
-      }
-    )
-    return testAxios
-    // return customAxios(accessToken, setAccessToken, navigate).get(
-    //   `/investment/my/stock`
-    // )
+    return customAxios({ isAuthNeeded: true }).get(`/investment/my/stock`)
   }
 
-  return useQuery(["my", "stock"], fetchMyStockList, {
+  return useQuery(["trade", "my", "stock"], fetchMyStockList, {
     staleTime: 60 * 60,
     select,
     onError,
@@ -30,9 +18,19 @@ export const useMyStockList = () => {
   })
 }
 
+export interface MyStockType {
+  stockId: number
+  stockName: string
+  svp: number // 주식 평가금액 비중 (%)
+  rrp: number // 수익률 (%)
+  curStockPrice: number // 현재 주가
+  avgPrice: number // 평균 매입단가
+  count: number // 보유 수량
+}
+
 const select = (response: any) => {
   console.log(response)
-  const selectedData = response.data
+  const selectedData: MyStockType[] = response.data
   console.log("selectedData >> ", selectedData)
   return selectedData
 }

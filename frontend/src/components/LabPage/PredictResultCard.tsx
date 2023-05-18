@@ -1,6 +1,6 @@
 import { useRecoilValue } from "recoil";
 import { selectedSliderList,  resultBoardSizeState } from "../../stores/LaboratoryAtoms";
-import { LabGraphType, LabRegressionType } from "./LabType";
+import { LabGraphType, LabRegressionType, resultBoardSizeType } from "./LabType";
 
 import ResultStock from "./ResultStock";
 import PredictKeywordCard from "./PredictKeywordCard";
@@ -13,7 +13,7 @@ interface Props {
   regressionData: LabRegressionType[];
 }
 
-const PredictResultCard = ({keywordList, graphData, constant, regressionData}: Props) => {
+const PredictResultCard = ({ keywordList, graphData, constant, regressionData }: Props) => {
   const resultBoardSize = useRecoilValue(resultBoardSizeState);
 
   // 사용자 입력값
@@ -75,7 +75,7 @@ const PredictResultCard = ({keywordList, graphData, constant, regressionData}: P
 
 export default PredictResultCard;
 
-const ResultCardSection = styled.div<{ size: "big" | "small" }>`
+const ResultCardSection = styled.div<{ size: resultBoardSizeType }>`
   width: ${(props) => (props.size === "big" ? "50%" : "170px")};
   height: ${(props) => (props.size === "small" ? "170px" : undefined)};
   border: 4px solid #ffffff;

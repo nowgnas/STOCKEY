@@ -1,7 +1,6 @@
 import { useRecoilValue } from "recoil";
-import {
-  resultBoardSizeState,
-} from "../stores/LaboratoryAtoms";
+import { resultBoardSizeState } from "../stores/LaboratoryAtoms";
+import { resultBoardSizeType } from "../components/LabPage/LabType";
 
 import StockAccordion from "../components/LabPage/StockAccordion";
 import KeywordAccordion from "../components/LabPage/KeywordAccordion";
@@ -12,9 +11,9 @@ import { CustomDragLayer } from "../components/common/DragDrop/CustomDragLayer";
 import styled from "styled-components";
 
 const LabPage = () => {
+  // accordion 둘다 접혀져있는 경우, result panel 큰 버전 랜더링
   const resultBoardSize = useRecoilValue(resultBoardSizeState);
 
-  // accordion 둘다 접혀져있는 경우, result panel 큰 버전 랜더링
   return (
     <PageWrapper>
       <ColumnWrapper width={"30%"}>
@@ -53,7 +52,7 @@ const ColumnWrapper = styled.div<{width: string}>`
   gap: 45px;
 `;
 
-const AbsoluteWrapper = styled.div<{ resultBoardSize: "big" | "small" }>`
+const AbsoluteWrapper = styled.div<{ resultBoardSize: resultBoardSizeType }>`
   position: absolute;
   padding: 0 0 5% 0;
   right: 8%;

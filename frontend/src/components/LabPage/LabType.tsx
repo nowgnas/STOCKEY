@@ -1,3 +1,15 @@
+export type StockCardType = {
+  id: number;
+  name: string;
+}
+
+export type KeywordCardType = {
+  id: number;
+  name: string;
+}
+
+export type resultBoardSizeType = "big" | "small";
+
 export type LabGraphType = {
   keyword: string;
   lastDate: {x: number, y: number};

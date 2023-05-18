@@ -28,7 +28,6 @@ const ResetBtn = () => {
   const resetSelectedSliderList = useResetRecoilState(selectedSliderList);
 
   const resetHandler = () => {
-    console.log("reset all!");
     resetSelectedLabStockState();
     resetSelectedLabKeywordListState();
     resetDraggedLabCardState();

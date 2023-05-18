@@ -1,6 +1,6 @@
 import { useRecoilState, useRecoilValue } from "recoil";
-import { resultBoardSizeState } from "../../stores/LaboratoryAtoms";
-import { selectedSliderList } from "../../stores/LaboratoryAtoms";
+import { resultBoardSizeState, selectedSliderList } from "../../stores/LaboratoryAtoms";
+import { resultBoardSizeType } from "./LabType";
 
 import PredictSlider from "./PredictSlider";
 import styled from "styled-components";
@@ -39,7 +39,7 @@ const PredictSliderSection = ({keywordList}: Props) => {
 
 export default PredictSliderSection;
 
-const SectionWrapper = styled.div<{ resultBoardSize: "big" | "small" }>`
+const SectionWrapper = styled.div<{ resultBoardSize: resultBoardSizeType }>`
   width: ${(props) => (props.resultBoardSize === "big" ? "45%" : "70%")};
   height: 200px;
   margin: 18px 0 0 0;

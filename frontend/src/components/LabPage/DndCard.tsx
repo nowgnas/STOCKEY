@@ -1,14 +1,11 @@
 // drag and drop 용 card
 
-import { memo, useEffect } from 'react';
+import { memo, useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import {
-  StockCardType,
-  KeywordCardType,
-  draggedLabCardState,
-} from "../../stores/LaboratoryAtoms";
+import { draggedLabCardState } from "../../stores/LaboratoryAtoms";
+import { StockCardType, KeywordCardType } from "./LabType";
 import { useDrag } from "react-dnd";
-import { getEmptyImage } from "react-dnd-html5-backend"
+import { getEmptyImage } from "react-dnd-html5-backend";
 
 import StockCardMini from "./StockCardMini";
 import KeywordCardMini from "./KeywordCardMini";
@@ -46,9 +43,8 @@ const DndCard = ({ type, item }: ParamProps) => {
   );
 
   useEffect(() => {
-    previewRef(getEmptyImage(), { captureDraggingState: true })
-  }, [])
-
+    previewRef(getEmptyImage(), { captureDraggingState: true });
+  }, []);
 
   return (
     <DragWrapper ref={dragRef} opacity={`${isDragging ? 0.4 : 1}`}>

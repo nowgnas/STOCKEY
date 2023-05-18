@@ -1,4 +1,4 @@
-import { KeywordCardType } from '../../stores/LaboratoryAtoms';
+import { KeywordCardType } from './LabType';
 import styled from 'styled-components';
 
 interface Props {

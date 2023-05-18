@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { SetterOrUpdater } from "recoil";
-import { StockCardType, KeywordCardType } from "../../stores/LaboratoryAtoms";
+import { StockCardType, KeywordCardType } from "./LabType";
 import StockSearchBar from "./StockSearchBar";
 import KeywordSearchBar from "./KeywordSearchBar";
 import DndCard from "./DndCard";

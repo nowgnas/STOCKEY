@@ -1,4 +1,4 @@
-import { StockCardType } from "../../stores/LaboratoryAtoms"
+import { StockCardType } from "./LabType"
 import styled from "styled-components"
 
 interface Props {

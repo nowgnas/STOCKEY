@@ -1,8 +1,6 @@
 import { useMemo } from "react";
-// import { Regression } from "./SampleItems";
-// import { GraphItemSixMonth } from "./SampleItems";
 import { LabGraphType, LabRegressionType } from "./LabType";
-import { ChangeType } from "./LabType";
+import { resultBoardSizeType, ChangeType } from "./LabType";
 import styled from "styled-components";
 
 interface Props {
@@ -10,7 +8,7 @@ interface Props {
   graphData: LabGraphType[];
   constant: number;
   regressionData: LabRegressionType[];
-  resultCardState: "big" | "small";
+  resultCardState: resultBoardSizeType;
 }
 
 const ResultStock = ({ sliderList, graphData, constant, regressionData, resultCardState }: Props) => {
@@ -25,17 +23,16 @@ const ResultStock = ({ sliderList, graphData, constant, regressionData, resultCa
     });
   });
 
-  // 등락 계산
-  // query에서 graph 마지막 주가 가져오기
+  // 등락 계산 base
   const baseStock: number = useMemo(() => {
     if (graphData.length > 0) {
       return graphData[0].lastDate.y;
     } else {
       return 0;
     }
-  }, []);
+  }, [graphData]);
 
-
+  // 등락 계산
   const changeAmount = baseStock > 0 ? result - baseStock : 0;
   const changePercent = baseStock > 0 ? changeAmount / baseStock : 0;
   const changeState: ChangeType =

@@ -2,7 +2,7 @@
 
 import customAxios from "../utils/customAxios";
 import { useQuery, useInfiniteQuery } from "react-query";
-import { StockCardType } from "../stores/LaboratoryAtoms";
+import { StockCardType } from "../components/LabPage/LabType"; 
 
 const axios = customAxios({});
 

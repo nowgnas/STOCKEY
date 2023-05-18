@@ -1,20 +1,13 @@
 import { useMutation, useQuery } from "react-query"
 import customAxios from "../utils/customAxios"
 import dayjs from "dayjs"
-import { useRecoilState } from "recoil"
-// import { accessTokenState } from "../stores/atoms"
 import { useNavigate } from "react-router-dom"
-import axios from "axios"
+
 export interface SubmitProps {
   stockId: number
   count: number
   orderType: String
 }
-// const axios = customAxios({})
-
-// const fetchSubmitTrade = (myList: SubmitProps[]) => {
-//   return axios.post("/api/investment/order", myList)
-// }
 
 const timeLeft = () => {
   const currentTime = dayjs()
@@ -22,40 +15,29 @@ const timeLeft = () => {
   return dayjs.duration(nextTradeTime.diff(currentTime)).asMilliseconds()
 }
 
-const fetchSubmitTrade = (myList: SubmitProps[]) => {
-  const testAxios = axios.post(
-    `${process.env.REACT_APP_SERVER_BASE_URL}/investment/order`,
-    {
-      headers: { "X-UserId": 1 },
-      data: myList,
-    }
-  )
-  return testAxios
-}
 // Form 제출
 export const useSubmitTradeMutation = () => {
+  const navigate = useNavigate()
+
+  const fetchSubmitTrade = (myList: SubmitProps[]) => {
+    return customAxios({ isAuthNeeded: true, navigate }).post(
+      "/investment/order",
+      myList
+    )
+  }
+
   return useMutation(fetchSubmitTrade)
 }
 
 // 주문 여부 확인
 export const useCheckOrder = () => {
-  // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const navigate = useNavigate()
 
-  const fetchCheckOrder = () => {
-    const testAxios = axios.get(
-      `${process.env.REACT_APP_SERVER_BASE_URL}/investment/order/check`,
-      {
-        headers: { "X-UserId": 1 },
-      }
+  const fetchCheckOrder = ({ queryKey }: any) => {
+    return customAxios({ isAuthNeeded: true, navigate }).get(
+      "/investment/order/check"
     )
-    return testAxios
   }
-  // const fetchCheckOrder = ({ queryKey }: any) => {
-  //   return customAxios({isAuthNeeded: true, navigate: navigate}).get(
-  //     "/api/investment/order/check"
-  //   )
-  // }
 
   return useQuery(["checkOrder"], fetchCheckOrder, {
     staleTime: timeLeft(),
@@ -67,23 +49,13 @@ export const useCheckOrder = () => {
 
 // 현재 잔액 조회
 export const useMyBalance = () => {
-  // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const navigate = useNavigate()
 
   const fetchMyBalance = () => {
-    const testAxios = axios.get(
-      `${process.env.REACT_APP_SERVER_BASE_URL}/investment/my/asset`,
-      {
-        headers: { "X-UserId": 1 },
-      }
+    return customAxios({ isAuthNeeded: true, navigate }).get(
+      "/investment/my/asset"
     )
-    return testAxios
   }
-  // const fetchMyBalance = () => {
-  //   return customAxios({isAuthNeeded: true, navigate: navigate}).get(
-  //     "/api/investment/my/asset"
-  //   )
-  // }
 
   return useQuery(["myBalance"], fetchMyBalance, {
     staleTime: timeLeft(),
@@ -95,43 +67,30 @@ export const useMyBalance = () => {
 }
 
 // 각 종목당 주문 현황 api
-export const useOrderStatus = (stockId: number) => {
+export const useOrderStatus = (stockId: number, isHover: boolean) => {
   const fetchOrderStatus = () => {
-    const testAxios = axios.get(
-      `${process.env.REACT_APP_SERVER_BASE_URL}/investment/orderstatus/${stockId}`
-    )
-    return testAxios
+    return customAxios({}).get(`/investment/orderstatus/${stockId}`)
   }
 
-  // const fetchOrderStatus = () => {
-  //   return axios.get(`/api/investment/orderstatus/${stockId}`)
-  // }
-
   return useQuery(["orderStatus", stockId], fetchOrderStatus, {
-    cacheTime: 0,
+    staleTime: 1000 * 60,
     select,
     onError,
     refetchOnWindowFocus: false,
+    enabled: isHover,
   })
 }
 
 // 내 보유 주식 api
 export const useMyStocks = () => {
+  const navigate = useNavigate()
+
   const fetchMyStocks = () => {
-    const testAxios = axios.get(
-      `${process.env.REACT_APP_SERVER_BASE_URL}/investment/my/stock`,
-      {
-        headers: { "X-UserId": 1 },
-      }
+    return customAxios({ isAuthNeeded: true, navigate }).get(
+      "/investment/my/stock"
     )
-    return testAxios
   }
 
-  // const fetchMyStocks = () => {
-  //   return customAxios({isAuthNeeded: true, navigate: navigate}).get(
-  //     "/api/investment/my/stock"
-  //   )
-  // }
   return useQuery(["myStock"], fetchMyStocks, {
     staleTime: timeLeft(),
     select: myStockSelect,
@@ -143,15 +102,8 @@ export const useMyStocks = () => {
 // 전체 주식 종목 가져오기
 export const useWholeStocks = () => {
   const fetchWholeStocks = () => {
-    const testAxios = axios.get(
-      `${process.env.REACT_APP_SERVER_BASE_URL}/investment/wholestockinfo`
-    )
-    return testAxios
+    return customAxios({}).get(`/investment/wholestockinfo`)
   }
-
-  // const fetchWholeStocks = () => {
-  //   return axios.get(`/api/investment/wholestockinfo`)
-  // }
 
   return useQuery(["wholeStock"], fetchWholeStocks, {
     staleTime: timeLeft(),

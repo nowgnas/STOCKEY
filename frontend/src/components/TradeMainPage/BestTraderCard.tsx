@@ -3,10 +3,17 @@ import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOu
 import BestTraderCarousel from "./BestTraderCarousel"
 import Lottie from "lottie-react"
 import LottieData from "./fanfare.json"
+import { useNavigate } from "react-router-dom"
 
 const BestTraderCard = () => {
+  const navigate = useNavigate()
+
   return (
-    <CardWrapper>
+    <CardWrapper
+      onClick={() => {
+        navigate("/trade/ranking")
+      }}
+    >
       <CardHeader>
         이번 주 투자왕
         <ArrowCircleRightOutlinedIcon />

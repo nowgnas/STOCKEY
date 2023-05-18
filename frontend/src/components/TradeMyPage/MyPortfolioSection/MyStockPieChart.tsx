@@ -1,7 +1,10 @@
 import { PanelTitle } from "../../StockDetailPage/SubPanel/KeywordPanel/KeywordPanel"
 import ChartWrapper from "../../common/Chart/ChartWrapper"
+import { useMyStockList } from "../../../hooks/useMyStockList"
 
 const MyStockPieChart = () => {
+  const { data: myStocks } = useMyStockList()
+
   const chartOptions: Highcharts.Options = {
     chart: {
       backgroundColor: "white",
@@ -21,7 +24,6 @@ const MyStockPieChart = () => {
     },
     legend: {
       enabled: false,
-      // backgroundColor: "white",
     },
     tooltip: {
       useHTML: true,
@@ -58,13 +60,10 @@ const MyStockPieChart = () => {
         type: "pie",
         innerSize: "30%",
         keys: ["name", "y"],
-        data: [
-          ["네이버", 150000],
-          ["신한지주", 110000],
-          ["카카오", 78000],
-          ["삼성전자", 59000],
-          ["포스코건설", 45000],
-        ],
+        data: myStocks?.map((stock) => [
+          stock.stockName,
+          stock.count * stock.curStockPrice,
+        ]),
       },
     ],
   }

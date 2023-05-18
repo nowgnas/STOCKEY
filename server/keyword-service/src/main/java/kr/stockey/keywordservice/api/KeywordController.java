@@ -182,10 +182,23 @@ public class KeywordController {
 
     @GetMapping("/client/correlation/{keywordId}")
     public ResponseEntity<List<KeywordStatisticDto>> getCountDate(@PathVariable Long keywordId,
-                                                            @RequestParam LocalDate startDate,
-                                                            @RequestParam LocalDate endDate) {
+                                                                  @RequestParam LocalDate startDate,
+                                                                  @RequestParam LocalDate endDate) {
         List<KeywordStatisticDto> countDate = keywordService.getCountDate(keywordId, startDate, endDate);
         return new ResponseEntity<>(countDate, HttpStatus.OK);
+    }
+
+    @GetMapping("/v2/{keywordsId}")
+    public ResponseEntity<KeywordDetailResponse> getKeywordDetailV2(@Valid @NotNull @Min(value = -1) @PathVariable Long keywordsId) {
+        KeywordDto keywordDto = keywordService.getKeywordDetail(keywordsId);
+        KeywordDetailResponse keywordDetailResponse = keywordDtoMapper.toKeywordDetailResponse(keywordDto);
+        return new ResponseEntity<>(keywordDetailResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/v2/{keywordsId}/frequency")
+    public ResponseEntity<List<KeywordStatisticDto>> getKeywordFreqV2(@Valid @NotNull @Min(value = -1) @PathVariable Long keywordsId) {
+        List<KeywordStatisticDto> keywordFreq = keywordService.getKeywordFreq(keywordsId);
+        return new ResponseEntity<>(keywordFreq, HttpStatus.OK);
     }
 
     /* --------------  다른 서비스에서 호출하는 메소드 [end]  ----------------  */

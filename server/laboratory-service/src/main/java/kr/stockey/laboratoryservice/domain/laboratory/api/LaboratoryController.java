@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import kr.stockey.laboratoryservice.domain.keyword.dto.KeywordSearchDto;
+import kr.stockey.laboratoryservice.domain.laboratory.api.response.RegressionResponse;
 import kr.stockey.laboratoryservice.domain.laboratory.dto.ResponseDto;
 import kr.stockey.laboratoryservice.domain.laboratory.service.LaboratoryService;
 import kr.stockey.laboratoryservice.domain.stock.dto.StockSearchDto;
@@ -11,14 +12,32 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class LaboratoryController {
     private final LaboratoryService laboratoryService;
+
+    @GetMapping("data/graph")
+    public ResponseEntity<ResponseDto> getGraphData(
+            @RequestParam("stockid") Long stock,
+            @RequestParam("id1") Long id1,
+            @RequestParam("id2") Long id2,
+            @RequestParam("id3") Long id3
+    ) {
+        RegressionResponse graphData = laboratoryService.getGraphData(stock, id1, id2, id3);
+
+        return ResponseEntity.ok(
+                ResponseDto.builder()
+                        .data(graphData)
+                        .build()
+        );
+    }
 
     /**
      * 전체 주식 종목 조회

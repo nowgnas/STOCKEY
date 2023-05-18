@@ -12,18 +12,13 @@ import PeekedStockCarousel from "./PeekedStockCarousel"
 export interface RankingProps {
   rank: number
   name: string
-  account: number
+  asset: number
 }
 
-const RankingItem = ({ rank, name, account }: RankingProps) => {
+const RankingItem = ({ rank, name, asset }: RankingProps) => {
   const [isHovered, setIsHovered] = useState(false)
   const [isPeeking, setIsPeeking] = useState(false)
-  const config = genConfig({
-    bgColor:
-      rank <= 3
-        ? `var(--custom-${["pink", "orange", "purple"][rank - 1]}-2)`
-        : undefined,
-  })
+  const config = genConfig(name)
 
   return (
     <Grid item display="flex" flexDirection="column" rowGap={2} xs={12}>
@@ -35,13 +30,13 @@ const RankingItem = ({ rank, name, account }: RankingProps) => {
           setIsHovered(false)
           setIsPeeking(false)
         }}
-        rank={rank}
+        rank={asset > 15000000 ? rank : 4}
       >
         <div>
           <span>{rank}</span>
           <div style={{ position: "relative" }}>
             {/* 1 ~ 3등 프로필 이미지에 효과 주기 */}
-            {rank <= 3 && (
+            {rank <= 3 && asset > 15000000 && (
               <Lottie
                 loop={true}
                 autoplay={true}
@@ -83,7 +78,7 @@ const RankingItem = ({ rank, name, account }: RankingProps) => {
                 src="https://img.icons8.com/parakeet/48/money-bag.png"
                 alt="money-bag"
               />
-              <span>{account.toLocaleString()}</span>
+              <span>{asset.toLocaleString()}</span>
             </div>
           }
         />

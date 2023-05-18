@@ -1,7 +1,8 @@
 import customAxios from "../utils/customAxios"
 import { useQuery } from "react-query"
+import { useNavigate } from "react-router-dom"
 
-const axios = customAxios()
+const axios = customAxios({})
 
 const fetchUserInfo = ({ queryKey }: { queryKey: string[] }) => {
   const code = queryKey[1]
@@ -14,10 +15,16 @@ const fetchUserInfo = ({ queryKey }: { queryKey: string[] }) => {
 }
 
 export const useUserInfo = (userId: string) => {
+  const navigate = useNavigate()
   return useQuery(["user", userId], fetchUserInfo, {
     staleTime: 10000,
     select,
-    onError,
+    onSuccess,
+    onError: (err) => {
+      console.warn("onError >> ", err)
+      window.alert("로그인 오류 발생")
+      navigate("/user/login", { replace: true })
+    },
     refetchOnWindowFocus: false,
     retry: false,
   })
@@ -27,7 +34,6 @@ const select = (response: any) => {
   console.log("useUserInfo야", response)
   return response
 }
-
-const onError = (err: any) => {
-  console.warn("onError >> ", err)
+const onSuccess = (response: any) => {
+  sessionStorage.setItem("accessToken", response.data.data.accessToken)
 }

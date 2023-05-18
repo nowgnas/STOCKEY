@@ -5,8 +5,14 @@ import RankingItem from "./RankingItem"
 import { PanelTitle } from "../StockDetailPage/SubPanel/KeywordPanel/KeywordPanel"
 import { triggerScroll } from "../common/Functions/triggerScroll"
 import { useEffect } from "react"
+import { useTraderRank } from "../../hooks/useTraderRank"
+import { nicknameState } from "../../stores/atoms"
+import { useRecoilValue } from "recoil"
 
 const TraderRankingList = () => {
+  const { data: rankData } = useTraderRank("깐풍쿠키")
+  const myNickname = useRecoilValue(nicknameState)
+
   // 랭킹 리스트로 스크롤 이동
   useEffect(() => {
     triggerScroll("ranking-list")
@@ -14,21 +20,31 @@ const TraderRankingList = () => {
 
   return (
     <RankingSection container rowSpacing={2} id="ranking-list">
-      <PanelTitle>이번 주 누적 랭킹 🔥</PanelTitle>
-      <StickyGrid
-        item
-        xs={12}
-        children={<MyRankingItem rank={4} name="하은하은" account={367900} />}
-      />
+      <PanelTitle style={{ marginBottom: "36px" }}>
+        이번 주 누적 랭킹 🔥
+      </PanelTitle>
+
+      {rankData?.myRank && rankData?.myRank > -1 && (
+        <StickyGrid
+          item
+          xs={12}
+          children={<MyRankingItem name={myNickname} rank={rankData?.myRank} />}
+        />
+      )}
       <Grid container xs={12} rowSpacing={3}>
-        {Array.from({ length: 100 }).map((_, index) => (
-          <RankingItem
-            key={index}
-            rank={index + 1}
-            name="경희경희"
-            account={367900}
-          />
-        ))}
+        {rankData?.traderRankList.length !== 0 &&
+          rankData?.traderRankList.map((trader) =>
+            trader.nickName === myNickname ? (
+              <MyRankingItem name={myNickname} rank={rankData?.myRank} />
+            ) : (
+              <RankingItem
+                key={`ranking-${trader.nickName}`}
+                rank={trader.ranking}
+                name={trader.nickName}
+                asset={trader.totalAsset}
+              />
+            )
+          )}
       </Grid>
     </RankingSection>
   )

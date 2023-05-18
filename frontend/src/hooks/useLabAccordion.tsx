@@ -91,42 +91,25 @@ export const useLabKeywordSearch = (searchValue: string | undefined) => {
   );
 };
 
-// graph data get
-export const useLabResultGraph = (
-  selectedStock: StockCardType | undefined = undefined,
-  selectedKeywordList: any[] | undefined = undefined,
-  isClicked: boolean | undefined = undefined
-) => {
-  return useQuery(
-    ["lab", "result", "graph"],
-    () =>
-      getLab("lab/result/graph-test", {
-        pathVariable: selectedStock?.name,
-      }),
-    {
-      refetchOnWindowFocus: false,
-      // click했을때만 실행
-      enabled: !!isClicked,
-    }
-  );
-};
 
-// 회귀분석 data get
-export const useLabResultRegression = (
-  selectedStock: StockCardType | undefined = undefined,
-  selectedKeywordList: any[] | undefined = undefined,
-  isClicked: boolean | undefined = undefined
+// result data get
+export const useLabResult = (
+  selectedStock: StockCardType | undefined,
+  selectedKeywordList: any[],
+  selectedPeriod: number,
+  isClicked: boolean
 ) => {
   return useQuery(
-    ["lab", "result", "regression"],
-    () =>
-      getLab("lab/result/regression-test", {
-        pathVariable: selectedStock?.name,
-      }),
-    {
+    ["lab", "result"],
+    () => getLab("lab/result/result-test", {
+      pathVariable: selectedStock?.name,
+    }),
+    { 
+      staleTime: 1000 * 60 * 60,
+      onError,
       refetchOnWindowFocus: false,
       // click했을때만 실행
-      enabled: !!isClicked,
+      enabled: !!isClicked
     }
-  );
-};
+  )
+}

@@ -1,13 +1,20 @@
-import { useRecoilValue } from "recoil";
-import { selectedLabStockState } from "../../stores/LaboratoryAtoms";
+import { StockCardType } from "../../stores/LaboratoryAtoms";
 import GraphSection from "./GraphSection";
 import PredictSection from "./PredictSection";
+import { LabGraphType, LabRegressionType } from "./LabType";
 import ZoomBtn from "./ZoomBtn";
 import styled from "styled-components";
 
-const ResultBoardOpen = () => {
-  const selectedStock = useRecoilValue(selectedLabStockState);
-  const stockName = `${selectedStock ? selectedStock.name : "종목"}`;
+interface Props {
+  stock: StockCardType | undefined
+  keywordList: any[]
+  graphData: LabGraphType[]
+  constant: number
+  regressionData: LabRegressionType[]
+}
+
+const ResultBoardOpen = ({stock, keywordList, graphData, constant, regressionData} : Props) => {
+  const stockName = `${stock ? stock.name : "종목"}`;
   const uni = stockName[stockName.length - 1].charCodeAt(0);
   const text =
     uni >= 44032 && uni <= 55203 && (uni - 44032) % 28 !== 0 ? "과" : "와";
@@ -26,15 +33,14 @@ const ResultBoardOpen = () => {
       </InfoWrapper>
 
       {/* graph */}
-      <GraphSection />
+      <GraphSection keywordList={keywordList} graphData={graphData} regressionData={regressionData}/>
 
       <HeaderWrapper>키워드를 조정하여 주가를 예측해보세요!</HeaderWrapper>
 
       {/* predict */}
-      <PredictSection />
+      <PredictSection keywordList={keywordList} graphData={graphData} constant={constant} regressionData={regressionData}/>
 
       {/* zoom btn */}
-
       <ZoomBtn />
 
     </BoardWrapper>

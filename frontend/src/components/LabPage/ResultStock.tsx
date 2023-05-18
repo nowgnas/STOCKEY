@@ -1,18 +1,22 @@
 import { useMemo } from "react";
-import { Regression } from "./SampleItems";
-import { GraphItemSixMonth } from "./SampleItems";
-import { changeType } from "./PredictKeywordCard";
+// import { Regression } from "./SampleItems";
+// import { GraphItemSixMonth } from "./SampleItems";
+import { LabGraphType, LabRegressionType } from "./LabType";
+import { ChangeType } from "./LabType";
 import styled from "styled-components";
 
 interface Props {
   sliderList: { keyword: string; cnt: number }[];
+  graphData: LabGraphType[];
+  constant: number;
+  regressionData: LabRegressionType[];
   resultCardState: "big" | "small";
 }
 
-const ResultStock = ({ sliderList, resultCardState }: Props) => {
+const ResultStock = ({ sliderList, graphData, constant, regressionData, resultCardState }: Props) => {
   // 결과 계산
-  let result = Regression.constant;
-  Regression.coefficients.map(({ keyword, coefficient }) => {
+  let result = constant;
+  regressionData.map(({ keyword, coefficient }) => {
     sliderList.forEach((item) => {
       if (item.keyword === keyword) {
         result += coefficient * item.cnt;
@@ -24,15 +28,19 @@ const ResultStock = ({ sliderList, resultCardState }: Props) => {
   // 등락 계산
   // query에서 graph 마지막 주가 가져오기
   const baseStock: number = useMemo(() => {
-    const scatterList = GraphItemSixMonth[0].scatter;
-    return scatterList[scatterList.length - 1][1];
+    if (graphData.length > 0) {
+      const scatterList = graphData[0].scatter;
+      return scatterList[scatterList.length - 1][1];
+    } else {
+      return 0;
+    }
   }, []);
   // console.log('base: ', baseStock);
 
 
-  const changeAmount = result - baseStock;
-  const changePercent = changeAmount / baseStock;
-  const changeState: changeType =
+  const changeAmount = baseStock > 0 ? result - baseStock : 0;
+  const changePercent = baseStock > 0 ? changeAmount / baseStock : 0;
+  const changeState: ChangeType =
     changeAmount === 0
       ? "noChange"
       : changeAmount > 0
@@ -94,7 +102,7 @@ const Result = styled.span`
   font-size: 2.6rem;
 `
 
-const ResultStateWrapper = styled.div<{ changeState: changeType }>`
+const ResultStateWrapper = styled.div<{ changeState: ChangeType }>`
   font-size: 1.5rem;
   color: ${(props) =>
     props.changeState === "increase"

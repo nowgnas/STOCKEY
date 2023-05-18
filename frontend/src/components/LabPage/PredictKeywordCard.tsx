@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { GraphItemSixMonth } from "./SampleItems";
+import { ChangeType } from "./LabType";
 import styled from "styled-components";
 
 interface Props {
@@ -7,32 +8,19 @@ interface Props {
     keyword: string;
     cnt: number;
   };
+  baseCnt: number;
 }
 
-export type changeType = "increase" | "decrease" | "noChange";
-
-const PredictKeywordCard = ({ sliderItem }: Props) => {
-  
-  // query에서 graph 마지막 keyword 빈도 가져오기
-  const baseCnt: number = useMemo(() => {
-    // console.log('이거 계산 다시?')
-    let baseCnt = 0;
-    GraphItemSixMonth.forEach(({ keyword, scatter }) => {
-      if (keyword === sliderItem.keyword) {
-        baseCnt = Math.round(scatter[scatter.length - 1][0]);
-        return false;
-      }
-    });
-    return baseCnt;
-  }, []);
-
-  // console.log('여기 다시?', sliderItem.keyword)
-
+const PredictKeywordCard = ({ sliderItem, baseCnt }: Props) => {
   const changePercent: number = useMemo(() => {
-    return (sliderItem.cnt - baseCnt) / baseCnt;
+    if (baseCnt > 0 ) {
+      return (sliderItem.cnt - baseCnt) / baseCnt;
+    } else {
+      return 0;
+    }
   }, [sliderItem.cnt]);
 
-  const changeState: changeType = useMemo(() => {
+  const changeState: ChangeType = useMemo(() => {
     if (changePercent === 0) {
       return "noChange";
     } else if (changePercent > 0) {
@@ -88,6 +76,7 @@ const CardWrapper = styled.div`
 const HeaderWrapper = styled.div`
   width: 96%;
   word-break: break-all;
+  text-align: center;
 `;
 
 const KeywordSection = styled.span`
@@ -106,7 +95,7 @@ const IconImg = styled.img`
   height: 100%;
 `;
 
-const PercentWrapper = styled.div<{ changeState: changeType }>`
+const PercentWrapper = styled.div<{ changeState: ChangeType }>`
   font-weight: bold;
   color: ${(props) =>
     props.changeState === "increase"

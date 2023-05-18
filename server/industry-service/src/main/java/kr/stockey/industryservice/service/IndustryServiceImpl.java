@@ -11,6 +11,7 @@ import kr.stockey.industryservice.dto.IndustrySumDto;
 import kr.stockey.industryservice.dto.StockBriefDto;
 import kr.stockey.industryservice.dto.core.FavoriteDto;
 import kr.stockey.industryservice.dto.core.IndustryDto;
+import kr.stockey.industryservice.dto.core.MemberDto;
 import kr.stockey.industryservice.dto.core.StockDto;
 import kr.stockey.industryservice.entity.Industry;
 import kr.stockey.industryservice.exception.favorite.FavoriteException;
@@ -96,8 +97,8 @@ public class IndustryServiceImpl implements IndustryService {
     }
 
     // 관심  산업 리스트 출력
-    public List<IndustryDto> getMyIndustries() {
-        List<FavoriteDto> myFavoriteIndustry = favoriteClient.getMyFavoriteIndustry();
+    public List<IndustryDto> getMyIndustries(MemberDto memberDto) {
+        List<FavoriteDto> myFavoriteIndustry = favoriteClient.getMyFavoriteIndustry(memberDto.getId());
         List<Industry> industryList = new ArrayList<>();
         myFavoriteIndustry.forEach(o -> industryList.add(getIndustry(o.getIndustryId())));
         return industryMapper.toDto(industryList);
@@ -105,26 +106,26 @@ public class IndustryServiceImpl implements IndustryService {
 
     // 관심 산업 등록
     @Transactional
-    public void addFavorite(Long id) {
+    public void addFavorite(MemberDto memberDto,Long id) {
         getIndustry(id);
-        boolean isFavorite = checkFavorite(id);
+        boolean isFavorite = checkFavorite(memberDto.getId(),id);
         //이미 관심등록했다면
         if (isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.ALREADY_EXIST);
         }
-        favoriteClient.createFavoriteIndustry(id);
+        favoriteClient.createFavoriteIndustry(memberDto.getId(),id);
 
     }
 
     @Transactional
-    public void deleteFavorite(Long id) {
+    public void deleteFavorite(MemberDto memberDto,Long id) {
         getIndustry(id);
-        boolean isFavorite = checkFavorite(id);
+        boolean isFavorite = checkFavorite(memberDto.getId(),id);
         // 관심 등록하지 않았다면
         if (!isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.NOT_FOUND);
         }
-        favoriteClient.deleteFavoriteIndustry(id);
+        favoriteClient.deleteFavoriteIndustry(memberDto.getId(),id);
     }
 
     public List<GetIndustryMarketCapResponse> getMarketCapList(Long id) {
@@ -161,8 +162,8 @@ public class IndustryServiceImpl implements IndustryService {
     }
 
     // 관심 산업 여부 체크
-    public boolean checkFavorite(Long industryId) {
-        return favoriteClient.checkFavoriteIndustry(industryId);
+    public boolean checkFavorite(Long memberId,Long industryId) {
+        return favoriteClient.checkFavoriteIndustry(memberId,industryId);
     }
 
 

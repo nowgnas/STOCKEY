@@ -3,9 +3,11 @@ package kr.stockey.industryservice.api;
 import kr.stockey.industryservice.api.response.GetIndustryMarketCapResponse;
 import kr.stockey.industryservice.api.response.GetIndustryResponse;
 import kr.stockey.industryservice.api.response.IndustryCapitalDto;
+import kr.stockey.industryservice.client.MemberClient;
 import kr.stockey.industryservice.dto.GetStockTodayResponse;
 import kr.stockey.industryservice.dto.StockBriefDto;
 import kr.stockey.industryservice.dto.core.IndustryDto;
+import kr.stockey.industryservice.dto.core.MemberDto;
 import kr.stockey.industryservice.dto.core.ResponseDto;
 import kr.stockey.industryservice.mapper.IndustryDtoMapper;
 import kr.stockey.industryservice.service.IndustryService;
@@ -18,7 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -30,6 +35,7 @@ import java.util.List;
 public class IndustryController {
     private final IndustryService industryService;
     private final IndustryDtoMapper dtoMapper;
+    private final MemberClient memberClient;
 
     // 산업 상세 설명
 
@@ -121,7 +127,8 @@ public class IndustryController {
     )
     @GetMapping("stocklist/my")
     public ResponseEntity<ResponseDto> getMyIndustries() {
-        List<IndustryDto> myIndustries = industryService.getMyIndustries();
+        MemberDto memberDto = getMember();
+        List<IndustryDto> myIndustries = industryService.getMyIndustries(memberDto);
         List<GetIndustryResponse> getIndustryResponses = dtoMapper.toGetResponse(myIndustries);
         return new ResponseEntity<>(new ResponseDto("OK", getIndustryResponses), HttpStatus.OK);
 
@@ -138,7 +145,8 @@ public class IndustryController {
     )
     @GetMapping("stocklist/my/{id}")
     public ResponseEntity<ResponseDto> checkFavorite(@PathVariable Long id) {
-        boolean result = industryService.checkFavorite(id);
+        MemberDto memberDto = getMember();
+        boolean result = industryService.checkFavorite(memberDto.getId(),id);
         return new ResponseEntity<>(new ResponseDto("OK", result), HttpStatus.OK);
     }
 
@@ -153,7 +161,8 @@ public class IndustryController {
     )
     @PostMapping("stocklist/my/{id}")
     public ResponseEntity<ResponseDto> addFavorite(@PathVariable Long id) {
-        industryService.addFavorite(id);
+        MemberDto memberDto = getMember();
+        industryService.addFavorite(memberDto,id);
         return new ResponseEntity<>(new ResponseDto("CREATED", null), HttpStatus.CREATED);
     }
 
@@ -168,7 +177,8 @@ public class IndustryController {
     )
     @DeleteMapping("stocklist/my/{id}")
     public ResponseEntity<ResponseDto> deleteFavorite(@PathVariable Long id) {
-        industryService.deleteFavorite(id);
+        MemberDto memberDto = getMember();
+        industryService.deleteFavorite(memberDto,id);
         return new ResponseEntity<>(new ResponseDto("DELETED", null), HttpStatus.OK);
     }
 
@@ -185,6 +195,12 @@ public class IndustryController {
     public ResponseEntity<ResponseDto> getMarketCapByDate(@PathVariable Long id) {
         List<GetIndustryMarketCapResponse> marketCapList = industryService.getMarketCapList(id);
         return new ResponseEntity<>(new ResponseDto("OK", marketCapList), HttpStatus.OK);
+    }
+
+    private MemberDto getMember() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String memberId = request.getHeader("X-UserId");
+        return memberClient.getMember(memberId);
     }
 
     /* --------------  다른 서비스에서 호출하는 메소드 [start] ----------------  */

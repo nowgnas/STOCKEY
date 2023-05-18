@@ -7,6 +7,7 @@ import kr.stockey.investmentservice.dto.*;
 import kr.stockey.investmentservice.mapper.InvestmentDtoMapper;
 import kr.stockey.investmentservice.service.InvestmentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/investment")
 @RequiredArgsConstructor
+@Slf4j
 public class InvestmentController {
 
     private final InvestmentService investmentService;
@@ -127,6 +129,7 @@ public class InvestmentController {
         HttpServletRequest request
                 = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String userId = request.getHeader("X-UserId");
+        log.debug(userId);
         return Long.valueOf(userId);
     }
 

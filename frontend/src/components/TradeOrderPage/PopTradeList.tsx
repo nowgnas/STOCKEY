@@ -5,11 +5,13 @@ import { nextTradeTimeState } from "../../stores/TradeAtoms"
 import StockCardMini from "../LabPage/StockCardMini"
 import { useNavigate } from "react-router-dom"
 import Carousel from "nuka-carousel"
+import { usePopList } from "../../hooks/useTradeForm"
 
 const PopTradeList = () => {
   const navigate = useNavigate()
   const nextHour = useRecoilValue(nextTradeTimeState).format("H")
 
+  const { data: popList } = usePopList()
   const goToDetail = (id: number) => {
     navigate(`/stock/${id}`)
   }
@@ -26,17 +28,25 @@ const PopTradeList = () => {
           cellAlign="center"
           slidesToShow={7.5}
         >
-          {DUMMYDATA.map((item, index) => {
-            return (
-              <Wrapper
-                key={`${index}-popTrade`}
-                id="slide"
-                onClick={() => goToDetail(item.id)}
-              >
-                <StockCardMini item={item} />
-              </Wrapper>
+          {popList && popList.length > 0 ? (
+            popList.map(
+              (item: { stockId: number; stockName: string }, index: number) => {
+                return (
+                  <Wrapper
+                    key={`${index}-popTrade`}
+                    id="slide"
+                    onClick={() => goToDetail(item.stockId)}
+                  >
+                    <StockCardMini
+                      item={{ id: item.stockId, name: item.stockName }}
+                    />
+                  </Wrapper>
+                )
+              }
             )
-          })}
+          ) : (
+            <NoPopLIstText>현재 인기 종목이 없습니다.</NoPopLIstText>
+          )}
         </Carousel>
       </CarouselContainer>
     </>
@@ -79,15 +89,4 @@ const Header = styled.p`
   margin: 0;
 `
 
-const DUMMYDATA = [
-  { id: 1, name: "카카오" },
-  { id: 2, name: "naver" },
-  { id: 3, name: "SKC" },
-  { id: 4, name: "삼성전자" },
-  { id: 5, name: "기아" },
-  { id: 6, name: "현대차" },
-  { id: 7, name: "LG전자" },
-  { id: 8, name: "LG에너지솔루션" },
-  { id: 9, name: "KB금융" },
-  { id: 10, name: "기업은행" },
-]
+const NoPopLIstText = styled.p``

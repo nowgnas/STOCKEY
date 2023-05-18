@@ -11,14 +11,14 @@ import java.util.List;
 @Getter
 @Setter
 public class RegressionResponse {
-    private List<GraphDataDto> graphDataDto;
+    private List<GraphDataDto> graphData;
     private Double constant;
-    private List<RegressionDto> regressionDto;
+    private List<RegressionDto> regression;
 
     @Builder
-    public RegressionResponse(List<GraphDataDto> graphDataDto, Double constant, List<RegressionDto> regressionDto) {
-        this.graphDataDto = graphDataDto;
+    public RegressionResponse(List<GraphDataDto> graphData, Double constant, List<RegressionDto> regression) {
+        this.graphData = graphData;
         this.constant = constant;
-        this.regressionDto = regressionDto;
+        this.regression = regression;
     }
 }

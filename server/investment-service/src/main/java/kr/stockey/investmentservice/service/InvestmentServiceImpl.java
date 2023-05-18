@@ -675,14 +675,14 @@ public class InvestmentServiceImpl implements InvestmentService{
 
     private List<Order> filterOrders(List<Order> rawOrderList) {
         LocalDateTime currentDateTime = LocalDateTime.now();
-        LocalDateTime oneHourAgo = currentDateTime.minusHours(0);
+        LocalDateTime oneHourAgo = currentDateTime.minusHours(1);
         LocalDateTime desiredStartTime = LocalDateTime.of(oneHourAgo.getYear(), oneHourAgo.getMonth(), oneHourAgo.getDayOfMonth(), oneHourAgo.getHour(), 0, 0);
         LocalDateTime desiredEndTime = LocalDateTime.of(oneHourAgo.getYear(), oneHourAgo.getMonth(), oneHourAgo.getDayOfMonth(), currentDateTime.getHour(), 0, 0);
 
         List<Order> filteredOrderList = new ArrayList<>();
         for (Order order : rawOrderList) {
             LocalDateTime orderTime = order.getOrderTime();
-            if (orderTime.isAfter(desiredStartTime) && orderTime.isBefore(desiredEndTime)) {
+            if (true || orderTime.isAfter(desiredStartTime) && orderTime.isBefore(desiredEndTime)) {
                 filteredOrderList.add(order);
             }
         }

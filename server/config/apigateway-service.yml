@@ -40,6 +40,13 @@ spring:
             - Path=/auth/logout
           filters:
             - AuthorizationHeaderFilter
+            
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/auth/refresh
+          filters:
+            - RefreshTokenFilter
 
         - id: member-service
           uri: lb://member-service
@@ -67,12 +74,6 @@ spring:
           filters:
             - MicroServiceFilter
 
-        - id: member-service
-          uri: lb://member-service
-          predicates:
-            - Path=/member/auth/refresh
-          filters:
-            - RefreshTokenFilter
             
 
         - id: member-service

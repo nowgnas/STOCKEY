@@ -1,5 +1,6 @@
 package kr.stockey.investmentservice.service;
 
+import kr.stockey.investmentservice.api.response.GetPopularStocksResponse;
 import kr.stockey.investmentservice.api.response.WholeStockInfoResponse;
 import kr.stockey.investmentservice.dto.*;
 
@@ -30,4 +31,5 @@ public interface InvestmentService {
 
     List<WholeStockInfoResponse> getWholeStockInfo();
 
+    List<GetPopularStocksResponse> getPopularStocks(Long topN);
 }

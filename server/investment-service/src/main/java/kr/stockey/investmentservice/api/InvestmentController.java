@@ -33,7 +33,7 @@ public class InvestmentController {
     @PostMapping("/order")
     public ResponseEntity<ResponseDto> takeStockOrder(@RequestBody List<OrderRequest> orderRequests) {
         List<OrderListDto> orderListDto = investmentDtoMapper.toOrderListDto(orderRequests);
-        OrderProducerDto orderProducerDto = new OrderProducerDto(getMemberId(), orderListDto, LocalDateTime.now());
+        OrderProducerDto orderProducerDto = new OrderProducerDto(getMemberId(), orderListDto, LocalDateTime.now().minusHours(1));
         investmentService.takeStockOrder(orderProducerDto);
         return new ResponseEntity<>(new ResponseDto("주문 제출 완료!", null), HttpStatus.OK);
     }

@@ -14,9 +14,10 @@ const LoginRedirectHandler = () => {
     isSuccess,
     isError,
   } = useUserInfo(KAKAO_CODE ? KAKAO_CODE : "")
+
   console.log(userData)
   useEffect(() => {
-    console.log("inHere")
+    console.log("inHere", userData)
     if (userData?.status === 201) {
       navigate("/user/signup", {
         replace: true,

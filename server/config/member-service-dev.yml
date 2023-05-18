@@ -1,0 +1,10 @@
+spring:
+  redis:
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        min-idle: 2
+    port: 6379
+    host: "redis-container"
+    password: "{cipher}69dcaaa2ad3b7c6a777932a2a0b8016ae34acc8ef7eb171fbe738462a3fb133e"

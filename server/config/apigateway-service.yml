@@ -10,6 +10,7 @@ spring:
             allowedOrigins:
               - http://localhost:3000
               - http://127.0.0.1:3000
+              - http://localhost:8000
               - https://stockey.kr
             allow-credentials: true
             allowedHeaders:
@@ -39,6 +40,13 @@ spring:
             - Path=/auth/logout
           filters:
             - AuthorizationHeaderFilter
+            
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/auth/refresh
+          filters:
+            - RefreshTokenFilter
 
         - id: member-service
           uri: lb://member-service
@@ -65,6 +73,8 @@ spring:
             - Path=/member/client/**
           filters:
             - MicroServiceFilter
+
+            
 
         - id: member-service
           uri: lb://member-service

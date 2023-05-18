@@ -1,11 +1,7 @@
 import { useQuery } from "react-query"
 import customAxios from "../utils/customAxios"
-import { useRecoilState } from "recoil"
-// import { accessTokenState } from "../stores/atoms"
 
 export const useMyStockList = () => {
-  // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
-
   const fetchMyStockList = () => {
     return customAxios({ isAuthNeeded: true }).get(`/investment/my/stock`)
   }
@@ -30,7 +26,7 @@ export interface MyStockType {
 
 const select = (response: any) => {
   console.log(response)
-  const selectedData: MyStockType[] = response.data
+  const selectedData: MyStockType[] = response.data.data
   console.log("selectedData >> ", selectedData)
   return selectedData
 }

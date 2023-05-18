@@ -144,8 +144,8 @@ public class StockServiceImpl implements StockService {
     }
 
     // 관심 종목 리스트 출력
-    public List<GetStockTodayResponse> getMyStocks(MemberDto memberdto) {
-        List<FavoriteDto> favorites = favoriteClient.getMyFavoriteStock();
+    public List<GetStockTodayResponse> getMyStocks(MemberDto memberDto) {
+        List<FavoriteDto> favorites = favoriteClient.getMyFavoriteStock(memberDto.getId());
         List<Stock> stockList = new ArrayList<>();
 
 
@@ -174,7 +174,7 @@ public class StockServiceImpl implements StockService {
 
     // 관심 여부 확인
     public boolean checkFavorite(Long userId, Long stockId) {
-        return favoriteClient.checkFavoriteStock(stockId);
+        return favoriteClient.checkFavoriteStock(userId,stockId);
     }
 
     // 관심 산업 등록
@@ -186,19 +186,19 @@ public class StockServiceImpl implements StockService {
         if (isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.ALREADY_EXIST);
         }
-        favoriteClient.createFavoriteStock(id);
+        favoriteClient.createFavoriteStock(memberDto.getId(),id);
     }
 
     @Transactional
-    public void deleteFavorite(MemberDto memberdto, Long id) {
+    public void deleteFavorite(MemberDto memberDto, Long id) {
 
         Stock stock = getStockEntity(id);
-        boolean isFavorite = checkFavorite(memberdto.getId(), id);
+        boolean isFavorite = checkFavorite(memberDto.getId(), id);
         // 관심 등록하지 않았다면
         if (!isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.NOT_FOUND);
         }
-        favoriteClient.deleteFavoriteStock(id);
+        favoriteClient.deleteFavoriteStock(memberDto.getId(),id);
     }
 
     public Double getCorrelation(Long id, GetCorrelationRequest getCorrelationRequest) {

@@ -1,7 +1,6 @@
 import {useRef, useMemo} from 'react';
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  KeywordCardType,
   keywordAccordionOpenState,
   selectedLabStockState,
   labKeywordSearchInput
@@ -9,28 +8,6 @@ import {
 import { useLabKeywordSearch } from "../../hooks/useLabAccordion";
 import AccordionLayout from "./AccordionLayout";
 
-const sampleItemStock: KeywordCardType[] = [
-  {
-    id: 1,
-    name: "keyword1",
-  },
-  {
-    id: 2,
-    name: "keyword2",
-  },
-  {
-    id: 3,
-    name: "keyword3",
-  },
-  {
-    id: 4,
-    name: "keyword4",
-  },
-  {
-    id: 5,
-    name: "keyword5",
-  },
-];
 
 const KeywordAccordion = () => {
   const [openState, setOpenState] = useRecoilState(keywordAccordionOpenState);
@@ -41,7 +18,7 @@ const KeywordAccordion = () => {
 
 
   // 분석 stock에 해당하는 keyword query
-  // 결과 6개 나옴 -> 무한스크롤 x
+  // 결과 6개 나옴 -> api 아직 x
 
 
   // 검색 keyword query
@@ -70,14 +47,15 @@ const KeywordAccordion = () => {
       hasNext.current = hasNextPageSearch;
       return keywordSearchItem
     } else {
+      return []
       // 2. 
-      if (selectedStock) {
-        // 2.1
-        return sampleItemStock
-      } else {
-        // 2.2
-        return []
-      }
+      // if (selectedStock) {
+      //   // 2.1
+      //   return data
+      // } else {
+      //   // 2.2
+      //   return []
+      // }
     }
   }
 

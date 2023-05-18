@@ -1,7 +1,8 @@
 export type LabGraphType = {
   keyword: string;
-  line: number[][];
-  scatter: number[][];
+  lastDate: {x: number, y: number};
+  line: {x: number, y: number}[];
+  scatter: {x: number, y: number}[];
 };
 
 export type LabRegressionType = {

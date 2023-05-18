@@ -4,10 +4,12 @@ import customAxios from "../utils/customAxios";
 import { useQuery, useInfiniteQuery } from "react-query";
 import { StockCardType } from "../stores/LaboratoryAtoms";
 
+// const axios = customAxios({});
 const axios = customAxios();
 
 type ParamsType = {
   pathVariable?: string | undefined;
+  requestParameter?: any[];
   pageParam?: number | undefined;
 };
 
@@ -21,6 +23,16 @@ const getLab = async (baseUrl: string, params?: ParamsType | undefined) => {
   // page param 있는 경우 추가
   if (params && params.pageParam) {
     url += `/${params.pageParam}`;
+  }
+  // request Param 있는 경우 추가
+  if (params && params.requestParameter) {
+    params.requestParameter.forEach((param, index) => {
+      if (index === 0) {
+        url += `?${param[0]}=${param[1]}`
+      } else {
+        url += `&${param[0]}=${param[1]}`
+      }
+    })
   }
   console.log(url, "get!");
   const response = await axios.get(url);
@@ -96,13 +108,22 @@ export const useLabKeywordSearch = (searchValue: string | undefined) => {
 export const useLabResult = (
   selectedStock: StockCardType | undefined,
   selectedKeywordList: any[],
-  selectedPeriod: number,
+  // selectedPeriod: number,
   isClicked: boolean
 ) => {
+  const requestParameter: any[] = []
+  if (selectedStock) {
+    requestParameter.push(['stockid', selectedStock!.id])
+  }
+  if (selectedKeywordList) {
+    selectedKeywordList.forEach((item, index) => {
+      requestParameter.push([`id${index+1}`, item.id])
+    })
+  }
   return useQuery(
     ["lab", "result"],
-    () => getLab("lab/result/result-test", {
-      pathVariable: selectedStock?.name,
+    () => getLab("lab/data/graph", {
+      requestParameter: requestParameter
     }),
     { 
       staleTime: 1000 * 60 * 60,

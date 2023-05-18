@@ -35,10 +35,10 @@ const PredictResultCard = ({keywordList, graphData, constant, regressionData}: P
   // keyword에 맞는 default 값
   const getBaseCnt = (keyword: string) => {
     let baseCnt = 0;
-    if (graphData) {
+    if (graphData.length > 0) {
       graphData.forEach((item) => {
         if (item.keyword === keyword) {
-          baseCnt = Math.round(item.scatter[item.scatter.length - 1][0]);
+          baseCnt = Math.round(item.lastDate.x);
           return false;
         }
       });

@@ -23,7 +23,7 @@ const OpenBtn = ({ isClicked, setIsClicked, refetch }: Props) => {
   // stock 있고 keyword 있는 경우에 btn active
   const selectedStock = useRecoilValue(selectedLabStockState);
   const selectedKeywodrState = useRecoilValue(selectedLabKeywordListState);
-  const active = !!(selectedStock && selectedKeywodrState.length > 0);
+  const active = !!(selectedStock && selectedKeywodrState.length === 3);
 
   // 클릭하면 query 보내기
   const clickHandler = () => {

@@ -15,7 +15,7 @@ const GraphSection = ({keywordList, graphData, regressionData}: Props) => {
 
   // keyword에 맞는 graph data
   const getGraphItem = (keyword: string) => {
-    let graphItem = {keyword: keyword, line: [[0, 0]], scatter: [[0, 0]]};
+    let graphItem = {keyword: keyword, lastDate: {x: 0, y: 0}, line: [{x: 0, y: 0}], scatter: [{x: 0, y: 0}]};
     if (graphData) {
       graphData.forEach((item) => {
         if (keyword === item.keyword) {

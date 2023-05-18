@@ -29,13 +29,11 @@ const ResultStock = ({ sliderList, graphData, constant, regressionData, resultCa
   // query에서 graph 마지막 주가 가져오기
   const baseStock: number = useMemo(() => {
     if (graphData.length > 0) {
-      const scatterList = graphData[0].scatter;
-      return scatterList[scatterList.length - 1][1];
+      return graphData[0].lastDate.y;
     } else {
       return 0;
     }
   }, []);
-  // console.log('base: ', baseStock);
 
 
   const changeAmount = baseStock > 0 ? result - baseStock : 0;

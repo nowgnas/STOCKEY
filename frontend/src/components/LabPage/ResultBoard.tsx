@@ -4,7 +4,7 @@ import {
   resultBoardOpenState,
   selectedLabStockState,
   selectedLabKeywordListState,
-  selectedLabPeriodState,
+  // selectedLabPeriodState,
   selectedSliderList
 } from "../../stores/LaboratoryAtoms";
 import { useLabResult } from "../../hooks/useLabAccordion";
@@ -23,13 +23,13 @@ const ResultBoard = () => {
   // back에 담아 보낼 data
   const selectedStock = useRecoilValue(selectedLabStockState);
   const selectedKeywodList = useRecoilValue(selectedLabKeywordListState);
-  const selectedPeriod = useRecoilValue(selectedLabPeriodState);
+  // const selectedPeriod = useRecoilValue(selectedLabPeriodState);
 
   // result data query
   const { data, isLoading, refetch } = useLabResult(
     selectedStock,
     selectedKeywodList,
-    selectedPeriod,
+    // selectedPeriod,
     isClicked
   );
 
@@ -37,13 +37,14 @@ const ResultBoard = () => {
   const setSliderList = useSetRecoilState(selectedSliderList);
   useEffect(() => {
     if (data) {
-  //   const cntArr = GraphItemSixMonth.map((item) => {
-  //     return {
-  //       keyword: item.keyword,
-  //       cnt: Math.round(item.scatter[item.scatter.length - 1][0])
-  //     };
-  //   });
-  //   setSliderList(cntArr);
+      const cntArr = data.graphData.map((item: any) => {
+        return {
+          keyword: item.keyword,
+          cnt: Math.round(item.lastDate.x)
+        };
+      });
+      setSliderList(cntArr);
+      setOpenState(true);
     }
   }, [data]);
 

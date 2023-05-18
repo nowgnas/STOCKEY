@@ -1,6 +1,5 @@
 import { SetterOrUpdater } from "recoil";
 import Slider from "@mui/material/Slider";
-import { totalNewsCnt } from "./SampleItems";
 import styled from "styled-components";
 import { styled as emotionStyled } from "@mui/material/styles";
 
@@ -13,6 +12,8 @@ interface Props {
   setSliderList: SetterOrUpdater<any[]>;
 }
 
+// 전체 뉴스 수 (임시)
+const TOTAL_NEWS_CNT = 500;
 
 const PredictSlider = ({ item, index, setSliderList }: Props) => {
   // slier 변경하면 recoil data 변경
@@ -21,7 +22,7 @@ const PredictSlider = ({ item, index, setSliderList }: Props) => {
     setSliderList((prev) => {
       return prev.map((prevItem) => {
         return prevItem.keyword === item.keyword
-          ? { keyword: prevItem.keyword, cnt: e.target.value * totalNewsCnt / 100 }
+          ? { keyword: prevItem.keyword, cnt: e.target.value * TOTAL_NEWS_CNT / 100 }
           : prevItem;
       });
     });
@@ -33,7 +34,7 @@ const PredictSlider = ({ item, index, setSliderList }: Props) => {
       setSliderList((prev) => {
         return prev.map((prevItem) => {
           return prevItem.keyword === item.keyword
-            ? { keyword: prevItem.keyword, cnt: prevItem.cnt +  totalNewsCnt / 100}
+            ? { keyword: prevItem.keyword, cnt: prevItem.cnt +  TOTAL_NEWS_CNT / 100}
             : prevItem;
         });
       });
@@ -41,7 +42,7 @@ const PredictSlider = ({ item, index, setSliderList }: Props) => {
       setSliderList((prev) => {
         return prev.map((prevItem) => {
           return prevItem.keyword === item.keyword
-            ? { keyword: prevItem.keyword, cnt: prevItem.cnt - totalNewsCnt / 100 }
+            ? { keyword: prevItem.keyword, cnt: prevItem.cnt - TOTAL_NEWS_CNT / 100 }
             : prevItem;
         });
       });
@@ -49,7 +50,7 @@ const PredictSlider = ({ item, index, setSliderList }: Props) => {
   };
 
   // slider에서 취급하는 0-100 값은 (키워드 출연 뉴스 개수 / 전체 기사 개수) %
-  const sliderPercentage = parseFloat((item.cnt / totalNewsCnt * 100).toPrecision(2));
+  const sliderPercentage = parseFloat((item.cnt / TOTAL_NEWS_CNT * 100).toPrecision(2));
 
   return (
     <SliderSection>

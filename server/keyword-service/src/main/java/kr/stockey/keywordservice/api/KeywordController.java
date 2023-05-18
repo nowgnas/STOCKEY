@@ -8,10 +8,12 @@ import kr.stockey.keywordservice.api.request.GetTopNKeywordRequest;
 import kr.stockey.keywordservice.api.response.GetTopNKeywordResponse;
 import kr.stockey.keywordservice.api.response.KeywordDetailResponse;
 import kr.stockey.keywordservice.api.response.KeywordSearchResponse;
+import kr.stockey.keywordservice.client.MemberClient;
 import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
 import kr.stockey.keywordservice.dto.KeywordStatisticDto;
 import kr.stockey.keywordservice.dto.TopKeywordDTO;
 import kr.stockey.keywordservice.dto.core.KeywordDto;
+import kr.stockey.keywordservice.dto.core.MemberDto;
 import kr.stockey.keywordservice.dto.core.ResponseDto;
 import kr.stockey.keywordservice.mapper.KeywordDtoMapper;
 import kr.stockey.keywordservice.service.KeywordService;
@@ -19,7 +21,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -33,6 +38,7 @@ public class KeywordController {
 
     private final KeywordService keywordService;
     private final KeywordDtoMapper keywordDtoMapper;
+    private final MemberClient memberClient;
 
     @Operation(summary = "keyword detail", description = "키워드 상세정보")
     @ApiResponses(
@@ -73,7 +79,8 @@ public class KeywordController {
     )
     @GetMapping("/keywordlist/my")
     public ResponseEntity<ResponseDto> getMyKeywords() {
-        List<KeywordDto> myKeywords = keywordService.getMyKeywords();
+        MemberDto memberDto = getMember();
+        List<KeywordDto> myKeywords = keywordService.getMyKeywords(memberDto);
         return new ResponseEntity<>(new ResponseDto("관심 키워드 출력!",
                 keywordDtoMapper.toKeywordResponse(myKeywords)), HttpStatus.OK);
 
@@ -89,7 +96,8 @@ public class KeywordController {
     )
     @GetMapping("/keywordlist/my/{id}")
     public ResponseEntity<ResponseDto> checkFavorite(@PathVariable Long id) {
-        boolean result = keywordService.checkFavorite(id);
+        MemberDto memberDto = getMember();
+        boolean result = keywordService.checkFavorite(memberDto.getId(), id);
         return new ResponseEntity<>(new ResponseDto("관심 키워드 여부 체크!", result), HttpStatus.OK);
     }
 
@@ -105,7 +113,8 @@ public class KeywordController {
     )
     @PostMapping("/keywordlist/my/{id}")
     public ResponseEntity<ResponseDto> addFavorite(@PathVariable Long id) {
-        keywordService.addFavorite(id);
+        MemberDto memberDto = getMember();
+        keywordService.addFavorite(memberDto,id);
         return new ResponseEntity<>(new ResponseDto("관심 키워드 등록 성공!", null), HttpStatus.CREATED);
     }
 
@@ -121,12 +130,12 @@ public class KeywordController {
     )
     @DeleteMapping("/keywordlist/my/{id}")
     public ResponseEntity<ResponseDto> deleteFavorite(@PathVariable Long id) {
-        keywordService.deleteFavorite(id);
+        MemberDto memberDto = getMember();
+        keywordService.deleteFavorite(memberDto,id);
         return new ResponseEntity<>(new ResponseDto("DELETED", null), HttpStatus.OK);
     }
 
 
-    // TODO topNKeyword
     @Operation(summary = "TopN 키워드 리턴", description = "economy, industry, stock 가각에 대해 특정 기간의 TopN 키워드 리턴")
     @ApiResponses(
             value = {
@@ -169,6 +178,11 @@ public class KeywordController {
         List<KeywordDto> searchKeyword = keywordService.getSearchKeyword(keyword);
         List<KeywordSearchResponse> keywordSearchResponses = keywordDtoMapper.toKeywordSearchResponse(searchKeyword);
         return new ResponseEntity<>(new ResponseDto("OK", keywordSearchResponses), HttpStatus.OK);
+    }
+    private MemberDto getMember() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String memberId = request.getHeader("X-UserId");
+        return memberClient.getMember(memberId);
     }
 
     /* --------------  다른 서비스에서 호출하는 메소드 [start] ----------------  */

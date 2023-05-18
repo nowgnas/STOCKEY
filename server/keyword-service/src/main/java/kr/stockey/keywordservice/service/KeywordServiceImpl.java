@@ -11,6 +11,7 @@ import kr.stockey.keywordservice.dto.TopKeywordCountDto;
 import kr.stockey.keywordservice.dto.TopKeywordDTO;
 import kr.stockey.keywordservice.dto.core.FavoriteDto;
 import kr.stockey.keywordservice.dto.core.KeywordDto;
+import kr.stockey.keywordservice.dto.core.MemberDto;
 import kr.stockey.keywordservice.entity.Keyword;
 import kr.stockey.keywordservice.exception.favorite.FavoriteException;
 import kr.stockey.keywordservice.exception.favorite.FavoriteExceptionType;
@@ -66,9 +67,9 @@ public class KeywordServiceImpl implements KeywordService {
     }
 
     @Override
-    public List<KeywordDto> getMyKeywords() {
+    public List<KeywordDto> getMyKeywords(MemberDto memberDto) {
         // 내 관심 키워드들
-        List<FavoriteDto> myFavoriteKeyword = favoriteClient.getMyFavoriteKeyword();
+        List<FavoriteDto> myFavoriteKeyword = favoriteClient.getMyFavoriteKeyword(memberDto.getId());
         List<KeywordDto> keywordDtoList = new ArrayList<>();
 
         // 관심 키워드 ID -> 키워드 entity => dto
@@ -83,32 +84,32 @@ public class KeywordServiceImpl implements KeywordService {
     }
 
     @Override
-    public boolean checkFavorite(Long id) {
-        return favoriteClient.checkFavoriteKeyword(id);
+    public boolean checkFavorite(Long memberId,Long id) {
+        return favoriteClient.checkFavoriteKeyword(memberId,id);
     }
 
     @Override
     @Transactional
-    public void addFavorite(Long id) {
+    public void addFavorite(MemberDto memberDto,Long id) {
         Keyword keyword = keywordRepository.findById(id).orElseThrow(()
                 -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
         // 이미 관심 등록 했다면
-        if (checkFavorite(keyword.getId())) {
+        if (checkFavorite(memberDto.getId(),id)) {
             throw new FavoriteException(FavoriteExceptionType.ALREADY_EXIST);
         }
-        favoriteClient.createFavoriteKeyword(id);
+        favoriteClient.createFavoriteKeyword(memberDto.getId(),id);
     }
 
     @Override
-    public void deleteFavorite(Long id) {
+    public void deleteFavorite(MemberDto memberDto,Long id) {
         keywordRepository.findById(id).orElseThrow(()
                 -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
-        boolean isFavorite = checkFavorite(id);
+        boolean isFavorite = checkFavorite(memberDto.getId(),id);
         // 관심 등록하지 않았다면
         if (!isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.NOT_FOUND);
         }
-        favoriteClient.deleteFavorite(id);
+        favoriteClient.deleteFavoriteKeyword(memberDto.getId(),id);
     }
 
     @Override

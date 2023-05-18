@@ -84,7 +84,8 @@ public class InvestmentServiceImpl implements InvestmentService{
      * 매 02분마다 체결 진행
      */
 
-    @Scheduled(cron = "0 2 * * * *", zone = "Asia/Seoul")
+//    @Scheduled(cron = "0 2 * * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0/2 * * * *", zone = "Asia/Seoul")  // 0분부터 55분까지 2분 간격으로 실행 -> 개발용
     public void orderExecuteScheduler() {
         // 실행할 메소드 내용 작성
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
@@ -188,7 +189,7 @@ public class InvestmentServiceImpl implements InvestmentService{
                 .filter(traderRankDto -> traderRankDto.getNickName().equals(nickname))
                 .findFirst()
                 .map(TraderRankDto::getRanking)
-                .orElseThrow(() -> new InvestmentException(InvestmentExceptionType.NO_USER_RANK));
+                .orElse(-1L);
     }
 
     @Override

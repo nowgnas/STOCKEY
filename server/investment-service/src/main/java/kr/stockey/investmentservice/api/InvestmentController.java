@@ -1,6 +1,7 @@
 package kr.stockey.investmentservice.api;
 
 import kr.stockey.investmentservice.api.request.OrderRequest;
+import kr.stockey.investmentservice.api.response.GetPopularStocksResponse;
 import kr.stockey.investmentservice.api.response.TraderRankResponse;
 import kr.stockey.investmentservice.api.response.WholeStockInfoResponse;
 import kr.stockey.investmentservice.dto.*;
@@ -119,6 +120,15 @@ public class InvestmentController {
     public ResponseEntity<ResponseDto> getWholeStockInfo() {
         List<WholeStockInfoResponse> wholeStockInfo = investmentService.getWholeStockInfo();
         return new ResponseEntity<>(new ResponseDto("전체 주식 정보 제공 완료!", wholeStockInfo), HttpStatus.OK);
+    }
+
+    /*
+        현재 주문 시간대에 Top N 인기종목
+     */
+    @GetMapping("/popular/{topN}")
+    public ResponseEntity<ResponseDto> getPopularStocks(@PathVariable("topN") Long topN) {
+        List<GetPopularStocksResponse> getPopularStocksResponse = investmentService.getPopularStocks(topN);
+        return new ResponseEntity<>(new ResponseDto("현 시점 인기 종목 가져오기!", getPopularStocksResponse), HttpStatus.OK);
     }
 
     /*

@@ -1,5 +1,6 @@
 package kr.stockey.investmentservice.service;
 
+import kr.stockey.investmentservice.api.response.GetPopularStocksResponse;
 import kr.stockey.investmentservice.api.response.WholeStockInfoResponse;
 import kr.stockey.investmentservice.dto.*;
 import kr.stockey.investmentservice.entity.*;
@@ -202,6 +203,37 @@ public class InvestmentServiceImpl implements InvestmentService{
             responses.add(new WholeStockInfoResponse(stockId, stockName, stockPrice));
         }
         return responses;
+    }
+
+    @Override
+    public List<GetPopularStocksResponse> getPopularStocks(Long topN) {
+        Map<Long, Long> stockOrderCountMap = new HashMap<>();
+        // 1. 현재 레디스에 등록된 주문 모두 가져오기
+        List<Order> wholeCurOrders = (List<Order>) orderRedisRepository.findAll();
+        for (Order memberOrder : wholeCurOrders) {
+            List<OrderListDto> orders = memberOrder.getOrders();
+            for (OrderListDto order : orders) {
+                Long stockId = order.getStockId();
+                Long count = Long.valueOf(order.getCount());
+                if (stockOrderCountMap.containsKey(stockId)) {
+                    // If the stockId already exists, add the count to the existing value
+                    stockOrderCountMap.put(stockId, stockOrderCountMap.get(stockId) + count);
+                } else {
+                    // If the stockId does not exist, add a new entry with the count as value
+                    stockOrderCountMap.put(stockId, count);
+                }
+            }
+        }
+
+        List<Map.Entry<Long, Long>> sortedEntries = stockOrderCountMap.entrySet().stream()
+                .sorted(Map.Entry.<Long, Long>comparingByValue().reversed())
+                .limit(topN).toList();
+
+        List<GetPopularStocksResponse> res = new ArrayList<>();
+        for (Map.Entry<Long, Long> entry : sortedEntries) {
+            res.add(new GetPopularStocksResponse(entry.getKey(), stockIdToNameMap.get(entry.getKey())));
+        }
+        return res;
     }
 
     // 인자로 들어온 날짜가 속한 주의 날짜들 리턴 (월 ~ 일)

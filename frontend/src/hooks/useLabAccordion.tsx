@@ -58,6 +58,7 @@ export const useLabStockSearch = (searchValue: string | undefined) => {
   );
 };
 
+
 // keyword 검색 get
 export const useLabKeywordSearch = (searchValue: string | undefined) => {
   return useInfiniteQuery(
@@ -71,11 +72,6 @@ export const useLabKeywordSearch = (searchValue: string | undefined) => {
       staleTime: 1000 * 10,
       cacheTime: 1000 * 20,
       onError,
-      // select: (data) => ({
-      //   // 무한스크롤 위해 pages를 일차원 배열로 flat
-      //   pages: data.pages.flatMap((ele) => ele),
-      //   pageParams: data.pageParams,
-      // }),
 
       // searchValue 있을때만 실행
       enabled: !!searchValue,

@@ -1,4 +1,4 @@
-import {useRef} from 'react';
+import {useRef, useMemo} from 'react';
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   KeywordCardType,
@@ -45,6 +45,14 @@ const KeywordAccordion = () => {
 
   // 검색 keyword query
   const {data: keywordSearch, fetchNextPage: fetchhNextPageSearch, hasNextPage: hasNextPageSearch} = useLabKeywordSearch(searchInput.trim());
+  // 무한스크롤 위해 data.pages를 일차원으로 flat -> 추후 back 데이터랑 맞춰야함
+  const keywordSearchItem = useMemo(() => {
+    if (keywordSearch) {
+      return keywordSearch.pages.flatMap((ele) => ele);
+    } else {
+      return [];
+    }
+  }, [keywordSearch])
 
   // data 흐름
   // 1. 검색어 있을 경우
@@ -55,18 +63,11 @@ const KeywordAccordion = () => {
   // 2.2 stock 선택안한 경우 > 빈 배열
 
   const keywordItem = () => {
-    if (searchInput.trim().length > 0 ) {
+    if (searchInput.trim().length > 0) {
       // 1.
-      if (keywordSearch) {
-        // 1.1
-        fetchNext.current = fetchhNextPageSearch;
-        hasNext.current = hasNextPageSearch;
-        // 무한스크롤 위해 data.pages를 일차원으로 flat -> 추후 back 데이터랑 맞춰야함
-        return keywordSearch.pages.flatMap((ele) => ele)
-      } else {
-        // 1.2
-        return []
-      }
+      fetchNext.current = fetchhNextPageSearch;
+      hasNext.current = hasNextPageSearch;
+      return keywordSearchItem
     } else {
       // 2. 
       if (selectedStock) {

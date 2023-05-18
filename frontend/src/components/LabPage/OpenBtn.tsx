@@ -1,58 +1,60 @@
 // 결과보기 btn
+import { Dispatch, SetStateAction } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   selectedLabStockState,
   selectedLabKeywordListState,
   resultBoardSizeState,
-  resultBoardOpenState
 } from "../../stores/LaboratoryAtoms";
+
 import { triggerScroll } from "../common/Functions/triggerScroll";
 import styled from "styled-components";
 
-const OpenBtn = () => {
+interface Props {
+  isClicked: boolean;
+  setIsClicked: Dispatch<SetStateAction<boolean>>;
+  refetch: () => void;
+}
+
+const OpenBtn = ({ isClicked, setIsClicked, refetch }: Props) => {
+  // click 했을때 board size big으로 변경
+  const setResultBoardSize = useSetRecoilState(resultBoardSizeState);
+
+  // stock 있고 keyword 있는 경우에 btn active
   const selectedStock = useRecoilValue(selectedLabStockState);
   const selectedKeywodrState = useRecoilValue(selectedLabKeywordListState);
-  const setResultBoardSize = useSetRecoilState(resultBoardSizeState);
-  const setResultBoardOpen = useSetRecoilState(resultBoardOpenState);
-  const active = !!(selectedStock && selectedKeywodrState.length > 0);
+  const active = !!(selectedStock && selectedKeywodrState.length === 3);
 
+  // 클릭하면 query 보내기
   const clickHandler = () => {
-    // result data 받아오는 query 보내기
-    // loading 중에는 spinner loading 끝나면 openstate 변경
-    // 임시로 settimeout
     setResultBoardSize("big");
     triggerScroll("resultBoardRef");
-    setTimeout(() => {
-      setResultBoardOpen(true);
-    }, 500)
+    if (!isClicked) {
+      // clicked false인 경우 -> clicked 변경 -> query 보내짐
+      setIsClicked(true);
+    } else {
+      // clicked true인 경우 (error난 경우) -> refetch
+      refetch();
+    }
   };
 
   return (
-    <LockBtnWrapper active={active} onClick={clickHandler} disabled={!active}>
+    <LockBtn active={active} onClick={clickHandler} disabled={!active}>
       결과보기
-    </LockBtnWrapper>
+    </LockBtn>
   );
 };
 
 export default OpenBtn;
 
-const LockBtnWrapper = styled.button<{ active: boolean }>`
+const LockBtn = styled.button<{ active: boolean }>`
+  background: ${(props) => (props.active ? "#f391a3" : "var(--custom-gray-2)")};
+  cursor: ${(props) => (props.active ? "pointer" : "default")};
   width: 30%;
   height: 80px;
-  margin-top: 300px;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-
   border: none;
   border-radius: 36px;
-  
   font-size: 1.8rem;
   font-weight: bold;
   color: white;
-  
-  background: ${props => props.active ? "#f391a3" : "var(--custom-gray-2)"};
-  cursor: ${props => props.active ? "pointer" : "default"};
 `;

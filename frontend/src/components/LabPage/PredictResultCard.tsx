@@ -1,21 +1,57 @@
 import { useRecoilValue } from "recoil";
 import { selectedSliderList,  resultBoardSizeState } from "../../stores/LaboratoryAtoms";
+import { LabGraphType, LabRegressionType } from "./LabType";
 
 import ResultStock from "./ResultStock";
 import PredictKeywordCard from "./PredictKeywordCard";
 import styled from "styled-components";
 
-const PredictResultCard = () => {
+interface Props {
+  keywordList: any[];
+  graphData: LabGraphType[];
+  constant: number;
+  regressionData: LabRegressionType[];
+}
+
+const PredictResultCard = ({keywordList, graphData, constant, regressionData}: Props) => {
   const resultBoardSize = useRecoilValue(resultBoardSizeState);
 
   // 사용자 입력값
   const sliderList = useRecoilValue(selectedSliderList);
 
+  // keyword에 맞는 slider item
+  const getSliderItem = (keyword: string) => {
+    let sliderItem = {keyword: keyword, cnt: 0};
+    if (sliderList.length > 0) {
+      sliderList.forEach((item) => {
+        if (keyword === item.keyword) {
+          sliderItem = item
+          return false;
+        }
+    })}
+    return sliderItem;
+  }
+
+  // keyword에 맞는 default 값
+  const getBaseCnt = (keyword: string) => {
+    let baseCnt = 0;
+    if (graphData.length > 0) {
+      graphData.forEach((item) => {
+        if (item.keyword === keyword) {
+          baseCnt = Math.round(item.lastDate.x);
+          return false;
+        }
+      });
+    }
+    return baseCnt;
+  };
+
+
   return (
     <ResultCardSection size={resultBoardSize}>
       <HeaderWrapper>
         예상 주가
-        <ResultStock sliderList={sliderList} resultCardState={resultBoardSize}/>
+        <ResultStock sliderList={sliderList} graphData={graphData} constant={constant} regressionData={regressionData} resultCardState={resultBoardSize}/>
       </HeaderWrapper>
 
       {resultBoardSize === "big" && (
@@ -23,8 +59,8 @@ const PredictResultCard = () => {
           <InfoWrapper>오늘보다</InfoWrapper>
 
           <CardWrapper>
-            {sliderList.map((item) => {
-              return <PredictKeywordCard key={item.keyword} sliderItem={item} />;
+            {keywordList.map((item, index) => {
+              return <PredictKeywordCard key={index} sliderItem={getSliderItem(item.name)} baseCnt={getBaseCnt(item.name)}/>;
             })}
           </CardWrapper>
 

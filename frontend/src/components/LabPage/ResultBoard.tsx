@@ -1,18 +1,74 @@
-import { useRecoilValue } from "recoil";
-import { resultBoardOpenState } from "../../stores/LaboratoryAtoms";
+import { useState, useEffect } from "react";
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil";
+import {
+  resultBoardOpenState,
+  selectedLabStockState,
+  selectedLabKeywordListState,
+  // selectedLabPeriodState,
+  selectedSliderList
+} from "../../stores/LaboratoryAtoms";
+import { useLabResult } from "../../hooks/useLabAccordion";
 import ResultBoardOpen from "./ResultBoardOpen";
 import OpenBtn from "./OpenBtn";
+import LoadingComponent from "../common/Loading/LoadingComponent";
 import styled from "styled-components";
 
 const ResultBoard = () => {
-  const openState = useRecoilValue(resultBoardOpenState);
+  // result board open state
+  const [openState, setOpenState] = useRecoilState(resultBoardOpenState);
+
+  // result board open btn click state
+  const [isClicked, setIsClicked] = useState(false);
+
+  // back에 담아 보낼 data
+  const selectedStock = useRecoilValue(selectedLabStockState);
+  const selectedKeywodList = useRecoilValue(selectedLabKeywordListState);
+  // const selectedPeriod = useRecoilValue(selectedLabPeriodState);
+
+  // result data query
+  const { data, isLoading, refetch } = useLabResult(
+    selectedStock,
+    selectedKeywodList,
+    // selectedPeriod,
+    isClicked
+  );
+
+  // data 들어오면 recoil slider 변경 후 result board state open으로 변경
+  const setSliderList = useSetRecoilState(selectedSliderList);
+  useEffect(() => {
+    if (data) {
+      const cntArr = data.graphData.map((item: any) => {
+        return {
+          keyword: item.keyword,
+          cnt: Math.round(item.lastDate.x)
+        };
+      });
+      setSliderList(cntArr);
+      setOpenState(true);
+    }
+  }, [data]);
+
 
   return (
     <BoardWrapper id="resultBoardRef">
-      <ResultBoardOpen />
+      <ResultBoardOpen
+        stock={selectedStock}
+        keywordList={selectedKeywodList}
+        graphData={data && data.graphData ? data.graphData : []}
+        constant={data && data.constant ? data.constant : 0}
+        regressionData={data && data.regressionData ? data.regressionData : []}
+      />
       {!openState && (
         <LockWrapper>
-          <OpenBtn />
+          {isLoading ? (
+            <LoadingComponent top={0} />
+          ) : (
+            <OpenBtn
+              isClicked={isClicked}
+              setIsClicked={setIsClicked}
+              refetch={refetch}
+            />
+          )}
         </LockWrapper>
       )}
     </BoardWrapper>
@@ -43,6 +99,7 @@ const LockWrapper = styled.div`
 
   display: flex;
   justify-content: center;
+  padding-top: 300px;
 
   background: rgba(255, 254, 254, 0.9);
   border-radius: 24px;

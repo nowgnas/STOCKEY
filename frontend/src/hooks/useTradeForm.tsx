@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "react-query"
 import customAxios from "../utils/customAxios"
 import dayjs from "dayjs"
 import { useRecoilState } from "recoil"
-import { accessTokenSelector } from "../stores/atoms"
+// import { accessTokenState } from "../stores/atoms"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 export interface SubmitProps {
@@ -10,7 +10,7 @@ export interface SubmitProps {
   count: number
   orderType: String
 }
-// const axios = customAxios()
+// const axios = customAxios({})
 
 // const fetchSubmitTrade = (myList: SubmitProps[]) => {
 //   return axios.post("/api/investment/order", myList)
@@ -39,7 +39,7 @@ export const useSubmitTradeMutation = () => {
 
 // 주문 여부 확인
 export const useCheckOrder = () => {
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
+  // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const navigate = useNavigate()
 
   const fetchCheckOrder = () => {
@@ -52,7 +52,7 @@ export const useCheckOrder = () => {
     return testAxios
   }
   // const fetchCheckOrder = ({ queryKey }: any) => {
-  //   return customAxios(accessToken, setAccessToken, navigate).get(
+  //   return customAxios({isAuthNeeded: true, navigate: navigate}).get(
   //     "/api/investment/order/check"
   //   )
   // }
@@ -67,7 +67,7 @@ export const useCheckOrder = () => {
 
 // 현재 잔액 조회
 export const useMyBalance = () => {
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
+  // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const navigate = useNavigate()
 
   const fetchMyBalance = () => {
@@ -80,7 +80,7 @@ export const useMyBalance = () => {
     return testAxios
   }
   // const fetchMyBalance = () => {
-  //   return customAxios(accessToken, setAccessToken, navigate).get(
+  //   return customAxios({isAuthNeeded: true, navigate: navigate}).get(
   //     "/api/investment/my/asset"
   //   )
   // }
@@ -128,7 +128,7 @@ export const useMyStocks = () => {
   }
 
   // const fetchMyStocks = () => {
-  //   return customAxios(accessToken, setAccessToken, navigate).get(
+  //   return customAxios({isAuthNeeded: true, navigate: navigate}).get(
   //     "/api/investment/my/stock"
   //   )
   // }

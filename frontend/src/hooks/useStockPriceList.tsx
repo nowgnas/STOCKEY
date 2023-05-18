@@ -1,7 +1,7 @@
 import { useQuery } from "react-query"
 import customAxios from "../utils/customAxios"
 
-const axios = customAxios()
+const axios = customAxios({})
 
 const fetchStockPriceList = ({ queryKey }: any) => {
   const stockId = queryKey[1]

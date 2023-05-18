@@ -2,7 +2,7 @@ import styled from "styled-components"
 import { useQuery } from "react-query"
 import { useNavigate } from "react-router-dom"
 import { useRecoilState } from "recoil"
-import { accessTokenState } from "../../../stores/atoms"
+// import { accessTokenState } from "../../../stores/atoms"
 import customAxios from "../../../utils/customAxios"
 import IndustryCard from "../../IndustryMainPage/IndustrySelector/IndustryCard"
 import Spinner from "../../common/Spinner/Spinner"
@@ -17,11 +17,11 @@ export interface MyIndustryType {
 
 const IndustryList = () => {
   // accessToken state
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
+  // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const navigate = useNavigate()
 
   // custom Axios
-  const axios = customAxios(accessToken, setAccessToken, navigate)
+  const axios = customAxios({ isAuthNeeded: true, navigate: navigate })
 
   // useQuery : MyIndustryList
   const fetchMyIndustryList = () => {
@@ -40,7 +40,7 @@ const IndustryList = () => {
       select,
       retry: false,
       refetchOnWindowFocus: false,
-      enabled: !!accessToken,
+      enabled: !!sessionStorage.getItem("accessToken"),
     }
   )
   console.log(MyIndustryList)

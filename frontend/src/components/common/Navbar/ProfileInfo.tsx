@@ -1,9 +1,10 @@
 import styled from "styled-components"
 import LoginBtn from "./LoginBtn"
 import { useRecoilValue } from "recoil"
-import { logInState } from "../../../stores/atoms"
+// import { logInState, accessTokenState } from "../../../stores/atoms"
 import { useNickname } from "../../../hooks/useNickname"
 import Avatar, { genConfig } from "react-nice-avatar"
+// import { useEffect } from "react"
 
 interface Props {
   isNarrow: boolean
@@ -11,7 +12,8 @@ interface Props {
 
 const ProfileInfo = ({ isNarrow }: Props) => {
   // login state
-  const isLogin = useRecoilValue(logInState)
+  // const isLogin = useRecoilValue(logInState)
+  // // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const { data: nickname, isLoading } = useNickname()
 
   if (isLoading) return <p style={{ color: "white" }}>로딩중</p>
@@ -36,7 +38,7 @@ const ProfileInfo = ({ isNarrow }: Props) => {
           <>
             {isNarrow ? undefined : (
               <LoginTextDiv>
-                <b>STOCKEY|{String(isLogin)}</b>를 <br /> 시작해보세요
+                <b>STOCKEY</b>를 <br /> 시작해보세요
               </LoginTextDiv>
             )}
             <LoginBtn isNarrow={isNarrow} />

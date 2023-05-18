@@ -39,9 +39,10 @@ const customAxios = ({
     // header에 accessToken 추가
     api.interceptors.request.use((config) => {
       if (isAuthNeeded && sessionStorage.getItem("accessToken")) {
+        // config.headers["Authorization"] =
+        //   "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImF1ZCI6IjE2Iiwibmlja25hbWUiOiLsp4TtmLjqs7Xsp4TtmLgiLCJleHAiOjE2OTAzODczMzR9.wtfN9xrf0ROIgX4C_0PGRB2YXrGXhWWxsd48hYtUGI4"
         config.headers["Authorization"] =
-          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImF1ZCI6IjE2Iiwibmlja25hbWUiOiLsp4TtmLjqs7Xsp4TtmLgiLCJleHAiOjE2OTAzODczMzR9.wtfN9xrf0ROIgX4C_0PGRB2YXrGXhWWxsd48hYtUGI4"
-        // config.headers["Authorization"] = "Bearer " + sessionStorage.getItem("accessToken");
+          "Bearer " + sessionStorage.getItem("accessToken")
       }
       return config
     })

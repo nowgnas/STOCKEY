@@ -33,14 +33,21 @@ export interface TradeHistoryType {
 const select = (response: any) => {
   console.log(response)
   const selectedData: TradeHistoryType[] = response.data.data
-  const billData: { [key: string]: any[] } = {}
+  const billData: { [key: string]: { BUY: any[]; SELL: any[] } } = {}
 
   selectedData.forEach((data) => {
-    if (billData.hasOwnProperty(dayjs(data.createdAt).format("M월 D일 H시"))) {
-      billData[dayjs(data.createdAt).format("M월 D일 H시")].push(data)
-    } else {
-      billData[dayjs(data.createdAt).format("M월 D일 H시")] = [data]
+    const tradeTime = dayjs(data.createdAt).format("M월 D일 H시")
+    if (!billData.hasOwnProperty(tradeTime)) {
+      billData[tradeTime] = { BUY: [], SELL: [] }
     }
+    billData[tradeTime][data.contractType].push({
+      id: data.stockId,
+      name: data.stockName,
+      orderQuantity: data.orderCount,
+      contractQuantity: data.contractCount,
+      contractPrice: data.contractPrice,
+      profit: data.profit,
+    })
   })
 
   console.log("billData >> ", billData)

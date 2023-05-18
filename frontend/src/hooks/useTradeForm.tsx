@@ -113,6 +113,19 @@ export const useWholeStocks = () => {
   })
 }
 
+export const usePopList = () => {
+  const fetchPopList = () => {
+    return customAxios({}).get(`/investment/popular/15`)
+  }
+
+  return useQuery(["wholeStock"], fetchPopList, {
+    staleTime: timeLeft(),
+    select,
+    onError,
+    refetchOnWindowFocus: false,
+  })
+}
+
 const select = (response: any) => {
   return response.data.data
 }

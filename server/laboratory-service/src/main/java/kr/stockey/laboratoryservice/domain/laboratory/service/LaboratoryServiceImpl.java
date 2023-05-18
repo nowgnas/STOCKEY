@@ -41,8 +41,8 @@ public class LaboratoryServiceImpl implements LaboratoryService {
 
 
         return RegressionResponse.builder()
-                .graphDataDto(list) // List
-                .regressionDto(null) // List
+                .graphData(list) // List
+                .regression(null) // List
                 .constant(null) // Double
                 .build();
     }

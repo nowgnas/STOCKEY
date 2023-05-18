@@ -163,6 +163,11 @@ spring:
         - id: investment-service
           uri: lb://investment-service
           predicates:
+            - Path=/investment/rank, /investment/orderstatus/**, /investment/wholestockinfo
+
+        - id: investment-service
+          uri: lb://investment-service
+          predicates:
             - Path=/investment/**
           filters:
             - AuthorizationHeaderFilter

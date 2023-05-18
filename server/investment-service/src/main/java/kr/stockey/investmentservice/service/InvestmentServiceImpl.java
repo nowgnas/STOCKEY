@@ -69,14 +69,14 @@ public class InvestmentServiceImpl implements InvestmentService{
     }
 
     private boolean checkOrderAvailableTime() {
-        LocalDateTime now = LocalDateTime.now(); // 한국 시간 기준으로 현재 시간을 가져옴
-
-        int hour = now.getHour();
-
-        // 주문 가능시간: 9시 ~ 15시
-        if (!(hour >= 9 && hour < 15)) {
-            throw new InvestmentException(InvestmentExceptionType.NOT_ORDERING_TIME);
-        }
+//        LocalDateTime now = LocalDateTime.now(); // 한국 시간 기준으로 현재 시간을 가져옴
+//
+//        int hour = now.getHour();
+//
+//        // 주문 가능시간: 9시 ~ 15시
+//        if (!(hour >= 9 && hour < 15)) {
+//            throw new InvestmentException(InvestmentExceptionType.NOT_ORDERING_TIME);
+//        }
         return true;
     }
 
@@ -90,7 +90,7 @@ public class InvestmentServiceImpl implements InvestmentService{
         // 실행할 메소드 내용 작성
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         // 오전 9시 ~ 오후 3시 사이, 2분일 때 실행
-        if (now.getHour() >= 9 && now.getHour() <= 15 && now.getMinute() == 2) {
+        if (now.getHour() >= 9 && now.getHour() <= 15 && now.getMinute() == 2 || true) {
             executeRun();
         }
     }

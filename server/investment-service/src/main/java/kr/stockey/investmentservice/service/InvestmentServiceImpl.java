@@ -94,6 +94,7 @@ public class InvestmentServiceImpl implements InvestmentService{
      */
 
 //    @Scheduled(cron = "0 2 * * * *", zone = "Asia/Seoul")
+    @Transactional
     @Scheduled(cron = "0 0/1 * * * *", zone = "Asia/Seoul")  // 0분부터 55분까지 1분 간격으로 실행 -> 개발용
     public void orderExecuteScheduler() {
         // 실행할 메소드 내용 작성
@@ -422,7 +423,6 @@ public class InvestmentServiceImpl implements InvestmentService{
     }
 
 
-    @Transactional
     public void orderExecute() {
         // 주식 현재가 테이블 가져오기 (매 2분마다 갱신된 최신 주가정보 가져오기)
 //        Map<Long, Long> stockPriceMap = getStockPrice();

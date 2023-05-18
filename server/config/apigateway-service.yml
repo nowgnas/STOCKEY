@@ -17,6 +17,7 @@ spring:
               - authorization
               - content-type
               - credential
+              - set-cookie
             allowedMethods:
               - GET
               - POST

@@ -36,14 +36,14 @@ const TradeConfirmModal = ({
     return formatList
   }
   const submitListHandler = () => {
-    console.log(submitList)
     submit(submitList)
-    confirmModalHandler(false)
   }
 
   useEffect(() => {
     if (isSuccess) {
       queryClient.invalidateQueries({ queryKey: ["checkOrder"] })
+      alert("주문이 제출되었습니다!")
+      confirmModalHandler(false)
     }
   }, [isSuccess])
 

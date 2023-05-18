@@ -60,7 +60,7 @@ const TradeForm = () => {
     if (isSuccessCheck) {
       setLockTrade(isOrderSubmit)
     }
-  })
+  }, [isOrderSubmit])
 
   // modal에 줄 데이터들
   const [modalData, setModalData] = useState<SimpleDialogProps | undefined>()

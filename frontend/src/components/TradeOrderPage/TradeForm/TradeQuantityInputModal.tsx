@@ -16,7 +16,7 @@ export interface SimpleDialogProps {
     currentPrice: number
     myStockNums?: number
   }
-  open?: boolean
+  open: boolean | undefined
 }
 
 interface Props extends SimpleDialogProps {

@@ -116,4 +116,5 @@ const Text = styled(Grid)`
 const LogoImage = styled.img`
   width: 20%;
   height: 100%;
+  border-radius: 16px;
 `

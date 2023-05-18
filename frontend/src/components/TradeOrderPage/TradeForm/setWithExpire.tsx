@@ -1,9 +1,10 @@
 import dayjs from "dayjs"
+import { BasketList } from "./TradeForm"
 
 export function setWithExpiry(
   key: string,
   value: object | null,
-  currentList: []
+  currentList: [] | BasketList[]
 ) {
   const now = dayjs()
   const nextHour = now.hour() + 1

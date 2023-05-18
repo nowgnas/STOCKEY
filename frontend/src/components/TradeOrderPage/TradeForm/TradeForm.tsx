@@ -1,12 +1,13 @@
 import styled from "styled-components"
+import { useEffect, useMemo, useState } from "react"
+import dayjs from "dayjs"
 
+import { useCheckOrder, useMyBalance } from "../../../hooks/useTradeForm"
 import TradeFormBalance from "./TradeFormBalance"
 import Grid from "@mui/material/Grid"
 import TradeStockList from "./TradeStockList"
 import TradeBasketList from "./TradeBasketList"
 import { CustomDragLayer } from "../../common/DragDrop/CustomDragLayer"
-import { useEffect, useMemo, useState } from "react"
-import dayjs from "dayjs"
 
 import TradeQuantityInputModal from "./TradeQuantityInputModal"
 import { SimpleDialogProps } from "./TradeQuantityInputModal"
@@ -23,11 +24,14 @@ export type BasketList = {
 }
 
 const TradeForm = () => {
-  // 더미데이터,,,,, 정각 단위로 useQuery써서 가져와야함
-  const myBalance = 1000000
+  const { data: myBalance, isSuccess: isSuccessMyBalance } = useMyBalance()
 
+  // 주문 여부 API
+  const { data: isOrderSubmit, isSuccess: isSuccessCheck } = useCheckOrder()
+  const [lockTrade, setLockTrade] = useState(false)
   // 판매 목록
   const [sellList, setSellList] = useState<BasketList[]>([])
+
   // 구매 목록
   const [buyList, setBuyList] = useState<BasketList[]>([])
   const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false)
@@ -40,14 +44,23 @@ const TradeForm = () => {
     const list = localStorage.getItem(status)
       ? JSON.parse(localStorage.getItem(status)!)
       : []
-    if (list && dayjs().isAfter(list.expiry)) localStorage.removeItem(status)
-    return list
+    if (list && dayjs().isAfter(list.expiry)) {
+      localStorage.removeItem(status)
+      return []
+    }
+    return list.value
   }
 
   useEffect(() => {
     setSellList(getList("sellList"))
-    setSellList(getList("buyList"))
+    setBuyList(getList("buyList"))
   }, [])
+
+  useEffect(() => {
+    if (isSuccessCheck) {
+      setLockTrade(isOrderSubmit)
+    }
+  })
 
   // modal에 줄 데이터들
   const [modalData, setModalData] = useState<SimpleDialogProps | undefined>()
@@ -75,17 +88,24 @@ const TradeForm = () => {
     <>
       <Header>주문서 작성하기</Header>
       <TradeFormContainer container columns={13} justifyContent="center">
-        <TradeFormWrapper item direction="column" md={6} xs={12}>
-          <TradeFormBalance myBalance={myBalance} />
+        <TradeFormWrapper item md={6} xs={12}>
+          <TradeFormBalance
+            myBalance={isSuccessMyBalance ? myBalance.deposit : 0}
+          />
           <TradeStockList />
         </TradeFormWrapper>
-        <TradeFormWrapper item md={6} xs={12}>
+        <TradeBasketWrapper item md={6} xs={12} justifyContent="space-between">
+          {lockTrade && (
+            <LockSection>
+              <LockImg src={"/tradeLogos/Lock.png"} />
+            </LockSection>
+          )}
           <TradeBasketList
             status={"팔래요"}
             text={"수익"}
             color={"--custom-blue"}
             data={sellList}
-            myBalance={myBalance}
+            myBalance={isSuccessMyBalance ? myBalance.deposit : 0}
             modalDataHandler={modalDataHandler}
             listHandler={listHandler}
           />
@@ -94,32 +114,43 @@ const TradeForm = () => {
             text={"지출"}
             color={"--custom-pink-4"}
             data={buyList}
-            myBalance={myBalance}
+            myBalance={isSuccessMyBalance ? myBalance.deposit : 0}
             modalDataHandler={modalDataHandler}
             listHandler={listHandler}
           />
-        </TradeFormWrapper>
+        </TradeBasketWrapper>
         <ButtonConfirmComp
+          disabled={lockTrade ? true : false}
           variant="contained"
           onClick={() => confirmModalHandler(true)}
+          orderstatus={`${lockTrade}`}
         >
-          주문서 제출하기
-          <ConfirmImage src={"/tradeLogos/paymentCheck.png"} />
+          {lockTrade ? (
+            "주문 완료"
+          ) : (
+            <>
+              주문서 제출하기
+              <ConfirmImage src={"/tradeLogos/paymentCheck.png"} />
+            </>
+          )}
         </ButtonConfirmComp>
       </TradeFormContainer>
-      <TradeQuantityInputModal
-        id={modalData?.id}
-        status={modalData?.status}
-        stockInfo={modalData?.stockInfo}
-        open={modalData?.open}
-        modalDataHandler={modalDataHandler}
-        listHandler={listHandler}
-      />
+      {modalData && (
+        <TradeQuantityInputModal
+          id={modalData?.id}
+          status={modalData?.status}
+          stockInfo={modalData?.stockInfo}
+          open={modalData.open}
+          modalDataHandler={modalDataHandler}
+          listHandler={listHandler}
+        />
+      )}
       <TradeConfirmModal
         sellList={sellList}
         buyList={buyList}
         open={confirmModalOpen}
         confirmModalHandler={confirmModalHandler}
+        listHandler={listHandler}
       />
       <CustomDragLayer />
     </>
@@ -138,25 +169,50 @@ const TradeFormContainer = styled(Grid)`
   }
 `
 const TradeFormWrapper = styled(Grid)`
-  min-height: 80vh;
-  max-height: 80vh;
-  width: 100%;
+  position: relative;
+  max-height: 68vh;
+  min-height: 68vh;
 
   @media (max-width: 900px) {
     min-height: 120vh;
     max-height: 120vh;
   }
 `
+const TradeBasketWrapper = styled(TradeFormWrapper)`
+  display: flex;
+  flex-direction: column !important;
+`
+
 const Header = styled.p`
   font-size: 32px;
   font-weight: bold;
 `
-const ButtonConfirmComp = styled(Button)`
+const ButtonConfirmComp = styled(Button)<{ orderstatus: string }>`
   width: 100%;
   height: 7rem;
   background-color: #625b71 !important;
   border-radius: 96px !important;
   font-size: 32px !important;
   font-weight: bold !important;
+  opacity: ${(props) => (props.orderstatus === "true" ? "50%" : "100%")};
+  color: white !important;
 `
 const ConfirmImage = styled.img``
+
+const LockSection = styled.section`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(255, 254, 254, 0.8);
+  border-radius: 24px;
+`
+
+const LockImg = styled.img`
+  width: 30%;
+`

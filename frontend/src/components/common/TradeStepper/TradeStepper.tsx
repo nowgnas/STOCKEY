@@ -29,13 +29,19 @@ const TradeStepper = () => {
           ? `지금 ${nextHour}시 거래 주문이 진행 중이에요!`
           : "장이 마감되었습니다."}
       </Header>
-      {nowHour > 7 && nowHour < 15 && (
+      {nowHour > 7 && nowHour < 15 ? (
         <BodyText>{nextHour}시 전까지 주문서 제출을 완료해주세요.</BodyText>
+      ) : (
+        ""
       )}
       <TimeWrapper>
         <Line nowHour={nowHour} />
-        {TIMES.map((time) => (
-          <TradeStepperItem time={time} nextTime={nextTime} />
+        {TIMES.map((time, index) => (
+          <TradeStepperItem
+            key={`TradeStepperItem-${index}`}
+            time={time}
+            nextTime={nextTime}
+          />
         ))}
       </TimeWrapper>
     </Container>

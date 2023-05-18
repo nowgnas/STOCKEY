@@ -4,8 +4,7 @@ import customAxios from "../utils/customAxios";
 import { useQuery, useInfiniteQuery } from "react-query";
 import { StockCardType } from "../stores/LaboratoryAtoms";
 
-// const axios = customAxios({});
-const axios = customAxios();
+const axios = customAxios({});
 
 type ParamsType = {
   pathVariable?: string | undefined;
@@ -15,10 +14,10 @@ type ParamsType = {
 
 // labPage get 요청
 const getLab = async (baseUrl: string, params?: ParamsType | undefined) => {
-  let url = baseUrl;
+  let url = baseUrl
   // path variable 있는 경우 추가
   if (params && params.pathVariable) {
-    url += `/${params.pathVariable}`;
+    url += `/${params.pathVariable}`
   }
   // page param 있는 경우 추가
   if (params && params.pageParam) {
@@ -72,8 +71,8 @@ export const useLabStockSearch = (searchValue: string | undefined) => {
       // searchValue 있을때만 실행
       enabled: !!searchValue,
     }
-  );
-};
+  )
+}
 
 // keyword stock 기반 get
 // export const useLabKeywordStock = (seletedStock: StockCardType | undefined) => {

@@ -1,7 +1,7 @@
 import customAxios from "../utils/customAxios"
 import { useQuery } from "react-query"
 
-const axios = customAxios()
+const axios = customAxios({})
 
 interface Props {
   id: number

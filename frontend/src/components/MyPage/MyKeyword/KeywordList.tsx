@@ -6,7 +6,7 @@ import { myKeywordState } from "../../../stores/MyPageAtoms"
 // useQuery
 import { useQuery } from "react-query"
 import { useNavigate } from "react-router-dom"
-import { accessTokenSelector } from "../../../stores/atoms"
+// import { accessTokenState } from "../../../stores/atoms"
 import customAxios from "../../../utils/customAxios"
 import Spinner from "../../common/Spinner/Spinner"
 
@@ -20,11 +20,11 @@ const KeywordList = () => {
   // selected myKeyword state
   const myKeyword = useRecoilValue(myKeywordState)
   // accesstoken state
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
+  // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   // useNavigate
   const navigate = useNavigate()
   // customAxios
-  const axios = customAxios(accessToken, setAccessToken, navigate)
+  const axios = customAxios({ isAuthNeeded: true, navigate: navigate })
 
   // useQuery: get my keyword
   const fetchMyKeywordList = () => {
@@ -41,7 +41,7 @@ const KeywordList = () => {
     {
       refetchOnMount: false,
       retry: false,
-      enabled: !!accessToken,
+      enabled: !!sessionStorage.getItem("accessToken"),
       select,
     }
   )

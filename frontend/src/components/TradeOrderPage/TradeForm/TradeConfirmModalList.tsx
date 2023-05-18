@@ -1,16 +1,17 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 
 import { useDrop } from "react-dnd"
 import { BasketList } from "./TradeForm"
 import TradeConfirmModalItem from "./TradeConfirmModalItem"
-import { hover } from "@testing-library/user-event/dist/hover"
+import { setWithExpiry } from "./setWithExpire"
 
 interface Props {
   status: string
   list: BasketList[]
+  listHandler: (status: string) => void
 }
-const TradeConfirmModalList = ({ status, list }: Props) => {
+const TradeConfirmModalList = ({ status, list, listHandler }: Props) => {
   const [items, setItems] = useState<BasketList[]>(list)
 
   const moveCardHandler = (dragIndex: number, hoverIndex: number) => {
@@ -25,6 +26,13 @@ const TradeConfirmModalList = ({ status, list }: Props) => {
       })
     }
   }
+
+  useEffect(() => {
+    if (items) {
+      setWithExpiry(status === "MYSELL" ? "sellList" : "buyList", null, items)
+      listHandler(status === "MYSELL" ? "팔래요" : "살래요")
+    }
+  }, [items])
 
   const [{ getItem }, dropRef] = useDrop(
     () => ({
@@ -41,11 +49,13 @@ const TradeConfirmModalList = ({ status, list }: Props) => {
     []
   )
   return (
-    <OrderList ref={status === "MYSELL" ? dropRef : null}>
-      {items.length > 0 &&
+    <OrderList ref={status === "MYBUY" ? dropRef : null}>
+      {items &&
+        items.length > 0 &&
         items.map((stock, index) => {
           return (
             <TradeConfirmModalItem
+              key={`TradeConfirmModalItem-${status}-${index}`}
               itemInfo={{
                 index: index,
                 status,
@@ -53,7 +63,7 @@ const TradeConfirmModalList = ({ status, list }: Props) => {
                 quantity: stock.quantity,
               }}
               opacity={
-                status === "MYSELL" && getItem && getItem.index === index
+                status === "MYBUY" && getItem && getItem.index === index
                   ? 0.1
                   : undefined
               }

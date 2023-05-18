@@ -31,7 +31,7 @@ const BalanceContainer = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 15%;
+  height: 20%;
   overflow: hidden;
   margin-bottom: 5%;
 
@@ -46,9 +46,10 @@ const BalanceWrapper = styled.section`
   justify-content: center;
   aligin-items: center;
   font-weight: bold;
+  width: 30%;
 `
 const BalanceText = styled.p`
-  font-size: 16px;
+  font-size: 12px;
   margin: 2%;
 
   @media (max-width: 500px) {

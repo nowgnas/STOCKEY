@@ -1,14 +1,10 @@
 import styled from "styled-components"
 import LoginBtn from "./LoginBtn"
-import { useEffect } from "react"
-import customAxios from "../../../utils/customAxios"
-import { useQuery } from "react-query"
-import { useRecoilState, useSetRecoilState } from "recoil"
-import {
-  logInState,
-  accessTokenSelector,
-  nicknameState,
-} from "../../../stores/atoms"
+import { useRecoilValue } from "recoil"
+// import { logInState, accessTokenState } from "../../../stores/atoms"
+import { useNickname } from "../../../hooks/useNickname"
+import Avatar, { genConfig } from "react-nice-avatar"
+// import { useEffect } from "react"
 
 interface Props {
   isNarrow: boolean
@@ -16,52 +12,26 @@ interface Props {
 
 const ProfileInfo = ({ isNarrow }: Props) => {
   // login state
-  const [isLogin, setIsLogin] = useRecoilState(logInState)
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
-  const setNickname = useSetRecoilState(nicknameState)
+  // const isLogin = useRecoilValue(logInState)
+  // // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
+  const { data: nickname, isLoading } = useNickname()
 
-  // axios
-  const axios = customAxios(accessToken, setAccessToken)
-
-  // nickname 요청 react query
-  // nickname fuction
-  const fetchNickname = () => {
-    return axios.get("/member")
-  }
-  const select = (response: any) => {
-    return response.data.data.nickname
-  }
-  // nickname useQuery
-  const { isLoading, data: nickname } = useQuery("nickname", fetchNickname, {
-    refetchOnWindowFocus: false,
-    select,
-    retry: 1,
-  })
-
-  useEffect(() => {
-    if (!!nickname) {
-      setNickname(nickname)
-    }
-  }, [nickname])
-
-  useEffect(() => {
-    if (accessToken) {
-      setIsLogin(true)
-    } else {
-      setIsLogin(false)
-    }
-  }, [accessToken])
-
-  if (isLoading) return <></>
+  if (isLoading) return <p style={{ color: "white" }}>로딩중</p>
 
   return (
     <>
       <ProfileDiv className={isNarrow ? "isNarrow" : undefined}>
-        {isLogin && nickname ? (
+        {nickname ? (
           <>
-            <AvatarDiv className={isNarrow ? "isNarrow" : undefined}>
-              {nickname[0]}
-            </AvatarDiv>
+            <Avatar
+              {...genConfig(nickname)}
+              shape="rounded"
+              style={{
+                width: "100%",
+                height: "10rem",
+              }}
+              className={isNarrow ? "isNarrow" : undefined}
+            />
             {isNarrow ? undefined : <ProfileName>{nickname}</ProfileName>}
           </>
         ) : (

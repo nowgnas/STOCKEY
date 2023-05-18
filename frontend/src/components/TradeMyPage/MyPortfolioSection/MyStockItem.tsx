@@ -1,25 +1,14 @@
 import { Grid } from "@mui/material"
 import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
+import { MyStockType } from "../../../hooks/useMyStockList"
 
-interface StockItemProps {
-  id: number
-  name: string
-  quantity: number
-  currentPrice: number
-  returnRate: number
-}
-
-const MyStockItem = ({
-  id,
-  name,
-  quantity,
-  currentPrice,
-  returnRate,
-}: StockItemProps) => {
+const MyStockItem = ({ myStock }: { myStock: MyStockType }) => {
+  const { stockId, stockName, svp, rrp, curStockPrice, avgPrice, count } =
+    myStock
   const navigate = useNavigate()
   const handleStockClick = () => {
-    navigate(`/stock/${id}`)
+    navigate(`/stock/${stockId}`)
   }
 
   return (
@@ -31,18 +20,18 @@ const MyStockItem = ({
         justifyContent="center"
         alignItems="center"
       >
-        <LogoImg src={`/logo_images/${name}.png`} />
+        <LogoImg src={`/logo_images/${stockName}.png`} />
       </Grid>
       <StockInfoWrapper container xs={10} rowGap={0}>
         <Grid item xs={12} display="flex" justifyContent="space-between">
-          <CompanyName>{name}</CompanyName>
-          <CurrentPrice>{currentPrice.toLocaleString()}</CurrentPrice>
+          <CompanyName>{stockName}</CompanyName>
+          <CurrentPrice>{curStockPrice.toLocaleString()}</CurrentPrice>
         </Grid>
         <Grid item xs={12} display="flex" justifyContent="space-between">
-          <Quantity>{quantity}주</Quantity>
-          <ReturnRate className={returnRate > 0 ? "positive" : "negative"}>
-            {returnRate > 0 ? "+ " : null}
-            {returnRate}%
+          <Quantity>{count}주</Quantity>
+          <ReturnRate className={rrp > 0 ? "positive" : "negative"}>
+            {rrp > 0 ? "+ " : null}
+            {rrp}%
           </ReturnRate>
         </Grid>
       </StockInfoWrapper>

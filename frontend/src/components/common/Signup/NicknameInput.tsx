@@ -63,7 +63,7 @@ const NicknameInput = ({ nickname, getNickname }: props) => {
 
   // nickname이 유효하다면(isValid === true) 중복성 검사
   useEffect(() => {
-    const axios = customAxios()
+    const axios = customAxios({})
     // 서버에 닉네임을 송신하는 코드
     const checkNickname = async () => {
       try {

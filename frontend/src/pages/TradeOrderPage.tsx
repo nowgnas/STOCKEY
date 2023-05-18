@@ -1,4 +1,5 @@
 import styled from "styled-components"
+
 import TradeStepper from "../components/common/TradeStepper/TradeStepper"
 import TradeBoard from "../components/TradeOrderPage/TradeBoard"
 import TradeBanner from "../components/TradeMainPage/TradeBanner"

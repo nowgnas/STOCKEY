@@ -3,7 +3,7 @@ import BackBtn from "./BackBtn"
 
 const KakaoBtn = () => {
   const REACT_APP_KAKAO_API = process.env.REACT_APP_KAKAO_API
-  const REACT_APP_KAKAO_REDIRECT = process.env.REACT_APP_KAKAO_REDIRECT
+  const REACT_APP_KAKAO_REDIRECT = "https://stockey.kr/oauth/kakao"
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REACT_APP_KAKAO_API}&redirect_uri=${REACT_APP_KAKAO_REDIRECT}&response_type=code`
 
   return (

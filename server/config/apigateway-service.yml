@@ -70,6 +70,14 @@ spring:
         - id: member-service
           uri: lb://member-service
           predicates:
+            - Path=/member/auth/refresh
+          filters:
+            - RefreshTokenFilter
+            
+
+        - id: member-service
+          uri: lb://member-service
+          predicates:
             - Path=/member/**
 
         # stock

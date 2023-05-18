@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import kr.stockey.laboratoryservice.domain.keyword.dto.KeywordSearchDto;
-import kr.stockey.laboratoryservice.domain.laboratory.api.response.GraphDataResponse;
 import kr.stockey.laboratoryservice.domain.laboratory.api.response.RegressionResponse;
 import kr.stockey.laboratoryservice.domain.laboratory.dto.ResponseDto;
 import kr.stockey.laboratoryservice.domain.laboratory.service.LaboratoryService;
@@ -26,37 +25,17 @@ public class LaboratoryController {
 
     @GetMapping("data/graph")
     public ResponseEntity<ResponseDto> getGraphData(
-            @RequestParam("id1") Long id1,
-            @RequestParam("id2") Long id2,
-            @RequestParam("id3") Long id3
-
-    ) {
-        List<Long> idList = new ArrayList<>();
-        idList.add(id1);
-        idList.add(id2);
-        idList.add(id3);
-        GraphDataResponse graphData = laboratoryService.getGraphData(idList);
-
-        return ResponseEntity.ok(
-                ResponseDto.builder().build()
-        );
-    }
-
-    @GetMapping("regression")
-    public ResponseEntity<ResponseDto> getRegressionData(
-            @RequestParam("stock") String stock,
+            @RequestParam("stockid") Long stock,
             @RequestParam("id1") Long id1,
             @RequestParam("id2") Long id2,
             @RequestParam("id3") Long id3
     ) {
-        List<Long> idList = new ArrayList<>();
-        idList.add(id1);
-        idList.add(id2);
-        idList.add(id3);
-        RegressionResponse regression = laboratoryService.getRegression(stock, idList);
+        RegressionResponse graphData = laboratoryService.getGraphData(stock, id1, id2, id3);
 
         return ResponseEntity.ok(
-                ResponseDto.builder().build()
+                ResponseDto.builder()
+                        .data(graphData)
+                        .build()
         );
     }
 

@@ -1,5 +1,6 @@
 package kr.stockey.laboratoryservice.domain.laboratory.api.response;
 
+import kr.stockey.laboratoryservice.domain.keyword.dto.GraphDataDto;
 import kr.stockey.laboratoryservice.domain.keyword.dto.RegressionDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,12 +11,14 @@ import java.util.List;
 @Getter
 @Setter
 public class RegressionResponse {
+    private List<GraphDataDto> graphDataDto;
     private Double constant;
-    List<RegressionDto> coefficients;
+    private List<RegressionDto> regressionDto;
 
     @Builder
-    public RegressionResponse(Double constant, List<RegressionDto> coefficients) {
+    public RegressionResponse(List<GraphDataDto> graphDataDto, Double constant, List<RegressionDto> regressionDto) {
+        this.graphDataDto = graphDataDto;
         this.constant = constant;
-        this.coefficients = coefficients;
+        this.regressionDto = regressionDto;
     }
 }

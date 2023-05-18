@@ -10,10 +10,10 @@ import java.time.LocalDate;
 @Setter
 public class KeywordStatisticDto {
     private LocalDate statisticDate;
-    private Long count;
+    private Integer count;
 
     @Builder
-    public KeywordStatisticDto(LocalDate statisticDate, Long count) {
+    public KeywordStatisticDto(LocalDate statisticDate, Integer count) {
         this.statisticDate = statisticDate;
         this.count = count;
     }

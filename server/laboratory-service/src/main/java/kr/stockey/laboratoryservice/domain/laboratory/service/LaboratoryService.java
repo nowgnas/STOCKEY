@@ -1,7 +1,6 @@
 package kr.stockey.laboratoryservice.domain.laboratory.service;
 
 import kr.stockey.laboratoryservice.domain.keyword.dto.KeywordSearchDto;
-import kr.stockey.laboratoryservice.domain.laboratory.api.response.GraphDataResponse;
 import kr.stockey.laboratoryservice.domain.laboratory.api.response.RegressionResponse;
 import kr.stockey.laboratoryservice.domain.stock.dto.StockSearchDto;
 
@@ -27,7 +26,5 @@ public interface LaboratoryService {
 
     List<StockSearchDto> getAllStock();
 
-    RegressionResponse getRegression(String stock, List<Long> idList);
-
-    GraphDataResponse getGraphData(List<Long> idList);
+    RegressionResponse getGraphData(Long stock, Long id1, Long id2, Long id3);
 }

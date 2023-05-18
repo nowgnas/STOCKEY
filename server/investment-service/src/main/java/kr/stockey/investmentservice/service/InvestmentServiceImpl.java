@@ -441,11 +441,10 @@ public class InvestmentServiceImpl implements InvestmentService{
         List<Order> wholeRedisOrderList = filterOrders(rawOrderList);
         System.out.println("wholeRedisOrderList = " + wholeRedisOrderList);
 
-        // wholeOrderList 내용 DB에 적재
-        loadOrderIntoDB(wholeRedisOrderList);
+        // wholeOrderList 내용 DB에 적재 및 가져오기
+        List<Contract> justOrdersEntities = loadOrderIntoDB(wholeRedisOrderList);
+        List<OrderDto> justOrders = investmentMapper.toOrderDtoList(justOrdersEntities);
 
-        // 방금 적재한 주문들 가져오기 (현 시간 기준 직전 라운드 시간대의 주문 리스트 가져오기)
-        List<OrderDto> justOrders = getJustOrders();
         System.out.println("justOrders = " + justOrders);
         List<MemberOrderDto> memberOrderList = justOrdersToMemberOrderList(justOrders);
 
@@ -613,21 +612,8 @@ public class InvestmentServiceImpl implements InvestmentService{
         return memberOrderDtos;
     }
 
-    private List<OrderDto> getJustOrders() {
-        LocalDateTime currentTime = LocalDateTime.now();
-//        LocalDateTime previousHour = currentTime.minusHours(1);
-        LocalDateTime previousHour = currentTime.minusMinutes(1);
-        
-        // Set the minutes and seconds to zero for the previous hour
-//        LocalDateTime startOfPreviousHour = previousHour.withMinute(0).withSecond(0).withNano(0);
-//        LocalDateTime endOfPreviousHour = previousHour.withMinute(0).withSecond(0).withNano(0).plusHours(1);
-
-        //List<Contract> justOrders = contractRepository.getJustOrders(startOfPreviousHour, endOfPreviousHour);
-        List<Contract> justOrders = contractRepository.getJustOrders(previousHour, currentTime);
-        return investmentMapper.toOrderDtoList(justOrders);
-    }
-
-    public void loadOrderIntoDB(List<Order> wholeOrderList) {
+    public List<Contract> loadOrderIntoDB(List<Order> wholeOrderList) {
+        List<Contract> savedContractList = new ArrayList<>();
         for (Order order : wholeOrderList) {
             for (OrderListDto orderListDto : order.getOrders()) {
                 // DB에 넣을 엔티티 생성
@@ -642,9 +628,11 @@ public class InvestmentServiceImpl implements InvestmentService{
                         .contractPrice(0L)
                         .profit(0.0)
                         .build();
-                contractRepository.save(contract);
+                Contract savedContract = contractRepository.save(contract);
+                savedContractList.add(savedContract);
             }
         }
+        return savedContractList;
     }
 
 

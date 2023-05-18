@@ -2,9 +2,12 @@ import styled from "styled-components"
 import MyTradeHistoryCard from "./MyTradeHistoryCard"
 import MyCurrentTradeHistoryCard from "./MyCurrentTradeHistoryCard"
 import { PanelTitle } from "../../StockDetailPage/SubPanel/KeywordPanel/KeywordPanel"
+import { useMyTradeHistory } from "../../../hooks/useMyTradeHistory"
 
 const MyTradeHistoryList = () => {
   const DUMMY_DATA = [35000, -1600, 0, -105800, 4100, 700]
+  const { data: myTrades } = useMyTradeHistory()
+
   return (
     <>
       <PanelTitle style={{ margin: "0 0 2px 5px" }}>내 주문 기록</PanelTitle>

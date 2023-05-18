@@ -33,21 +33,19 @@ const MyStockList = ({ id }: any) => {
           </Select>
         </FormControl>
       </HeaderDiv>
-      {dummyData.map((_, index) => {
-        return (
-          <>
-            <MyStockItem
-              key={index}
-              id={4}
-              name="카카오"
-              quantity={5}
-              currentPrice={248500}
-              returnRate={0.66}
-            />
-            <Divider style={{ border: "1px solid var(--custom-gray-4)" }} />
-          </>
-        )
-      })}
+
+      {myStocks?.length !== 0 &&
+        myStocks?.map((myStock, index) => {
+          return (
+            <>
+              <MyStockItem
+                // key={`myStock-${myStock.stockId}`}
+                myStock={myStock}
+              />
+              <Divider style={{ border: "1px solid var(--custom-gray-4)" }} />
+            </>
+          )
+        })}
       <PageIndicator count={5} shape="rounded" />
     </div>
   )

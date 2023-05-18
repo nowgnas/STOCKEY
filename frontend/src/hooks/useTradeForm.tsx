@@ -1,11 +1,7 @@
 import { useMutation, useQuery } from "react-query"
 import customAxios from "../utils/customAxios"
 import dayjs from "dayjs"
-import { useRecoilState } from "recoil"
-// import { accessTokenState } from "../stores/atoms"
 import { useNavigate } from "react-router-dom"
-
-const axios = customAxios()
 
 export interface SubmitProps {
   stockId: number
@@ -21,11 +17,10 @@ const timeLeft = () => {
 
 // Form 제출
 export const useSubmitTradeMutation = () => {
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
   const navigate = useNavigate()
 
   const fetchSubmitTrade = (myList: SubmitProps[]) => {
-    return customAxios(accessToken, setAccessToken, navigate).post(
+    return customAxios({ isAuthNeeded: true, navigate }).post(
       "/investment/order",
       myList
     )
@@ -36,11 +31,10 @@ export const useSubmitTradeMutation = () => {
 
 // 주문 여부 확인
 export const useCheckOrder = () => {
-  // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const navigate = useNavigate()
 
   const fetchCheckOrder = ({ queryKey }: any) => {
-    return customAxios(accessToken, setAccessToken, navigate).get(
+    return customAxios({ isAuthNeeded: true, navigate }).get(
       "/investment/order/check"
     )
   }
@@ -55,11 +49,10 @@ export const useCheckOrder = () => {
 
 // 현재 잔액 조회
 export const useMyBalance = () => {
-  // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
   const navigate = useNavigate()
 
   const fetchMyBalance = () => {
-    return customAxios(accessToken, setAccessToken, navigate).get(
+    return customAxios({ isAuthNeeded: true, navigate }).get(
       "/investment/my/asset"
     )
   }
@@ -76,7 +69,7 @@ export const useMyBalance = () => {
 // 각 종목당 주문 현황 api
 export const useOrderStatus = (stockId: number, isHover: boolean) => {
   const fetchOrderStatus = () => {
-    return axios.get(`/investment/orderstatus/${stockId}`)
+    return customAxios({}).get(`/investment/orderstatus/${stockId}`)
   }
 
   return useQuery(["orderStatus", stockId], fetchOrderStatus, {
@@ -90,11 +83,10 @@ export const useOrderStatus = (stockId: number, isHover: boolean) => {
 
 // 내 보유 주식 api
 export const useMyStocks = () => {
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenSelector)
   const navigate = useNavigate()
 
   const fetchMyStocks = () => {
-    return customAxios(accessToken, setAccessToken, navigate).get(
+    return customAxios({ isAuthNeeded: true, navigate }).get(
       "/investment/my/stock"
     )
   }
@@ -110,7 +102,7 @@ export const useMyStocks = () => {
 // 전체 주식 종목 가져오기
 export const useWholeStocks = () => {
   const fetchWholeStocks = () => {
-    return axios.get(`/investment/wholestockinfo`)
+    return customAxios({}).get(`/investment/wholestockinfo`)
   }
 
   return useQuery(["wholeStock"], fetchWholeStocks, {

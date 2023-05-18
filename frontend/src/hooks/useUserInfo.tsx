@@ -34,6 +34,9 @@ const select = (response: any) => {
   console.log("useUserInfo야", response)
   return response
 }
+
+export const useGoToSignUp = (response: any) => {}
+
 const onSuccess = (response: any) => {
   sessionStorage.setItem("accessToken", response.data.data.accessToken)
 }

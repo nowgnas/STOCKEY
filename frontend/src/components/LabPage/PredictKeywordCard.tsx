@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { GraphItemSixMonth } from "./SampleItems";
 import { ChangeType } from "./LabType";
 import styled from "styled-components";
 
@@ -13,7 +12,7 @@ interface Props {
 
 const PredictKeywordCard = ({ sliderItem, baseCnt }: Props) => {
   const changePercent: number = useMemo(() => {
-    if (baseCnt > 0 ) {
+    if ( baseCnt > 0 ) {
       return (sliderItem.cnt - baseCnt) / baseCnt;
     } else {
       return 0;

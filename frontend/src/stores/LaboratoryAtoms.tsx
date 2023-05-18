@@ -1,14 +1,5 @@
 import { atom, selector } from "recoil";
-
-export interface StockCardType {
-  id: number;
-  name: string;
-}
-
-export interface KeywordCardType {
-  id: number;
-  name: string;
-}
+import { StockCardType, KeywordCardType, resultBoardSizeType } from "../components/LabPage/LabType";
 
 // target stock
 export const selectedLabStockState = atom<StockCardType | undefined>({
@@ -62,7 +53,6 @@ export const labKeywordSearchInput = atom<string>({
 });
 
 // resultBoard Size
-type resultBoardSizeType = "big" | "small";
 export const resultBoardSizeState = selector<resultBoardSizeType>({
   key: "resultBoardSizeState",
   // resultBoard의 size를 get
@@ -77,7 +67,6 @@ export const resultBoardSizeState = selector<resultBoardSizeType>({
   },
   // resultBoard size를 big으로 변경하기 위해 accordion false로 set
   set: ({ set }, newVal) => {
-    console.log('set!')
     if (newVal === "big") {
       set(stockAccordionOpenState, false);
       set(keywordAccordionOpenState, false);

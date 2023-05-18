@@ -18,7 +18,6 @@ const TOTAL_NEWS_CNT = 500;
 const PredictSlider = ({ item, index, setSliderList }: Props) => {
   // slier 변경하면 recoil data 변경
   const changeHandler = (e: any) => {
-    console.log(e.target.value);
     setSliderList((prev) => {
       return prev.map((prevItem) => {
         return prevItem.keyword === item.keyword

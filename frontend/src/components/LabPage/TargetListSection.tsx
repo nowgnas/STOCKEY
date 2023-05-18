@@ -19,9 +19,7 @@ type panelState = "possible" | "impossible" | "nonActive";
 
 const TargetListSection = () => {
   const [stock, setStock] = useRecoilState(selectedLabStockState);
-  const [keywordList, setKeywordList] = useRecoilState(
-    selectedLabKeywordListState
-  );
+  const [keywordList, setKeywordList] = useRecoilState(selectedLabKeywordListState);
   const draggedItem = useRecoilValue(draggedLabCardState);
   const setStockAccordionOpen = useSetRecoilState(stockAccordionOpenState);
   const setKeywordAccordionOpen = useSetRecoilState(keywordAccordionOpenState);
@@ -62,11 +60,7 @@ const TargetListSection = () => {
       setStock(draggedItem.item);
       setStockAccordionOpen(false);
       setKeywordAccordionOpen(true);
-      setResultBoardOpen(false);
-
-      // keyword list get 하는 query refetch 보내기
-
-      
+      setResultBoardOpen(false);      
     } else if (
       // keyword drop한 경우
       draggedItem.type === "KEYWORD" &&

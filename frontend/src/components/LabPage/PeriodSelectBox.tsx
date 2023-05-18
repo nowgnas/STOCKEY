@@ -1,4 +1,4 @@
-import {memo} from 'react';
+import { memo } from 'react';
 import { useRecoilState } from "recoil";
 import { selectedLabPeriodState } from "../../stores/LaboratoryAtoms";
 

@@ -4,8 +4,8 @@ import {
   resultBoardOpenState,
   selectedLabStockState,
   selectedLabKeywordListState,
-  // selectedLabPeriodState,
   selectedSliderList
+  // selectedLabPeriodState,
 } from "../../stores/LaboratoryAtoms";
 import { useLabResult } from "../../hooks/useLabAccordion";
 import ResultBoardOpen from "./ResultBoardOpen";

@@ -24,12 +24,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,6 +42,14 @@ public class KeywordController {
     private final KeywordService keywordService;
     private final KeywordDtoMapper keywordDtoMapper;
     private final MemberClient memberClient;
+
+    private Map<Long, GetKeyPhraseResponse> keyPhraseResponseStore;
+
+    @PostConstruct
+    void init() {
+        keyPhraseResponseStore = new HashMap<>();
+    }
+
 
     @Operation(summary = "keyword detail", description = "키워드 상세정보")
     @ApiResponses(
@@ -166,6 +177,23 @@ public class KeywordController {
         return new ResponseEntity<>(new ResponseDto("OK", keyphrase), HttpStatus.OK);
     }
 
+    /*
+        @GetMapping("/{keywordsId}/keyphrase") 요청을 보낸 후 데이터를 가져오기 위한 url
+     */
+    @GetMapping("/keyphrase/poll")
+    public ResponseEntity<ResponseDto> pollKeyphrase() {
+        Long memberId = getMemberId();
+        GetKeyPhraseResponse getKeyPhraseResponse = keyPhraseResponseStore.get(memberId);
+
+        if (getKeyPhraseResponse == null) {
+            return new ResponseEntity<>(new ResponseDto("NO_CONTENT", null), HttpStatus.NO_CONTENT);
+        } else {
+            // poll 결과 데이터가 있으면 지운 후 리턴
+            keyPhraseResponseStore.remove(memberId);
+            return new ResponseEntity<>(new ResponseDto("OK", getKeyPhraseResponse), HttpStatus.OK);
+        }
+    }
+
     @Operation(summary = "검색", description = "keyword 검색 결과를 제공합니다.")
     @ApiResponses(
             value = {
@@ -183,6 +211,12 @@ public class KeywordController {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String memberId = request.getHeader("X-UserId");
         return memberClient.getMember(memberId);
+    }
+
+    private Long getMemberId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String memberId = request.getHeader("X-UserId");
+        return Long.valueOf(memberId);
     }
 
     /* --------------  다른 서비스에서 호출하는 메소드 [start] ----------------  */

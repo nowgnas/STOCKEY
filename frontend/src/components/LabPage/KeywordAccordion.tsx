@@ -41,6 +41,7 @@ const KeywordAccordion = () => {
 
 
   // 분석 stock에 해당하는 keyword query
+  // 결과 6개 나옴 -> 무한스크롤 x
 
 
   // 검색 keyword query

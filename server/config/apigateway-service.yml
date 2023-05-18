@@ -38,49 +38,60 @@ spring:
         - id: member-service
           uri: lb://member-service
           predicates:
-            - Path=/auth/logout
-          filters:
-            - AuthorizationHeaderFilter
-            
-        - id: member-service
-          uri: lb://member-service
-          predicates:
-            - Path=/auth/refresh
-          filters:
-            - RefreshTokenFilter
-
-        - id: member-service
-          uri: lb://member-service
-          predicates:
             - Path=/auth/**
-
-        # member
-        - id: member-service
-          uri: lb://member-service
-          predicates:
-            - Path=/member/nickname
-            - Method=GET
-
-        - id: member-service
-          uri: lb://member-service
-          predicates:
-            - Path=/member, /member/nickname
-          filters:
-            - AuthorizationHeaderFilter
-
-        - id: member-service
-          uri: lb://member-service
-          predicates:
-            - Path=/member/client/**
-          filters:
-            - MicroServiceFilter
-
-            
 
         - id: member-service
           uri: lb://member-service
           predicates:
             - Path=/member/**
+
+
+        # - id: member-service
+        #   uri: lb://member-service
+        #   predicates:
+        #     - Path=/auth/logout
+        #   filters:
+        #     - AuthorizationHeaderFilter
+            
+        # - id: member-service
+        #   uri: lb://member-service
+        #   predicates:
+        #     - Path=/auth/refresh
+        #   filters:
+        #     - RefreshTokenFilter
+
+        # - id: member-service
+        #   uri: lb://member-service
+        #   predicates:
+        #     - Path=/auth/**
+
+        # # member
+        # - id: member-service
+        #   uri: lb://member-service
+        #   predicates:
+        #     - Path=/member/nickname
+        #     - Method=GET
+
+        # - id: member-service
+        #   uri: lb://member-service
+        #   predicates:
+        #     - Path=/member, /member/nickname
+        #   filters:
+        #     - AuthorizationHeaderFilter
+
+        # - id: member-service
+        #   uri: lb://member-service
+        #   predicates:
+        #     - Path=/member/client/**
+        #   filters:
+        #     - MicroServiceFilter
+
+            
+
+        # - id: member-service
+        #   uri: lb://member-service
+        #   predicates:
+        #     - Path=/member/**
 
         # stock
         - id: stock-service

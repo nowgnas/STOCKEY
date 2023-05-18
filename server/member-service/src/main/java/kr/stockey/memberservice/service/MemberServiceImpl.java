@@ -112,7 +112,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void saveMember(long oAuthId, String nickname, OauthType oauthType) {
         // 닉네임 중복 화인
-        checkDuplicatedNickname(nickname);
+//        checkDuplicatedNickname(nickname);
 
         // 회원 등록
         Member member = Member.oAuthBuilder()

@@ -35,8 +35,8 @@ const select = (response: any) => {
   return response
 }
 
-export const useGoToSignUp = (response: any) => {}
-
 const onSuccess = (response: any) => {
-  sessionStorage.setItem("accessToken", response.data.data.accessToken)
+  console.log(response)
+  if (response.status === 201) return
+  // sessionStorage.setItem("accessToken", response.data.data.accessToken)
 }

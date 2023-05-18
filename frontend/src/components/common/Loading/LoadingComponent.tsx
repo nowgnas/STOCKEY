@@ -1,9 +1,13 @@
 import styled, { keyframes } from "styled-components"
 
-const LoadingComponent = () => {
+interface Props {
+  top?: number | undefined
+}
+
+const LoadingComponent = ({top = 30}: Props) => {
   return (
     <LoaderContainer>
-      <LoaderWrapper>
+      <LoaderWrapper top={top}>
         <Circle></Circle>
         <Circle></Circle>
         <Circle></Circle>
@@ -23,12 +27,12 @@ const LoaderContainer = styled.div`
   width: 100%;
   height: 100%;
 `
-const LoaderWrapper = styled.div`
+const LoaderWrapper = styled.div<{top: number}>`
   width: 200px;
   height: 50%;
   position: absolute;
   left: 50%;
-  top: 30%;
+  top: ${props => props.top}%;
   transform: translate(-50%, 0%);
 `
 const CircleAnimation = keyframes`

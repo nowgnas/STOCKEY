@@ -1,13 +1,21 @@
 import PredictSliderSection from "./PredictSliderSection";
 import PredictResultCard from "./PredictResultCard";
+import { LabGraphType, LabRegressionType } from "./LabType";
 
 import styled from "styled-components";
 
-const PredictSection = () => {
+interface Props {
+  keywordList: any[];
+  graphData: LabGraphType[];
+  constant: number;
+  regressionData: LabRegressionType[];
+}
+
+const PredictSection = ({keywordList, graphData, constant, regressionData}: Props) => {
   return (
     <SectionWrapper>
-      <PredictSliderSection />
-      <PredictResultCard />
+      <PredictSliderSection keywordList={keywordList}/>
+      <PredictResultCard keywordList={keywordList} graphData={graphData} constant={constant} regressionData={regressionData}/>
     </SectionWrapper>
   );
 };

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { resultBoardSizeState } from "../../stores/LaboratoryAtoms";
+import { LabGraphType } from "./LabType";
 
 import * as Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -8,19 +9,14 @@ import HighchartsReact from "highcharts-react-official";
 import { colorPalette } from "./PredictSlider";
 import styled from "styled-components";
 
-type LabGraphType = {
-  keyword: string;
-  line: number[][];
-  scatter: number[][];
-};
 
 interface Props {
-  item: LabGraphType;
   index: number;
+  item: LabGraphType;
   coefficient: number;
 }
 
-const GraphComp = ({ item, index, coefficient }: Props) => {
+const GraphComp = ({ index, item, coefficient }: Props) => {
   const resultBoardSize = useRecoilValue(resultBoardSizeState);
 
   const [chartWidth, setChartWidth] = useState(0);
@@ -122,6 +118,9 @@ const GraphComp = ({ item, index, coefficient }: Props) => {
     },
   };
 
+  console.log(item)
+
+
   return (
     <GraphContainer>
       <GraphTitle>
@@ -164,6 +163,7 @@ const GraphTitle = styled.div`
 
 const CoefficientWrapper = styled.span<{ coefficient: number }>`
   margin: 0 2rem;
+  display: ${props => props.coefficient === 0 ? "none": undefined};
   color: ${(props) =>
     props.coefficient > 0
       ? "var(--custom-increase-red)"

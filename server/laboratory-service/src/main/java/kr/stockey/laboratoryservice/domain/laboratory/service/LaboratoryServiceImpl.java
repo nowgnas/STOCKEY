@@ -26,7 +26,7 @@ public class LaboratoryServiceImpl implements LaboratoryService {
     @Override
     public RegressionResponse getRegression(String stock, List<Long> idList) {
         for (Long id : idList) {
-            laboratoryFeignClient.getKeywordDaily(id);
+            ResponseDto keywordDaily = laboratoryFeignClient.getKeywordDaily(id);
 
         }
     }

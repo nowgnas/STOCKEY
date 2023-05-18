@@ -4,27 +4,27 @@ spring:
 
   cloud:
     gateway:
-      globalcors:
-        cors-configurations:
-          "[/**]":
-            allowedOriginPatterns:
-              - http://localhost:3000
-              - http://127.0.0.1:3000
-              - http://localhost:8000
-              - https://stockey.kr
-            allow-credentials: true
-            allowedHeaders:
-              - authorization
-              - content-type
-              - credential
-              - set-cookie
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - PATCH
-              - OPTIONS
+      # globalcors:
+      #   cors-configurations:
+      #     "[/**]":
+      #       allowedOriginPatterns:
+      #         - http://localhost:3000
+      #         - http://127.0.0.1:3000
+      #         - http://localhost:8000
+      #         - https://stockey.kr
+      #       allow-credentials: true
+      #       allowedHeaders:
+      #         - authorization
+      #         - content-type
+      #         - credential
+      #         - set-cookie
+      #       allowedMethods:
+      #         - GET
+      #         - POST
+      #         - PUT
+      #         - DELETE
+      #         - PATCH
+      #         - OPTIONS
 
       default-filters:
         - name: GlobalFilter

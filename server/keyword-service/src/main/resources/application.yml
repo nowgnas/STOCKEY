@@ -19,6 +19,6 @@ springdoc:
 
 
 django:
-  url: localhost
-  port: 8000
+  url: http://localhost
+  port: 7777
 

@@ -20,7 +20,7 @@ const OpenBtn = ({ isClicked, setIsClicked, refetch }: Props) => {
   // click 했을때 board size big으로 변경
   const setResultBoardSize = useSetRecoilState(resultBoardSizeState);
 
-  // stock 있고 keyword 있는 경우에 btn active
+  // stock 있고 keyword 3개인 경우 btn active
   const selectedStock = useRecoilValue(selectedLabStockState);
   const selectedKeywodrState = useRecoilValue(selectedLabKeywordListState);
   const active = !!(selectedStock && selectedKeywodrState.length === 3);
@@ -33,7 +33,7 @@ const OpenBtn = ({ isClicked, setIsClicked, refetch }: Props) => {
       // clicked false인 경우 -> clicked 변경 -> query 보내짐
       setIsClicked(true);
     } else {
-      // clicked true인 경우 (error난 경우) -> refetch
+      // clicked true인 경우 -> refetch
       refetch();
     }
   };

@@ -1,4 +1,4 @@
-import { StockCardType } from "../../stores/LaboratoryAtoms";
+import { StockCardType } from "./LabType";
 import GraphSection from "./GraphSection";
 import PredictSection from "./PredictSection";
 import { LabGraphType, LabRegressionType } from "./LabType";

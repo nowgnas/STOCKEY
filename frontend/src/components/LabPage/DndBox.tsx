@@ -1,15 +1,13 @@
 import { memo, useState, useRef } from "react";
 import { useSetRecoilState } from "recoil";
 import {
-  KeywordCardType,
-  StockCardType,
   selectedLabStockState,
   selectedLabKeywordListState,
   stockAccordionOpenState,
   keywordAccordionOpenState,
   resultBoardOpenState
 } from "../../stores/LaboratoryAtoms";
-
+import { StockCardType, KeywordCardType } from "./LabType";
 import StockCardMini from "./StockCardMini";
 import KeywordCardMini from "./KeywordCardMini";
 

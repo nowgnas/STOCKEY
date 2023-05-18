@@ -1,8 +1,8 @@
-import {useRef, useMemo} from 'react';
+import { useRef, useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   keywordAccordionOpenState,
-  selectedLabStockState,
+  // selectedLabStockState,
   labKeywordSearchInput
 } from "../../stores/LaboratoryAtoms";
 import { useLabKeywordSearch } from "../../hooks/useLabAccordion";
@@ -11,12 +11,12 @@ import AccordionLayout from "./AccordionLayout";
 
 const KeywordAccordion = () => {
   const [openState, setOpenState] = useRecoilState(keywordAccordionOpenState);
-  const selectedStock = useRecoilValue(selectedLabStockState);
   const searchInput = useRecoilValue(labKeywordSearchInput);
   const fetchNext = useRef<any>(undefined);
   const hasNext = useRef<boolean | undefined>(undefined);
-
-
+  
+  
+  // const selectedStock = useRecoilValue(selectedLabStockState);
   // 분석 stock에 해당하는 keyword query
   // 결과 6개 나옴 -> api 아직 x
 
@@ -47,6 +47,8 @@ const KeywordAccordion = () => {
       hasNext.current = hasNextPageSearch;
       return keywordSearchItem
     } else {
+      fetchNext.current = undefined;
+      hasNext.current = false;
       return []
       // 2. 
       // if (selectedStock) {

@@ -118,8 +118,6 @@ const GraphComp = ({ index, item, coefficient }: Props) => {
     },
   };
 
-  console.log(item)
-
 
   return (
     <GraphContainer>

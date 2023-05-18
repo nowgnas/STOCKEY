@@ -3,3 +3,8 @@ server:
 spring:
   application:
     name: keyword-service
+
+
+django:
+  url: django-service
+  port: 8991

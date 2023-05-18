@@ -443,12 +443,14 @@ public class InvestmentServiceImpl implements InvestmentService{
 
         // 방금 적재한 주문들 가져오기 (현 시간 기준 직전 라운드 시간대의 주문 리스트 가져오기)
         List<OrderDto> justOrders = getJustOrders();
+        System.out.println("justOrders = " + justOrders);
         List<MemberOrderDto> memberOrderList = justOrdersToMemberOrderList(justOrders);
 
         // 앞에서 부터 주문 체결 진행 (각 멤버 id는 고유)
         for (MemberOrderDto memberOrder : memberOrderList) {
             // member id로 가장 최신 deposit history 체크 -> 없다면 최초거래이므로 기본크레딧에서 시작
             Long curMemberId = memberOrder.getMemberId();
+            System.out.println("curMemberId = " + curMemberId);
             Optional<Deposit> depositOptional = depositRepository.findLatestDepositByMemberId(curMemberId);
             List<OrderListDto> stockOrders = memberOrder.getOrders();
             
@@ -533,17 +535,22 @@ public class InvestmentServiceImpl implements InvestmentService{
                         }
 
                         MyStock myStock = myCurStockOptional.get();
+                        System.out.println("sell - myStock = " + myStock);
                         Long myStockCount = myStock.getCount();
+                        System.out.println("sell - myStockCount = " + myStockCount);
                         Long actualSellQuantity = Math.min(myStockCount, orderStockCount);
+                        System.out.println("sell - actualSellQuantity = " + actualSellQuantity);
 
                         // profit 계산 ((매도가 - 매입 평균 단가) * 매도 수량)
-                        Double profit = (curStockPrice - myStock.getAvgPrice()) * orderStockCount;
+                        Double profit = (curStockPrice - myStock.getAvgPrice()) * actualSellQuantity;
+                        System.out.println("sell - profit = " + profit); // *
 
                         // 보유주식 감소, 만약 모든 보유 주식을 팔았다면 mystock 엔티티 삭제 진행
                         if (myStockCount.equals(actualSellQuantity)) {
                             myStockRepository.deleteById(myStock.getId());
                         } else {
                             myStock.setCount(myStockCount - actualSellQuantity);
+                            System.out.println("setter - myStock = " + myStock);
                         }
 
                         // 예수금 증가

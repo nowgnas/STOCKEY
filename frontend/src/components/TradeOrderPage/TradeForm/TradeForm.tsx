@@ -28,10 +28,10 @@ const TradeForm = () => {
 
   // 주문 여부 API
   const { data: isOrderSubmit, isSuccess: isSuccessCheck } = useCheckOrder()
-  // const isOrderSubmit = true // 더미
-
+  const [lockTrade, setLockTrade] = useState(false)
   // 판매 목록
   const [sellList, setSellList] = useState<BasketList[]>([])
+
   // 구매 목록
   const [buyList, setBuyList] = useState<BasketList[]>([])
   const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false)
@@ -55,6 +55,12 @@ const TradeForm = () => {
     setSellList(getList("sellList"))
     setBuyList(getList("buyList"))
   }, [])
+
+  useEffect(() => {
+    if (isSuccessCheck) {
+      setLockTrade(isOrderSubmit)
+    }
+  })
 
   // modal에 줄 데이터들
   const [modalData, setModalData] = useState<SimpleDialogProps | undefined>()
@@ -89,7 +95,7 @@ const TradeForm = () => {
           <TradeStockList />
         </TradeFormWrapper>
         <TradeBasketWrapper item md={6} xs={12} justifyContent="space-between">
-          {isOrderSubmit && (
+          {lockTrade && (
             <LockSection>
               <LockImg src={"/tradeLogos/Lock.png"} />
             </LockSection>
@@ -114,12 +120,12 @@ const TradeForm = () => {
           />
         </TradeBasketWrapper>
         <ButtonConfirmComp
-          disabled={isOrderSubmit ? true : false}
+          disabled={lockTrade ? true : false}
           variant="contained"
           onClick={() => confirmModalHandler(true)}
-          orderstatus={`${isOrderSubmit}`}
+          orderstatus={`${lockTrade}`}
         >
-          {isOrderSubmit ? (
+          {lockTrade ? (
             "주문 완료"
           ) : (
             <>

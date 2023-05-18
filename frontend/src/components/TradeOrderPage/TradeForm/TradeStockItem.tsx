@@ -32,7 +32,7 @@ const TradeStockItem = ({ item }: TradeStockItemProps) => {
   const [expectedProfit, setExpectedProfit] = useState<number>(0)
 
   // buy, sell 주문 현황
-  const { data, isSuccess, refetch } = useOrderStatus(item.id)
+  const { data, isSuccess, refetch } = useOrderStatus(item.id, isHover)
 
   useEffect(() => {
     previewRef(getEmptyImage(), { captureDraggingState: true })
@@ -60,31 +60,31 @@ const TradeStockItem = ({ item }: TradeStockItemProps) => {
           columns={15}
           opacity={`${isDragging ? 0.4 : 1}`}
         >
-          <StockTitle item xs={5}>
-            <StockInfo>
+          <StockTitle item xs={item.buyPrice ? 5 : 12}>
+            <StockImgDiv>
               <StockImage src={`/logo_images/${item.name}.png`} />
-            </StockInfo>
+            </StockImgDiv>
 
             <StockInfo>
               <InfoText>{item.name}</InfoText>
-              {item.buyPrice && <SubText>{item.stockNums}주</SubText>}
+              {item.buyPrice && <InfoText>{item.stockNums}주</InfoText>}
             </StockInfo>
           </StockTitle>
 
           <StockInfo item xs={3}>
             <SubText>현재가</SubText>
-            <InfoText>
+            <SubTitle>
               {internationalNumberFormat.format(item.currentPrice)}
-            </InfoText>
+            </SubTitle>
           </StockInfo>
 
           {item.buyPrice && (
             <>
               <StockInfo item xs={3}>
                 <SubText>매입 단가</SubText>
-                <InfoText>
+                <SubTitle>
                   {internationalNumberFormat.format(item.buyPrice)}
-                </InfoText>
+                </SubTitle>
               </StockInfo>
               <StockInfo item xs={4}>
                 <SubText>예상 수익</SubText>
@@ -124,24 +124,34 @@ const StockItemWrapper = styled(Grid)<{ opacity: string }>`
 `
 
 const StockImage = styled.img`
-  width: 80%;
+  width: 3rem;
   height: 100%;
   border-radius: 16px;
 `
 const StockTitle = styled(Grid)`
   display: flex;
   flex-direction: center;
-  justify-content: center;
+  // justify-content: center;
   align-items: center;
 `
 const StockInfo = styled(Grid)`
-  width: 50%;
+  display: flex;
+  flex-direction: column !important;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
 `
 
-const InfoText = styled.p`
+const SubTitle = styled.p`
   font-size: 10px;
   font-weight: bold;
   margin: 1px;
+`
+const StockImgDiv = styled(StockInfo)`
+  width: 40%;
+`
+
+const InfoText = styled(SubTitle)`
   width: 100%;
   white-space: nowrap;
   overflow: hidden;

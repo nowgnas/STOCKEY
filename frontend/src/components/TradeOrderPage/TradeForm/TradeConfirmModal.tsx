@@ -38,9 +38,14 @@ const TradeConfirmModal = ({
   const submitListHandler = () => {
     console.log(submitList)
     submit(submitList)
-    queryClient.invalidateQueries({ queryKey: ["checkOrder"] })
     confirmModalHandler(false)
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      queryClient.invalidateQueries({ queryKey: ["checkOrder"] })
+    }
+  }, [isSuccess])
 
   useEffect(() => {
     let formatSellList: SubmitProps[] = []

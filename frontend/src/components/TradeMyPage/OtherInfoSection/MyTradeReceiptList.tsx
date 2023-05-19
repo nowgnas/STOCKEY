@@ -1,44 +1,50 @@
-import MyTradeReceiptItem, { TradeReceiptItemType, ItemContainer, ItemWrapper } from "./MyTradeReceiptItem";
-import styled from "styled-components";
+import MyTradeReceiptItem, {
+  TradeReceiptItemType,
+  ItemContainer,
+  ItemWrapper,
+} from "./MyTradeReceiptItem"
+import styled from "styled-components"
 
 interface Props {
   type: "buy" | "sell"
   itemList: TradeReceiptItemType[]
-  amount: number
 }
 
 const listWidth = [28, 30, 16, 16]
 
-const MyTradeReceiptList = ({type, itemList, amount} : Props) => {
+const MyTradeReceiptList = ({ type, itemList }: Props) => {
   return (
     <ContentWrapper>
-      
       {type === "buy" ? (
-      <ContentHeader color="var(--custom-increase-red)">
-        샀어요
-      </ContentHeader>
+        <ContentHeader color="var(--custom-increase-red)">샀어요</ContentHeader>
       ) : (
-      <ContentHeader color="var(--custom-decrease-blue)">
-        팔았어요
-      </ContentHeader>
+        <ContentHeader color="var(--custom-decrease-blue)">
+          팔았어요
+        </ContentHeader>
       )}
-    
-    <ContentBody>
-      <ContentBodyHeader>
-        <ItemContainer>
-          <ItemWrapper width={listWidth[0]}>종목</ItemWrapper>
-          <ItemWrapper width={listWidth[1]}>체결 가격</ItemWrapper>
-          <ItemWrapper width={listWidth[2]}>체결 수량</ItemWrapper>
-          <ItemWrapper width={listWidth[3]}>주문 수량</ItemWrapper>
-        </ItemContainer>
-      </ContentBodyHeader>
 
-      {itemList.map((item) => {
-        return <MyTradeReceiptItem key={item.name} item={item} listWidth={listWidth}/>
-      })}
-    </ContentBody>
-    
-    <ContentFooter>
+      <ContentBody>
+        <ContentBodyHeader>
+          <ItemContainer>
+            <ItemWrapper width={listWidth[0]}>종목</ItemWrapper>
+            <ItemWrapper width={listWidth[1]}>체결 가격</ItemWrapper>
+            <ItemWrapper width={listWidth[2]}>체결 수량</ItemWrapper>
+            <ItemWrapper width={listWidth[3]}>주문 수량</ItemWrapper>
+          </ItemContainer>
+        </ContentBodyHeader>
+
+        {itemList.map((item) => {
+          return (
+            <MyTradeReceiptItem
+              key={item.name}
+              item={item}
+              listWidth={listWidth}
+            />
+          )
+        })}
+      </ContentBody>
+
+      {/* <ContentFooter>
       {
         type === "buy" ? (
           `지출 : ${amount.toLocaleString("ko-kr")}원`
@@ -46,14 +52,12 @@ const MyTradeReceiptList = ({type, itemList, amount} : Props) => {
           `수익 : ${amount.toLocaleString("ko-kr")}원`
         )
       }
-    </ContentFooter>
-  
-  </ContentWrapper>
+    </ContentFooter> */}
+    </ContentWrapper>
   )
-};
+}
 
-export default MyTradeReceiptList;
-
+export default MyTradeReceiptList
 
 const ContentWrapper = styled.div`
   width: 100%;
@@ -61,14 +65,14 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-`;
+`
 
 const ContentHeader = styled.div<{ color: string }>`
   color: ${(props) => props.color};
   height: 10%;
   font-size: 1.6rem;
   font-weight: bold;
-`;
+`
 
 const ContentBody = styled.div`
   width: 100%;
@@ -94,7 +98,7 @@ const ContentBody = styled.div`
   ::-webkit-scrollbar-track {
     width: 12px;
   }
-`;
+`
 
 const ContentBodyHeader = styled.div`
   position: sticky;

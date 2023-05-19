@@ -29,7 +29,11 @@ const LoginRedirectHandler = () => {
   }, [userData, isSuccess])
 
   useEffect(() => {
-    if (sessionStorage.getItem("accessToken") !== undefined) {
+    console.log("isHere", sessionStorage.getItem("accessToken"))
+    if (
+      sessionStorage.getItem("accessToken") !== undefined ||
+      sessionStorage.getItem("accessToken")
+    ) {
       navigate("/stock", { replace: true })
     }
   }, [sessionStorage.getItem("accessToken")])

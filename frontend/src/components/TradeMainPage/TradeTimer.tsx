@@ -1,12 +1,21 @@
 import styled from "styled-components"
 import { useRecoilValue, useSetRecoilState } from "recoil"
-import { currentTimeState, timeLeftState } from "../../stores/TradeAtoms"
+import {
+  currentTimeState,
+  timeLeftState,
+  timeLeftNumsState,
+} from "../../stores/TradeAtoms"
 import dayjs from "dayjs"
+import { useQueryClient } from "react-query"
 
 const TradeTimer = () => {
+  const queryClient = useQueryClient()
   const setCurrentTime = useSetRecoilState(currentTimeState)
   const { hoursLeft, minutesLeft, secondsLeft } = useRecoilValue(timeLeftState)
-
+  const timeLeft = useRecoilValue(timeLeftNumsState)
+  if (Math.abs(timeLeft.timeLeft) < 1500) {
+    queryClient.invalidateQueries({ queryKey: ["checkOrder"] })
+  }
   setTimeout(() => {
     setCurrentTime(dayjs())
   }, 1000)

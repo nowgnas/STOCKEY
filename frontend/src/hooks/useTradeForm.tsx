@@ -11,7 +11,7 @@ export interface SubmitProps {
 
 const timeLeft = () => {
   const currentTime = dayjs()
-  const nextTradeTime = dayjs().add(1, "hour").minute(2).startOf("minute")
+  const nextTradeTime = dayjs().add(1, "minute").startOf("minute")
   return dayjs.duration(nextTradeTime.diff(currentTime)).asMilliseconds()
 }
 
@@ -118,7 +118,7 @@ export const usePopList = () => {
     return customAxios({}).get(`/investment/popular/15`)
   }
 
-  return useQuery(["usePopList"], fetchPopList, {
+  return useQuery(["checkOrder", "usePopList"], fetchPopList, {
     staleTime: timeLeft(),
     select,
     onError,

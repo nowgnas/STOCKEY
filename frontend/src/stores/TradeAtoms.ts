@@ -13,7 +13,8 @@ export const currentTimeState = atom<Dayjs>({
 // 다음 거래 체결 시간
 export const nextTradeTimeState = selector({
   key: "nextTradeTimeState",
-  get: ({ get }) => get(currentTimeState).add(1, "hour").startOf("hour"),
+  // get: ({ get }) => get(currentTimeState).add(1, "hour").startOf("hour"),
+  get: ({ get }) => get(currentTimeState).add(1, "minute").startOf("minute"),
 })
 
 // 다음 거래 체결까지 남은 시간 (시, 분, 초)
@@ -28,5 +29,13 @@ export const timeLeftState = selector({
       minutesLeft: timeLeft.format("mm"),
       secondsLeft: timeLeft.format("ss"),
     }
+  },
+})
+
+export const timeLeftNumsState = selector({
+  key: "timeLeftNumsState",
+  get: ({ get }) => {
+    const timeLeft = get(nextTradeTimeState).diff(get(currentTimeState))
+    return { timeLeft }
   },
 })

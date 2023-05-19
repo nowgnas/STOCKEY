@@ -16,6 +16,7 @@ const TradeTimer = () => {
   if (Math.floor(timeLeft.timeLeft / 1000) === 55) {
     queryClient.invalidateQueries({ queryKey: ["oneMinute"] })
   }
+
   setTimeout(() => {
     setCurrentTime(dayjs())
   }, 1000)

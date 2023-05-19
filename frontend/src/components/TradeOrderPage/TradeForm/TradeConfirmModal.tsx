@@ -41,7 +41,7 @@ const TradeConfirmModal = ({
 
   useEffect(() => {
     if (isSuccess) {
-      queryClient.invalidateQueries({ queryKey: ["checkOrder"] })
+      queryClient.invalidateQueries({ queryKey: ["oneMinute"] })
       alert("주문이 제출되었습니다!")
       confirmModalHandler(false)
     }

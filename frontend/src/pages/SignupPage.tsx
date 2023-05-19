@@ -9,6 +9,7 @@ import { useSignup } from "../hooks/useSignup"
 import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import { nicknameValidState } from "../stores/atoms"
 import Spinner from "../components/common/Spinner/Spinner"
+import { useNickname } from "../hooks/useNickname"
 
 const SignupPage = () => {
   const location = useLocation()
@@ -36,6 +37,7 @@ const SignupPage = () => {
     isError,
     refetch, // 클릭 시, refetch를 통해 재실행 하게 됨
   } = useSignup({ nickname, oauthId, oauthType })
+  const { refetch: refetchNickname } = useNickname()
 
   // click handling => fetch data
   const handleClick = () => {
@@ -51,6 +53,7 @@ const SignupPage = () => {
     if (token) {
       sessionStorage.setItem("accessToken", token)
       // setLogIn(true)
+      refetchNickname()
       navigate("/stock", { replace: true })
     }
   }, [token])

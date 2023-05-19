@@ -19,7 +19,10 @@ export const useUserInfo = (userId: string) => {
   return useQuery(["user", userId], fetchUserInfo, {
     staleTime: 10000,
     select,
-    onSuccess,
+    onSuccess: (response: any) => {
+      sessionStorage.setItem("accessToken", response.data.data.accessToken)
+      navigate("/stock", { replace: true })
+    },
     onError: (err) => {
       console.warn("onError >> ", err)
       window.alert("로그인 오류 발생")
@@ -33,8 +36,4 @@ export const useUserInfo = (userId: string) => {
 const select = (response: any) => {
   console.log("useUserInfo야", response)
   return response
-}
-
-const onSuccess = (response: any) => {
-  // sessionStorage.setItem("accessToken", response.data.data.accessToken)
 }

@@ -27,21 +27,7 @@ const LoginRedirectHandler = () => {
         },
       })
     }
-    if (isSuccess) {
-      console.log("세션에 넣을꺼얌")
-    }
   }, [userData, isSuccess])
-
-  useEffect(() => {
-    if (
-      sessionStorage.getItem("accessToken") !== undefined ||
-      sessionStorage.getItem("accessToken")
-    ) {
-      console.log("isHere", sessionStorage.getItem("accessToken"))
-      console.log("갈꺼야")
-      // navigate("/stock", { replace: true })
-    }
-  }, [sessionStorage.getItem("accessToken")])
 
   if (isLoading) return <Spinner />
   return <></>

@@ -29,7 +29,7 @@ public class NewsController {
     }
 
 
-    @PostMapping("/client/top-keyword/economy")
+    @PostMapping("/client/top-keyword")
     public ResponseEntity<List<TopKeywordCountDto>> getTopNKeywordsForEconomy(@RequestBody @Valid GetTopNKeywordRequest request) {
         List<TopKeywordCountDto> result = newsService.getTopNKeywordsForEconomy(request);
         return new ResponseEntity<>(result, HttpStatus.OK);

@@ -104,7 +104,7 @@ export const useWholeStocks = () => {
   const fetchWholeStocks = () => {
     return customAxios({}).get(`/investment/wholestockinfo`)
   }
-
+  console.log("here")
   return useQuery(["wholeStock"], fetchWholeStocks, {
     staleTime: timeLeft(),
     select: wholeStockSelect,
@@ -131,6 +131,7 @@ const select = (response: any) => {
 }
 
 const myStockSelect = (response: any) => {
+  console.log(response)
   const responseData = response.data.data
   const formatData = responseData.map(
     (item: {
@@ -155,6 +156,8 @@ const myStockSelect = (response: any) => {
 }
 
 const wholeStockSelect = (response: any) => {
+  console.log(response)
+
   const responseData = response.data.data
   const formatData = responseData.map(
     (item: { stockId: number; stockName: string; stockPrice: number }) => {

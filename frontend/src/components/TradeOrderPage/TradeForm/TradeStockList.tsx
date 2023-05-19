@@ -21,11 +21,10 @@ interface TradeStockItem {
 }
 
 const TradeStockList = () => {
-  // 나중에 useQuery 사용 전체종목도 해서 넣기
-  const { data: myStock } = useMyStocks()
-  const { data: wholeStock } = useWholeStocks()
-  console.log("wholeStock", wholeStock)
-  console.log("myStock", myStock)
+  const { data: myStock, isSuccess: isMyStockSuccess } = useMyStocks()
+  const { data: wholeStock, isSuccess: isWholeStockSuccess } = useWholeStocks()
+  console.log("wholeStock", wholeStock, isMyStockSuccess)
+  console.log("myStock", myStock, isWholeStockSuccess)
 
   const [value, setValue] = useState(0)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -43,20 +42,20 @@ const TradeStockList = () => {
       setSearchData([])
       return
     }
-    if (value === 0)
+    if (value === 0 && myStock)
       setSearchData(
         myStock.filter((stock: TradeStockItem) => {
           return stock.name.toUpperCase().includes(searchInput.toUpperCase())
         })
       )
-    if (value === 1)
+    if (value === 1 && wholeStock)
       setSearchData(
         wholeStock.filter((stock: TradeStockItem) => {
           return stock.name.toUpperCase().includes(searchInput.toUpperCase())
         })
       )
   }, [searchInput])
-  console.log(value)
+
   return (
     <StockContainer>
       <StockTabs value={value} onChange={handleChange}>
@@ -147,118 +146,3 @@ const SearchDiv = styled(TextField)`
     height: 1em;
   }
 `
-
-// const MY_STOCK_DUMMY_DATA = [
-//   {
-//     id: 1,
-//     name: "LG에너지솔루션",
-//     stockNums: 302,
-//     currentPrice: 125000,
-//     buyPrice: 127000,
-//   },
-//   {
-//     id: 2,
-//     name: "카카오",
-//     stockNums: 32,
-//     currentPrice: 50000,
-//     buyPrice: 23000,
-//   },
-//   {
-//     id: 3,
-//     name: "삼성전자",
-//     stockNums: 32,
-//     currentPrice: 53000,
-//     buyPrice: 1000,
-//   },
-//   {
-//     id: 4,
-//     name: "naver",
-//     stockNums: 32,
-//     currentPrice: 125000,
-//     buyPrice: 127000,
-//   },
-//   {
-//     id: 1,
-//     name: "LG에너지솔루션",
-//     stockNums: 302,
-//     currentPrice: 125000,
-//     buyPrice: 127000,
-//   },
-//   {
-//     id: 2,
-//     name: "카카오",
-//     stockNums: 32,
-//     currentPrice: 50000,
-//     buyPrice: 23000,
-//   },
-//   {
-//     id: 3,
-//     name: "삼성전자",
-//     stockNums: 32,
-//     currentPrice: 53000,
-//     buyPrice: 1000,
-//   },
-//   {
-//     id: 4,
-//     name: "naver",
-//     stockNums: 32,
-//     currentPrice: 125000,
-//     buyPrice: 127000,
-//   },
-//   {
-//     id: 1,
-//     name: "LG에너지솔루션",
-//     stockNums: 302,
-//     currentPrice: 125000,
-//     buyPrice: 127000,
-//   },
-//   {
-//     id: 2,
-//     name: "카카오",
-//     stockNums: 32,
-//     currentPrice: 50000,
-//     buyPrice: 23000,
-//   },
-//   {
-//     id: 3,
-//     name: "삼성전자",
-//     stockNums: 32,
-//     currentPrice: 53000,
-//     buyPrice: 1000,
-//   },
-//   {
-//     id: 4,
-//     name: "naver",
-//     stockNums: 32,
-//     currentPrice: 125000,
-//     buyPrice: 127000,
-//   },
-//   {
-//     id: 1,
-//     name: "LG에너지솔루션",
-//     stockNums: 302,
-//     currentPrice: 125000,
-//     buyPrice: 127000,
-//   },
-//   {
-//     id: 2,
-//     name: "카카오",
-//     stockNums: 32,
-//     currentPrice: 50000,
-//     buyPrice: 23000,
-//   },
-//   {
-//     id: 3,
-//     name: "삼성전자",
-//     stockNums: 32,
-//     currentPrice: 53000,
-//     buyPrice: 1000,
-//   },
-//   {
-//     id: 4,
-//     name: "naver",
-//     stockNums: 32,
-//     currentPrice: 125000,
-//     buyPrice: 127000,
-//   },
-// ]

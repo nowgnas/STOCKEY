@@ -59,7 +59,8 @@ const TradeStockList = () => {
   useEffect(() => {
     setSearchInput("")
     setSearchData([])
-  }, [])
+  }, [value])
+
   return (
     <StockContainer>
       <StockTabs value={value} onChange={handleChange}>

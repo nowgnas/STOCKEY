@@ -39,7 +39,7 @@ export const useCheckOrder = () => {
     )
   }
 
-  return useQuery(["checkOrder", "oneMinute"], fetchCheckOrder, {
+  return useQuery(["oneMinute", "checkOrder"], fetchCheckOrder, {
     staleTime: timeLeft(),
     select,
     onError,

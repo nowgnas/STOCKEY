@@ -68,7 +68,7 @@ const MyTradeHistoryList = () => {
       <div className="scroll-x" style={{ overflowY: "visible" }}>
         <CardListContainer>
           <MyCurrentTradeHistoryCard isSubmitted={true} />
-          <MyCurrentTradeHistoryCard isSubmitted={false} />
+          {/* <MyCurrentTradeHistoryCard isSubmitted={false} /> */}
           {myTrades &&
             Object.keys(myTrades).map((tradeTime) => (
               <MyTradeHistoryCard

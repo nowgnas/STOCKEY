@@ -326,23 +326,26 @@ public class InvestmentServiceImpl implements InvestmentService{
         if (orderList!=null) {
             // First, create a map from the contractList for easy access
             Map<Long, ContractDto> contractMap = contractList.stream()
+                    .filter(Objects::nonNull)
+                    .filter(contract -> contract.getMatchOrderId() != null)
                     .collect(Collectors.toMap(ContractDto::getMatchOrderId, contract -> contract));
 
             // Then, for each order, find the corresponding contract
             for (ContractDto order : orderList) {
                 ContractDto matchingContract = contractMap.get(order.getId());
-
-                OrderHistoryDto orderHistoryDto = OrderHistoryDto.builder()
-                        .stockId(order.getStockId())
-                        .stockName(stockIdToNameMap.get(order.getStockId()))
-                        .orderCount(order.getCount())
-                        .contractCount(matchingContract.getCount())
-                        .contractPrice(matchingContract.getContractPrice())
-                        .profit(matchingContract.getProfit())
-                        .contractType(order.getContractType())
-                        .createdAt(order.getCreatedAt())
-                        .build();
-                orderHistoryDtoList.add(orderHistoryDto);
+                if (matchingContract != null) {
+                    OrderHistoryDto orderHistoryDto = OrderHistoryDto.builder()
+                            .stockId(order.getStockId())
+                            .stockName(stockIdToNameMap.get(order.getStockId()))
+                            .orderCount(order.getCount())
+                            .contractCount(matchingContract.getCount())
+                            .contractPrice(matchingContract.getContractPrice())
+                            .profit(matchingContract.getProfit())
+                            .contractType(order.getContractType())
+                            .createdAt(order.getCreatedAt())
+                            .build();
+                    orderHistoryDtoList.add(orderHistoryDto);
+                }
             }
         }
         return orderHistoryDtoList;

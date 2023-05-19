@@ -13,8 +13,8 @@ const TradeTimer = () => {
   const setCurrentTime = useSetRecoilState(currentTimeState)
   const { hoursLeft, minutesLeft, secondsLeft } = useRecoilValue(timeLeftState)
   const timeLeft = useRecoilValue(timeLeftNumsState)
-  if (Math.abs(timeLeft.timeLeft) < 1500) {
-    queryClient.invalidateQueries({ queryKey: ["checkOrder"] })
+  if (Math.floor(timeLeft.timeLeft / 1000) === 55) {
+    queryClient.invalidateQueries({ queryKey: ["oneMinute"] })
   }
   setTimeout(() => {
     setCurrentTime(dayjs())

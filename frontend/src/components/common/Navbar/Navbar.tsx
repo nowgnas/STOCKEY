@@ -4,10 +4,10 @@ import LogoutBtn from "./LogoutBtn"
 import StockeyLogo from "./StockeyLogo"
 import styled from "styled-components"
 import { useLocation } from "react-router-dom"
-// import { useNickname } from "../../../hooks/useNickname"
+import { useNickname } from "../../../hooks/useNickname"
 // recoil
-// import { useRecoilValue } from "recoil"
-// import { logInState, nicknameState } from "../../../stores/atoms"
+import { useRecoilValue } from "recoil"
+import { logInState, nicknameState } from "../../../stores/atoms"
 
 interface Props {
   isNarrow: boolean
@@ -15,8 +15,8 @@ interface Props {
 
 const Navbar = ({ isNarrow }: Props) => {
   const curPath = useLocation().pathname
-  // const { data: nickname } = useNickname()
-  // const isLogin = useRecoilValue(logInState)
+  const { data: nickname } = useNickname()
+  const isLogin = useRecoilValue(logInState)
   // const nickname = useRecoilValue(nicknameState)
 
   const isSeleted = (name: string) => {
@@ -82,9 +82,10 @@ const Navbar = ({ isNarrow }: Props) => {
             selected={isSeleted("모의투자")}
             isNarrow={isNarrow}
           />
-          {sessionStorage.getItem("accessToken") && (
+          {/* {sessionStorage.getItem("accessToken") && (
             <LogoutBtn isNarrow={isNarrow} />
-          )}
+          )} */}
+          {isLogin && <LogoutBtn isNarrow={isNarrow} />}
         </NavbarDiv>
       </NavWrapper>
     </>

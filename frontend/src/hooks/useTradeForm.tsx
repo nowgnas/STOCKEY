@@ -104,7 +104,7 @@ export const useWholeStocks = () => {
   const fetchWholeStocks = () => {
     return customAxios({}).get(`/investment/wholestockinfo`)
   }
-
+  console.log("here")
   return useQuery(["wholeStock"], fetchWholeStocks, {
     staleTime: timeLeft(),
     select: wholeStockSelect,

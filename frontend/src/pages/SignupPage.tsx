@@ -47,9 +47,11 @@ const SignupPage = () => {
   // react-query data handling
   // 성공한 경우 token 처리
   useEffect(() => {
+    console.log(token)
     if (token) {
       sessionStorage.setItem("accessToken", token)
       // setLogIn(true)
+      navigate("/stock", { replace: true })
     }
   }, [token])
 

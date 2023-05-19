@@ -16,8 +16,9 @@ const LoginRedirectHandler = () => {
   } = useUserInfo(KAKAO_CODE ? KAKAO_CODE : "")
 
   useEffect(() => {
-    console.log("inHere", userData)
+    console.log("inHere", userData, "성공여부", isSuccess)
     if (userData?.status === 201) {
+      console.log("201이떴엉")
       navigate("/user/signup", {
         replace: true,
         state: {
@@ -26,15 +27,19 @@ const LoginRedirectHandler = () => {
         },
       })
     }
+    if (isSuccess) {
+      console.log("세션에 넣을꺼얌")
+    }
   }, [userData, isSuccess])
 
   useEffect(() => {
-    console.log("isHere", sessionStorage.getItem("accessToken"))
     if (
       sessionStorage.getItem("accessToken") !== undefined ||
       sessionStorage.getItem("accessToken")
     ) {
-      navigate("/stock", { replace: true })
+      console.log("isHere", sessionStorage.getItem("accessToken"))
+      console.log("갈꺼야")
+      // navigate("/stock", { replace: true })
     }
   }, [sessionStorage.getItem("accessToken")])
 

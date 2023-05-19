@@ -20,8 +20,11 @@ export const useUserInfo = (userId: string) => {
     staleTime: 10000,
     select,
     onSuccess: (response: any) => {
-      sessionStorage.setItem("accessToken", response.data.data.accessToken)
-      navigate("/stock", { replace: true })
+      if (response.status === 201) return
+      if (response.status === 200) {
+        sessionStorage.setItem("accessToken", response.data.data.accessToken)
+        navigate("/stock", { replace: true })
+      }
     },
     onError: (err) => {
       console.warn("onError >> ", err)

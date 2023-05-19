@@ -52,14 +52,11 @@ const TradeForm = () => {
   }
 
   useEffect(() => {
-    setSellList(getList("sellList"))
-    setBuyList(getList("buyList"))
-  }, [])
-
-  useEffect(() => {
     if (isSuccessCheck) {
       setLockTrade(isOrderSubmit)
     }
+    setSellList(getList("sellList"))
+    setBuyList(getList("buyList"))
   }, [isOrderSubmit])
 
   // modal에 줄 데이터들

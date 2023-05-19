@@ -37,8 +37,9 @@ const TradeStockItem = ({ item }: TradeStockItemProps) => {
   useEffect(() => {
     previewRef(getEmptyImage(), { captureDraggingState: true })
     if (item.stockNums) {
-      const expectedProfit =
+      const expectedProfit = Math.floor(
         item.stockNums * (item.currentPrice - item.buyPrice!)
+      )
       setExpectedProfit(expectedProfit)
     }
   }, [])
@@ -83,7 +84,7 @@ const TradeStockItem = ({ item }: TradeStockItemProps) => {
               <StockInfo item xs={3}>
                 <SubText>매입 단가</SubText>
                 <SubTitle>
-                  {internationalNumberFormat.format(item.buyPrice)}
+                  {internationalNumberFormat.format(Math.floor(item.buyPrice))}
                 </SubTitle>
               </StockInfo>
               <StockInfo item xs={4}>

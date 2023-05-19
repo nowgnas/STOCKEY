@@ -36,5 +36,7 @@ const select = (response: any) => {
 }
 
 const onSuccess = (response: any) => {
+  console.log(response)
+  if (response.status === 201) return
   sessionStorage.setItem("accessToken", response.data.data.accessToken)
 }

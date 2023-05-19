@@ -5,7 +5,61 @@ import { PanelTitle } from "../../StockDetailPage/SubPanel/KeywordPanel/KeywordP
 import { useMyTradeHistory } from "../../../hooks/useMyTradeHistory"
 
 const MyTradeHistoryList = () => {
-  const DUMMY_DATA = [35000, -1600, 0, -105800, 4100, 700]
+  // const MyTrades: any = {
+  //   "5월 18일 10시": {
+  //     BUY: [
+  //       {
+  //         id: 1,
+  //         name: "Apple",
+  //         orderQuantity: 5,
+  //         contractQuantity: 3,
+  //         contractPrice: 1500,
+  //         profit: 100,
+  //       },
+  //     ],
+  //     SELL: [],
+  //   },
+  //   "5월 18일 14시": {
+  //     BUY: [
+  //       {
+  //         id: 2,
+  //         name: "Google",
+  //         orderQuantity: 2,
+  //         contractQuantity: 2,
+  //         contractPrice: 2500,
+  //         profit: 50,
+  //       },
+  //     ],
+  //     SELL: [],
+  //   },
+  //   "5월 19일 9시": {
+  //     BUY: [],
+  //     SELL: [
+  //       {
+  //         id: 3,
+  //         name: "Microsoft",
+  //         orderQuantity: 4,
+  //         contractQuantity: 4,
+  //         contractPrice: 1800,
+  //         profit: -80,
+  //       },
+  //     ],
+  //   },
+  //   "5월 19일 14시": {
+  //     BUY: [],
+  //     SELL: [
+  //       {
+  //         id: 1,
+  //         name: "Apple",
+  //         orderQuantity: 3,
+  //         contractQuantity: 2,
+  //         contractPrice: 1600,
+  //         profit: 120,
+  //       },
+  //     ],
+  //   },
+  // }
+
   const { data: myTrades } = useMyTradeHistory()
 
   return (
@@ -15,13 +69,16 @@ const MyTradeHistoryList = () => {
         <CardListContainer>
           <MyCurrentTradeHistoryCard isSubmitted={true} />
           <MyCurrentTradeHistoryCard isSubmitted={false} />
-          {DUMMY_DATA.map((item) => (
-            <MyTradeHistoryCard
-              key={item}
-              date="5월 9일 15시"
-              realizedProfit={item}
-            />
-          ))}
+          {myTrades &&
+            Object.keys(myTrades).map((tradeTime) => (
+              <MyTradeHistoryCard
+                key={`trade-${tradeTime}`}
+                buyList={myTrades[tradeTime]["BUY"]}
+                sellList={myTrades[tradeTime]["SELL"]}
+                date={tradeTime}
+                // realizedProfit={item}
+              />
+            ))}
         </CardListContainer>
       </div>
     </>

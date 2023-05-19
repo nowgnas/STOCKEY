@@ -1,12 +1,8 @@
 import { useQuery } from "react-query"
 import customAxios from "../utils/customAxios"
-import { useRecoilState } from "recoil"
-// import { accessTokenState } from "../stores/atoms"
 import dayjs from "dayjs"
 
 export const useMyTradeHistory = () => {
-  // const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
-
   const fetchMyTradeHistory = () => {
     return customAxios({ isAuthNeeded: true }).get(`/investment/my/orders`)
   }

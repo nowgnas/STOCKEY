@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components"
 import dayjs from "dayjs"
 import { shimmer, shake } from "../../../Keyframes"
+import { useState } from "react"
 
 interface CurrentTradeHistoryProps {
   isSubmitted: boolean

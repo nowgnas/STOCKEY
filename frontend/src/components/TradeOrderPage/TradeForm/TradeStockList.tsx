@@ -23,8 +23,6 @@ interface TradeStockItem {
 const TradeStockList = () => {
   const { data: myStock, isSuccess: isMyStockSuccess } = useMyStocks()
   const { data: wholeStock, isSuccess: isWholeStockSuccess } = useWholeStocks()
-  console.log("wholeStock", wholeStock, isWholeStockSuccess)
-  console.log("myStock", myStock, isMyStockSuccess)
 
   const [value, setValue] = useState(0)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {

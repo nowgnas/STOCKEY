@@ -57,7 +57,7 @@ export const useMyBalance = () => {
     )
   }
 
-  return useQuery(["myBalance", "oneMinute"], fetchMyBalance, {
+  return useQuery(["oneMinute", "myBalance"], fetchMyBalance, {
     staleTime: timeLeft(),
     select,
     onError,
@@ -72,7 +72,7 @@ export const useOrderStatus = (stockId: number, isHover: boolean) => {
     return customAxios({}).get(`/investment/orderstatus/${stockId}`)
   }
 
-  return useQuery(["orderStatus", "oneMinute", stockId], fetchOrderStatus, {
+  return useQuery(["oneMinute", "orderStatus", stockId], fetchOrderStatus, {
     staleTime: 1000 * 60,
     select,
     onError,
@@ -91,7 +91,7 @@ export const useMyStocks = () => {
     )
   }
 
-  return useQuery(["myStock", "oneMinute"], fetchMyStocks, {
+  return useQuery(["oneMinute", "myStock"], fetchMyStocks, {
     staleTime: timeLeft(),
     select: myStockSelect,
     onError,

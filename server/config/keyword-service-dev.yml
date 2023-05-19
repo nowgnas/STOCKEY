@@ -6,5 +6,5 @@ spring:
 
 
 django:
-  url: django-service
-  port: 8991
+  url: '{cipher}513adfcfe0fb7018b507623595a57eb04d8dec475a7698317e678b1ec8e1a315'
+  port: '{cipher}919bbbe32eab13fb05de9ee83370a916c24f9e3e9f47467b48a5537fea4d4c3d'

@@ -39,7 +39,7 @@ export const useCheckOrder = () => {
     )
   }
 
-  return useQuery(["checkOrder"], fetchCheckOrder, {
+  return useQuery(["checkOrder", "oneMinute"], fetchCheckOrder, {
     staleTime: timeLeft(),
     select,
     onError,
@@ -57,7 +57,7 @@ export const useMyBalance = () => {
     )
   }
 
-  return useQuery(["myBalance"], fetchMyBalance, {
+  return useQuery(["myBalance", "oneMinute"], fetchMyBalance, {
     staleTime: timeLeft(),
     select,
     onError,
@@ -72,7 +72,7 @@ export const useOrderStatus = (stockId: number, isHover: boolean) => {
     return customAxios({}).get(`/investment/orderstatus/${stockId}`)
   }
 
-  return useQuery(["orderStatus", stockId], fetchOrderStatus, {
+  return useQuery(["orderStatus", "oneMinute", stockId], fetchOrderStatus, {
     staleTime: 1000 * 60,
     select,
     onError,
@@ -91,7 +91,7 @@ export const useMyStocks = () => {
     )
   }
 
-  return useQuery(["myStock"], fetchMyStocks, {
+  return useQuery(["myStock", "oneMinute"], fetchMyStocks, {
     staleTime: timeLeft(),
     select: myStockSelect,
     onError,
@@ -118,7 +118,7 @@ export const usePopList = () => {
     return customAxios({}).get(`/investment/popular/15`)
   }
 
-  return useQuery(["checkOrder", "usePopList"], fetchPopList, {
+  return useQuery(["oneMinute", "usePopList"], fetchPopList, {
     staleTime: timeLeft(),
     select,
     onError,

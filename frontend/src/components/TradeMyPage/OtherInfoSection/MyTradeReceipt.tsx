@@ -1,11 +1,14 @@
-import { Dialog } from "@mui/material";
-import MyTradeReceiptList from "./MyTradeReceiptList";
-import styled from "styled-components";
+import { Dialog } from "@mui/material"
+import MyTradeReceiptList from "./MyTradeReceiptList"
+import styled from "styled-components"
 
 interface Props {
-  date: string;
-  open: boolean;
-  tradeModalHandler: (status: boolean) => void;
+  date: string
+  open: boolean
+  buyList: any
+  sellList: any
+  realizedProfit: number
+  tradeModalHandler: (status: boolean) => void
 }
 
 // sample data
@@ -53,12 +56,16 @@ const sampleItem = {
     },
   ],
   sellAmount: 4890000, // 없으면 0원
-};
+}
 
-const MyTradeReceipt = ({ date, open, tradeModalHandler }: Props) => {
-  // 해당 거래 총 순수익
-  const totalAmount = sampleItem.sellAmount - sampleItem.buyAmount;
-
+const MyTradeReceipt = ({
+  date,
+  open,
+  buyList,
+  sellList,
+  realizedProfit,
+  tradeModalHandler,
+}: Props) => {
   return (
     <DialogContainer open={open}>
       <DialogWrapper>
@@ -67,24 +74,18 @@ const MyTradeReceipt = ({ date, open, tradeModalHandler }: Props) => {
         <TitleWrapper>{date} 거래 주문서</TitleWrapper>
 
         <SubTitleWrapper>
-          {totalAmount >= 0
-            ? `이번 거래로 총 ${totalAmount.toLocaleString("ko-kr")}원 벌었어요`
-            : `이번 거래로 총 ${Math.abs(totalAmount).toLocaleString(
+          {realizedProfit >= 0
+            ? `이번 거래로 총 ${realizedProfit.toLocaleString(
+                "ko-kr"
+              )}원 벌었어요`
+            : `이번 거래로 총 ${Math.abs(realizedProfit).toLocaleString(
                 "ko-kr"
               )}원 잃었어요`}
         </SubTitleWrapper>
 
-        <MyTradeReceiptList
-          type="sell"
-          itemList={sampleItem.sellList}
-          amount={sampleItem.sellAmount}
-        />
+        <MyTradeReceiptList type="sell" itemList={sellList} />
 
-        <MyTradeReceiptList
-          type="buy"
-          itemList={sampleItem.buyList}
-          amount={sampleItem.buyAmount}
-        />
+        <MyTradeReceiptList type="buy" itemList={buyList} />
 
         <ButtonComp
           color="rgba(114, 166, 250, 0.59)"
@@ -96,10 +97,10 @@ const MyTradeReceipt = ({ date, open, tradeModalHandler }: Props) => {
         <TriangleArr cnt={15} position="bottom" />
       </DialogWrapper>
     </DialogContainer>
-  );
-};
+  )
+}
 
-export default MyTradeReceipt;
+export default MyTradeReceipt
 
 const DialogContainer = styled(Dialog)`
   & > .MuiDialog-container > .MuiPaper-root {
@@ -117,7 +118,7 @@ const DialogContainer = styled(Dialog)`
       width: 90%;
     }
   }
-`;
+`
 
 const DialogWrapper = styled.div`
   width: 100%;
@@ -127,12 +128,12 @@ const DialogWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   position: relative;
-`;
+`
 
 const TitleWrapper = styled.div`
   font-size: 2.2rem;
   font-weight: bold;
-`;
+`
 
 const SubTitleWrapper = styled.div`
   font-size: 1.8rem;
@@ -141,7 +142,7 @@ const SubTitleWrapper = styled.div`
   border: 4px solid #faf5f7;
   border-radius: 12px;
   padding: 0.5rem;
-`;
+`
 
 const ButtonComp = styled.div<{ color: string }>`
   width: 100%;
@@ -154,28 +155,27 @@ const ButtonComp = styled.div<{ color: string }>`
   font-size: 1.4rem;
   font-weight: bold;
   cursor: pointer;
-`;
+`
 
-
-// 영수증 형태 css 
+// 영수증 형태 css
 interface TriangelArrProps {
-  cnt: number;
-  position: string;
+  cnt: number
+  position: string
 }
 const TriangleArr = ({ cnt, position }: TriangelArrProps) => {
-  const arr = [];
+  const arr = []
   for (let i = 0; i < cnt; i++) {
-    arr.push(i);
+    arr.push(i)
   }
 
   return (
     <TriangelWrapper position={position}>
       {arr.map((num) => {
-        return <Triangle key={num} position={position} />;
+        return <Triangle key={num} position={position} />
       })}
     </TriangelWrapper>
-  );
-};
+  )
+}
 
 const TriangelWrapper = styled.div<{ position: string }>`
   position: absolute;
@@ -185,7 +185,7 @@ const TriangelWrapper = styled.div<{ position: string }>`
   overflow-x: hidden;
   display: flex;
   justify-content: center;
-`;
+`
 
 const Triangle = styled.div<{ position: string }>`
   width: 40px;
@@ -193,4 +193,4 @@ const Triangle = styled.div<{ position: string }>`
   border-right: 18px solid transparent;
   border-${(props) =>
     props.position === "top" ? "bottom" : "top"}: 24px solid white;
-`;
+`

@@ -3,11 +3,49 @@ eureka:
     hostname: localhost
 
 server:
-  port: 0
+  port: 9001
 
 spring:
   application:
     name: keyword-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #    url: jdbc:mysql://localhost:3306/stockeyV2?useSSL=false&&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    #    username: ssafy
+    #    password: ssafy
+    url: jdbc:mysql://15.164.240.191:3306/stockey?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: tmxhzl205))
+
+  kafka:
+    bootstrap-servers:
+      - 15.164.240.191:9092
+      - 3.36.11.204:9092
+
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+  redis:
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        min-idle: 2
+    port: 6379
+    host: 'localhost'
+    password: 'ssafy'
+
+logging:
+  level:
+    org.hibernate.SQL: debug
 
 
 # springdoc swagger
@@ -22,3 +60,6 @@ django:
   url: localhost
   port: 8000
 
+kafka_cluster:
+  broker1: 15.164.240.191:9092
+  broker2: 3.36.11.204:9092

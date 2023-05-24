@@ -20,8 +20,10 @@ import kr.stockey.keywordservice.exception.keyword.KeywordExceptionType;
 import kr.stockey.keywordservice.mapper.KeywordMapper;
 import kr.stockey.keywordservice.repository.KeywordRepository;
 import kr.stockey.keywordservice.repository.KeywordStatisticRepository;
+import kr.stockey.keywordservice.utils.RoundRobinUrlGenerator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -31,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -52,6 +55,15 @@ public class KeywordServiceImpl implements KeywordService {
     private final KeywordStatisticRepository keywordStatisticRepository;
     private final FavoriteClient favoriteClient;
     private final NewsClient newsClient;
+
+    private final RestTemplate restTemplate;
+    private RoundRobinUrlGenerator keyPhraseUrlGenerator;
+
+    @PostConstruct
+    void init() {
+        keyPhraseUrlGenerator = new RoundRobinUrlGenerator();
+        keyPhraseUrlGenerator.getNextUrl();
+    }
 
 
     @Override
@@ -136,6 +148,11 @@ public class KeywordServiceImpl implements KeywordService {
 
     @Override
     public List<GetKeyPhraseResponse.Message> getKeyphrase(Long keywordId, GetKeyphraseRequest getKeyphraseRequest) {
+
+        String djangoUrl = keyPhraseUrlGenerator.getNextUrl();
+
+        // code
+
 
         LocalDate startDate = getKeyphraseRequest.getStartDate();
         LocalDate endDate = getKeyphraseRequest.getEndDate();

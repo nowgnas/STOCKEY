@@ -1,0 +1,9 @@
+eureka:
+  instance:
+    hostname: localhost
+server:
+  port: 0
+
+spring:
+  application:
+    name: favorite-service

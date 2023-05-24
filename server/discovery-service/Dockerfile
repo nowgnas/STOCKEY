@@ -1,5 +1,4 @@
 FROM arm64v8/openjdk:11-jdk AS builder
-ENV PROFILE dev
 WORKDIR /app
 COPY server/discovery-service/gradlew .
 COPY server/discovery-service/gradle gradle
@@ -9,7 +8,7 @@ COPY server/discovery-service/src src
 RUN chmod +x ./gradlew
 RUN ./gradlew clean bootJar
 
-FROM arm64v8/openjdk:11-jre-alpine
+FROM arm64v8/openjdk:11-jdk
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 ENTRYPOINT ["java", "-jar", \

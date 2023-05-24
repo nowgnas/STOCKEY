@@ -1,0 +1,67 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.11'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'kr.stockey'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+ext {
+    set('springCloudVersion', "2021.0.7")
+}
+
+dependencies {
+    implementation 'org.springframework.cloud:spring-cloud-starter'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
+
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
+
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.projectlombok:lombok:1.18.26'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+    // test in-memory db
+    implementation 'com.h2database:h2'
+    // for apache kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+    // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
+    implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '3.4.0'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // https://mvnrepository.com/artifact/org.mockito/mockito-core
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.3.1'
+    // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.3.1'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

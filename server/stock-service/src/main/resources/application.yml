@@ -1,0 +1,10 @@
+eureka:
+  instance:
+    hostname: localhost
+server:
+  port: 8088
+
+spring:
+  application:
+    name: stock-service
+

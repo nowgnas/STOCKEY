@@ -1,0 +1,16 @@
+FROM arm64v8/openjdk:11-jdk AS builder
+WORKDIR /app
+COPY server/member-service/gradlew .
+COPY server/member-service/gradle gradle
+COPY server/member-service/build.gradle .
+COPY server/member-service/settings.gradle .
+COPY server/member-service/src src
+RUN chmod +x ./gradlew
+RUN ./gradlew clean bootJar
+
+FROM arm64v8/openjdk:11-jdk
+WORKDIR /app
+COPY --from=builder /app/build/libs/*.jar app.jar
+ENTRYPOINT ["java", "-jar", \
+        "-Dspring.profiles.active=${PROFILE}", \
+        "/app/app.jar"]

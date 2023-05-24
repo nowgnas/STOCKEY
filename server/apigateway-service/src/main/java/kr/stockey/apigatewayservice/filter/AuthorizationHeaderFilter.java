@@ -48,7 +48,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             if (!isJwtValid(jwt)) {
                 return onError(exchange, "JWT is not valid ", HttpStatus.UNAUTHORIZED);
             }
-            
+
             // UserId 가져오기
             String userId = getuserId(jwt);
             log.info(userId);
@@ -57,7 +57,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             ServerHttpRequest  newRequest = exchange.getRequest().mutate()
                     .headers(httpHeaders -> {
                         httpHeaders.set(USER_ID_HEADER, userId);
-                        if(request.getCookies().containsKey("refreshToken")){
+                        if (request.getCookies().containsKey("refreshToken")) {
                             HttpCookie refreshToken = request.getCookies().get("refreshToken").get(0);
                             httpHeaders.set("refreshToken", refreshToken.getValue());
                         }
@@ -65,7 +65,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
                     .build();
             // 새로운 exchange 생성
             ServerWebExchange newExchange = exchange.mutate().request(newRequest).build();
-            
+
             return chain.filter(newExchange);
         });
     }
@@ -98,7 +98,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     /**
      * jwt토큰 => userId 리턴
      */
-    private String getuserId(String jwt){
+    private String getuserId(String jwt) {
         DecodedJWT payload = JWT.decode(jwt);
         return payload.getAudience().get(0);
 

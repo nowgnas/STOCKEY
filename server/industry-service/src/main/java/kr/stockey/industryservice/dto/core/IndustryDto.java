@@ -1,12 +1,14 @@
 package kr.stockey.industryservice.dto.core;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
-@Builder
 @Schema(description = "산업 dto")
+@NoArgsConstructor
+@Setter
 public class IndustryDto {
 
     @Schema(description = "산업 id",example = "10")

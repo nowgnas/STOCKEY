@@ -1,0 +1,17 @@
+eureka:
+  instance:
+    hostname: localhost
+server:
+  port: 0
+
+spring:
+  application:
+    name: news-service
+
+
+# springdoc swagger
+springdoc:
+  api-docs:
+    path: /docs # ?? path ??
+  swagger-ui:
+    path: /swagger-ui # ?? path ??

@@ -6,7 +6,7 @@ plugins {
 
 group = 'kr.stockey'
 version = '1.0'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 configurations {
     compileOnly {
@@ -55,6 +55,8 @@ dependencies {
 
     // for apache kafka
     implementation 'org.springframework.kafka:spring-kafka'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 }
 

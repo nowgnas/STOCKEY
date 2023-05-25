@@ -9,9 +9,7 @@ import kr.stockey.keywordservice.api.response.GetTopNKeywordResponse;
 import kr.stockey.keywordservice.api.response.KeywordDetailResponse;
 import kr.stockey.keywordservice.api.response.KeywordSearchResponse;
 import kr.stockey.keywordservice.client.MemberClient;
-import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
-import kr.stockey.keywordservice.dto.KeywordStatisticDto;
-import kr.stockey.keywordservice.dto.TopKeywordDTO;
+import kr.stockey.keywordservice.dto.*;
 import kr.stockey.keywordservice.dto.core.KeywordDto;
 import kr.stockey.keywordservice.dto.core.MemberDto;
 import kr.stockey.keywordservice.dto.core.ResponseDto;
@@ -42,14 +40,6 @@ public class KeywordController {
     private final KeywordService keywordService;
     private final KeywordDtoMapper keywordDtoMapper;
     private final MemberClient memberClient;
-
-    private Map<Long, List<GetKeyPhraseResponse.Message>> keyPhraseResponseStore;
-
-    @PostConstruct
-    void init() {
-        keyPhraseResponseStore = new HashMap<>();
-    }
-
 
     @Operation(summary = "keyword detail", description = "키워드 상세정보")
     @ApiResponses(
@@ -173,8 +163,9 @@ public class KeywordController {
     @GetMapping("/{keywordsId}/keyphrase")
     public ResponseEntity<ResponseDto> GetKeyphrase(@PathVariable Long keywordsId,
                                                     @Valid @ModelAttribute GetKeyphraseRequest getKeyphraseRequest) {
-        List<GetKeyPhraseResponse.Message> keyphrase = keywordService.getKeyphrase(keywordsId, getKeyphraseRequest);
-        return new ResponseEntity<>(new ResponseDto("OK", keyphrase), HttpStatus.OK);
+        Long memberId = getMemberId();
+        keywordService.setKeyphraseRequestToTopic(new KeyphraseRequestDto(memberId, keywordsId, getKeyphraseRequest));
+        return new ResponseEntity<>(new ResponseDto("OK", null), HttpStatus.OK);
     }
 
     /*
@@ -183,15 +174,8 @@ public class KeywordController {
     @GetMapping("/keyphrase/poll")
     public ResponseEntity<ResponseDto> pollKeyphrase() {
         Long memberId = getMemberId();
-        List<GetKeyPhraseResponse.Message> messages = keyPhraseResponseStore.get(memberId);
-
-        if (messages == null) {
-            return new ResponseEntity<>(new ResponseDto("NO_CONTENT", null), HttpStatus.NO_CONTENT);
-        } else {
-            // poll 결과 데이터가 있으면 지운 후 리턴
-            keyPhraseResponseStore.remove(memberId);
-            return new ResponseEntity<>(new ResponseDto("OK", messages), HttpStatus.OK);
-        }
+        List<KeyphraseResponseMessageDto> keyphraseResponseMessageDtos = keywordService.pollKeyphraseData(memberId);
+        return new ResponseEntity<>(new ResponseDto("OK", keyphraseResponseMessageDtos), HttpStatus.OK);
     }
 
     @Operation(summary = "검색", description = "keyword 검색 결과를 제공합니다.")

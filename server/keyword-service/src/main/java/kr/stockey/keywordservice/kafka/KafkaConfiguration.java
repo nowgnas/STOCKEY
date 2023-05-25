@@ -1,5 +1,6 @@
 package kr.stockey.keywordservice.kafka;
 
+import kr.stockey.keywordservice.dto.KeyphraseRequestDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +37,7 @@ public class KafkaConfiguration {
         // Create a custom JsonDeserializer for the valueType
         JsonDeserializer<T> jsonDeserializer = new JsonDeserializer<>(targetType);
 
-        jsonDeserializer.addTrustedPackages("kr.stockey.investmentservice.*", "java.util", "java.lang");
+        jsonDeserializer.addTrustedPackages("kr.stockey.keywordservice.*", "java.util", "java.lang");
 
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
 
@@ -47,16 +48,16 @@ public class KafkaConfiguration {
         return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), errorHandlingDeserializer);
     }
 
-//    @Bean
-//    public ConcurrentKafkaListenerContainerFactory<String, OrderProducerDto> kafkaListenerContainerFactory1() {
-//        ConcurrentKafkaListenerContainerFactory<String, OrderProducerDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
-//        /*
-//        "earliest": the consumer will start consuming messages from the beginning of the topic partition
-//        "latest": the consumer will only consume messages that are produced after the consumer has subscribed to the topic partition
-//        "none": if no committed offset is available, the consumer will throw an exception.
-//         */
-//        factory.setConsumerFactory(consumerFactory("stock-order-consumer", "earliest", OrderProducerDto.class));
-//        factory.setConcurrency(3); // Set the desired level of concurrency
-//        return factory;
-//    }
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, KeyphraseRequestDto> kafkaListenerContainerFactory1() {
+        ConcurrentKafkaListenerContainerFactory<String, KeyphraseRequestDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        /*
+        "earliest": the consumer will start consuming messages from the beginning of the topic partition
+        "latest": the consumer will only consume messages that are produced after the consumer has subscribed to the topic partition
+        "none": if no committed offset is available, the consumer will throw an exception.
+         */
+        factory.setConsumerFactory(consumerFactory("keyphrase-consumer", "latest", KeyphraseRequestDto.class));
+        factory.setConcurrency(4); // Set the desired level of concurrency
+        return factory;
+    }
 }

@@ -56,10 +56,11 @@ springdoc:
     path: /swagger-ui # ?? path ??
 
 
-django:
-  url: localhost
-  port: 8000
-
 kafka_cluster:
   broker1: 15.164.240.191:9092
   broker2: 3.36.11.204:9092
+
+
+Django_urls:
+  server1: http://3.36.11.204:9092:7777
+  server2: http://54.180.148.93:7777

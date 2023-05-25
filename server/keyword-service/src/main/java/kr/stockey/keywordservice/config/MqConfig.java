@@ -17,8 +17,8 @@ public class MqConfig {
     }
 
     @Bean
-    public RoundRobinUrlGenerator roundRobinUrlGenerator(@Value("${Django_urls.server1}") String server1,
-                                                         @Value("${Django_urls.server2}") String server2) {
+    public RoundRobinUrlGenerator roundRobinUrlGenerator(@Value("${django_urls.server1}") String server1,
+                                                         @Value("${django_urls.server2}") String server2) {
         List<String> servers = Arrays.asList(server1, server2);
         return new RoundRobinUrlGenerator(servers);
     }

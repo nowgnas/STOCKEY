@@ -6,7 +6,7 @@ plugins {
 
 group = 'kr.stockey'
 version = '1.0'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 configurations {
     compileOnly {
@@ -52,6 +52,11 @@ dependencies {
     implementation 'javax.servlet:javax.servlet-api:4.0.1'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
+
+    // for apache kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 }
 

@@ -13,6 +13,10 @@ spring:
         host: keyword-redis
         password: "{cipher}881c68eee33f540e81014b0841172140ad1e1f5bda03a8829b16354ac7ee5ddb"
 
-django:
-    url: "{cipher}25c8cd0702d5cca1a1e3ad9f2240777dd6940b3a7ef642ae612982e5a40cc4234b6b297d94dcfdea2d5a89be4ac6455e"
-    port: "{cipher}919bbbe32eab13fb05de9ee83370a916c24f9e3e9f47467b48a5537fea4d4c3d"
+kafka_cluster:
+    broker1: "{cipher}2cfc9e2c09102eb5fe056077f3e7ad0c4e7c198b5883d6c2b879b32075246909ca3edf5373cae6a798f1796a4c1dad2b"
+    broker2: "{cipher}95d060deb6c20a461b4c87102796626d7435e11aa33d1443d14d37788fa6f0f49ac423dd8adce9742333333f9f16df0a"
+
+Django_urls:
+    server1: "{cipher}9379ea852c9dbacdc003715b19f00de5f61623ecaf0865de3ee1f8b8cfbd5b9688073869e311e7760af23d25d492950e"
+    server2: "{cipher}295621336a73f8ac11e9ca58bc866ae221d56bdaedb5a548745938395e17b4fd455badace35107b27d9bf0b0d54958db"

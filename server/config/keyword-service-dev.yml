@@ -1,10 +1,18 @@
 server:
-  port: 8083
+    port: 8083
 spring:
-  application:
-    name: keyword-service
-
+    application:
+        name: keyword-service
+    redis:
+        lettuce:
+            pool:
+                max-active: 10
+                max-idle: 10
+                min-idle: 2
+        port: 6379
+        host: keyword-redis
+        password: "{cipher}881c68eee33f540e81014b0841172140ad1e1f5bda03a8829b16354ac7ee5ddb"
 
 django:
-  url: '{cipher}25c8cd0702d5cca1a1e3ad9f2240777dd6940b3a7ef642ae612982e5a40cc4234b6b297d94dcfdea2d5a89be4ac6455e'
-  port: '{cipher}919bbbe32eab13fb05de9ee83370a916c24f9e3e9f47467b48a5537fea4d4c3d'
+    url: "{cipher}25c8cd0702d5cca1a1e3ad9f2240777dd6940b3a7ef642ae612982e5a40cc4234b6b297d94dcfdea2d5a89be4ac6455e"
+    port: "{cipher}919bbbe32eab13fb05de9ee83370a916c24f9e3e9f47467b48a5537fea4d4c3d"

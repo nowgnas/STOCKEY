@@ -11,6 +11,7 @@ import kr.stockey.keywordservice.redis.KeyphraseResult;
 import kr.stockey.keywordservice.redis.KeyphraseResultRepository;
 import kr.stockey.keywordservice.utils.RoundRobinUrlGenerator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class KeyphraseRequestListener {
     private final RoundRobinUrlGenerator roundRobinUrlGenerator;
     private final KeywordDtoMapper keywordDtoMapper;
@@ -40,6 +42,8 @@ public class KeyphraseRequestListener {
         GetKeyphraseRequest getKeyphraseRequest = keyphraseRequestDto.getGetKeyphraseRequest();
 
         String nextUrl = roundRobinUrlGenerator.getNextUrl();
+        log.info("Running consumer ... ");
+        log.info("url: " + nextUrl);
 
         LocalDate startDate = getKeyphraseRequest.getStartDate();
         LocalDate endDate = getKeyphraseRequest.getEndDate();

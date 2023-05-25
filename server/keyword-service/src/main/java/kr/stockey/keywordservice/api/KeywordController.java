@@ -28,6 +28,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -206,17 +207,21 @@ public class KeywordController {
     /* --------------  다른 서비스에서 호출하는 메소드 [start] ----------------  */
 
     @GetMapping("/client/{keywordId}")
-    public ResponseEntity<KeywordDto> getKeyword(@PathVariable Long keywordId) {
+    public ResponseEntity<KeywordDto> getKeyword(@PathVariable("keywordId") Long keywordId) {
         KeywordDto keywordDto = keywordService.getKeywordDetail(keywordId);
         return new ResponseEntity<>(keywordDto, HttpStatus.OK);
     }
 
 
     @GetMapping("/client/correlation/{keywordId}")
-    public ResponseEntity<List<KeywordStatisticDto>> getCountDate(@PathVariable Long keywordId,
-                                                                  @RequestParam LocalDate startDate,
-                                                                  @RequestParam LocalDate endDate) {
-        List<KeywordStatisticDto> countDate = keywordService.getCountDate(keywordId, startDate, endDate);
+    public ResponseEntity<List<KeywordStatisticDto>> getCountDate(@PathVariable("keywordId") Long keywordId,
+                                                                  @RequestParam("startDate") String startDate,
+                                                                  @RequestParam("endDate") String endDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+        LocalDate startDate_ = LocalDate.parse(startDate, formatter);
+        LocalDate endDate_ = LocalDate.parse(endDate, formatter);
+
+        List<KeywordStatisticDto> countDate = keywordService.getCountDate(keywordId, startDate_, endDate_);
         return new ResponseEntity<>(countDate, HttpStatus.OK);
     }
 

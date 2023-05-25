@@ -19,9 +19,11 @@ public interface KeywordStatisticRepository extends JpaRepository<KeywordStatist
 
     @Query("SELECT ks.statisticDate as statisticDate, ks.count as count " +
             " FROM KeywordStatistic ks " +
-            " WHERE ks.category = 'FREQ' AND ks.keyword = :keywordId " +
+            " WHERE ks.category = 'FREQ' AND ks.keyword.id = :keywordId " +
             " AND ks.statisticDate between :startDate and :endDate")
-    List<KeywordStatisticDto> getCountDate(Long keywordId, LocalDate startDate, LocalDate endDate);
+    List<KeywordStatisticDto> getCountDate(@Param("keywordId") Long keywordId,
+                                           @Param("startDate") LocalDate startDate,
+                                           @Param("endDate") LocalDate endDate);
 
 
 

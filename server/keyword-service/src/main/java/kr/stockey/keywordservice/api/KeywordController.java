@@ -16,6 +16,7 @@ import kr.stockey.keywordservice.dto.core.ResponseDto;
 import kr.stockey.keywordservice.mapper.KeywordDtoMapper;
 import kr.stockey.keywordservice.service.KeywordService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/keywords")
+@Slf4j
 public class KeywordController {
 
     private final KeywordService keywordService;
@@ -164,6 +166,7 @@ public class KeywordController {
     @GetMapping("/{keywordsId}/keyphrase")
     public ResponseEntity<ResponseDto> GetKeyphrase(@PathVariable Long keywordsId,
                                                     @Valid @ModelAttribute GetKeyphraseRequest getKeyphraseRequest) {
+        log.debug("----------GetKeyphrase----------");
         Long memberId = getMemberId();
         keywordService.setKeyphraseRequestToTopic(new KeyphraseRequestDto(memberId, keywordsId, getKeyphraseRequest));
         return new ResponseEntity<>(new ResponseDto("OK", null), HttpStatus.OK);

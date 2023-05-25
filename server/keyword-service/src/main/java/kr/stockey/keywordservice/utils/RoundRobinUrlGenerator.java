@@ -16,6 +16,7 @@ public class RoundRobinUrlGenerator {
     public RoundRobinUrlGenerator(List<String> servers) {
         this.servers = servers;
         this.index = new AtomicInteger(0);
+        log.info("생성자 주입 작동");
         for (String server : servers) {
             log.info("-------------- django server =" + server);
         }

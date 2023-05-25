@@ -1,0 +1,37 @@
+/* custom classnames */
+
+/* 주가, 실현 손익 등에서 값이 양수인지, 음수인지, 0인지에 따라 적용되는 스타일 */
+.positive {
+  color: var(--custom-increase-red);
+}
+
+.negative {
+  color: var(--custom-decrease-blue);
+}
+
+.neutral {
+  color: var(--custom-gray-1);
+}
+
+/* 스크롤 */
+
+/* 가로 스크롤 + 스크롤바 숨김 */
+.scroll-x {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scroll-x::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
+/* 세로 스크롤 + 스크롤바 숨김 */
+.scroll-y {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scroll-y::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}

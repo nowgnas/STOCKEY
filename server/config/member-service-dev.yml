@@ -1,0 +1,14 @@
+spring:
+  redis:
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        min-idle: 2
+    port: 6379
+    host: "redis-container"
+    password: "{cipher}69dcaaa2ad3b7c6a777932a2a0b8016ae34acc8ef7eb171fbe738462a3fb133e"
+
+kakaoOauth:
+  REST_API_KEY: "{cipher}b6c2dc0c84f938c4659aa81a95fbf6b75c91013b343175609c6795ce78e07aee040614238fac6818e6e7c9b2912f399c142cd5b05a898f466d6da0488ae85c42"
+  REDIRECT_URL: "{cipher}3a83d39e3420ec7d27b91c46c39d15debed011de2a0d67ae8e3d1c0944ca6d25cfad0c7c3cbe3fd1901ef20aacf74635"

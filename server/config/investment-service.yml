@@ -1,0 +1,24 @@
+server:
+  port: 8086
+spring:
+  application:
+    name: investment-service
+  kafka:
+    bootstrap-servers:
+      - "{cipher}e86b25b27bb1f4c51a35652be9fc06fd3834edad0ad35ba448b4b1cceb9d34fad9581e52c8e0ecaee9e30cbb5671824b"
+      - "{cipher}1bb54c70b4b887ff1e29ea1d421abfe572e718b06d81768ea434cddc697fe03fb385cf23994b4637d603a0f8b67e569b"
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  redis:
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        min-idle: 2
+    port: 6379
+    host: invest-redis
+    password: "{cipher}881c68eee33f540e81014b0841172140ad1e1f5bda03a8829b16354ac7ee5ddb"
+
+kafka_cluster:
+  broker1: "{cipher}28270fad4c0285daa33e0a5de3b8dfa6433a736c6e97796e7ed53ac61259306f45c98d8ea3fbdb36163be9e0d302ce14"
+  broker2: "{cipher}03cafa9c549eadf427545900a7421cd30f62ab6f339c7ebe191fde21059c1410c2aef6e15d1168f1db158ebc460de8ad"

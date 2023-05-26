@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql-member/stockey?serverTimezone=Asia/Seoul
+    username: "{cipher}d398a940bd6a2accbfeebef65fc597390b1182914baad6bdf3bbbe8b27817547"
+    password: "{cipher}3a0878c2c4b967de9f401f352110f295a1b88e5b5e2c8aa8753bb2aeeccd27b6"
+
+  redis:
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        min-idle: 2
+    port: 6379
+    host: "redis-container"
+    password: "{cipher}69dcaaa2ad3b7c6a777932a2a0b8016ae34acc8ef7eb171fbe738462a3fb133e"

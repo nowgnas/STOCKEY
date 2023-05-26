@@ -1,0 +1,30 @@
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: "{cipher}71103a8b218e5a1ba76bbc2a548a7d9d90a05a708b66dc6ed58a4242cdebd5ad5cdd9042514c6ab53b8411fb87466855"
+spring:
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+  datasource:
+    url: "{cipher}f788eb1e9f133089fb283a9a70cdedc61656ddeaf865955d5f716d3586ed78b5a70d314e790ec291a2c6adb91119d9979ee409a3a597c0dbe1e1a3b8435ba8f17b0dde6f3bfb5724a1ea00ec788cc3e366795f44fad8de2ac646a1c4036624790294c751598a9a48a237c78f6d120f01adcc0a0006e8f72b38f5c48fea104d4c"
+    username: "{cipher}76c9b5f2064e0e895669abd41552ad978511295a1043a32a28f8b0ca738e1911"
+    password: "{cipher}9fe075646d24f48ad8ab793019960cf47340050169d522344f24cc1b6d3ad68c"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+        show_sql: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, healtth, beans,httptrace, busrefresh

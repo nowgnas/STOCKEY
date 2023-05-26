@@ -5,10 +5,7 @@ import kr.stockey.keywordservice.api.request.GetTopNKeywordRequest;
 import kr.stockey.keywordservice.api.request.NewsCountRequest;
 import kr.stockey.keywordservice.client.FavoriteClient;
 import kr.stockey.keywordservice.client.NewsClient;
-import kr.stockey.keywordservice.dto.GetKeyPhraseResponse;
-import kr.stockey.keywordservice.dto.KeywordStatisticDto;
-import kr.stockey.keywordservice.dto.TopKeywordCountDto;
-import kr.stockey.keywordservice.dto.TopKeywordDTO;
+import kr.stockey.keywordservice.dto.*;
 import kr.stockey.keywordservice.dto.core.FavoriteDto;
 import kr.stockey.keywordservice.dto.core.KeywordDto;
 import kr.stockey.keywordservice.dto.core.MemberDto;
@@ -17,11 +14,16 @@ import kr.stockey.keywordservice.exception.favorite.FavoriteException;
 import kr.stockey.keywordservice.exception.favorite.FavoriteExceptionType;
 import kr.stockey.keywordservice.exception.keyword.KeywordException;
 import kr.stockey.keywordservice.exception.keyword.KeywordExceptionType;
+import kr.stockey.keywordservice.kafka.producer.KeyphraseRequestProducer;
 import kr.stockey.keywordservice.mapper.KeywordMapper;
+import kr.stockey.keywordservice.redis.KeyphraseResult;
+import kr.stockey.keywordservice.redis.KeyphraseResultRepository;
 import kr.stockey.keywordservice.repository.KeywordRepository;
 import kr.stockey.keywordservice.repository.KeywordStatisticRepository;
+import kr.stockey.keywordservice.utils.RoundRobinUrlGenerator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -31,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -41,17 +44,20 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class KeywordServiceImpl implements KeywordService {
-    @Value("${django.url}")
-    private String djangoUrl;
-    @Value("${django.port}")
-    private String djangoPort;
-
 
     private final KeywordMapper keywordMapper;
     private final KeywordRepository keywordRepository;
     private final KeywordStatisticRepository keywordStatisticRepository;
     private final FavoriteClient favoriteClient;
     private final NewsClient newsClient;
+    private final RestTemplate restTemplate;
+    private final KeyphraseRequestProducer keyphraseRequestProducer;
+    private final KeyphraseResultRepository keyphraseResultRepository;
+
+    @PostConstruct
+
+    void init() {
+    }
 
 
     @Override
@@ -84,32 +90,32 @@ public class KeywordServiceImpl implements KeywordService {
     }
 
     @Override
-    public boolean checkFavorite(Long memberId,Long id) {
-        return favoriteClient.checkFavoriteKeyword(memberId,id);
+    public boolean checkFavorite(Long memberId, Long id) {
+        return favoriteClient.checkFavoriteKeyword(memberId, id);
     }
 
     @Override
     @Transactional
-    public void addFavorite(MemberDto memberDto,Long id) {
+    public void addFavorite(MemberDto memberDto, Long id) {
         Keyword keyword = keywordRepository.findById(id).orElseThrow(()
                 -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
         // 이미 관심 등록 했다면
-        if (checkFavorite(memberDto.getId(),id)) {
+        if (checkFavorite(memberDto.getId(), id)) {
             throw new FavoriteException(FavoriteExceptionType.ALREADY_EXIST);
         }
-        favoriteClient.createFavoriteKeyword(memberDto.getId(),id);
+        favoriteClient.createFavoriteKeyword(memberDto.getId(), id);
     }
 
     @Override
-    public void deleteFavorite(MemberDto memberDto,Long id) {
+    public void deleteFavorite(MemberDto memberDto, Long id) {
         keywordRepository.findById(id).orElseThrow(()
                 -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
-        boolean isFavorite = checkFavorite(memberDto.getId(),id);
+        boolean isFavorite = checkFavorite(memberDto.getId(), id);
         // 관심 등록하지 않았다면
         if (!isFavorite) {
             throw new FavoriteException(FavoriteExceptionType.NOT_FOUND);
         }
-        favoriteClient.deleteFavoriteKeyword(memberDto.getId(),id);
+        favoriteClient.deleteFavoriteKeyword(memberDto.getId(), id);
     }
 
     @Override
@@ -135,34 +141,6 @@ public class KeywordServiceImpl implements KeywordService {
     }
 
     @Override
-    public List<GetKeyPhraseResponse.Message> getKeyphrase(Long keywordId, GetKeyphraseRequest getKeyphraseRequest) {
-
-        LocalDate startDate = getKeyphraseRequest.getStartDate();
-        LocalDate endDate = getKeyphraseRequest.getEndDate();
-        Long id = getKeyphraseRequest.getId();
-        String newsType = getKeyphraseRequest.getNewsType();
-        // LocalDate => String 형식으로 변환
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-        String startDateString = startDate.format(formatter);
-        String endDateString = endDate.format(formatter);
-
-        // SpringBoot -> DjangoServer 데이터 요청
-        RestTemplate restTemplate = new RestTemplate();
-        String url = djangoUrl + ":" + djangoPort + "/keywords/{keywordId}/keyphrase?";
-        String queryUrl = UriComponentsBuilder.fromUriString(url)
-                .queryParam("type", newsType)
-                .queryParam("id", id)
-                .queryParam("start_date", startDateString)
-                .queryParam("end_date", endDateString)
-                .buildAndExpand(keywordId)
-                .toUriString();
-        ResponseEntity<GetKeyPhraseResponse> response = restTemplate.exchange(queryUrl, HttpMethod.GET, null, new ParameterizedTypeReference<GetKeyPhraseResponse>() {
-        });
-        GetKeyPhraseResponse Returns = response.getBody();
-        return Returns.getMessages();
-    }
-
-    @Override
     public List<KeywordDto> getSearchKeyword(String name) {
         List<Keyword> keywordList = keywordRepository.findTop10ByNameStartingWith(name);
         return keywordMapper.toDto(keywordList);
@@ -173,6 +151,20 @@ public class KeywordServiceImpl implements KeywordService {
         keywordRepository.findById(keywordId).orElseThrow(()
                 -> new KeywordException(KeywordExceptionType.KEYWORD_NOT_EXIST));
         return keywordStatisticRepository.getCountDate(keywordId, startDate, endDate);
+    }
+
+    @Override
+    public void setKeyphraseRequestToTopic(KeyphraseRequestDto keyphraseRequestDto) {
+        keyphraseRequestProducer.send(keyphraseRequestDto);
+    }
+
+    @Override
+    public List<KeyphraseResponseMessageDto> pollKeyphraseData(Long memberId) {
+        KeyphraseResult keyphraseResult = keyphraseResultRepository
+                .findById(String.valueOf(memberId))
+                .orElseThrow(() -> new KeywordException(KeywordExceptionType.KEYPHRASE_NOT_EXIST));
+        keyphraseResultRepository.delete(keyphraseResult); // 제공한 데이터는 레디스에서 삭제
+        return keyphraseResult.getMessages();
     }
 }
 

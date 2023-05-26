@@ -1,0 +1,19 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: member-service
+
+
+
+jwt:
+  # base64? ???? ?? ?, HS512? ??? ??? ???, 512??(64???) ??? ??? ???. ?? ????
+  secretKey: "{cipher}10d6a9ef3db134316645ec176d42327e9055a5b380dcbe81a2662924b154fcb38774a7be9ac48ff17d91d512a297b79dbf5f39f0e7dd318c2a23b442fefb6202f798c269c52c21e85ab9a3a1d9854014"
+  access:
+    expiration: 100000
+  refresh:
+    expiration: 14400
+
+kakaoOauth:
+  REST_API_KEY: "{cipher}b6c2dc0c84f938c4659aa81a95fbf6b75c91013b343175609c6795ce78e07aee040614238fac6818e6e7c9b2912f399c142cd5b05a898f466d6da0488ae85c42"
+  REDIRECT_URL: "{cipher}6fb01d08b53e08d06886f5ad47cd03d2994c1f7c7862a808b65b7c82b55f0f0ad7fbd4f710966be8868399cdd0ec120ba728f177a512995dcfb73388c9061efed0df7fedd229354f0a6f6fb5dc58199d"

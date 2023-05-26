@@ -1,0 +1,16 @@
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: "http://localhost:8761/eureka"
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest

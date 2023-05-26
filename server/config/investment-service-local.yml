@@ -1,0 +1,37 @@
+server:
+  port: 8086
+spring:
+  application:
+    name: investment-service
+  kafka:
+    bootstrap-servers:
+      - "{cipher}e86b25b27bb1f4c51a35652be9fc06fd3834edad0ad35ba448b4b1cceb9d34fad9581e52c8e0ecaee9e30cbb5671824b"
+      - "{cipher}1bb54c70b4b887ff1e29ea1d421abfe572e718b06d81768ea434cddc697fe03fb385cf23994b4637d603a0f8b67e569b"
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  redis:
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        min-idle: 2
+    port: 6379
+    host: invest-redis
+    password: "{cipher}881c68eee33f540e81014b0841172140ad1e1f5bda03a8829b16354ac7ee5ddb"
+
+  datasource:
+    url: "{cipher}9a7eb1745bd4d06956f35c21fc5a7941717ea9910aa78f9d86f5ed8a3887900509ad19c88e5a030854280321e897041cd0fe5660836b8bbf0621ae8e17cf0fc5d984aa4c6bd0c34b27215e322cb5180ec8e694e91cd9d628e405911dd33deb1e79a8de47092b53b8705a568a1119ae175109093b39762c5520e866dc6992f000"
+    username: "{cipher}76c9b5f2064e0e895669abd41552ad978511295a1043a32a28f8b0ca738e1911"
+    password: "{cipher}b1d8751c1b8ac0f05695dde8c35ba402610ff9e30592c010246eeb4b50da07c2"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+        show_sql: true
+kafka_cluster:
+  broker1: "{cipher}11bbb4610b256ad5eeab5f2cfbda1de7759a66b36c28db7094a0ac9572586534decd4614d420beb504a68fbf056aa937"
+  broker2: "{cipher}c9a5a95a3e73e1abb5d620c58933f42cfe204eb6cae266a4218c111d92ef8056a03e30e4d007026cc6a486267ca58a10"

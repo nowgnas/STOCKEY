@@ -1,0 +1,22 @@
+server:
+    port: 8083
+spring:
+    application:
+        name: keyword-service
+    redis:
+        lettuce:
+            pool:
+                max-active: 10
+                max-idle: 10
+                min-idle: 2
+        port: 6379
+        host: keyword-redis
+        password: "{cipher}881c68eee33f540e81014b0841172140ad1e1f5bda03a8829b16354ac7ee5ddb"
+
+kafka_cluster:
+    broker1: "{cipher}2cfc9e2c09102eb5fe056077f3e7ad0c4e7c198b5883d6c2b879b32075246909ca3edf5373cae6a798f1796a4c1dad2b"
+    broker2: "{cipher}95d060deb6c20a461b4c87102796626d7435e11aa33d1443d14d37788fa6f0f49ac423dd8adce9742333333f9f16df0a"
+
+django_urls:
+    server1: "{cipher}c69b783e529c61c319ee5ff68d532b25fa785c138c79f2911ae4bc2f1458cce625e2e43a496f3c733ce8291e6844fae5"
+    server2: "{cipher}a348ce9a5cf21494916955e0347297035716dd0e49e807bdc4a9e72facf983d3558f64f48a4f350f78f3f3ce30eab7c4"
